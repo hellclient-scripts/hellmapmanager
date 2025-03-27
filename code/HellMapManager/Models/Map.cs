@@ -40,4 +40,5 @@ public class MapFile
 {
     public required Map Map;
     public String Path = "";
+    public bool Modfied = true;
 }

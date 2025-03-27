@@ -1,5 +1,7 @@
 ﻿using System;
 using HellMapManager.States;
+using System.Collections.ObjectModel;
+
 namespace HellMapManager.ViewModels;
 public delegate void Action();
 
@@ -20,5 +22,24 @@ public partial class MainWindowViewModel : ViewModelBase
     public void OnExit()
     {
         this.AppState.Exit();
+    }
+    public ObservableCollection<String> Recents { get => new ObservableCollection<String>(this.AppState.Recents.ToArray()); }
+    public void OnOpenRecent(String name)
+    {
+        Console.WriteLine(name);
+    }
+    public void OnSave()
+    {
+    }
+    public bool CanSave
+    {
+        get => this.AppState.Current != null && this.AppState.Current.Modfied;
+    }
+    public void OnSaveAs()
+    {
+    }
+    public bool CanSaveAs
+    {
+        get => this.AppState.Current != null;
     }
 }
