@@ -14,7 +14,19 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+    <DockPanel>
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="文件(_F)" >
+        <MenuItem Header="新建(_N)"  Command="{Binding OnNew}" CommandParameter="{Binding $parent[Window]}"/>
+        <MenuItem Header="打开(_O)"  Command="{Binding OnOpen}" CommandParameter="{Binding $parent[Window]}"/>
+        <Separator/>
+        <MenuItem Header="退出(_E)" Command="{Binding OnExit}"/>
+      </MenuItem>
+      <MenuItem Header="帮助(_H)">
+        <MenuItem Header="关于(_A)"/>
+      </MenuItem>
+    </Menu>
 
     <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    </DockPanel>
 </Window>
