@@ -1,27 +1,24 @@
 ﻿using System;
-using HellMapManager.Services;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.MicroCom;
-
+using HellMapManager.States;
 namespace HellMapManager.ViewModels;
 public delegate void Action();
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    public required AppState AppState;
     public string Greeting { get; } = "Welcome to Avalonia!";
-    public async static void OnOpen(object sender)
+    public async void OnOpen()
     {
         Console.WriteLine("Open");
-        Console.WriteLine(await FileDialog.LoadFile(sender));
+        Console.WriteLine(await this.AppState.OpenFile());
     }
-    public async static void OnNew(object sender)
+    public async void OnNew()
     {
         Console.WriteLine("Open");
-        Console.WriteLine(await FileDialog.LoadFile(sender));
+        Console.WriteLine(await this.AppState.OpenFile());
     }
     public void OnExit()
     {
-        this.ShotdownAction();
+        this.AppState.Exit();
     }
-    public required Action ShotdownAction;
 }

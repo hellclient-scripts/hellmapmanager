@@ -6,7 +6,7 @@ using Avalonia.Platform.Storage;
 
 namespace HellMapManager.Services;
 
-public class FileDialog
+public class DialogManager
 {
     public static async Task<String> LoadFile(object sender)
     {

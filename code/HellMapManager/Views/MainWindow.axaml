@@ -17,8 +17,8 @@
     <DockPanel>
     <Menu DockPanel.Dock="Top">
       <MenuItem Header="文件(_F)" >
-        <MenuItem Header="新建(_N)"  Command="{Binding OnNew}" CommandParameter="{Binding $parent[Window]}"/>
-        <MenuItem Header="打开(_O)"  Command="{Binding OnOpen}" CommandParameter="{Binding $parent[Window]}"/>
+        <MenuItem Header="新建(_N)"  Command="{Binding OnNew}"/>
+        <MenuItem Header="打开(_O)"  Command="{Binding OnOpen}"/>
         <Separator/>
         <MenuItem Header="退出(_E)" Command="{Binding OnExit}"/>
       </MenuItem>

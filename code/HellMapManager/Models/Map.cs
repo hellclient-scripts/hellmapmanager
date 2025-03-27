@@ -35,3 +35,9 @@ public class Map
         };
     }
 }
+
+public class MapFile
+{
+    public required Map Map;
+    public String Path = "";
+}
