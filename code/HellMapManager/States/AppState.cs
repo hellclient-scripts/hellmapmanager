@@ -28,4 +28,12 @@ public partial class AppState
     {
         this.Desktop.Shutdown(0);
     }
+    public void SetCurrent(MapFile mapfile)
+    {
+        if (mapfile != null)
+        {
+            this.Current = mapfile;
+            this.RaiseMudFileUpdatedEvent(this);
+        }
+    }
 }

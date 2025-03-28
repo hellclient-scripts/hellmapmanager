@@ -13,6 +13,8 @@
             <TextBox Text="{Binding Name}"/>
             <TextBlock>请输入地图的描述</TextBlock>
             <TextBox Height="100" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Desc}"/>
+            <Button Command="{Binding OnCreate}">创建</Button>
+            <Button IsCancel="true" Command="{Binding OnCancel}">取消</Button>
         </StackPanel>
 
 </Window>

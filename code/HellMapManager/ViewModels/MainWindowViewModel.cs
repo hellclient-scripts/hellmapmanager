@@ -4,7 +4,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 using HellMapManager.Windows.NewFileDialog;
+using HellMapManager.Models;
 using HellMapManager.Services;
+using System.Threading.Tasks;
+using System.Reflection;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -15,12 +18,23 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         AppState = state;
         AppState.NewFileDialogEvent += OpenNewFileDialog;
+        AppState.MudFileUpdatedEvent += (object? sender, EventArgs args) =>
+        {
+            OnPropertyChanged(nameof(CanSave));
+            OnPropertyChanged(nameof(CanSaveAs));
+            OnPropertyChanged(nameof(TitleInfo));
+        };
     }
-    public void OpenNewFileDialog(object? sender)
+    public async void OpenNewFileDialog(object? sender, EventArgs args)
     {
         Console.WriteLine("OpenNewFileDialog");
         var dialog = new NewFileDialog();
-        dialog.ShowDialog(AppState.Desktop.MainWindow!);
+        var mudfile = await dialog.ShowDialog<MapFile>(AppState.Desktop.MainWindow!);
+        if (mudfile != null)
+        {
+            Console.WriteLine("创建了地图文件");
+            AppState.SetCurrent(mudfile);
+        }
     }
     public required AppState AppState;
     public string Greeting { get; } = "您还没有打开地图文件。";
@@ -47,7 +61,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public bool CanSave
     {
-        get => this.AppState.Current != null && this.AppState.Current.Modfied;
+        get => this.AppState.Current != null && this.AppState.Current.Modified;
     }
     public void OnSaveAs()
     {
@@ -55,5 +69,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool CanSaveAs
     {
         get => this.AppState.Current != null;
+    }
+    public String TitleInfo{
+        get=>(AppState.Current==null?"":(AppState.Current.Modified?"* ":"")+(AppState.Current.Path!=""?AppState.Current.Path:"<未保存>")+" ")+"HellMapManager";
     }
 }

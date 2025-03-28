@@ -34,11 +34,17 @@ public class Map
             Info = MapInfo.Empty(name, desc),
         };
     }
+    
 }
 
 public class MapFile
 {
     public required Map Map;
     public String Path = "";
-    public bool Modfied = true;
+    public bool Modified = true;
+    public static MapFile Empty(String name,String desc){
+        return new MapFile{
+            Map=Map.Empty(name,desc),
+        };
+    }
 }
