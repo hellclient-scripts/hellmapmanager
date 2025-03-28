@@ -1,13 +1,27 @@
 ﻿using System;
 using HellMapManager.States;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
-
+using HellMapManager.Windows.NewFileDialog;
+using HellMapManager.Services;
 namespace HellMapManager.ViewModels;
-public delegate void Action();
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+
+    [SetsRequiredMembersAttribute]
+    public MainWindowViewModel(AppState state)
+    {
+        AppState = state;
+        AppState.NewFileDialogEvent += OpenNewFileDialog;
+    }
+    public void OpenNewFileDialog(object? sender)
+    {
+        Console.WriteLine("OpenNewFileDialog");
+        var dialog = new NewFileDialog();
+        dialog.ShowDialog(AppState.Desktop.MainWindow!);
+    }
     public required AppState AppState;
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
@@ -15,10 +29,9 @@ public partial class MainWindowViewModel : ViewModelBase
         Console.WriteLine("Open");
         Console.WriteLine(await this.AppState.OpenFile());
     }
-    public async void OnNew()
+    public void OnNew()
     {
-        Console.WriteLine("New");
-        Console.WriteLine(await this.AppState.OpenFile());
+        AppState.RaiseNewFileDialogEvent(this);
     }
     public void OnExit()
     {

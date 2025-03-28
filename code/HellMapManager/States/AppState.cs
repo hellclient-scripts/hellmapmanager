@@ -3,11 +3,10 @@ using HellMapManager.Services;
 using Avalonia.Controls.ApplicationLifetimes;
 using System.Threading.Tasks;
 using System;
-using System.Collections.Generic;
 namespace HellMapManager.States;
 
 
-public class AppState
+public partial class AppState
 {
     public MapFile? Current;
     public Settings Settings = new Settings();
