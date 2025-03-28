@@ -10,8 +10,9 @@ namespace HellMapManager.States;
 public class AppState
 {
     public MapFile? Current;
+    public Settings Settings = new Settings();
     public required IClassicDesktopStyleApplicationLifetime Desktop;
-    public List<String> Recents = ["111","222","333"];
+
     public async Task<String> OpenFile()
     {
         return await DialogManager.LoadFile(this.Desktop.MainWindow!);
