@@ -23,6 +23,7 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanSave));
             OnPropertyChanged(nameof(CanSaveAs));
             OnPropertyChanged(nameof(TitleInfo));
+            OnPropertyChanged(nameof(CanClose));
         };
     }
     public async void OpenNewFileDialog(object? sender, EventArgs args)
@@ -70,7 +71,16 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get => this.AppState.Current != null;
     }
-    public String TitleInfo{
-        get=>(AppState.Current==null?"":(AppState.Current.Modified?"* ":"")+(AppState.Current.Path!=""?AppState.Current.Path:"<未保存>")+" ")+"HellMapManager";
+    public bool CanClose
+    {
+        get => this.AppState.Current != null;
+    }
+    public void OnClose()
+    {
+        this.AppState.CloseCurrent();
+    }
+    public String TitleInfo
+    {
+        get => (AppState.Current == null ? "" : (AppState.Current.Modified ? "* " : "") + (AppState.Current.Path != "" ? AppState.Current.Path : "<未保存>") + " ") + "HellMapManager";
     }
 }

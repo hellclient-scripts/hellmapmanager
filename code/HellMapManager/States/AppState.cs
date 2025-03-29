@@ -36,4 +36,9 @@ public partial class AppState
             this.RaiseMudFileUpdatedEvent(this);
         }
     }
+    public void CloseCurrent()
+    {
+        this.Current = null;
+        this.RaiseMudFileUpdatedEvent(this);
+    }
 }
