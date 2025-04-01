@@ -33,12 +33,12 @@ public partial class AppState
         if (mapfile != null)
         {
             this.Current = mapfile;
-            this.RaiseMudFileUpdatedEvent(this);
+            this.RaiseMapFileUpdatedEvent(this);
         }
     }
     public void CloseCurrent()
     {
         this.Current = null;
-        this.RaiseMudFileUpdatedEvent(this);
+        this.RaiseMapFileUpdatedEvent(this);
     }
 }

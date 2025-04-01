@@ -16,9 +16,7 @@ public class Path
     public List<String> Tags = [];
     public List<String> ExTags = [];
     public int Cost = 1;
-    public String Version { get; set; } = "";
     //禁用标记位
     public bool Disabled = false;
     //最后更新时间
-    public DateTime UpdatedTime;
 }

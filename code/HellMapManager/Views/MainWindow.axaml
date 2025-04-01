@@ -3,11 +3,13 @@
         xmlns:vm="using:HellMapManager.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:overview="clr-namespace:HellMapManager.Views.Mapfile.Overview"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="HellMapManager.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="{Binding TitleInfo}">
+        Title="{Binding TitleInfo}"
+        >
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -33,11 +35,16 @@
         <Separator/>
         <MenuItem Header="退出(_E)" Command="{Binding OnExit}"/>
       </MenuItem>
+      <MenuItem Header="对比(_D)" IsEnabled="{Binding CanShowMapFile}">
+      </MenuItem>
+      <MenuItem Header="导出(_X)" IsEnabled="{Binding CanShowMapFile}">
+      </MenuItem>
       <MenuItem Header="帮助(_H)">
         <MenuItem Header="关于(_A)"/>
       </MenuItem>
     </Menu>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding CanShowWelcome}"/>
+    <overview:Overview  HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding CanShowMapFile}"/>
     </DockPanel>
 </Window>

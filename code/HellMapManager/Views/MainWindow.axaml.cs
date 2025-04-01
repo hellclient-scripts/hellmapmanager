@@ -10,6 +10,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        Console.WriteLine(Environment.ProcessPath);
+        // Console.WriteLine(Environment.ProcessPath);
     }
 }

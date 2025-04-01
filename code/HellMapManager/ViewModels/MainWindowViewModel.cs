@@ -18,19 +18,22 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         AppState = state;
         AppState.NewFileDialogEvent += OpenNewFileDialog;
-        AppState.MudFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppState.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(CanSave));
             OnPropertyChanged(nameof(CanSaveAs));
             OnPropertyChanged(nameof(TitleInfo));
             OnPropertyChanged(nameof(CanClose));
+            OnPropertyChanged(nameof(CanShowWelcome));
+            OnPropertyChanged(nameof(CanShowMapFile));
+            OnPropertyChanged(nameof(GetMap));
         };
     }
     public async void OpenNewFileDialog(object? sender, EventArgs args)
     {
         Console.WriteLine("OpenNewFileDialog");
         var dialog = new NewFileDialog();
-        var mudfile = await dialog.ShowDialog<MapFile>(AppState.Desktop.MainWindow!);
+        var mudfile = await dialog.ShowDialog<MapFile?>(AppState.Desktop.MainWindow!);
         if (mudfile != null)
         {
             Console.WriteLine("创建了地图文件");
@@ -82,5 +85,17 @@ public partial class MainWindowViewModel : ViewModelBase
     public String TitleInfo
     {
         get => (AppState.Current == null ? "" : (AppState.Current.Modified ? "* " : "") + (AppState.Current.Path != "" ? AppState.Current.Path : "<未保存>") + " ") + "HellMapManager";
+    }
+    public bool CanShowWelcome
+    {
+        get => this.AppState.Current == null;
+    }
+    public bool CanShowMapFile
+    {
+        get => this.AppState.Current != null;
+    }
+    public MapFile? GetMap
+    {
+        get => AppState.Current;
     }
 }

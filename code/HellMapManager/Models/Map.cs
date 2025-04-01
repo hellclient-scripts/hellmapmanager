@@ -5,10 +5,10 @@ namespace HellMapManager.Models;
 public class MapInfo
 {
     public static String CurrentVersion = "1.0";
-    public String Name = "";
-    public String Desc = "";
-    public String Version = "";
-    public required DateTime UpdatedTime;
+    public String Name{get;set;} = "";
+    public String Desc{get;set;} = "";
+    public String Version{get;set;} = "";
+    public required DateTime UpdatedTime{get;set;}
     public static MapInfo Empty(String name, String desc)
     {
         var info = new MapInfo
@@ -23,10 +23,9 @@ public class MapInfo
 }
 public class Map
 {
-    public required MapInfo Info;
-    public List<Room> Rooms = [];
+    public required MapInfo Info{get;set;}
+    public List<Room> Rooms{get;set;} = [];
 
-    public List<Path> Paths = [];
     public static Map Empty(String name, String desc)
     {
         return new Map
@@ -39,7 +38,7 @@ public class Map
 
 public class MapFile
 {
-    public required Map Map;
+    public required Map Map{get;set;}
     public String Path = "";
     public bool Modified = true;
     public static MapFile Empty(String name,String desc){

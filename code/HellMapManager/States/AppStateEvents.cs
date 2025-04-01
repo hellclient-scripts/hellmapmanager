@@ -10,10 +10,10 @@ public partial class AppState
     {
         this.NewFileDialogEvent?.Invoke(sender, EventArgs.Empty);
     }
-    public event EventHandler? MudFileUpdatedEvent;
-    public void RaiseMudFileUpdatedEvent(object? sender)
+    public event EventHandler? MapFileUpdatedEvent;
+    public void RaiseMapFileUpdatedEvent(object? sender)
     {
-        this.MudFileUpdatedEvent?.Invoke(sender, EventArgs.Empty);
+        this.MapFileUpdatedEvent?.Invoke(sender, EventArgs.Empty);
     }
 
 

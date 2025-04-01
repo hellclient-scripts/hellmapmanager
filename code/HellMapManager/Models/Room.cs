@@ -18,11 +18,9 @@ public class Room
     public String Group { get; set; } = "";
     //标签列表，筛选用
     public List<String> Tags = [];
-
-    //房间的版本，UUID，每次修改时自动更新
-    public String Version { get; set; } = "";
     //禁用标记位
     public bool Disabled = false;
     //最后更新时间
-    public DateTime UpdatedTime;
+
+    public List<Path> Paths = [];
 }
