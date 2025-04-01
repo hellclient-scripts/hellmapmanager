@@ -3,7 +3,6 @@ using HellMapManager.States;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
-using HellMapManager.Windows.NewFileDialog;
 using HellMapManager.Models;
 using HellMapManager.Services;
 using System.Threading.Tasks;
@@ -17,28 +16,14 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindowViewModel(AppState state)
     {
         AppState = state;
-        AppState.NewFileDialogEvent += OpenNewFileDialog;
         AppState.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
-            OnPropertyChanged(nameof(CanSave));
-            OnPropertyChanged(nameof(CanSaveAs));
+            OnPropertyChanged(nameof(IsFileModified));
             OnPropertyChanged(nameof(TitleInfo));
-            OnPropertyChanged(nameof(CanClose));
             OnPropertyChanged(nameof(CanShowWelcome));
-            OnPropertyChanged(nameof(CanShowMapFile));
+            OnPropertyChanged(nameof(IsFileOpend));
             OnPropertyChanged(nameof(GetMap));
         };
-    }
-    public async void OpenNewFileDialog(object? sender, EventArgs args)
-    {
-        Console.WriteLine("OpenNewFileDialog");
-        var dialog = new NewFileDialog();
-        var mudfile = await dialog.ShowDialog<MapFile?>(AppState.Desktop.MainWindow!);
-        if (mudfile != null)
-        {
-            Console.WriteLine("创建了地图文件");
-            AppState.SetCurrent(mudfile);
-        }
     }
     public required AppState AppState;
     public string Greeting { get; } = "您还没有打开地图文件。";
@@ -49,7 +34,8 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public void OnNew()
     {
-        AppState.RaiseNewFileDialogEvent(this);
+        Console.WriteLine("创建了地图文件");
+        AppState.NewMap();
     }
     public void OnExit()
     {
@@ -63,24 +49,20 @@ public partial class MainWindowViewModel : ViewModelBase
     public void OnSave()
     {
     }
-    public bool CanSave
+    public bool IsFileModified
     {
         get => this.AppState.Current != null && this.AppState.Current.Modified;
     }
     public void OnSaveAs()
     {
     }
-    public bool CanSaveAs
-    {
-        get => this.AppState.Current != null;
-    }
-    public bool CanClose
-    {
-        get => this.AppState.Current != null;
-    }
     public void OnClose()
     {
         this.AppState.CloseCurrent();
+    }
+    public void OnRevert()
+    {
+
     }
     public String TitleInfo
     {
@@ -90,7 +72,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get => this.AppState.Current == null;
     }
-    public bool CanShowMapFile
+    public bool IsFileOpend
     {
         get => this.AppState.Current != null;
     }

@@ -11,8 +11,13 @@
   <TextBlock Text="{Binding GetMap.Map.Info.Name}"/>
   <TextBlock Text="地图描述:"/>
   <TextBlock Text="{Binding GetMap.Map.Info.Desc}"/>
-  <TextBlock Text="地图房间数量:"/>
+  <TextBlock Text="房间数量:"/>
   <TextBlock Text="{Binding GetMap.Map.Rooms.Count}"/>
-
+  <TextBlock Text="别名数量:"/>
+  <TextBlock Text="{Binding GetMap.Map.Aliases.Count}"/>
+  <TextBlock Text="线数量:"/>
+  <TextBlock Text="{Binding GetMap.Map.Routes.Count}"/>
+  <TextBlock Text="变量数量:"/>
+  <TextBlock Text="{Binding GetMap.Map.Variables.Count}"/>
   </StackPanel>
 </UserControl>

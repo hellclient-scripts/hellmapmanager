@@ -28,13 +28,16 @@ public partial class AppState
     {
         this.Desktop.Shutdown(0);
     }
+
+    public void NewMap()
+    {
+        var mapfile = MapFile.Empty("", "");
+        this.SetCurrent(mapfile);
+    }
     public void SetCurrent(MapFile mapfile)
     {
-        if (mapfile != null)
-        {
-            this.Current = mapfile;
-            this.RaiseMapFileUpdatedEvent(this);
-        }
+        this.Current = mapfile;
+        this.RaiseMapFileUpdatedEvent(this);
     }
     public void CloseCurrent()
     {

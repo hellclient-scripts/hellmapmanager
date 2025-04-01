@@ -21,9 +21,9 @@
       <MenuItem Header="文件(_F)" >
         <MenuItem Header="新建(_N)"  Command="{Binding OnNew}"/>
         <MenuItem Header="打开(_O)"  Command="{Binding OnOpen}"/>
-        <MenuItem Header="保存(_S)"  Command="{Binding OnSave}" IsEnabled="{Binding CanSave}"/>
-        <MenuItem Header="另存为(_A)"  Command="{Binding OnSaveAs}" IsEnabled="{Binding CanSaveAs}"/>
-        <MenuItem Header="关闭(_C)"  Command="{Binding OnClose}" IsEnabled="{Binding CanClose}"/>
+        <MenuItem Header="保存(_S)"  Command="{Binding OnSave}" IsEnabled="{Binding IsFileModified}"/>
+        <MenuItem Header="另存为(_A)"  Command="{Binding OnSaveAs}" IsEnabled="{Binding IsFileOpend}"/>
+        <MenuItem Header="关闭(_C)"  Command="{Binding OnClose}" IsEnabled="{Binding IsFileOpend}"/>
         <Separator/>
         <MenuItem Header="打开最近文件(_R)"  ItemsSource="{Binding Recents}" x:Name="Recents">
           <ItemsControl.ItemTemplate>
@@ -33,11 +33,13 @@
           </ItemsControl.ItemTemplate>
         </MenuItem>
         <Separator/>
+        <MenuItem Header="还原(_R)"  Command="{Binding OnRevert}" IsEnabled="{Binding IsFileOpend}"/>
+        <Separator/>
         <MenuItem Header="退出(_E)" Command="{Binding OnExit}"/>
       </MenuItem>
-      <MenuItem Header="对比(_D)" IsEnabled="{Binding CanShowMapFile}">
+      <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}">
       </MenuItem>
-      <MenuItem Header="导出(_X)" IsEnabled="{Binding CanShowMapFile}">
+      <MenuItem Header="导出(_X)" IsEnabled="{Binding IsFileOpend}">
       </MenuItem>
       <MenuItem Header="帮助(_H)">
         <MenuItem Header="关于(_A)"/>
@@ -45,6 +47,6 @@
     </Menu>
 
     <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding CanShowWelcome}"/>
-    <overview:Overview  HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding CanShowMapFile}"/>
+    <overview:Overview  HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding IsFileOpend}"/>
     </DockPanel>
 </Window>
