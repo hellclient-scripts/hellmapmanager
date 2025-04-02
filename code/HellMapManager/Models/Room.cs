@@ -21,8 +21,6 @@ public class Room
     public string Desc { get; set; } = "";
     //房间的区域，筛选用
     public string Zone { get; set; } = "";
-    //房间的分组名，筛选用
-    public string Group { get; set; } = "";
     //标签列表，筛选用
     [XmlArray(ElementName = "Tags")]
     [XmlArrayItem(typeof(string))]
