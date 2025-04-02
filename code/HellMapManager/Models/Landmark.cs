@@ -2,10 +2,10 @@ namespace HellMapManager.Models;
 
 public class Landmark
 {
-    public Landmark(){}
-    public string Key = "";
-    public string Type = "";
-    public string Value = "";
-    public string Desc = "";
-    public bool Disabled;
+    public Landmark() { }
+    public string Key { get; set; } = "";
+    public string Type { get; set; } = "";
+    public string Value { get; set; } = "";
+    public string Desc { get; set; } = "";
+    public bool Disabled { get; set; } = false;
 }
