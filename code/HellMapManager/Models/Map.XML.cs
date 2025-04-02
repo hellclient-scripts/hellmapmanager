@@ -9,16 +9,9 @@ public class MapXML
 {
 
 }
+
 public partial class Map
 {
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Map))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(MapInfo))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Alias))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Room))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Exit))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Route))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Variable))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Landmark))]
     public string ToXML()
     {
         var result = "";

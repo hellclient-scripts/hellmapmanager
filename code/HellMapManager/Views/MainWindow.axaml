@@ -39,8 +39,13 @@
       </MenuItem>
       <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}">
       </MenuItem>
+      
       <MenuItem Header="导出(_X)" IsEnabled="{Binding IsFileOpend}">
       </MenuItem>
+      <MenuItem Header="导入(_I)" IsEnabled="{Binding IsFileOpend}">
+        <MenuItem Header="导入UTF8编码的RoomsH文件"  Command="{Binding OnImportRoomsH}"/>
+      </MenuItem>
+
       <MenuItem Header="帮助(_H)">
         <MenuItem Header="关于(_A)"/>
       </MenuItem>

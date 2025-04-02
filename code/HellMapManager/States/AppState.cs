@@ -39,7 +39,7 @@ public partial class AppState
             }
         }
     }
-    private void AppendRecent(RecentFile recent)
+    private void AddRecent(RecentFile recent)
     {
         this.Settings.Recents.RemoveAll(r => r.Path == recent.Path);
         this.Settings.Recents.Insert(0, recent);
@@ -59,7 +59,7 @@ public partial class AppState
                 Modified = false,
                 Path = file,
             };
-            this.AppendRecent(Current.ToRecentFile());
+            this.AddRecent(Current.ToRecentFile());
             this.RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -67,19 +67,38 @@ public partial class AppState
     {
         if (this.Current != null)
         {
+            this.Current.Map.Sort();
             HMMFile.Save(file, this.Current);
             this.Current.Modified = false;
             this.Current.Path = file;
-            this.AppendRecent(Current.ToRecentFile());
+            this.AddRecent(Current.ToRecentFile());
             this.RaiseMapFileUpdatedEvent(this);
         }
     }
+    private void ImportRoomsHFile(string file)
+    {
+        if (this.Current != null)
+        {
+            this.Current.Map.ImportRooms(RoomsH.Open(file));
+            this.RaiseMapFileUpdatedEvent(this);
+        }
+    }
+
     public async Task Open()
     {
         var file = await DialogManager.LoadFile(this.Desktop.MainWindow!);
         if (file != "")
         {
             this.LoadFile(file);
+        }
+
+    }
+    public async Task ImportRoomsH()
+    {
+        var file = await DialogManager.ImportRoomsH(this.Desktop.MainWindow!);
+        if (file != "")
+        {
+            this.ImportRoomsHFile(file);
         }
 
     }

@@ -44,6 +44,13 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
     }
+    public async void OnImportRoomsH()
+    {
+        if (await AppState.ConfirmModified())
+        {
+            await this.AppState.ImportRoomsH();
+        }
+    }
     public void OnExit()
     {
         this.AppState.Exit();

@@ -8,22 +8,30 @@ namespace HellMapManager.Models;
 public class Exit
 {
     public Exit() { }
+    [XmlAttribute]
     //路径指令
+
     public string Command { get; set; } = "";
-    //触发房间
-    public string From { get; set; } = "";
+    [XmlAttribute]
     //目标房间
     public string To { get; set; } = "";
-    [XmlArray(ElementName = "Tags")]
-    [XmlArrayItem(typeof(string))]
+    [XmlText]
+    public string Desc { get; set; } = "";
+    [XmlElement(ElementName = "Tag", Type = typeof(string))]
 
     public List<string> Tags = [];
-    [XmlArray(ElementName = "ExTags")]
-    [XmlArrayItem(typeof(string))]
+    [XmlElement(ElementName = "ExTag", Type = typeof(string))]
 
     public List<string> ExTags = [];
+    [XmlAttribute]
     public int Cost = 1;
     //禁用标记位
+    [XmlIgnore]
     public bool Disabled = false;
-    //最后更新时间
+    [XmlAttribute("Disabled")]
+    public int DisabledInXML
+    {
+        get => Disabled ? 1 : 0;
+        set { Disabled = (value == 1); }
+    }
 }

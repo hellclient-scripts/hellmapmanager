@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualBasic;
+using System.Linq;
 namespace HellMapManager.Models;
 
 [XmlRootAttribute("Info")]
@@ -15,10 +16,10 @@ public partial class MapInfo
     public static string CurrentVersion = "1.0";
     [XmlAttribute]
     public string Name { get; set; } = "";
-    public string NameLabel{get=>Name==""?"<未命名>":Name;}
+    public string NameLabel { get => Name == "" ? "<未命名>" : Name; }
     [XmlText]
     public string Desc { get; set; } = "";
-    public string DescLabel{get=>Name==""?"<无描述>":Name;}
+    public string DescLabel { get => Name == "" ? "<无描述>" : Name; }
     [XmlAttribute]
     public string Version { get; set; } = "";
     [XmlAttribute]
@@ -38,6 +39,15 @@ public partial class MapInfo
 [XmlRootAttribute("Map")]
 public partial class Map
 {
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Map))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(MapInfo))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Alias))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Room))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Exit))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Route))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Variable))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Landmark))]
+
     public Map()
     {
         Info = MapInfo.Empty("", "");
@@ -63,6 +73,10 @@ public partial class Map
     [XmlArray(ElementName = "Routes")]
     [XmlArrayItem(typeof(Route))]
     public List<Route> Routes { get; set; } = [];
+    public void Sort()
+    {
+        this.Rooms.Sort((x, y) => x.Key.CompareTo(y.Key));
+    }
     public static Map Empty(string name, string desc)
     {
         return new Map
@@ -72,6 +86,22 @@ public partial class Map
     }
 }
 
+
+public partial class Map
+{
+    private void InsertRoom(Room room)
+    {
+        this.Rooms.RemoveAll(r => r.Key == room.Key);
+        this.Rooms.Add(room);
+    }
+    public void ImportRooms(List<Room> rooms)
+    {
+        foreach (var room in rooms)
+        {
+            InsertRoom(room);
+        }
+    }
+}
 public class MapFile
 {
 
