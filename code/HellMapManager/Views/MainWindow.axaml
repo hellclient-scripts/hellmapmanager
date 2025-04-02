@@ -28,7 +28,7 @@
         <MenuItem Header="打开最近文件(_R)"  ItemsSource="{Binding Recents}" x:Name="Recents">
           <ItemsControl.ItemTemplate>
           <DataTemplate>
-            <MenuItem Header="{Binding .}" Command="{Binding #Recents.((vm:MainWindowViewModel)DataContext).OnOpenRecent}" CommandParameter="{Binding .}"/>
+            <MenuItem Header="{Binding Label}" Command="{Binding #Recents.((vm:MainWindowViewModel)DataContext).OnOpenRecent}" CommandParameter="{Binding Path}"/>
           </DataTemplate>
           </ItemsControl.ItemTemplate>
         </MenuItem>

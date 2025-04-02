@@ -18,6 +18,7 @@ public partial class MainWindowViewModel : ViewModelBase
         AppState = state;
         AppState.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
+            OnPropertyChanged(nameof(Recents));
             OnPropertyChanged(nameof(IsFileModified));
             OnPropertyChanged(nameof(TitleInfo));
             OnPropertyChanged(nameof(CanShowWelcome));
@@ -29,22 +30,31 @@ public partial class MainWindowViewModel : ViewModelBase
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
     {
-        Console.WriteLine("Open");
-        Console.WriteLine(await this.AppState.OpenFile());
+        if (await AppState.ConfirmModified())
+        {
+            await this.AppState.OpenFile();
+        }
     }
-    public void OnNew()
+    public async Task OnNew()
     {
-        Console.WriteLine("创建了地图文件");
-        AppState.NewMap();
+        if (await AppState.ConfirmModified())
+        {
+            Console.WriteLine("创建了地图文件");
+            AppState.NewMap();
+        }
+
     }
     public void OnExit()
     {
         this.AppState.Exit();
     }
-    public ObservableCollection<String> Recents { get => new ObservableCollection<String>(this.AppState.Settings.Recents.ToArray()); }
-    public void OnOpenRecent(String name)
+    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(this.AppState.Settings.Recents.ToArray()); }
+    public async void OnOpenRecent(String file)
     {
-        Console.WriteLine(name);
+        if (await AppState.ConfirmModified())
+        {
+            AppState.OpenRecent(file);
+        }
     }
     public void OnSave()
     {
@@ -53,15 +63,22 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get => this.AppState.Current != null && this.AppState.Current.Modified;
     }
-    public void OnSaveAs()
+    public async void OnSaveAs()
     {
+        await AppState.SaveAs();
     }
-    public void OnClose()
+    public async void OnClose()
     {
-        this.AppState.CloseCurrent();
+        if (await AppState.ConfirmModified())
+        {
+            this.AppState.CloseCurrent();
+        }
     }
-    public void OnRevert()
+    public async void OnRevert()
     {
+        if (await AppState.ConfirmModified())
+        {
+        }
 
     }
     public String TitleInfo

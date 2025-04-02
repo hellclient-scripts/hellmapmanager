@@ -1,8 +1,11 @@
 using System;
 using System.IO;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace HellMapManager.Services;
 
@@ -21,13 +24,32 @@ public class DialogManager
 
         if (files.Count >= 1)
         {
-            // 打开第一个文件的读取流。
-            await using var stream = await files[0].OpenReadAsync();
-            using var streamReader = new StreamReader(stream);
-            // 将文件的所有内容作为文本读取。
-            var fileContent = await streamReader.ReadToEndAsync();
-            return fileContent;
+            return files[0].Path.AbsolutePath;
         }
         return "";
+    }
+    public static FilePickerFileType HMMFileType = new FilePickerFileType("HMM文件")
+    {
+        Patterns = new[] { "*.hmm" },
+    };
+    public static async Task<String> SaveAs(object sender)
+    {
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)sender);
+
+        var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "保存地图文件",
+            DefaultExtension = "hmm",
+            FileTypeChoices = new[] { HMMFileType },
+            ShowOverwritePrompt = true,
+        });
+        return file == null ? "" : file.Path.AbsolutePath;
+    }
+
+    public static async Task<bool> ConfirmModifiedDialog()
+    {
+        var box = MessageBoxManager.GetMessageBoxStandard("文件未保存", "当前文件有未保存的修改，继续操作将丢失所有修改。是否继续？", ButtonEnum.YesNo);
+        var choice = await box.ShowAsync();
+        return choice == ButtonResult.Yes;
     }
 }

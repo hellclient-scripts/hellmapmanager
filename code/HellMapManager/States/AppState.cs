@@ -12,18 +12,78 @@ public partial class AppState
     public Settings Settings = new Settings();
     public required IClassicDesktopStyleApplicationLifetime Desktop;
 
-    public async Task<String> OpenFile()
+    public async Task OpenFile()
     {
-        return await DialogManager.LoadFile(this.Desktop.MainWindow!);
+        var file = await DialogManager.LoadFile(this.Desktop.MainWindow!);
+        if (file != "")
+        {
+            this.LoadFile(file);
+        }
     }
-    public void SaveFile()
+    public void OpenRecent(string file)
     {
+        if (file != "")
+        {
+            this.LoadFile(file);
+        }
+    }
+
+    public async Task SaveAs()
+    {
+        if (this.Current != null)
+        {
+            var file = await DialogManager.SaveAs(this.Desktop.MainWindow!);
+            if (file != "")
+            {
+                this.SaveFile(file);
+            }
+        }
+    }
+    private void AppendRecent(RecentFile recent)
+    {
+        this.Settings.Recents.RemoveAll(r => r.Path == recent.Path);
+        this.Settings.Recents.Insert(0, recent);
+        if (this.Settings.Recents.Count > AppPreset.MaxRecents)
+        {
+            this.Settings.Recents = this.Settings.Recents.GetRange(0, AppPreset.MaxRecents);
+        }
+    }
+    private void LoadFile(string file)
+    {
+        var mf = HMMFile.Open(file);
+        if (mf != null)
+        {
+            Current = new MapFile()
+            {
+                Map = mf,
+                Modified = false,
+                Path = file,
+            };
+            this.AppendRecent(Current.ToRecentFile());
+            this.RaiseMapFileUpdatedEvent(this);
+        }
+    }
+    private void SaveFile(string file)
+    {
+        if (this.Current != null)
+        {
+            HMMFile.Save(file, this.Current);
+            this.Current.Modified = false;
+            this.Current.Path = file;
+            this.AppendRecent(Current.ToRecentFile());
+            this.RaiseMapFileUpdatedEvent(this);
+        }
+    }
+    public async Task Open()
+    {
+        var file = await DialogManager.LoadFile(this.Desktop.MainWindow!);
+        if (file != "")
+        {
+            this.LoadFile(file);
+        }
 
     }
-    public void SaveAsFile()
-    {
 
-    }
     public void Exit()
     {
         this.Desktop.Shutdown(0);
@@ -43,5 +103,13 @@ public partial class AppState
     {
         this.Current = null;
         this.RaiseMapFileUpdatedEvent(this);
+    }
+    public async Task<bool> ConfirmModified()
+    {
+        if (this.Current == null || !this.Current.Modified)
+        {
+            return true;
+        }
+        return await DialogManager.ConfirmModifiedDialog();
     }
 }
