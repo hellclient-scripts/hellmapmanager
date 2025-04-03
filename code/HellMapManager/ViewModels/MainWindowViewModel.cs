@@ -12,7 +12,6 @@ namespace HellMapManager.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
 
-    [SetsRequiredMembersAttribute]
     public MainWindowViewModel(AppState state)
     {
         AppState = state;
@@ -23,10 +22,12 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(TitleInfo));
             OnPropertyChanged(nameof(CanShowWelcome));
             OnPropertyChanged(nameof(IsFileOpend));
-            OnPropertyChanged(nameof(GetMap));
+            UpdateOverview();
+            
         };
     }
-    public required AppState AppState;
+    public partial void UpdateOverview();
+    public AppState AppState;
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
     {
@@ -99,9 +100,5 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool IsFileOpend
     {
         get => this.AppState.Current != null;
-    }
-    public MapFile? GetMap
-    {
-        get => AppState.Current;
     }
 }

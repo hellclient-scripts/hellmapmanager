@@ -1,5 +1,4 @@
 namespace HellMapManager.Models;
-using System.Diagnostics.CodeAnalysis;
 
 public class Alias
 {
