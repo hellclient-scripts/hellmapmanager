@@ -42,6 +42,15 @@ public class Room
     //房间出口列表
     [XmlElement(ElementName = "Exit", Type = typeof(Exit))]
     public List<Exit> Exits = [];
+    public int ExitsCount
+    {
+        get => Exits.Count;
+    }
+    public string AllTags
+    {
+        get => String.Join(" , ", this.Tags.ToArray());
+    }
+
 }
 
 public class RoomFormatter

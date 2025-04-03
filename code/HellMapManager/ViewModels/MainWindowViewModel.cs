@@ -23,10 +23,11 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanShowWelcome));
             OnPropertyChanged(nameof(IsFileOpend));
             UpdateOverview();
-            
+            UpdateRooms();
         };
     }
     public partial void UpdateOverview();
+    public partial void UpdateRooms();
     public AppState AppState;
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
@@ -47,7 +48,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public async void OnImportRoomsH()
     {
-        if (await AppState.ConfirmModified())
+        if (await AppState.ConfirmImport())
         {
             await this.AppState.ImportRoomsH();
         }

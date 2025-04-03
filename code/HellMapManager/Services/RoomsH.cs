@@ -31,7 +31,7 @@ public class RoomsH
                 continue;
             }
             var room = RoomFormatter.DecodeRoom(linedata);
-            if (room != null)
+            if (room is not null)
             {
                 result.Add(room);
             }

@@ -131,4 +131,14 @@ public partial class AppState
         }
         return await DialogManager.ConfirmModifiedDialog();
     }
+        public async Task<bool> ConfirmImport()
+    {
+        if (this.Current == null || !this.Current.Modified)
+        {
+            return true;
+        }
+        return await DialogManager.ConfirmImportDialog();
+    }
+
+    
 }

@@ -8,5 +8,7 @@ public class Route
     public Route() { }
     public string Key { get; set; } = "";
     public string Desc { get; set; } = "";
+    public string Group { get; set; } = "";
+
     public List<Room> Rooms = [];
 }

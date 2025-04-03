@@ -71,4 +71,11 @@ public class DialogManager
         var choice = await box.ShowAsync();
         return choice == ButtonResult.Yes;
     }
+    public static async Task<bool> ConfirmImportDialog()
+    {
+        var box = MessageBoxManager.GetMessageBoxStandard("导入数据", "当前文件有未保存的修改，是否继续导入？", ButtonEnum.YesNo);
+        var choice = await box.ShowAsync();
+        return choice == ButtonResult.Yes;
+    }
+
 }
