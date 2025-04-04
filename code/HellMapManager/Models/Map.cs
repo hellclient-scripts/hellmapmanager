@@ -87,21 +87,6 @@ public partial class Map
 }
 
 
-public partial class Map
-{
-    private void InsertRoom(Room room)
-    {
-        this.Rooms.RemoveAll(r => r.Key == room.Key);
-        this.Rooms.Add(room);
-    }
-    public void ImportRooms(List<Room> rooms)
-    {
-        foreach (var room in rooms)
-        {
-            InsertRoom(room);
-        }
-    }
-}
 public class MapFile
 {
 
@@ -112,6 +97,7 @@ public class MapFile
     public Map Map { get; set; }
     public string Path = "";
     public bool Modified = true;
+    public Cache Cache = new Cache();
     public static MapFile Empty(string name, string desc)
     {
         return new MapFile
@@ -122,5 +108,26 @@ public class MapFile
     public RecentFile ToRecentFile()
     {
         return new RecentFile(Map.Info.Name, Path);
+    }
+    private void InsertRoom(Room room)
+    {
+        this.Map.Rooms.RemoveAll(r => r.Key == room.Key);
+        this.Map.Rooms.Add(room);
+        this.Cache.Rooms[room.Key] = room;
+    }
+    public void ImportRooms(List<Room> rooms)
+    {
+        foreach (var room in rooms)
+        {
+            InsertRoom(room);
+        }
+    }
+    public void RebuldCache()
+    {
+        this.Cache = new Cache();
+        foreach (var room in this.Map.Rooms)
+        {
+            this.Cache.Rooms[room.Key] = room;
+        }
     }
 }

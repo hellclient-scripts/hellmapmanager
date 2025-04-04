@@ -59,6 +59,7 @@ public partial class AppState
                 Modified = false,
                 Path = file,
             };
+            Current.RebuldCache();
             this.AddRecent(Current.ToRecentFile());
             this.RaiseMapFileUpdatedEvent(this);
         }
@@ -79,7 +80,7 @@ public partial class AppState
     {
         if (this.Current != null)
         {
-            this.Current.Map.ImportRooms(RoomsH.Open(file));
+            this.Current.ImportRooms(RoomsH.Open(file));
             this.RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -131,7 +132,7 @@ public partial class AppState
         }
         return await DialogManager.ConfirmModifiedDialog();
     }
-        public async Task<bool> ConfirmImport()
+    public async Task<bool> ConfirmImport()
     {
         if (this.Current == null || !this.Current.Modified)
         {
@@ -140,5 +141,5 @@ public partial class AppState
         return await DialogManager.ConfirmImportDialog();
     }
 
-    
+
 }
