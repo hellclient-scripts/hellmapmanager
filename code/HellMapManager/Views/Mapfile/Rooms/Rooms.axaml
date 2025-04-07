@@ -12,6 +12,7 @@
   <DataGrid Margin="20" ItemsSource="{Binding GetRooms}"
           GridLinesVisibility="All"
           IsReadOnly="True"
+          x:Name="AllRooms"
           BorderThickness="1" BorderBrush="Gray">
     <DataGrid.Columns>
       <DataGridTextColumn Header="房间主键" Width="200"
@@ -24,6 +25,13 @@
          Binding="{Binding ExitsCount}" />
       <DataGridTextColumn Header="房间标签"
          Binding="{Binding AllTags}" />             
+		<DataGridTemplateColumn Header="操作">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<Button Command="{Binding #AllRooms.((vm:MainWindowViewModel)DataContext).OnDumpRoom}" Content="Dump" CommandParameter="{Binding .}"/>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+		</DataGridTemplateColumn>
 
     </DataGrid.Columns>
   </DataGrid>

@@ -50,7 +50,17 @@ public class Room
     {
         get => String.Join(" , ", this.Tags.ToArray());
     }
-
+    public bool HasExitTo(string key)
+    {
+        foreach (var exit in Exits)
+        {
+            if (exit.To == key)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 public class RoomFormatter
