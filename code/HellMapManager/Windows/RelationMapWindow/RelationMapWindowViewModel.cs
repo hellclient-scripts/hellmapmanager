@@ -20,9 +20,11 @@ public class ViewItem
     public bool IsLevel1 { get => Item.Depth == 1; }
     public bool IsLevel2 { get => Item.Depth == 2; }
     public bool IsLevelOther { get => Item.Depth > 2; }
-    private string ZoneInfo{
-        get{
-            return Item.Room.Zone==""?"":$"/{Item.Room.Zone}";
+    private string ZoneInfo
+    {
+        get
+        {
+            return Item.Room.Zone == "" ? "" : $"/{Item.Room.Zone}";
         }
     }
     public string LabelWithKey
@@ -95,7 +97,7 @@ public class RelationMapWindowViewModel : ObservableObject
             return graph;
         }
     }
-    public void OnContextMenuEnter(object obj)
+    public void EnterViewItem(object obj)
     {
         if (obj is ViewItem && AppState.Current is not null)
         {

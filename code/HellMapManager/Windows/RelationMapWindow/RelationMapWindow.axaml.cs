@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.PanAndZoom;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using HellMapManager.Services;
 using System;
@@ -29,4 +30,19 @@ public partial class RelationMapWindow : Window
             ((RelationMapWindowViewModel)DataContext).RefreshEvent -= Refresh;
         }
     }
+    public void OnDoubleTapped(object sender, TappedEventArgs args)
+    {
+        if (sender is Border)
+        {
+            var bo = (Border)sender;
+            if (bo.DataContext is ViewItem)
+            {
+                var vi = (ViewItem)bo.DataContext;
+                Console.WriteLine(vi.Item.Room.Key);
+                ((RelationMapWindowViewModel)DataContext!).EnterViewItem(vi);
+            }
+        }
+
+    }
+
 }

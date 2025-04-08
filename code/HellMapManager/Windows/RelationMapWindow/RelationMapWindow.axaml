@@ -72,10 +72,11 @@
             Classes.Level1="{Binding IsLevel1}"
             Classes.Level2="{Binding IsLevel2}"
             Classes.LevelOther="{Binding IsLevelOther}"
+            DoubleTapped="OnDoubleTapped"
           >
                 <Border.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="{Binding  #ZoomBorder.((vm:RelationMapWindowViewModel)DataContext).OnContextMenuEnter}" CommandParameter="{Binding .}" Header="进入" />
+                    <MenuItem Command="{Binding  #ZoomBorder.((vm:RelationMapWindowViewModel)DataContext).EnterViewItem}" CommandParameter="{Binding .}" Header="进入" />
                 </ContextMenu>
             </Border.ContextMenu>
             <StackPanel>
