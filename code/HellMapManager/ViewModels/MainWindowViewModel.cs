@@ -1,12 +1,8 @@
 ﻿using System;
 using HellMapManager.States;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows.Input;
 using HellMapManager.Models;
-using HellMapManager.Services;
 using System.Threading.Tasks;
-using System.Reflection;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -22,12 +18,12 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(TitleInfo));
             OnPropertyChanged(nameof(CanShowWelcome));
             OnPropertyChanged(nameof(IsFileOpend));
-            UpdateOverview();
-            UpdateRooms();
         };
+        InitOverview();
+        InitRooms();
     }
-    public partial void UpdateOverview();
-    public partial void UpdateRooms();
+    public partial void InitOverview();
+    public partial void InitRooms();
     public AppState AppState;
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()

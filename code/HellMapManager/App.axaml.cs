@@ -28,10 +28,13 @@ public partial class App : Application
             {
                 Desktop = desktop
             };
-            desktop.MainWindow = new MainWindow
+            var mw = new MainWindow
             {
                 DataContext = new MainWindowViewModel(appstate)
             };
+            mw.InitWindow(appstate);
+            desktop.MainWindow = mw;
+
         }
 
         base.OnFrameworkInitializationCompleted();

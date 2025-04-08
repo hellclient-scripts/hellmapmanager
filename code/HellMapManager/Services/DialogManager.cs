@@ -6,7 +6,9 @@ using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-
+using MsBox.Avalonia.Dto;
+using MsBox.Avalonia.Models;
+using System.Collections.Generic;
 namespace HellMapManager.Services;
 
 public class DialogManager
@@ -67,15 +69,36 @@ public class DialogManager
 
     public static async Task<bool> ConfirmModifiedDialog()
     {
-        var box = MessageBoxManager.GetMessageBoxStandard("文件未保存", "当前文件有未保存的修改，继续操作将丢失所有修改。是否继续？", ButtonEnum.YesNo);
+        var ps = new MessageBoxCustomParams
+        {
+            ButtonDefinitions = new List<ButtonDefinition>
+                {
+                    new ButtonDefinition { Name = "是",IsDefault=true },
+                    new ButtonDefinition { Name = "否",IsCancel=true },
+                },
+            ContentTitle = "文件未保存",
+            ContentMessage = "当前文件有未保存的修改，继续操作将丢失所有修改。是否继续",
+        };
+        var box = MessageBoxManager.GetMessageBoxCustom(ps);
         var choice = await box.ShowAsync();
-        return choice == ButtonResult.Yes;
+        return choice == "是";
+
     }
     public static async Task<bool> ConfirmImportDialog()
     {
-        var box = MessageBoxManager.GetMessageBoxStandard("导入数据", "当前文件有未保存的修改，是否继续导入？", ButtonEnum.YesNo);
+        var ps = new MessageBoxCustomParams
+        {
+            ButtonDefinitions = new List<ButtonDefinition>
+                {
+                    new ButtonDefinition { Name = "是",IsDefault=true },
+                    new ButtonDefinition { Name = "否",IsCancel=true },
+                },
+            ContentTitle = "导入数据",
+            ContentMessage = "当前文件有未保存的修改，是否继续导入？",
+        };
+        var box = MessageBoxManager.GetMessageBoxCustom(ps);
         var choice = await box.ShowAsync();
-        return choice == ButtonResult.Yes;
+        return choice == "是";
     }
 
 }

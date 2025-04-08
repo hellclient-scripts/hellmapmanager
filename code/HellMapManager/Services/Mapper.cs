@@ -8,7 +8,6 @@ public enum RelationType
 {
     TwoSide = 0,
     OneSideTo = 1,
-    OneSideFrom = 2,
 }
 public class Relation
 {
@@ -54,14 +53,11 @@ public class RelationMapItem
                 case RelationType.OneSideTo:
                     mode = "to";
                     break;
-                case RelationType.OneSideFrom:
-                    mode = "from";
-                    break;
                 default:
                     mode = "twoway";
                     break;
             }
-            result.Add(new string(' ', Depth * 4 + 2) + mode);
+            result.Add(new string(' ', r.Target.Depth * 4) + mode);
             result.AddRange(r.Target.Dump());
         }
         return result;
@@ -86,7 +82,7 @@ public partial class Mapper
             var cache = new Dictionary<string, bool>();
             foreach (var exit in exits)
             {
-                if (exit.To == "")
+                if (exit.To == "" || exit.To == item.Room.Key)
                 {
                     continue;
                 }
@@ -104,19 +100,14 @@ public partial class Mapper
                 targetRoom = MapFile.Cache.Rooms[exit.To];
                 if (Walked.ContainsKey(exit.To))
                 {
-                    if (!targetRoom.HasExitTo(item.Room.Key))
-                    {
-                        mode = RelationType.OneSideFrom;
-                        Walked[exit.To].Relations.Add(new Relation(item, mode));
-                    }
                     continue;
                 }
+                var target = new RelationMapItem(targetRoom, item.Depth + 1);
+                Walked[exit.To] = target;
                 if (targetRoom.HasExitTo(item.Room.Key))
                 {
                     mode = RelationType.TwoSide;
                 }
-                var target = new RelationMapItem(targetRoom, item.Depth + 1);
-                Walked[target.Room.Key] = target;
                 item.Relations.Add(new Relation(target, mode));
             }
         }
@@ -132,7 +123,7 @@ public partial class Mapper
             buildRelations(root);
             var currentDepth = 1;
             var relations = root.Relations;
-            while (currentDepth <= MaxDepth)
+            while (currentDepth < MaxDepth)
             {
                 if (relations.Count == 0)
                 {

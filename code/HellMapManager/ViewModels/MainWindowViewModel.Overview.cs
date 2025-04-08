@@ -11,15 +11,17 @@ namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public partial void UpdateOverview()
+    public partial void InitOverview()
     {
-        OnPropertyChanged(nameof(GetMapRoomsCount));
-        OnPropertyChanged(nameof(GetMapAliasesCount));
-        OnPropertyChanged(nameof(GetMapRoutesCount));
-        OnPropertyChanged(nameof(GetMapVariablesCount));
-        OnPropertyChanged(nameof(GetMapNameLabel));
-        OnPropertyChanged(nameof(GetMapDescLabel));
-
+        AppState.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        {
+            OnPropertyChanged(nameof(GetMapRoomsCount));
+            OnPropertyChanged(nameof(GetMapAliasesCount));
+            OnPropertyChanged(nameof(GetMapRoutesCount));
+            OnPropertyChanged(nameof(GetMapVariablesCount));
+            OnPropertyChanged(nameof(GetMapNameLabel));
+            OnPropertyChanged(nameof(GetMapDescLabel));
+        };
     }
     public int GetMapRoomsCount
     {
