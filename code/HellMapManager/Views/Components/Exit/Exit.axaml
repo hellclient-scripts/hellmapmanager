@@ -1,0 +1,105 @@
+<UserControl
+  x:Class="HellMapManager.Views.Components.Exit.Exit"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="using:HellMapManager.Models"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:CompileBindings="True"
+  x:DataType="models:Exit"
+  mc:Ignorable="d">
+  <UserControl.Styles>
+    <Style Selector="Border">
+      <Setter Property="CornerRadius" Value="3" />
+      <Setter Property="Padding" Value="2" />
+      <Setter Property="Margin" Value="2 0" />
+    </Style>
+    <Style Selector="Border.To">
+      <Setter Property="Background" Value="#FF333333" />
+    </Style>
+    <Style Selector="Border.Tag">
+      <Setter Property="Background" Value="#FF2A9D8F" />
+    </Style>
+    <Style Selector="Border.ExTag">
+      <Setter Property="Background" Value="#FFE76F51" />
+    </Style>
+    <Style Selector="Border.Command">
+      <Setter Property="Background" Value="#FF264653" />
+    </Style>
+    <Style Selector="Border.Cost">
+      <Setter Property="Background" Value="#FFE9C46A" />
+    </Style>
+    <Style Selector="Border.Exit Image">
+      <Setter Property="Width" Value="18" />
+      <Setter Property="Height" Value="18" />
+    </Style>
+    <Style Selector="Border.Exit TextBlock">
+      <Setter Property="Padding" Value="5 0" />
+      <Setter Property="Background" Value="White" />
+    </Style>
+    <Style Selector="TextBlock.TipLabel">
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="StackPanel.Tooltip TextBlock">
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style Selector="StackPanel.Tooltip TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+  </UserControl.Styles>
+  <ToolTip.Tip>
+    <StackPanel Classes="Tooltip">
+      <WrapPanel>
+        <TextBlock Classes="TipLabel">目的地:</TextBlock>
+        <TextBlock Text="{Binding To}" />
+      </WrapPanel>
+      <WrapPanel>
+        <TextBlock Classes="TipLabel">指令:</TextBlock>
+        <TextBlock Text="{Binding Command}" />
+      </WrapPanel>
+      <WrapPanel IsVisible="{Binding HasTag}">
+        <TextBlock Classes="TipLabel">标签:</TextBlock>
+        <TextBlock Text="{Binding AllTags}" />
+      </WrapPanel>
+      <WrapPanel IsVisible="{Binding HasExTag}">
+        <TextBlock Classes="TipLabel">排除标签:</TextBlock>
+        <TextBlock Text="{Binding AllExTags}" />
+      </WrapPanel>
+      <WrapPanel>
+        <TextBlock Classes="TipLabel">耗时:</TextBlock>
+        <TextBlock Text="{Binding Cost}" />
+      </WrapPanel>
+    </StackPanel>
+  </ToolTip.Tip>
+  <ItemsControl ItemsSource="{Binding Labels}">
+    <ItemsControl.ItemsPanel>
+      <ItemsPanelTemplate>
+        <WrapPanel />
+      </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+    <ItemsControl.ItemTemplate>
+      <DataTemplate>
+        <Border
+          Classes.Command="{Binding IsCommand}"
+          Classes.Cost="{Binding IsCost}"
+          Classes.ExTag="{Binding IsExTag}"
+          Classes.Exit="True"
+          Classes.Tag="{Binding IsTag}"
+          Classes.To="{Binding IsTo}">
+          <StackPanel Orientation="Horizontal">
+            <Image IsVisible="{Binding IsCommand}" Source="avares://HellMapManager/Assets/keyboard.png" />
+            <Image IsVisible="{Binding IsTag}" Source="avares://HellMapManager/Assets/check_circle.png" />
+            <Image IsVisible="{Binding IsExTag}" Source="avares://HellMapManager/Assets/unpublished.png" />
+            <Image IsVisible="{Binding IsTo}" Source="avares://HellMapManager/Assets/sports_score.png" />
+            <Image IsVisible="{Binding IsCost}" Source="avares://HellMapManager/Assets/timer.png" />
+            <TextBlock Text="{Binding Value}" />
+          </StackPanel>
+        </Border>
+      </DataTemplate>
+    </ItemsControl.ItemTemplate>
+  </ItemsControl>
+
+</UserControl>

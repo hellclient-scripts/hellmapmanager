@@ -8,6 +8,7 @@ using HellMapManager.Models;
 using Avalonia.Controls;
 using HellMapManager.States;
 using Avalonia;
+using System.Collections.ObjectModel;
 namespace HellMapManager.Windows.RelationMapWindow;
 public class ViewItem
 {
@@ -73,6 +74,14 @@ public class ViewItem
     public string Updated
     {
         get => Item.Room.Updated.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss");
+    }
+    public ObservableCollection<Exit> Exits
+    {
+        get
+        {
+            var exits = new ObservableCollection<Exit>(Item.Room.Exits.ToArray());
+            return exits;
+        }
     }
 }
 
@@ -142,15 +151,23 @@ public class RelationMapWindowViewModel : ObservableObject
         if (obj is ViewItem && AppState.Current is not null)
         {
             var vi = (ViewItem)obj;
-            var item = Mapper.RelationMap(AppState.Current, vi.Item.Room.Key, AppPreset.RelationMaxDepth);
+            EnterRoomKey(vi.Item.Room.Key);
+        }
+    }
+    public void EnterRoomKey(string key)
+    {
+        if (key != "" && AppState.Current is not null)
+        {
+            var item = Mapper.RelationMap(AppState.Current, key, AppPreset.RelationMaxDepth);
             if (item is not null)
             {
-                this.Item = item;
+                Item = item;
                 OnPropertyChanged(nameof(this.MyGraph));
                 OnPropertyChanged(nameof(this.Title));
                 OnPropertyChanged(nameof(this.Current));
                 RefreshEvent?.Invoke(this, EventArgs.Empty);
             }
+
         }
     }
     public void OnClick(object sender)

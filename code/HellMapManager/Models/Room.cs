@@ -32,7 +32,7 @@ public class Room
     public List<string> Tags = [];
     //房间出口列表
     [XmlElement(ElementName = "Exit", Type = typeof(Exit))]
-    public List<Exit> Exits = [];
+    public List<Exit> Exits{get;set;} = [];
     public int ExitsCount
     {
         get => Exits.Count;

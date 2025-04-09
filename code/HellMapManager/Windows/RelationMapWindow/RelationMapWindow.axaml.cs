@@ -4,6 +4,8 @@ using Avalonia.Controls.PanAndZoom;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using HellMapManager.Services;
+using ComponentExit = HellMapManager.Views.Components.Exit;
+using HellMapManager.Models;
 using System;
 
 namespace HellMapManager.Windows.RelationMapWindow;
@@ -38,11 +40,24 @@ public partial class RelationMapWindow : Window
             if (bo.DataContext is ViewItem)
             {
                 var vi = (ViewItem)bo.DataContext;
-                Console.WriteLine(vi.Item.Room.Key);
                 ((RelationMapWindowViewModel)DataContext!).EnterViewItem(vi);
             }
         }
 
+    }
+
+    public void OnExitDoubleTapped(object sender, TappedEventArgs args)
+    {
+        if (sender is ComponentExit.Exit)
+        {
+            var s = (ComponentExit.Exit)sender;
+            if (s.DataContext is Exit)
+            {
+                var ex = (Exit)s.DataContext;
+                var p = this.Find<Panel>("RoomDetail")!;
+                ((RelationMapWindowViewModel)DataContext!).EnterRoomKey(ex.To);
+            }
+        }
     }
 
 }

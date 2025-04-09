@@ -4,6 +4,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:agc="clr-namespace:AvaloniaGraphControl;assembly=AvaloniaGraphControl"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:exit="using:HellMapManager.Views.Components.Exit"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:models="using:HellMapManager.Models"
   xmlns:paz="using:Avalonia.Controls.PanAndZoom"
@@ -16,50 +17,73 @@
   mc:Ignorable="d">
   <DockPanel>
     <Panel
+      Name="RoomDetail"
       Width="300"
       Background="#FFEEEEEE"
-      DockPanel.Dock="Left">
-      <ScrollViewer>
-        <Border Padding="10">
-          <StackPanel>
-            <StackPanel.Styles>
-              <Style Selector="TextBlock.Content">
-                <Setter Property="Padding" Value="10 5 10 5" />
-              </Style>
-              <Style Selector="TextBlock.Content.Empty">
-                <Setter Property="Foreground" Value="#FF888888" />
-              </Style>
-              <Style Selector="TextBlock.Label">
-                <Setter Property="FontWeight" Value="Bold" />
-              </Style>
-            </StackPanel.Styles>
-            <TextBlock Classes="RoomKey Label" Text="房间主键" />
-            <TextBlock Classes="RoomKey Content" Text="{Binding Current.Item.Room.Key}" />
-            <TextBlock Classes="RoomName Label" Text="房间名" />
-            <TextBlock
-              Classes="RoomName Content"
-              Classes.Empty="{Binding Current.IsNameEmpty}"
-              Text="{Binding Current.NameInfo}" />
-            <TextBlock Classes="RoomZone Label" Text="区域" />
-            <TextBlock
-              Classes="RoomZone Content"
-              Classes.Empty="{Binding Current.IsZoneEmpty}"
-              Text="{Binding Current.ZoneInfo}" />
-            <TextBlock Classes="RoomTags Label" Text="标签" />
-            <TextBlock
-              Classes="RoomTags Content"
-              Classes.Empty="{Binding Current.IsTagsEmpty}"
-              Text="{Binding Current.TagsInfo}" />
-            <TextBlock Classes="RoomDesc Label" Text="房间备注" />
-            <TextBlock
-              Classes="RoomDesc Content"
-              Classes.Empty="{Binding Current.IsDescEmpty}"
-              Text="{Binding Current.DescInfo}" />
-            <TextBlock Classes="RoomUpdated Label" Text="更新时间" />
-            <TextBlock Classes="RoomUpdated Content" Text="{Binding Current.Updated}" />
-          </StackPanel>
-        </Border>
-      </ScrollViewer>
+      DockPanel.Dock="Right">
+      <DockPanel>
+        <Panel DockPanel.Dock="Bottom">
+          <Button
+            Margin="5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Classes="accent">
+            <TextBlock>编辑房间</TextBlock>
+          </Button>
+        </Panel>
+        <ScrollViewer>
+          <Border Padding="10">
+            <StackPanel>
+              <StackPanel.Styles>
+                <Style Selector="TextBlock.Content">
+                  <Setter Property="Padding" Value="10 5 10 5" />
+                </Style>
+                <Style Selector="TextBlock.Content.Empty">
+                  <Setter Property="Foreground" Value="#FF888888" />
+                </Style>
+                <Style Selector="TextBlock.Label">
+                  <Setter Property="FontWeight" Value="Bold" />
+                </Style>
+              </StackPanel.Styles>
+              <TextBlock Classes="RoomKey Label" Text="房间主键" />
+              <TextBlock Classes="RoomKey Content" Text="{Binding Current.Item.Room.Key}" />
+              <TextBlock Classes="RoomName Label" Text="房间名" />
+              <TextBlock
+                Classes="RoomName Content"
+                Classes.Empty="{Binding Current.IsNameEmpty}"
+                Text="{Binding Current.NameInfo}" />
+              <TextBlock Classes="RoomZone Label" Text="区域" />
+              <TextBlock
+                Classes="RoomZone Content"
+                Classes.Empty="{Binding Current.IsZoneEmpty}"
+                Text="{Binding Current.ZoneInfo}" />
+              <TextBlock Classes="RoomTags Label" Text="标签" />
+              <TextBlock
+                Classes="RoomTags Content"
+                Classes.Empty="{Binding Current.IsTagsEmpty}"
+                Text="{Binding Current.TagsInfo}" />
+              <TextBlock Classes="RoomDesc Label" Text="房间备注" />
+              <TextBlock
+                Classes="RoomDesc Content"
+                Classes.Empty="{Binding Current.IsDescEmpty}"
+                Text="{Binding Current.DescInfo}" />
+              <TextBlock Classes="RoomExits Label" Text="出口列表（双击进入）" />
+              <ItemsControl ItemsSource="{Binding Current.Exits}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <exit:Exit
+                      Padding="0,5"
+                      DataContext="{Binding .}"
+                      DoubleTapped="OnExitDoubleTapped" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <TextBlock Classes="RoomUpdated Label" Text="更新时间" />
+              <TextBlock Classes="RoomUpdated Content" Text="{Binding Current.Updated}" />
+            </StackPanel>
+          </Border>
+        </ScrollViewer>
+      </DockPanel>
     </Panel>
     <Panel Height="22" DockPanel.Dock="Bottom">
       <Border HorizontalAlignment="Center" VerticalAlignment="Center">
