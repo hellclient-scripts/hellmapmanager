@@ -129,49 +129,88 @@
           <Setter Property="FontSize" Value="16" />
         </Style>
       </Panel.Styles>
-      <paz:ZoomBorder
-        Name="ZoomBorder"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        ClipToBounds="True"
-        EnableConstrains="True"
-        EnableGestureTranslation="True"
-        EnableGestureZoom="True"
-        EnablePan="True"
-        PanButton="Left"
-        Stretch="None"
-        ZoomSpeed="1.2">
-        <agc:GraphPanel
-          Name="GraphPanel"
-          Width="999999"
-          Height="999999"
-          Graph="{Binding MyGraph}"
-          LayoutMethod="MDS">
-          <agc:GraphPanel.DataTemplates>
-            <DataTemplate DataType="{x:Type vm:ViewItem}">
-              <Border
-                Classes.Level0="{Binding IsLevel0}"
-                Classes.Level1="{Binding IsLevel1}"
-                Classes.Level2="{Binding IsLevel2}"
-                Classes.LevelOther="{Binding IsLevelOther}"
-                DoubleTapped="OnDoubleTapped">
-                <Border.ContextMenu>
-                  <ContextMenu>
-                    <MenuItem
-                      Command="{Binding #ZoomBorder.((vm:RelationMapWindowViewModel)DataContext).EnterViewItem}"
-                      CommandParameter="{Binding .}"
-                      Header="进入" />
-                  </ContextMenu>
-                </Border.ContextMenu>
-                <StackPanel>
-                  <TextBlock Text="{Binding LabelWithKey}" />
-                  <TextBlock Text="{Binding Tags}" />
-                </StackPanel>
-              </Border>
-            </DataTemplate>
-          </agc:GraphPanel.DataTemplates>
-        </agc:GraphPanel>
-      </paz:ZoomBorder>
+      <Canvas x:Name="BGCanvas">
+        <paz:ZoomBorder
+          Name="ZoomBorder"
+          Canvas.Left="0"
+          Canvas.Top="0"
+          Width="{Binding ElementName=BGCanvas, Path=Bounds.Width}"
+          Height="{Binding ElementName=BGCanvas, Path=Bounds.Height}"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          ClipToBounds="True"
+          EnableConstrains="True"
+          EnableGestureTranslation="True"
+          EnableGestureZoom="True"
+          EnablePan="True"
+          PanButton="Left"
+          Stretch="None"
+          ZoomSpeed="1.2">
+          <agc:GraphPanel
+            Name="GraphPanel"
+            Width="999999"
+            Height="999999"
+            Graph="{Binding MyGraph}"
+            LayoutMethod="MDS">
+            <agc:GraphPanel.DataTemplates>
+              <DataTemplate DataType="{x:Type vm:ViewItem}">
+                <Border
+                  Classes.Level0="{Binding IsLevel0}"
+                  Classes.Level1="{Binding IsLevel1}"
+                  Classes.Level2="{Binding IsLevel2}"
+                  Classes.LevelOther="{Binding IsLevelOther}"
+                  DoubleTapped="OnDoubleTapped">
+                  <Border.ContextMenu>
+                    <ContextMenu>
+                      <MenuItem
+                        Command="{Binding #ZoomBorder.((vm:RelationMapWindowViewModel)DataContext).EnterViewItem}"
+                        CommandParameter="{Binding .}"
+                        Header="进入" />
+                    </ContextMenu>
+                  </Border.ContextMenu>
+                  <StackPanel>
+                    <TextBlock Text="{Binding LabelWithKey}" />
+                    <TextBlock Text="{Binding Tags}" />
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </agc:GraphPanel.DataTemplates>
+          </agc:GraphPanel>
+        </paz:ZoomBorder>
+        <Button
+          Canvas.Top="10"
+          Canvas.Right="10"
+          Width="42"
+          Height="42">
+          <ToolTip.Tip>
+            <TextBlock>刷新</TextBlock>
+          </ToolTip.Tip>
+          <Image
+            Width="20"
+            Height="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Source="avares://HellMapManager/Assets/refresh.png"
+            ZIndex="1" />
+        </Button>
+                <Button
+          Canvas.Top="10"
+          Canvas.Right="62"
+          Width="42"
+          Height="42">
+          <ToolTip.Tip>
+            <TextBlock>返回</TextBlock>
+          </ToolTip.Tip>
+          <Image
+            Width="20"
+            Height="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Source="avares://HellMapManager/Assets/arrow_back.png"
+            ZIndex="1" />
+        </Button>
+
+      </Canvas>
     </Panel>
   </DockPanel>
 </Window>
