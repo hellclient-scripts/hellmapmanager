@@ -1,40 +1,64 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="using:HellMapManager.ViewModels"
-             x:DataType="vm:MainWindowViewModel"
-             x:Class="HellMapManager.Views.Mapfile.Rooms.Rooms">
-             <DockPanel LastChildFill="True">
-              <TextBlock DockPanel.Dock="Top" Text="{Binding GetMapRoomsCount}"/>
-              <Grid>
-  <DataGrid Margin="20" ItemsSource="{Binding GetRooms}"
-          GridLinesVisibility="All"
-          IsReadOnly="True"
-          x:Name="AllRooms"
-          BorderThickness="1" BorderBrush="Gray">
-    <DataGrid.Columns>
-      <DataGridTextColumn Header="房间主键" Width="200"
-         Binding="{Binding Key}" />
-      <DataGridTextColumn Header="房间名" Width="200"
-         Binding="{Binding Name}" />
-      <DataGridTextColumn Header="区域" Width="200"
-         Binding="{Binding Zone}" />    
-      <DataGridTextColumn Header="出口数量" Width="200"
-         Binding="{Binding ExitsCount}" />
-      <DataGridTextColumn Header="房间标签"
-         Binding="{Binding AllTags}" />             
-		<DataGridTemplateColumn Header="操作">
-			<DataGridTemplateColumn.CellTemplate>
-				<DataTemplate>
-					<Button Command="{Binding #AllRooms.((vm:MainWindowViewModel)DataContext).OnDumpRoom}" Content="Dump" CommandParameter="{Binding .}"/>
-				</DataTemplate>
-			</DataGridTemplateColumn.CellTemplate>
-		</DataGridTemplateColumn>
+<UserControl
+   x:Class="HellMapManager.Views.Mapfile.Rooms.Rooms"
+   xmlns="https://github.com/avaloniaui"
+   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+   xmlns:vm="using:HellMapManager.ViewModels"
+   d:DesignHeight="450"
+   d:DesignWidth="800"
+   x:DataType="vm:MainWindowViewModel"
+   mc:Ignorable="d">
+   <DockPanel LastChildFill="True">
+      <TextBlock DockPanel.Dock="Top" Text="{Binding GetMapRoomsCount}" />
+      <Grid>
+         <DataGrid
+            x:Name="AllRooms"
+            Margin="20"
+            BorderBrush="Gray"
+            BorderThickness="1"
+            GridLinesVisibility="All"
+            IsReadOnly="True"
+            ItemsSource="{Binding GetRooms}">
+            <DataGrid.Columns>
+               <DataGridTextColumn
+                  Width="200"
+                  Binding="{Binding Key}"
+                  Header="房间主键" />
+               <DataGridTextColumn
+                  Width="200"
+                  Binding="{Binding Name}"
+                  Header="房间名" />
+               <DataGridTextColumn
+                  Width="200"
+                  Binding="{Binding Zone}"
+                  Header="区域" />
+               <DataGridTextColumn
+                  Width="200"
+                  Binding="{Binding ExitsCount}"
+                  Header="出口数量" />
+               <DataGridTextColumn Binding="{Binding AllTags}" Header="房间标签" />
+               <DataGridTemplateColumn Header="操作">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate>
+                        <Button
+                           Command="{Binding #AllRooms.((vm:MainWindowViewModel)DataContext).OnDumpRoom}"
+                           CommandParameter="{Binding .}"
+                           Margin="2">
+                           <ToolTip.Tip>
+                              <TextBlock>查看房间关系地图</TextBlock>
+                           </ToolTip.Tip>
+                           <Image
+                              Width="16"
+                              Height="16"
+                              Source="avares://HellMapManager/Assets/travel_explore.png" />
 
-    </DataGrid.Columns>
-  </DataGrid>
-  </Grid>
-  </DockPanel>
+                        </Button>
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
+            </DataGrid.Columns>
+         </DataGrid>
+      </Grid>
+   </DockPanel>
 </UserControl>

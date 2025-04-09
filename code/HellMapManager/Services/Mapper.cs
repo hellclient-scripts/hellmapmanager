@@ -28,7 +28,7 @@ public class RelationMapItem
         this.Room = room;
     }
     public int Depth = 0;
-    public Room Room;
+    public Room Room{get;set;}
     public List<Relation> Relations = [];
     public bool HasRelation(string target)
     {

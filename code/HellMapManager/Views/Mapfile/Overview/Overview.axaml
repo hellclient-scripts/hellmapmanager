@@ -1,23 +1,26 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="using:HellMapManager.ViewModels"
-             x:DataType="vm:MainWindowViewModel"
-             x:Class="HellMapManager.Views.Mapfile.Overview.Overview">
+<UserControl
+  x:Class="HellMapManager.Views.Mapfile.Overview.Overview"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.ViewModels"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:MainWindowViewModel"
+  mc:Ignorable="d">
   <StackPanel Margin="20">
-  <TextBlock Text="地图名:"/>
-  <TextBlock Text="{Binding GetMapNameLabel}"/>
-  <TextBlock Text="描述:"/>
-  <TextBlock Text="{Binding GetMapDescLabel}"/>
-  <TextBlock Text="房间数量:"/>
-  <TextBlock Text="{Binding GetMapRoomsCount}"/>
-  <TextBlock Text="别名数量:"/>
-  <TextBlock Text="{Binding GetMapAliasesCount}"/>
-  <TextBlock Text="路线数量:"/>
-  <TextBlock Text="{Binding GetMapRoutesCount}"/>
-  <TextBlock Text="变量数量:"/>
-  <TextBlock Text="{Binding GetMapVariablesCount}"/>
+    <TextBlock Text="地图名:" />
+    <TextBlock Text="{Binding GetMapNameLabel}" />
+    <TextBlock Text="描述:" />
+    <TextBlock Text="{Binding GetMapDescLabel}" />
+    <TextBlock Text="房间数量:" />
+    <TextBlock Text="{Binding GetMapRoomsCount}" />
+    <TextBlock Text="别名数量:" />
+    <TextBlock Text="{Binding GetMapAliasesCount}" />
+    <TextBlock Text="路线数量:" />
+    <TextBlock Text="{Binding GetMapRoutesCount}" />
+    <TextBlock Text="变量数量:" />
+    <TextBlock Text="{Binding GetMapVariablesCount}" />
   </StackPanel>
 </UserControl>

@@ -30,15 +30,6 @@ public class Room
     //标签列表，筛选用
     [XmlElement(ElementName = "Tag", Type = typeof(string))]
     public List<string> Tags = [];
-    //禁用标记位
-    [XmlIgnore]
-    public bool Disabled = false;
-    [XmlAttribute("Disabled")]
-    public int DisabledInXML
-    {
-        get => Disabled ? 1 : 0;
-        set { Disabled = (value == 1); }
-    }
     //房间出口列表
     [XmlElement(ElementName = "Exit", Type = typeof(Exit))]
     public List<Exit> Exits = [];
@@ -61,6 +52,7 @@ public class Room
         }
         return false;
     }
+    public DateTime Updated;
 }
 
 public class RoomFormatter

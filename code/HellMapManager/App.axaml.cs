@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using HellMapManager.ViewModels;
 using HellMapManager.Views;
 using HellMapManager.States;
+using Avalonia.Remote.Protocol.Viewport;
 
 namespace HellMapManager;
 
@@ -28,13 +29,13 @@ public partial class App : Application
             {
                 Desktop = desktop
             };
-            var mw = new MainWindow
+            var mw = new MainWindow()
             {
+                AppState = appstate,
                 DataContext = new MainWindowViewModel(appstate)
             };
-            mw.InitWindow(appstate);
             desktop.MainWindow = mw;
-
+            mw.InitWindow();
         }
 
         base.OnFrameworkInitializationCompleted();

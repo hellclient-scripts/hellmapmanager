@@ -23,7 +23,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public void OnDumpRoom(Room room)
     {
-        var rm = Mapper.RelationMap(AppState.Current!, room.Key, 5);
+        var rm = Mapper.RelationMap(AppState.Current!, room.Key, AppPreset.RelationMaxDepth);
         if (rm is not null)
         {
             AppState.RaiseShowRelationMapEvent(this, rm);

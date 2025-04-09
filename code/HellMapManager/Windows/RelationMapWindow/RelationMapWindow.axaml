@@ -1,92 +1,153 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        xmlns:vm="using:HellMapManager.Windows.RelationMapWindow"
-        xmlns:models="using:HellMapManager.Models"
-        xmlns:services="using:HellMapManager.Services"
-        x:DataType="vm:RelationMapWindowViewModel"
-        x:Class="HellMapManager.Windows.RelationMapWindow.RelationMapWindow"
-        xmlns:paz="using:Avalonia.Controls.PanAndZoom"
-        xmlns:agc="clr-namespace:AvaloniaGraphControl;assembly=AvaloniaGraphControl"
-        Title="{Binding Title}">
-<Panel>
-  <Panel.Styles>
-    <Style Selector="Border">
-      <Setter Property="BorderBrush" Value="Black"/>
-      <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="3"/>
-    </Style>
-   <Style Selector="Border.Level0">
-         <Setter Property="Padding" Value="16"/>
-        <Setter Property="Background" Value="#FFFFF2C2"/>
-   </Style>
-   <Style Selector="Border.Level0 TextBlock">
-      <Setter Property="FontSize" Value="24"/>
-   </Style>
-   <Style Selector="Border.Level1">
-         <Setter Property="Padding" Value="10"/>
-        <Setter Property="Background" Value="#FFD9DFC6"/>
-   </Style>
-   <Style Selector="Border.Level1 TextBlock">
-      <Setter Property="FontSize" Value="20"/>
-   </Style>
-   <Style Selector="Border.Level2">
-         <Setter Property="Padding" Value="8"/>
-         <Setter Property="Background" Value="#FFEFF3EA"/>
-   </Style>
-   <Style Selector="Border.Level2 TextBlock">
-      <Setter Property="FontSize" Value="18"/>
-   </Style>
-   <Style Selector="Border.LevelOther">
-         <Setter Property="Padding" Value="6"/>
-         <Setter Property="Background" Value="White"/>
-   </Style>
-   <Style Selector="Border.LevelOther TextBlock">
-      <Setter Property="FontSize" Value="16"/>
-   </Style>   
- </Panel.Styles>
-<paz:ZoomBorder Name="ZoomBorder"
-                        ZoomSpeed="1.2" 
-                        EnablePan="True"
-                        PanButton="Left"
-                        EnableGestureZoom="True"
-                        EnableGestureTranslation="True"
-                        EnableConstrains="True"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Stretch="None"
-                        ClipToBounds="True"
->
-      <agc:GraphPanel Graph="{Binding MyGraph}" 
-      LayoutMethod="MDS"
-      Name="GraphPanel" 
-      Width="999999"
-      Height="999999"
-      >
-        <agc:GraphPanel.DataTemplates>
-        <DataTemplate DataType="{x:Type vm:ViewItem}">
-          <Border
-            Classes.Level0="{Binding IsLevel0}"
-            Classes.Level1="{Binding IsLevel1}"
-            Classes.Level2="{Binding IsLevel2}"
-            Classes.LevelOther="{Binding IsLevelOther}"
-            DoubleTapped="OnDoubleTapped"
-          >
-                <Border.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Command="{Binding  #ZoomBorder.((vm:RelationMapWindowViewModel)DataContext).EnterViewItem}" CommandParameter="{Binding .}" Header="进入" />
-                </ContextMenu>
-            </Border.ContextMenu>
-            <StackPanel>
-            <TextBlock Text="{Binding LabelWithKey}"/>
-            <TextBlock Text="{Binding Tags}"/>
-            </StackPanel>
-          </Border>
-        </DataTemplate>
-        </agc:GraphPanel.DataTemplates>
-      </agc:GraphPanel>
-    </paz:ZoomBorder>
+<Window
+  x:Class="HellMapManager.Windows.RelationMapWindow.RelationMapWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:agc="clr-namespace:AvaloniaGraphControl;assembly=AvaloniaGraphControl"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="using:HellMapManager.Models"
+  xmlns:paz="using:Avalonia.Controls.PanAndZoom"
+  xmlns:services="using:HellMapManager.Services"
+  xmlns:vm="using:HellMapManager.Windows.RelationMapWindow"
+  Title="{Binding Title}"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:RelationMapWindowViewModel"
+  mc:Ignorable="d">
+  <DockPanel>
+    <Panel
+      Width="300"
+      Background="#FFEEEEEE"
+      DockPanel.Dock="Left">
+      <ScrollViewer>
+        <Border Padding="10">
+          <StackPanel>
+            <StackPanel.Styles>
+              <Style Selector="TextBlock.Content">
+                <Setter Property="Padding" Value="10 5 10 5" />
+              </Style>
+              <Style Selector="TextBlock.Content.Empty">
+                <Setter Property="Foreground" Value="#FF888888" />
+              </Style>
+              <Style Selector="TextBlock.Label">
+                <Setter Property="FontWeight" Value="Bold" />
+              </Style>
+            </StackPanel.Styles>
+            <TextBlock Classes="RoomKey Label" Text="房间主键" />
+            <TextBlock Classes="RoomKey Content" Text="{Binding Current.Item.Room.Key}" />
+            <TextBlock Classes="RoomName Label" Text="房间名" />
+            <TextBlock
+              Classes="RoomName Content"
+              Classes.Empty="{Binding Current.IsNameEmpty}"
+              Text="{Binding Current.NameInfo}" />
+            <TextBlock Classes="RoomZone Label" Text="区域" />
+            <TextBlock
+              Classes="RoomZone Content"
+              Classes.Empty="{Binding Current.IsZoneEmpty}"
+              Text="{Binding Current.ZoneInfo}" />
+            <TextBlock Classes="RoomTags Label" Text="标签" />
+            <TextBlock
+              Classes="RoomTags Content"
+              Classes.Empty="{Binding Current.IsTagsEmpty}"
+              Text="{Binding Current.TagsInfo}" />
+            <TextBlock Classes="RoomDesc Label" Text="房间备注" />
+            <TextBlock
+              Classes="RoomDesc Content"
+              Classes.Empty="{Binding Current.IsDescEmpty}"
+              Text="{Binding Current.DescInfo}" />
+            <TextBlock Classes="RoomUpdated Label" Text="更新时间" />
+            <TextBlock Classes="RoomUpdated Content" Text="{Binding Current.Updated}" />
+          </StackPanel>
+        </Border>
+      </ScrollViewer>
     </Panel>
+    <Panel Height="22" DockPanel.Dock="Bottom">
+      <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock
+          FontSize="14"
+          Foreground="#FF666666"
+          Text="鼠标拖动移动地图，滚轮缩放，右键房间显示菜单，双击房间进入" />
+      </Border>
+    </Panel>
+    <Panel>
+      <Panel.Styles>
+        <Style Selector="Border">
+          <Setter Property="BorderBrush" Value="Black" />
+          <Setter Property="BorderThickness" Value="1" />
+          <Setter Property="CornerRadius" Value="3" />
+        </Style>
+        <Style Selector="Border.Level0">
+          <Setter Property="Padding" Value="16" />
+          <Setter Property="Background" Value="#FFFFF2C2" />
+        </Style>
+        <Style Selector="Border.Level0 TextBlock">
+          <Setter Property="FontSize" Value="24" />
+        </Style>
+        <Style Selector="Border.Level1">
+          <Setter Property="Padding" Value="10" />
+          <Setter Property="Background" Value="#FFD9DFC6" />
+        </Style>
+        <Style Selector="Border.Level1 TextBlock">
+          <Setter Property="FontSize" Value="20" />
+        </Style>
+        <Style Selector="Border.Level2">
+          <Setter Property="Padding" Value="8" />
+          <Setter Property="Background" Value="#FFEFF3EA" />
+        </Style>
+        <Style Selector="Border.Level2 TextBlock">
+          <Setter Property="FontSize" Value="18" />
+        </Style>
+        <Style Selector="Border.LevelOther">
+          <Setter Property="Padding" Value="6" />
+          <Setter Property="Background" Value="White" />
+        </Style>
+        <Style Selector="Border.LevelOther TextBlock">
+          <Setter Property="FontSize" Value="16" />
+        </Style>
+      </Panel.Styles>
+      <paz:ZoomBorder
+        Name="ZoomBorder"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        ClipToBounds="True"
+        EnableConstrains="True"
+        EnableGestureTranslation="True"
+        EnableGestureZoom="True"
+        EnablePan="True"
+        PanButton="Left"
+        Stretch="None"
+        ZoomSpeed="1.2">
+        <agc:GraphPanel
+          Name="GraphPanel"
+          Width="999999"
+          Height="999999"
+          Graph="{Binding MyGraph}"
+          LayoutMethod="MDS">
+          <agc:GraphPanel.DataTemplates>
+            <DataTemplate DataType="{x:Type vm:ViewItem}">
+              <Border
+                Classes.Level0="{Binding IsLevel0}"
+                Classes.Level1="{Binding IsLevel1}"
+                Classes.Level2="{Binding IsLevel2}"
+                Classes.LevelOther="{Binding IsLevelOther}"
+                DoubleTapped="OnDoubleTapped">
+                <Border.ContextMenu>
+                  <ContextMenu>
+                    <MenuItem
+                      Command="{Binding #ZoomBorder.((vm:RelationMapWindowViewModel)DataContext).EnterViewItem}"
+                      CommandParameter="{Binding .}"
+                      Header="进入" />
+                  </ContextMenu>
+                </Border.ContextMenu>
+                <StackPanel>
+                  <TextBlock Text="{Binding LabelWithKey}" />
+                  <TextBlock Text="{Binding Tags}" />
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </agc:GraphPanel.DataTemplates>
+        </agc:GraphPanel>
+      </paz:ZoomBorder>
+    </Panel>
+  </DockPanel>
 </Window>

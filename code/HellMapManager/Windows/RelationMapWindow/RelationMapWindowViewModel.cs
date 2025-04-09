@@ -20,7 +20,7 @@ public class ViewItem
     public bool IsLevel1 { get => Item.Depth == 1; }
     public bool IsLevel2 { get => Item.Depth == 2; }
     public bool IsLevelOther { get => Item.Depth > 2; }
-    private string ZoneInfo
+    private string ZoneSuffix
     {
         get
         {
@@ -31,12 +31,48 @@ public class ViewItem
     {
         get
         {
-            return $"{Item.Room.Name}({Item.Room.Key}){ZoneInfo}";
+            return $"{Item.Room.Name}({Item.Room.Key}){ZoneSuffix}";
         }
     }
     public string Tags
     {
         get => string.Join(",", Item.Room.Tags);
+    }
+    public bool IsDescEmpty
+    {
+        get => Item.Room.Desc == "";
+    }
+    public string DescInfo
+    {
+        get => Item.Room.Desc == "" ? "<无描述>" : Item.Room.Desc;
+    }
+    public bool IsNameEmpty
+    {
+        get => Item.Room.Name == "";
+    }
+    public string NameInfo
+    {
+        get => Item.Room.Name == "" ? "<无房间名>" : Item.Room.Name;
+    }
+    public bool IsZoneEmpty
+    {
+        get => Item.Room.Zone == "";
+    }
+    public string ZoneInfo
+    {
+        get => Item.Room.Zone == "" ? "<无区域>" : Item.Room.Zone;
+    }
+    public bool IsTagsEmpty
+    {
+        get => Item.Room.Tags.Count == 0;
+    }
+    public string TagsInfo
+    {
+        get => Item.Room.Tags.Count == 0 ? "<无标签>" : Tags;
+    }
+    public string Updated
+    {
+        get => Item.Room.Updated.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss");
     }
 }
 
@@ -52,6 +88,10 @@ public class RelationMapWindowViewModel : ObservableObject
     public string Title
     {
         get => "房间   " + Item.Room.Name + "(" + Item.Room.Key + ")" + "   关系地图";
+    }
+    public ViewItem Current
+    {
+        get => new ViewItem(Item);
     }
     public Graph MyGraph
     {
@@ -102,12 +142,13 @@ public class RelationMapWindowViewModel : ObservableObject
         if (obj is ViewItem && AppState.Current is not null)
         {
             var vi = (ViewItem)obj;
-            var item = Mapper.RelationMap(AppState.Current, vi.Item.Room.Key, 5);
+            var item = Mapper.RelationMap(AppState.Current, vi.Item.Room.Key, AppPreset.RelationMaxDepth);
             if (item is not null)
             {
                 this.Item = item;
                 OnPropertyChanged(nameof(this.MyGraph));
                 OnPropertyChanged(nameof(this.Title));
+                OnPropertyChanged(nameof(this.Current));
                 RefreshEvent?.Invoke(this, EventArgs.Empty);
             }
         }

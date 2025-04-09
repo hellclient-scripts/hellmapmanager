@@ -1,30 +1,36 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:overview="clr-namespace:HellMapManager.Views.Mapfile.Overview"
-             xmlns:rooms="clr-namespace:HellMapManager.Views.Mapfile.Rooms"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="using:HellMapManager.ViewModels"
-             x:DataType="vm:MainWindowViewModel"
-             x:Class="HellMapManager.Views.Mapfile.MapFile">
-             <DockPanel LastChildFill="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-<TabControl Margin="5">
-  <TabItem Header="概览">
-    <overview:Overview  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-  </TabItem>
-  <TabItem Header="房间">
-    <rooms:Rooms  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-  </TabItem>
-  <TabItem Header="别名">
-    <TextBlock Margin="5">This is tab 3 content</TextBlock>
-  </TabItem>
-  <TabItem Header="路线">
-    <TextBlock Margin="5">This is tab 3 content</TextBlock>
-  </TabItem>
-  <TabItem Header="地标">
-    <TextBlock Margin="5">This is tab 3 content</TextBlock>
-  </TabItem>
-</TabControl>
-</DockPanel>
+<UserControl
+  x:Class="HellMapManager.Views.Mapfile.MapFile"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:overview="clr-namespace:HellMapManager.Views.Mapfile.Overview"
+  xmlns:rooms="clr-namespace:HellMapManager.Views.Mapfile.Rooms"
+  xmlns:vm="using:HellMapManager.ViewModels"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:MainWindowViewModel"
+  mc:Ignorable="d">
+  <DockPanel
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    LastChildFill="True">
+    <TabControl Margin="5">
+      <TabItem Header="概览">
+        <overview:Overview HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+      </TabItem>
+      <TabItem Header="房间">
+        <rooms:Rooms HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+      </TabItem>
+      <TabItem Header="别名">
+        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      </TabItem>
+      <TabItem Header="路线">
+        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      </TabItem>
+      <TabItem Header="地标">
+        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      </TabItem>
+    </TabControl>
+  </DockPanel>
 </UserControl>

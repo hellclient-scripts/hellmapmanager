@@ -14,11 +14,10 @@ public partial class MainWindow : Window
         InitializeComponent();
         // Console.WriteLine(Environment.ProcessPath);
     }
-    public AppState AppState;
-    public void InitWindow(AppState appState)
+    public required AppState AppState;
+    public void InitWindow()
     {
-        AppState = appState;
-        appState.ShowRelationMapEvent += this.ShowRelationMap;
+        AppState.ShowRelationMapEvent += this.ShowRelationMap;
     }
     public async void ShowRelationMap(object? sender, RelationMapItem rm)
     {

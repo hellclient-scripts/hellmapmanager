@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 
 using HellMapManager.Models;
+using System;
 
 namespace HellMapManager.Services;
 
@@ -33,6 +34,7 @@ public class RoomsH
             var room = RoomFormatter.DecodeRoom(linedata);
             if (room is not null)
             {
+                room.Updated = DateTime.Now;
                 result.Add(room);
             }
         }
