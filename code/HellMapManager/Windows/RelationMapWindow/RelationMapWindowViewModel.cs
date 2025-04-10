@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using HellMapManager.States;
 using Avalonia;
 using System.Collections.ObjectModel;
+using System.Linq;
 namespace HellMapManager.Windows.RelationMapWindow;
 public class ViewItem
 {
@@ -92,6 +93,7 @@ public class RelationMapWindowViewModel : ObservableObject
         AppState = state;
         Item = item;
     }
+    public List<string> Histories = [];
     public AppState AppState;
     public RelationMapItem Item;
     public string Title
@@ -146,6 +148,28 @@ public class RelationMapWindowViewModel : ObservableObject
             return graph;
         }
     }
+    public bool HasHistory
+    {
+        get => Histories.Count > 0;
+    }
+    private void AddHistory(string key)
+    {
+        Histories.Remove(key);
+        Histories.Add(key);
+        if (Histories.Count > AppPreset.RelationMaxHistoriesCount)
+        {
+            Histories = Histories.Slice(Histories.Count - AppPreset.RelationMaxHistoriesCount, AppPreset.RelationMaxHistoriesCount);
+        }
+    }
+    public void HistoryBack()
+    {
+        if (Histories.Count > 0)
+        {
+            var last = Histories.Last();
+            Histories = Histories.Slice(0, Histories.Count - 1);
+            DoEnterRoomKey(last, false);
+        }
+    }
     public void EnterViewItem(object obj)
     {
         if (obj is ViewItem && AppState.Current is not null)
@@ -156,33 +180,32 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     public void EnterRoomKey(string key)
     {
+        DoEnterRoomKey(key, true);
+    }
+    private void DoEnterRoomKey(string key, bool modfiyHistory)
+    {
         if (key != "" && AppState.Current is not null)
         {
             var item = Mapper.RelationMap(AppState.Current, key, AppPreset.RelationMaxDepth);
             if (item is not null)
             {
+                if (modfiyHistory)
+                {
+                    AddHistory(Item.Room.Key);
+                }
                 Item = item;
                 OnPropertyChanged(nameof(this.MyGraph));
                 OnPropertyChanged(nameof(this.Title));
                 OnPropertyChanged(nameof(this.Current));
+                OnPropertyChanged(nameof(this.HasHistory));
                 RefreshEvent?.Invoke(this, EventArgs.Empty);
             }
 
         }
     }
-    public void OnClick(object sender)
+    public void OnHistoryBack()
     {
-        Console.WriteLine("Click");
-        if (sender is GraphPanel)
-        {
-            var gp = (GraphPanel)sender;
-            Console.WriteLine(gp.DesiredSize.Width);
-            Console.WriteLine(gp.DesiredSize.Height);
-            Console.WriteLine(gp.Bounds.Width);
-            Console.WriteLine(gp.Bounds.Height);
-            Console.WriteLine(gp.Width);
-            Console.WriteLine(gp.Height);
-        }
+        HistoryBack();
     }
     public event EventHandler? RefreshEvent;
 }

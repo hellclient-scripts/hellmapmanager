@@ -206,7 +206,9 @@
           Canvas.Top="10"
           Canvas.Right="62"
           Width="42"
-          Height="42">
+          Height="42"
+          Command="{Binding OnHistoryBack}"
+          IsVisible="{Binding HasHistory}">
           <ToolTip.Tip>
             <TextBlock>返回</TextBlock>
           </ToolTip.Tip>
