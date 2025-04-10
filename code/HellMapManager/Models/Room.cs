@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -23,19 +22,14 @@ public partial class Room
 {
     public string Key { get; set; } = "";
     //房间的名称，显示用
-    [XmlAttribute]
     public string Name { get; set; } = "";
-    [XmlText]
     //房间的描述，显示用
     public string Desc { get; set; } = "";
-    [XmlAttribute]
     //房间的区域，筛选用
     public string Group { get; set; } = "";
     //标签列表，筛选用
-    [XmlElement(ElementName = "Tag", Type = typeof(string))]
     public List<string> Tags = [];
     //房间出口列表
-    [XmlElement(ElementName = "Exit", Type = typeof(Exit))]
     public List<Exit> Exits { get; set; } = [];
     public List<RoomData> Data { get; set; } = [];
     public Room Clone()
@@ -51,14 +45,12 @@ public partial class Room
         };
     }
 }
-[XmlRootAttribute("Room")]
 public partial class Room
 {
     [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Room))]
     public Room()
     {
     }
-    [XmlAttribute]
     //房间的key,必须唯一，不能为空
     public int ExitsCount
     {

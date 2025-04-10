@@ -1,28 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Serialization;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.VisualBasic;
-using System.Linq;
 namespace HellMapManager.Models;
 
-[XmlRootAttribute("Info")]
 public partial class MapInfo
 {
     public MapInfo()
     {
     }
     public static string CurrentVersion = "1.0";
-    [XmlAttribute]
     public string Name { get; set; } = "";
     public string NameLabel { get => Name == "" ? "<未命名>" : Name; }
-    [XmlText]
     public string Desc { get; set; } = "";
     public string DescLabel { get => Name == "" ? "<无描述>" : Name; }
-    [XmlAttribute]
     public string Version { get; set; } = "";
-    [XmlAttribute]
     public long UpdatedTime { get; set; } = 0;
     public static MapInfo Empty(string name, string desc)
     {
@@ -36,18 +27,8 @@ public partial class MapInfo
         return info;
     }
 }
-[XmlRootAttribute("Map")]
 public partial class Map
 {
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Map))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(MapInfo))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Alias))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Room))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Exit))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Route))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Variable))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Landmark))]
-
     public Map()
     {
         Info = MapInfo.Empty("", "");
@@ -59,26 +40,15 @@ public partial class Map
     }
 
     public MapInfo Info { get; set; }
-    [XmlArray(ElementName = "Rooms")]
-    [XmlArrayItem(typeof(Room))]
     public List<Room> Rooms { get; set; } = [];
-    [XmlArray(ElementName = "Aliases")]
-    [XmlArrayItem(typeof(Alias))]
     public List<Alias> Aliases { get; set; } = [];
-    [XmlArray(ElementName = "Landmarks")]
-    [XmlArrayItem(typeof(Landmark))]
     public List<Landmark> Landmarks { get; set; } = [];
-    [XmlArray(ElementName = "Variables")]
     public List<Variable> Variables { get; set; } = [];
-    [XmlArray(ElementName = "Routes")]
-    [XmlArrayItem(typeof(Route))]
     public List<Route> Routes { get; set; } = [];
-
     public List<Region> Regions { get; set; } = [];
-
     public List<Trace> Traces { get; set; } = [];
-    public List<Trace> Shortcuts { get; set; } = [];
-
+    public List<Shortcut> Shortcuts { get; set; } = [];
+    public List<Snapshot> Snapshots { get; set; } = [];
     public void Sort()
     {
         this.Rooms.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));

@@ -9,5 +9,5 @@ public class Route
     public string Desc { get; set; } = "";
     public string Group { get; set; } = "";
 
-    public List<Room> Rooms = [];
+    public List<string> Rooms = [];
 }
