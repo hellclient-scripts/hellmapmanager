@@ -12,13 +12,11 @@ public class RoomsH
 {
     public static List<Room> Open(string file)
     {
-        using (var fileStream = new FileStream(file, FileMode.Open))
-        {
-            var body = new byte[fileStream.Length];
-            fileStream.ReadAsync(body, 0, (int)fileStream.Length);
-            var rooms = Load(Encoding.UTF8.GetString(body));
-            return rooms;
-        }
+        using var fileStream = new FileStream(file, FileMode.Open);
+        var body = new byte[fileStream.Length];
+        fileStream.ReadAsync(body, 0, (int)fileStream.Length);
+        var rooms = Load(Encoding.UTF8.GetString(body));
+        return rooms;
     }
     public static List<Room> Load(string data)
     {
@@ -34,7 +32,6 @@ public class RoomsH
             var room = RoomFormatter.DecodeRoom(linedata);
             if (room is not null)
             {
-                room.Updated = DateTime.Now;
                 result.Add(room);
             }
         }

@@ -28,10 +28,22 @@
       <TabItem Header="路线">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>
       </TabItem>
+      <TabItem Header="踪迹">
+        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      </TabItem>
       <TabItem Header="地区">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>
       </TabItem>
       <TabItem Header="地标">
+        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      </TabItem>
+      <TabItem Header="捷径">
+        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      </TabItem>
+      <TabItem Header="变量">
+        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+      </TabItem>
+      <TabItem Header="快照">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>
       </TabItem>
     </TabControl>

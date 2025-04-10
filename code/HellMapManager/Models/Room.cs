@@ -7,16 +7,20 @@ using System.Text;
 
 namespace HellMapManager.Models;
 
-//房间的数据结构
-[XmlRootAttribute("Room")]
-public class Room
+
+public class RoomData(string key, string value)
 {
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Room))]
-    public Room()
+    public string Key { get; set; } = key;
+    public string Value { get; set; } = value;
+    public RoomData Clone()
     {
+        return new RoomData(Key, Value);
     }
-    [XmlAttribute]
-    //房间的key,必须唯一，不能为空
+}
+
+//房间的数据结构
+public partial class Room
+{
     public string Key { get; set; } = "";
     //房间的名称，显示用
     [XmlAttribute]
@@ -26,13 +30,36 @@ public class Room
     public string Desc { get; set; } = "";
     [XmlAttribute]
     //房间的区域，筛选用
-    public string Zone { get; set; } = "";
+    public string Group { get; set; } = "";
     //标签列表，筛选用
     [XmlElement(ElementName = "Tag", Type = typeof(string))]
     public List<string> Tags = [];
     //房间出口列表
     [XmlElement(ElementName = "Exit", Type = typeof(Exit))]
-    public List<Exit> Exits{get;set;} = [];
+    public List<Exit> Exits { get; set; } = [];
+    public List<RoomData> Data { get; set; } = [];
+    public Room Clone()
+    {
+        return new Room()
+        {
+            Key = Key,
+            Name = Name,
+            Desc = Desc,
+            Group = Group,
+            Tags = Tags.GetRange(0, Tags.Count),
+            Data = Data.ConvertAll(d => d.Clone()),
+        };
+    }
+}
+[XmlRootAttribute("Room")]
+public partial class Room
+{
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Room))]
+    public Room()
+    {
+    }
+    [XmlAttribute]
+    //房间的key,必须唯一，不能为空
     public int ExitsCount
     {
         get => Exits.Count;
@@ -52,7 +79,26 @@ public class Room
         }
         return false;
     }
-    public DateTime Updated;
+    public void Sort()
+    {
+        Data.Sort((x, y) => x.Key.CompareTo(y.Key));
+    }
+    private void AddData(RoomData rd)
+    {
+        Data.RemoveAll((d) => d.Key == rd.Key);
+        if (rd.Value != "")
+        {
+            Data.Add(rd);
+        }
+    }
+    public void SetDatas(List<RoomData> list)
+    {
+        foreach (var rd in list)
+        {
+            AddData(rd);
+        }
+        Data.Sort((x, y) => x.Key.CompareTo(y.Key));
+    }
 }
 
 public class RoomFormatter
@@ -109,13 +155,13 @@ public class RoomFormatter
             Exits.Add(Exit);
         }
         var AllExits = new StringBuilder().AppendJoin(",", Exits);
-        var RoomDef = new StringBuilder(Escape(room.Zone));
+        var RoomDef = new StringBuilder(Escape(room.Group));
         foreach (string tag in room.Tags)
         {
             RoomDef.Append("+").Append(Escape(tag));
         }
         var RoomDesc = new StringBuilder(Escape(room.Name));
-        if (room.Zone != "" || room.Tags.Count > 0)
+        if (room.Group != "" || room.Tags.Count > 0)
         {
             RoomDesc.Append(RoomDef);
         }
@@ -143,11 +189,11 @@ public class RoomFormatter
             room.Name = Unescape(RoomNameAndRoomDef[0].Trim());
             if (RoomNameAndRoomDef.Length > 1)
             {
-                var RoomZoneAndRoomTags = RoomNameAndRoomDef[1].Split("+");
-                room.Zone = Unescape(RoomZoneAndRoomTags[0].Trim());
-                for (var i = 1; i < RoomZoneAndRoomTags.Length; i++)
+                var RoomGroupAndRoomTags = RoomNameAndRoomDef[1].Split("+");
+                room.Group = Unescape(RoomGroupAndRoomTags[0].Trim());
+                for (var i = 1; i < RoomGroupAndRoomTags.Length; i++)
                 {
-                    var tag = Unescape(RoomZoneAndRoomTags[i].Trim());
+                    var tag = Unescape(RoomGroupAndRoomTags[i].Trim());
                     room.Tags.Add(tag);
                 }
             }

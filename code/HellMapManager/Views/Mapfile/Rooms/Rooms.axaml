@@ -31,7 +31,7 @@
                   Header="房间名" />
                <DataGridTextColumn
                   Width="200"
-                  Binding="{Binding Zone}"
+                  Binding="{Binding Group}"
                   Header="区域" />
                <DataGridTextColumn
                   Width="200"

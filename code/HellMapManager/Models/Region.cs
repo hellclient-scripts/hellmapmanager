@@ -8,10 +8,10 @@ public enum RegionItemType
     Room,
     Zoom,
 }
-public class RegionItem(RegionItemType type, string key)
+public class RegionItem(RegionItemType type, string value)
 {
     public RegionItemType Type { get; set; } = type;
-    public string Key { get; set; } = key;
+    public string Value { get; set; } = value;
 
 }
 
@@ -22,6 +22,5 @@ public class Region()
 
     public string Group { get; set; } = "";
     public List<RegionItem> Items { get; set; } = [];
-    public DateTime Updated { get; set; }
 
 }

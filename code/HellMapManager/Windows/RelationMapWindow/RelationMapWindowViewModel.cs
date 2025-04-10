@@ -22,18 +22,18 @@ public class ViewItem
     public bool IsLevel1 { get => Item.Depth == 1; }
     public bool IsLevel2 { get => Item.Depth == 2; }
     public bool IsLevelOther { get => Item.Depth > 2; }
-    private string ZoneSuffix
+    private string GroupSuffix
     {
         get
         {
-            return Item.Room.Zone == "" ? "" : $"/{Item.Room.Zone}";
+            return Item.Room.Group == "" ? "" : $"/{Item.Room.Group}";
         }
     }
     public string LabelWithKey
     {
         get
         {
-            return $"{Item.Room.Name}({Item.Room.Key}){ZoneSuffix}";
+            return $"{Item.Room.Name}({Item.Room.Key}){GroupSuffix}";
         }
     }
     public string Tags
@@ -43,6 +43,14 @@ public class ViewItem
     public bool IsDescEmpty
     {
         get => Item.Room.Desc == "";
+    }
+    public bool IsDataEmpty
+    {
+        get => Item.Room.Data.Count == 0;
+    }
+    public bool HasData
+    {
+        get => Item.Room.Data.Count > 0;
     }
     public string DescInfo
     {
@@ -56,13 +64,13 @@ public class ViewItem
     {
         get => Item.Room.Name == "" ? "<无房间名>" : Item.Room.Name;
     }
-    public bool IsZoneEmpty
+    public bool IsGroupEmpty
     {
-        get => Item.Room.Zone == "";
+        get => Item.Room.Group == "";
     }
-    public string ZoneInfo
+    public string GroupInfo
     {
-        get => Item.Room.Zone == "" ? "<无区域>" : Item.Room.Zone;
+        get => Item.Room.Group == "" ? "<无区域>" : Item.Room.Group;
     }
     public bool IsTagsEmpty
     {
@@ -71,10 +79,6 @@ public class ViewItem
     public string TagsInfo
     {
         get => Item.Room.Tags.Count == 0 ? "<无标签>" : Tags;
-    }
-    public string Updated
-    {
-        get => Item.Room.Updated.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss");
     }
     public ObservableCollection<Exit> Exits
     {

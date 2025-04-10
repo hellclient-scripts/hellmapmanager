@@ -1,13 +1,10 @@
 using System.Collections.Generic;
-
 namespace HellMapManager.Models;
-
-public class Route
+public partial class Snapshot
 {
-    public Route() { }
     public string Key { get; set; } = "";
-    public string Desc { get; set; } = "";
+    public int Timestamp = 0;
     public string Group { get; set; } = "";
 
-    public List<Room> Rooms = [];
+    public List<RoomData> Data { get; set; } = [];
 }

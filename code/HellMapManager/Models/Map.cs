@@ -75,9 +75,13 @@ public partial class Map
     public List<Route> Routes { get; set; } = [];
 
     public List<Region> Regions { get; set; } = [];
+
+    public List<Trace> Traces { get; set; } = [];
+    public List<Trace> Shortcuts { get; set; } = [];
+
     public void Sort()
     {
-        this.Rooms.Sort((x, y) => x.Zone != y.Zone ? x.Zone.CompareTo(y.Zone) : x.Key.CompareTo(y.Key));
+        this.Rooms.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
     }
     public static Map Empty(string name, string desc)
     {
