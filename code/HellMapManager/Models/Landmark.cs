@@ -1,3 +1,5 @@
+using System;
+
 namespace HellMapManager.Models;
 
 public class Landmark
@@ -7,6 +9,5 @@ public class Landmark
     public string Type { get; set; } = "";
     public string Value { get; set; } = "";
     public string Desc { get; set; } = "";
-    public string Group { get; set; } = "";
-    public bool Disabled { get; set; } = false;
+    public DateTime Updated { get; set; }
 }

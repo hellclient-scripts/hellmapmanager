@@ -32,6 +32,12 @@ public partial class RelationMapWindow : Window
             ((RelationMapWindowViewModel)DataContext).RefreshEvent -= Refresh;
         }
     }
+    public void OnRefreshButtonDoubleTapped(object sender, TappedEventArgs args)
+    {
+        var zb = this.Find<ZoomBorder>("ZoomBorder")!;
+        zb.ResetMatrix();
+    }
+
     public void OnDoubleTapped(object sender, TappedEventArgs args)
     {
         if (sender is Border)

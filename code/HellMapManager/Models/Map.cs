@@ -73,6 +73,8 @@ public partial class Map
     [XmlArray(ElementName = "Routes")]
     [XmlArrayItem(typeof(Route))]
     public List<Route> Routes { get; set; } = [];
+
+    public List<Region> Regions { get; set; } = [];
     public void Sort()
     {
         this.Rooms.Sort((x, y) => x.Zone != y.Zone ? x.Zone.CompareTo(y.Zone) : x.Key.CompareTo(y.Key));

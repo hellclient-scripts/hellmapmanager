@@ -38,6 +38,9 @@
                 <Style Selector="TextBlock.Content">
                   <Setter Property="Padding" Value="10 5 10 5" />
                 </Style>
+                <Style Selector="ItemsControl.Content">
+                  <Setter Property="Padding" Value="10 5 10 5" />
+                </Style>
                 <Style Selector="TextBlock.Content.Empty">
                   <Setter Property="Foreground" Value="#FF888888" />
                 </Style>
@@ -68,7 +71,7 @@
                 Classes.Empty="{Binding Current.IsDescEmpty}"
                 Text="{Binding Current.DescInfo}" />
               <TextBlock Classes="RoomExits Label" Text="出口列表（双击进入）" />
-              <ItemsControl ItemsSource="{Binding Current.Exits}">
+              <ItemsControl Classes="RoomExits Content" ItemsSource="{Binding Current.Exits}">
                 <ItemsControl.ItemTemplate>
                   <DataTemplate>
                     <exit:Exit
@@ -181,7 +184,8 @@
           Canvas.Top="10"
           Canvas.Right="10"
           Width="42"
-          Height="42">
+          Height="42"
+          Tapped="OnRefreshButtonDoubleTapped">
           <ToolTip.Tip>
             <TextBlock>刷新</TextBlock>
           </ToolTip.Tip>
@@ -193,7 +197,7 @@
             Source="avares://HellMapManager/Assets/refresh.png"
             ZIndex="1" />
         </Button>
-                <Button
+        <Button
           Canvas.Top="10"
           Canvas.Right="62"
           Width="42"
