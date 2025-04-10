@@ -23,13 +23,18 @@
       DockPanel.Dock="Right">
       <DockPanel>
         <Panel DockPanel.Dock="Bottom">
-          <Button
+          <SplitButton
             Margin="5"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Classes="accent">
+            <SplitButton.Flyout>
+              <MenuFlyout Placement="Bottom">
+                <MenuItem Header="删除房间" />
+              </MenuFlyout>
+            </SplitButton.Flyout>
             <TextBlock>编辑房间</TextBlock>
-          </Button>
+          </SplitButton>
         </Panel>
         <ScrollViewer>
           <Border Padding="10">
@@ -213,7 +218,6 @@
             Source="avares://HellMapManager/Assets/arrow_back.png"
             ZIndex="1" />
         </Button>
-
       </Canvas>
     </Panel>
   </DockPanel>
