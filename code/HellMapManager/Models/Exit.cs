@@ -57,6 +57,17 @@ public class Exit
     {
         return To != "" && Command != "";
     }
+    public Exit Clone()
+    {
+        return new Exit()
+        {
+            Command = Command,
+            To = To,
+            Tags = Tags.GetRange(0, Tags.Count),
+            ExTags = Tags.GetRange(0, ExTags.Count),
+            Cost = Cost,
+        };
+    }
 
     public List<ExitLabel> Labels
     {

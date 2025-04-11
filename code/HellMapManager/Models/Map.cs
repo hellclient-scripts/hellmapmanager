@@ -20,6 +20,7 @@ public partial class MapInfo
     public string DescLabel { get => Name == "" ? "<无描述>" : Name; }
     public string Version { get; set; } = "";
     public long UpdatedTime { get; set; } = 0;
+    public bool Compressed { get; set; } = false;
     public static MapInfo Empty(string name, string desc)
     {
         var info = new MapInfo
@@ -46,6 +47,8 @@ public partial class Map
     public List<Trace> Traces { get; set; } = [];
     public List<Shortcut> Shortcuts { get; set; } = [];
     public List<Snapshot> Snapshots { get; set; } = [];
+    public List<Query> Querys { get; set; } = [];
+
     public void Sort()
     {
         this.Rooms.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));

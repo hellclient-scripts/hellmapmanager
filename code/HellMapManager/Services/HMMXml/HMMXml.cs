@@ -493,6 +493,9 @@ public class HMMMap
     }
     [XmlIgnore]
     public MapEncoding MapEncoding = MapEncoding.Default;
+    [XmlIgnore]
+    public bool Compressed = false;
+
     [XmlAttribute]
     public string Name { get; set; } = "";
 

@@ -1,8 +1,8 @@
 
 using System.IO;
 using HellMapManager.Models;
-using System.Text;
 using HellMapManager.Services.HMMXml;
+using HellMapManager.Services.HMMEncoder;
 namespace HellMapManager.Services;
 
 public class HMMFile
@@ -11,21 +11,14 @@ public class HMMFile
     {
         using (var fileStream = new FileStream(name, FileMode.Create))
         {
-            var hm = new HMMMap();
-            hm.FromModel(mf.Map);
-            var data = hm.ToXML();
-            fileStream.Write(data);
+            var result = HMMEncoder.HMMEncoder.Encode(mf);
+
+            fileStream.Write(result);
         }
     }
     public static Map? Open(string name)
     {
         var body = File.ReadAllBytes(name);
-        var hm = HMMMap.FromXML(body);
-        if (hm == null)
-        {
-            return null;
-        }
-        return hm.ToModel();
-
+        return HMMEncoder.HMMEncoder.Decode(body)!.Map;
     }
 }
