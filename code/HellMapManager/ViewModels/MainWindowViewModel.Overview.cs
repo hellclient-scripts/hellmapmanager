@@ -7,6 +7,7 @@ using HellMapManager.Models;
 using HellMapManager.Services;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Text;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -20,7 +21,9 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(GetMapRoutesCount));
             OnPropertyChanged(nameof(GetMapVariablesCount));
             OnPropertyChanged(nameof(GetMapNameLabel));
-            OnPropertyChanged(nameof(GetMapDescLabel));
+            OnPropertyChanged(nameof(GetMapEncodingLabel));
+
+
         };
     }
     public int GetMapRoomsCount
@@ -42,6 +45,24 @@ public partial class MainWindowViewModel : ViewModelBase
     public string GetMapNameLabel
     {
         get => this.AppState.Current != null ? (this.AppState.Current.Map.Info.NameLabel) : "";
+    }
+    public string GetMapEncodingLabel
+    {
+        get
+        {
+            if (this.AppState.Current is not null)
+            {
+                switch (this.AppState.Current.Map.Encoding)
+                {
+                    case MapEncoding.GB18030:
+                        return "GB18030";
+                    default:
+                        return "UTF";
+                }
+
+            }
+            return "";
+        }
     }
     public string GetMapDescLabel
     {

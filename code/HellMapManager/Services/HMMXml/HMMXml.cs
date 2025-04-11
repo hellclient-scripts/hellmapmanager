@@ -4,9 +4,11 @@ using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Models;
 using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Text;
 using System;
 
-namespace HellMapManager.Services.HMMFormat;
+namespace HellMapManager.Services.HMMXml;
 
 public class HMMSnapshot
 {
@@ -489,6 +491,8 @@ public class HMMMap
         typeof(List<HMMExit>).GetDefaultMembers();
         typeof(List<HMMRegionItem>).GetDefaultMembers();
     }
+    [XmlIgnore]
+    public MapEncoding MapEncoding = MapEncoding.Default;
     [XmlAttribute]
     public string Name { get; set; } = "";
 
@@ -544,7 +548,8 @@ public class HMMMap
     public List<HMMSnapshot> Snapshots { get; set; } = [];
     public void FromModel(Map map)
     {
-        this.Version = MapInfo.CurrentVersion;
+        MapEncoding = map.Encoding;
+        Version = MapInfo.CurrentVersion;
         Name = map.Info.Name;
         Desc = map.Info.Desc;
         UpdatedTime = map.Info.UpdatedTime;
@@ -562,6 +567,7 @@ public class HMMMap
     {
         var map = new Map
         {
+            Encoding = MapEncoding,
             Info = new MapInfo
             {
                 Name = Name,
@@ -569,6 +575,7 @@ public class HMMMap
                 Version = MapInfo.CurrentVersion,
                 UpdatedTime = UpdatedTime,
             },
+
             Rooms = [.. Rooms.ConvertAll(r => r.ToModel()).Where(r => r.Validated())],
             Aliases = [.. Aliases.ConvertAll(r => r.ToModel()).Where(r => r.Validated())],
             Landmarks = [.. Landmarks.ConvertAll(r => r.ToModel()).Where(r => r.Validated())],
@@ -581,22 +588,84 @@ public class HMMMap
         };
         return map;
     }
-    public string ToXML()
+    public byte[] ToXML()
     {
-        var result = "";
-        using (StringWriter writer = new())
+        Encoding encoding;
+        switch (MapEncoding)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(HMMMap));
-            serializer.Serialize(writer, this);
-            result = writer.ToString();
+            case MapEncoding.GB18030:
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                encoding = Encoding.GetEncoding("GB18030");
+                break;
+            default:
+                encoding = Encoding.Default;
+                break;
         }
-        return result;
+
+        var xmlWriterSettings = new XmlWriterSettings
+        {
+            Indent = true,
+            OmitXmlDeclaration = false,
+            Encoding = encoding,
+        };
+        using (var memoryStream = new MemoryStream())
+        {
+            using (XmlWriter xmlWriter = XmlWriter.Create(memoryStream, xmlWriterSettings))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(HMMMap));
+                serializer.Serialize(xmlWriter, this);
+                return memoryStream.GetBuffer();
+            }
+        }
     }
-    public static HMMMap? FromXML(string data)
+    private static MapEncoding getXmlEncoding(byte[] data)
     {
-        using StringReader reader = new StringReader(data);
-        XmlSerializer serializer = new XmlSerializer(typeof(HMMMap));
-        return (HMMMap?)serializer.Deserialize(reader);
+        using (var ms = new MemoryStream(data))
+        {
+            using (var sr = new StreamReader(ms))
+            {
+                var xmlversion = sr.ReadLine();
+
+                if (xmlversion is not null && (xmlversion.Contains("GB18030") || xmlversion.Contains("gb18030")))
+                {
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+                    return MapEncoding.GB18030;
+
+                }
+                return MapEncoding.Default;
+            }
+        }
+
+    }
+
+    public static HMMMap? FromXML(byte[] data)
+    {
+        using (var memoryStream = new MemoryStream(data))
+        {
+            Encoding encoding;
+            var xmlencoding = getXmlEncoding(data);
+            switch (xmlencoding)
+            {
+                case MapEncoding.GB18030:
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                    encoding = Encoding.GetEncoding("GB18030");
+                    break;
+                default:
+                    encoding = Encoding.Default;
+                    break;
+            }
+            using StreamReader reader = new StreamReader(memoryStream, encoding);
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(HMMMap));
+                var hm = (HMMMap?)serializer.Deserialize(reader);
+                if (hm is not null)
+                {
+                    hm.MapEncoding = xmlencoding;
+                }
+                return hm;
+            }
+        }
 
     }
 

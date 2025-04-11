@@ -14,6 +14,8 @@
     <TextBlock Text="{Binding GetMapNameLabel}" />
     <TextBlock Text="描述:" />
     <TextBlock Text="{Binding GetMapDescLabel}" />
+    <TextBlock Text="编码:" />
+    <TextBlock Text="{Binding GetMapEncodingLabel}" />
     <TextBlock Text="房间数量:" />
     <TextBlock Text="{Binding GetMapRoomsCount}" />
     <TextBlock Text="别名数量:" />

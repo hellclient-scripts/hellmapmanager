@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 namespace HellMapManager.Models;
 
+public enum MapEncoding
+{
+    Default,
+    GB18030,
+}
 public partial class MapInfo
 {
     public MapInfo()
@@ -29,8 +34,9 @@ public partial class MapInfo
 }
 public partial class Map
 {
+    public MapEncoding Encoding { get; set; } = MapEncoding.Default;
 
-    public MapInfo Info { get; set; }=new MapInfo();
+    public MapInfo Info { get; set; } = new MapInfo();
     public List<Room> Rooms { get; set; } = [];
     public List<Alias> Aliases { get; set; } = [];
     public List<Landmark> Landmarks { get; set; } = [];
