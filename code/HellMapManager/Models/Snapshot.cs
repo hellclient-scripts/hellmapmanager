@@ -7,4 +7,9 @@ public partial class Snapshot
     public string Group { get; set; } = "";
 
     public List<RoomData> Data { get; set; } = [];
+    public bool Validated()
+    {
+        return Key != "";
+    }
+
 }

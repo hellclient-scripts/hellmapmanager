@@ -37,7 +37,6 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (await AppState.ConfirmModified())
         {
-            Console.WriteLine("创建了地图文件");
             AppState.NewMap();
         }
 

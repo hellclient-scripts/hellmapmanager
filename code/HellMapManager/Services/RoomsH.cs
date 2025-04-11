@@ -13,9 +13,8 @@ public class RoomsH
     public static List<Room> Open(string file)
     {
         using var fileStream = new FileStream(file, FileMode.Open);
-        var body = new byte[fileStream.Length];
-        fileStream.ReadAsync(body, 0, (int)fileStream.Length);
-        var rooms = Load(Encoding.UTF8.GetString(body));
+        var body=new StreamReader(fileStream,Encoding.UTF8).ReadToEnd();
+        var rooms = Load(body);
         return rooms;
     }
     public static List<Room> Load(string data)
@@ -25,7 +24,7 @@ public class RoomsH
         foreach (string line in lines)
         {
             var linedata = line.Trim();
-            if (linedata == "" || linedata.StartsWith("//"))
+            if (linedata.Length == 0 || linedata.StartsWith("//"))
             {
                 continue;
             }

@@ -53,6 +53,11 @@ public class Exit
     public List<string> Tags { get; set; } = [];
     public List<string> ExTags { get; set; } = [];
     public int Cost { get; set; } = 1;
+    public bool Validated()
+    {
+        return To != "" && Command != "";
+    }
+
     public List<ExitLabel> Labels
     {
         get

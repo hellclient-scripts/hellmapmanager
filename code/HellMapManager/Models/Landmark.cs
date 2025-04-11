@@ -9,4 +9,9 @@ public class Landmark
     public string Type { get; set; } = "";
     public string Value { get; set; } = "";
     public string Desc { get; set; } = "";
+    public bool Validated()
+    {
+        return Key != "";
+    }
+
 }

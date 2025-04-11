@@ -29,17 +29,8 @@ public partial class MapInfo
 }
 public partial class Map
 {
-    public Map()
-    {
-        Info = MapInfo.Empty("", "");
-        typeof(List<Room>).GetDefaultMembers();
-        typeof(List<Alias>).GetDefaultMembers();
-        typeof(List<Landmark>).GetDefaultMembers();
-        typeof(List<Variable>).GetDefaultMembers();
-        typeof(List<Route>).GetDefaultMembers();
-    }
 
-    public MapInfo Info { get; set; }
+    public MapInfo Info { get; set; }=new MapInfo();
     public List<Room> Rooms { get; set; } = [];
     public List<Alias> Aliases { get; set; } = [];
     public List<Landmark> Landmarks { get; set; } = [];

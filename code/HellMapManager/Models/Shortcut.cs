@@ -9,4 +9,9 @@ public partial class Shortcut : Exit
 
     public List<string> RoomTags { get; set; } = [];
     public List<string> RoomExTags { get; set; } = [];
+    public new bool Validated()
+    {
+        return Key != "" && base.Validated();
+    }
+
 }

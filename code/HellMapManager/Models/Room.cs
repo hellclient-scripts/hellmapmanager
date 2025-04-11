@@ -11,6 +11,10 @@ public class RoomData(string key, string value)
 {
     public string Key { get; set; } = key;
     public string Value { get; set; } = value;
+    public bool Validated()
+    {
+        return Key != "" && Value != "";
+    }
     public RoomData Clone()
     {
         return new RoomData(Key, Value);
@@ -32,6 +36,10 @@ public partial class Room
     //房间出口列表
     public List<Exit> Exits { get; set; } = [];
     public List<RoomData> Data { get; set; } = [];
+    public bool Validated()
+    {
+        return Key != "";
+    }
     public Room Clone()
     {
         return new Room()

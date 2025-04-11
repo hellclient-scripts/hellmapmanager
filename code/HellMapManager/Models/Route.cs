@@ -10,4 +10,9 @@ public class Route
     public string Group { get; set; } = "";
 
     public List<string> Rooms = [];
+    public bool Validated()
+    {
+        return Key != "";
+    }
+
 }

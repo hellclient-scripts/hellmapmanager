@@ -19,6 +19,11 @@ public partial class Trace
         };
 
     }
+    public bool Validated()
+    {
+        return Key != "";
+    }
+
 }
 
 public partial class Trace

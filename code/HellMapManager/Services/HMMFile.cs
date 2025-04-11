@@ -12,7 +12,7 @@ public class HMMFile
         using (var fileStream = new FileStream(name, FileMode.Create))
         {
             var hm = new HMMMap();
-            hm.FromMap(mf.Map);
+            hm.FromModel(mf.Map);
             var data = Encoding.UTF8.GetBytes(hm.ToXML());
             fileStream.Write(data);
         }
@@ -23,9 +23,12 @@ public class HMMFile
         {
             var body = new byte[fileStream.Length];
             fileStream.ReadAsync(body, 0, (int)fileStream.Length);
-            var hm = new HMMMap();
-            hm.FromXML(Encoding.UTF8.GetString(body));
-            return hm.ToMap();
+            var hm = HMMMap.FromXML(Encoding.UTF8.GetString(body));
+            if (hm == null)
+            {
+                return null;
+            }
+            return hm.ToModel();
         }
 
     }
