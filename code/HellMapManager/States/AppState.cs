@@ -70,7 +70,7 @@ public partial class AppState
         {
             this.Current.Map.Sort();
             HMMFile.Save(file, this.Current);
-            this.Current.Modified = false;
+            this.Current.MarkAsModified();
             this.Current.Path = file;
             this.AddRecent(Current.ToRecentFile());
             this.RaiseMapFileUpdatedEvent(this);

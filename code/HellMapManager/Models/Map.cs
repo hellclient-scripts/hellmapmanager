@@ -57,6 +57,7 @@ public partial class Map
             Info = MapInfo.Empty(name, desc),
         };
     }
+
 }
 
 
@@ -77,6 +78,11 @@ public class MapFile
         {
             Map = Map.Empty(name, desc),
         };
+    }
+    public void MarkAsModified()
+    {
+        Map.Info.UpdatedTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+        Modified = true;
     }
     public RecentFile ToRecentFile()
     {
