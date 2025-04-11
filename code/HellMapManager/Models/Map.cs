@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Text;
+using HellMapManager.Utils.Formatter;
 namespace HellMapManager.Models;
 
 public enum MapEncoding
@@ -13,29 +14,55 @@ public partial class MapInfo
     public MapInfo()
     {
     }
-    public static string CurrentVersion = "1.0";
     public string Name { get; set; } = "";
     public string NameLabel { get => Name == "" ? "<未命名>" : Name; }
     public string Desc { get; set; } = "";
     public string DescLabel { get => Name == "" ? "<无描述>" : Name; }
-    public string Version { get; set; } = "";
     public long UpdatedTime { get; set; } = 0;
-    public bool Compressed { get; set; } = false;
     public static MapInfo Empty(string name, string desc)
     {
         var info = new MapInfo
         {
-            Version = CurrentVersion,
             UpdatedTime = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds(),
             Name = name,
             Desc = desc,
         };
         return info;
     }
+    public bool Validated()
+    {
+        return UpdatedTime > -1;
+    }
+    public const string EncodeKey = "Info";
+
+    public string Encode()
+    {
+        return HMMFormatter.EncodeKeyValue1(EncodeKey,
+            HMMFormatter.EncodeList1([
+                HMMFormatter.Escape(Name),//0
+                HMMFormatter.Escape(UpdatedTime.ToString()),//1
+                HMMFormatter.Escape(Desc),//2
+            ])
+        );
+    }
+    public static MapInfo Decode(string val)
+    {
+        var result = new MapInfo();
+        var kv = HMMFormatter.DecodeKeyValue1(val);
+        var list = HMMFormatter.DecodeList1(kv.Value);
+        result.Name = HMMFormatter.UnescapeAt(list, 0);
+        result.UpdatedTime = HMMFormatter.UnescapeIntAt(list, 0, -1);
+        result.Desc = HMMFormatter.UnescapeAt(list, 2);
+        return result;
+    }
 }
+
+
 public partial class Map
 {
-    public MapEncoding Encoding { get; set; } = MapEncoding.Default;
+    public MapEncoding Encoding { get; set; } = MapEncoding.GB18030;
+    public static string CurrentVersion = "1.0";
+    public bool Compressed { get; set; } = false;
 
     public MapInfo Info { get; set; } = new MapInfo();
     public List<Room> Rooms { get; set; } = [];
@@ -60,7 +87,6 @@ public partial class Map
             Info = MapInfo.Empty(name, desc),
         };
     }
-
 }
 
 
