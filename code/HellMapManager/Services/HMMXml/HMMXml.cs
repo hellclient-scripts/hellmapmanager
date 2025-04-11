@@ -475,7 +475,7 @@ public class HMMMap
     [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(HMMTrace))]
     [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(HMMShortcut))]
     [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(HMMSnapshot))]
-
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(HMMRegionItem))]
     public HMMMap()
     {
         typeof(List<HMMRoom>).GetDefaultMembers();

@@ -34,7 +34,7 @@
       <TabItem Header="地区">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>
       </TabItem>
-      <TabItem Header="地标">
+      <TabItem Header="定位">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>
       </TabItem>
       <TabItem Header="捷径">
