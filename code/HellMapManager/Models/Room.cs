@@ -65,8 +65,7 @@ public partial class Room
                     e=>HMMFormatter.EncodeList3([
                         HMMFormatter.Escape(e.Command),//5-0
                         HMMFormatter.Escape(e.To),//5-1
-                    HMMFormatter.EncodeList4(e.Tags.ConvertAll(HMMFormatter.Escape)),//5-2
-                    HMMFormatter.EncodeList4(e.ExTags.ConvertAll(HMMFormatter.Escape)),//5-3
+                    HMMFormatter.EncodeList4(e.Conditions.ConvertAll(HMMFormatter.EscapeCondition)),//5-2
                     HMMFormatter.Escape(HMMFormatter.Escape(e.Cost.ToString())),//5-4
                     ])
                 )),
@@ -95,9 +94,8 @@ public partial class Room
             {
                 Command = HMMFormatter.UnescapeAt(list, 0),
                 To = HMMFormatter.UnescapeAt(list, 1),
-                Tags = HMMFormatter.DecodeList4(HMMFormatter.At(list, 2)).ConvertAll(HMMFormatter.Unescape),
-                ExTags = HMMFormatter.DecodeList4(HMMFormatter.At(list, 3)).ConvertAll(HMMFormatter.Unescape),
-                Cost = HMMFormatter.UnescapeInt(HMMFormatter.At(list, 4), 0),
+                Conditions = HMMFormatter.DecodeList4(HMMFormatter.At(list, 2)).ConvertAll(HMMFormatter.UnescapeCondition),
+                Cost = HMMFormatter.UnescapeInt(HMMFormatter.At(list, 3), 0),
             };
         });
         result.Data = HMMFormatter.DecodeList2(HMMFormatter.At(list, 6)).ConvertAll(

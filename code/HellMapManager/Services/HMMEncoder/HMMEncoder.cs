@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using Avalonia.Input;
 using HellMapManager.Models;
 using HellMapManager.Utils.Formatter;
 namespace HellMapManager.Services.HMMEncoder;

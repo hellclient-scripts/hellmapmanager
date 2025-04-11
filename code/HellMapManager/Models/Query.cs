@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace HellMapManager.Models;
 
-public class QueeryItem(string type, string value)
+public class QueeryItem(string type, Condition value)
 {
     public string Type { get; set; } = type;
-    public string Value { get; set; } = value;
+    public Condition Value { get; set; } = value;
 }
 
 public class Query
@@ -31,7 +31,7 @@ public class Query
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeKeyValue2(HMMFormatter.Escape(d.Value),HMMFormatter.Escape(d.Value)))),//3
+                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeKeyValue2(HMMFormatter.Escape(d.Type),HMMFormatter.EscapeCondition(d.Value)))),//3
             ])
         );
     }
@@ -46,7 +46,7 @@ public class Query
         result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d =>
         {
             var kv = HMMFormatter.DecodeKeyValue2(d);
-            return new QueeryItem(kv.UnescapeKey(), kv.UnescapeValue());
+            return new QueeryItem(kv.UnescapeKey(), HMMFormatter.UnescapeCondition(kv.Value));
         });
         return result;
     }

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using HellMapManager.Utils.Formatter;
+using Microsoft.VisualBasic;
 
 namespace HellMapManager.Models;
 
@@ -9,8 +11,8 @@ public class ExitLabel
     public enum Types
     {
         Command,
-        Tag,
-        ExTag,
+        Condition,
+        ExCondition,
         To,
         Cost,
     }
@@ -24,13 +26,13 @@ public class ExitLabel
     {
         get => this.Type == Types.Command;
     }
-    public bool IsTag
+    public bool IsCondition
     {
-        get => this.Type == Types.Tag;
+        get => this.Type == Types.Condition;
     }
-    public bool IsExTag
+    public bool IsExCondition
     {
-        get => this.Type == Types.ExTag;
+        get => this.Type == Types.ExCondition;
     }
     public bool IsTo
     {
@@ -50,8 +52,7 @@ public class Exit
     public string Command { get; set; } = "";
     //目标房间
     public string To { get; set; } = "";
-    public List<string> Tags { get; set; } = [];
-    public List<string> ExTags { get; set; } = [];
+    public List<Condition> Conditions { get; set; } = [];
     public int Cost { get; set; } = 1;
     public bool Validated()
     {
@@ -63,8 +64,7 @@ public class Exit
         {
             Command = Command,
             To = To,
-            Tags = Tags.GetRange(0, Tags.Count),
-            ExTags = Tags.GetRange(0, ExTags.Count),
+            Conditions = Conditions.GetRange(0, Conditions.Count),
             Cost = Cost,
         };
     }
@@ -78,13 +78,9 @@ public class Exit
                 new ExitLabel(ExitLabel.Types.Command, Command),
                 new ExitLabel(ExitLabel.Types.To, To)
             };
-            foreach (var tag in Tags)
+            foreach (var c in Conditions)
             {
-                labels.Add(new ExitLabel(ExitLabel.Types.Tag, tag));
-            }
-            foreach (var extag in ExTags)
-            {
-                labels.Add(new ExitLabel(ExitLabel.Types.ExTag, extag));
+                labels.Add(new ExitLabel(c.Not ? ExitLabel.Types.ExCondition : ExitLabel.Types.Condition, c.Key));
             }
             if (Cost != 1)
             {
@@ -93,20 +89,12 @@ public class Exit
             return labels;
         }
     }
-    public bool HasTag
+    public bool HasCondition
     {
-        get => Tags.Count > 0;
+        get => Conditions.Count > 0;
     }
-    public string AllTags
+    public string AllConditions
     {
-        get => string.Join(",", Tags);
-    }
-    public bool HasExTag
-    {
-        get => ExTags.Count > 0;
-    }
-    public string AllExTags
-    {
-        get => string.Join(",", ExTags);
+        get => string.Join(",", Conditions.ConvertAll(d => (d.Not ? "! " : "") + d.Key));
     }
 }

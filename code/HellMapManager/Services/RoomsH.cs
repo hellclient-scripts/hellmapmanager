@@ -5,6 +5,7 @@ using System.IO;
 
 using HellMapManager.Models;
 using System;
+using HellMapManager.Utils.Formatter;
 
 namespace HellMapManager.Services;
 public class RoomFormatter
@@ -48,14 +49,21 @@ public class RoomFormatter
             var Cost = exit.Cost == 1 ? "" : exit.Cost.ToString();
             var ExitDef = new StringBuilder(Escape(ToRoom)).Append(Cost == "" ? "" : ("$" + Escape(Cost)));
             var CondExit = new StringBuilder(Escape(exit.Command));
-            foreach (string extag in exit.ExTags)
+            foreach (var extag in exit.Conditions)
             {
-                CondExit.Insert(0, Escape(extag)).Insert(0, "<");
+                if (extag.Not)
+                {
+                    CondExit.Insert(0, Escape(extag.Key)).Insert(0, "<");
+                }
             }
             var Command = CondExit;
-            foreach (string tag in exit.Tags)
+            foreach (var tag in exit.Conditions)
             {
-                Command.Insert(0, Escape(tag)).Insert(0, ">");
+                if (!tag.Not)
+                {
+
+                    Command.Insert(0, Escape(tag.Key)).Insert(0, ">");
+                }
             }
             var Exit = Command.Append(ExitDef);
             Exits.Add(Exit);
@@ -127,7 +135,7 @@ public class RoomFormatter
                     var tag = Unescape(TagsAndCondCommand[i].Trim());
                     if (tag != "")
                     {
-                        exit.Tags.Add(tag);
+                        exit.Conditions.Add(new Condition(tag, false));
                     }
                 }
                 var ExtagsAndCommand = CondCommand.Split("<");
@@ -135,7 +143,10 @@ public class RoomFormatter
                 for (var i = 0; i < extagscount; i++)
                 {
                     var extag = Unescape(ExtagsAndCommand[i].Trim());
-                    exit.ExTags.Add(extag);
+                    if (extag != "")
+                    {
+                        exit.Conditions.Add(new Condition(extag, true));
+                    }
                 }
                 exit.Command = Unescape(ExtagsAndCommand.Last().Trim());
                 if (exit.Command == "")

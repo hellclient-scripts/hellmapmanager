@@ -4,12 +4,19 @@ using System.Linq;
 using System.Text;
 
 namespace HellMapManager.Utils.Formatter;
+
+
+public class Condition(string key, bool not)
+{
+    public string Key { get; set; } = key;
+    public bool Not { get; set; } = not;
+}
+
 public class Token(string unesacped, string escaped)
 {
     public string Escaped { get; set; } = escaped;
     public string Unescaped { get; set; } = unesacped;
 }
-
 
 public class KeyValue(string key, string value)
 {
@@ -37,6 +44,7 @@ public class HMMFormatter
     public static Token TokenSep2 { get; } = new(";", "%3B");
     public static Token TokenSep3 { get; } = new(",", "%2C");
     public static Token TokenSep4 { get; } = new("&", "%26");
+    public static Token TokenNot { get; } = new("!", "%21");
     public static Token TokenNewline { get; } = new("\n", "%0A");
     public static string Escape(string val)
     {
@@ -50,6 +58,7 @@ public class HMMFormatter
         .Replace(TokenSep2.Unescaped, TokenSep2.Escaped)
         .Replace(TokenSep3.Unescaped, TokenSep3.Escaped)
         .Replace(TokenSep4.Unescaped, TokenSep4.Escaped)
+        .Replace(TokenNot.Unescaped, TokenNot.Escaped)
         .Replace(TokenNewline.Unescaped, TokenNewline.Escaped)
         .ToString();
     }
@@ -57,6 +66,7 @@ public class HMMFormatter
     {
         return new StringBuilder(val)
         .Replace(TokenNewline.Escaped, TokenNewline.Unescaped)
+        .Replace(TokenNot.Escaped, TokenNot.Unescaped)
         .Replace(TokenSep4.Escaped, TokenSep4.Unescaped)
         .Replace(TokenSep3.Escaped, TokenSep3.Unescaped)
         .Replace(TokenSep2.Escaped, TokenSep2.Unescaped)
@@ -159,5 +169,27 @@ public class HMMFormatter
     public static int UnescapeIntAt(List<string> list, int index, int defaultValue)
     {
         return UnescapeInt(At(list, index), defaultValue);
+    }
+    public static string EscapeCondition(Condition c)
+    {
+        return (c.Not ? "!" : "") + Escape(c.Key);
+    }
+    public static Condition UnescapeCondition(string val)
+    {
+        var not = val.Length > 0 && val.StartsWith('!');
+        string key;
+        if (not)
+        {
+            key = val.Substring(1);
+        }
+        else
+        {
+            key = val;
+        }
+        return new Condition(Escape(key), not);
+    }
+    public static Condition UnescapeConditionAt(List<string> list, int index)
+    {
+        return UnescapeCondition(At(list, index));
     }
 }

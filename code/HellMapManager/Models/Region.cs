@@ -9,13 +9,13 @@ public enum RegionItemType
     Room,
     Zone,
 }
-public class RegionItem(RegionItemType type, string value)
+public class RegionItem(RegionItemType type, Condition value)
 {
     public RegionItemType Type { get; set; } = type;
-    public string Value { get; set; } = value;
+    public Condition Value { get; set; } = value;
     public bool Validated()
     {
-        return Value != "";
+        return Value.Key != "";
     }
 
 }
@@ -42,7 +42,7 @@ public class Region
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeKeyValue2(HMMFormatter.Escape(d.Type==RegionItemType.Zone?"Zone":"Room"),HMMFormatter.Escape(d.Value)))),//3
+                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeKeyValue2(HMMFormatter.Escape(d.Type==RegionItemType.Zone?"Zone":"Room"),HMMFormatter.EscapeCondition(d.Value)))),//3
             ])
         );
     }
@@ -57,7 +57,7 @@ public class Region
         result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d =>
         {
             var kv = HMMFormatter.DecodeKeyValue2(d);
-            return new RegionItem(kv.UnescapeKey() == "Zone" ? RegionItemType.Zone : RegionItemType.Room, kv.UnescapeValue());
+            return new RegionItem(kv.UnescapeKey() == "Zone" ? RegionItemType.Zone : RegionItemType.Room, HMMFormatter.UnescapeCondition(kv.Value));
         });
         return result;
     }

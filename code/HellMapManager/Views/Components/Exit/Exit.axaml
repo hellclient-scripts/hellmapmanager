@@ -19,10 +19,10 @@
     <Style Selector="Border.To">
       <Setter Property="Background" Value="#FF333333" />
     </Style>
-    <Style Selector="Border.Tag">
+    <Style Selector="Border.Condition">
       <Setter Property="Background" Value="#FF2A9D8F" />
     </Style>
-    <Style Selector="Border.ExTag">
+    <Style Selector="Border.ExCondition">
       <Setter Property="Background" Value="#FFE76F51" />
     </Style>
     <Style Selector="Border.Command">
@@ -60,13 +60,9 @@
         <TextBlock Classes="TipLabel">指令:</TextBlock>
         <TextBlock Text="{Binding Command}" />
       </WrapPanel>
-      <WrapPanel IsVisible="{Binding HasTag}">
+      <WrapPanel IsVisible="{Binding HasCondition}">
         <TextBlock Classes="TipLabel">标签:</TextBlock>
-        <TextBlock Text="{Binding AllTags}" />
-      </WrapPanel>
-      <WrapPanel IsVisible="{Binding HasExTag}">
-        <TextBlock Classes="TipLabel">排除标签:</TextBlock>
-        <TextBlock Text="{Binding AllExTags}" />
+        <TextBlock Text="{Binding AllConditions}" />
       </WrapPanel>
       <WrapPanel>
         <TextBlock Classes="TipLabel">耗时:</TextBlock>
@@ -84,15 +80,15 @@
       <DataTemplate>
         <Border
           Classes.Command="{Binding IsCommand}"
+          Classes.Condition="{Binding IsCondition}"
           Classes.Cost="{Binding IsCost}"
-          Classes.ExTag="{Binding IsExTag}"
+          Classes.ExCondition="{Binding IsExCondition}"
           Classes.Exit="True"
-          Classes.Tag="{Binding IsTag}"
           Classes.To="{Binding IsTo}">
           <StackPanel Orientation="Horizontal">
             <Image IsVisible="{Binding IsCommand}" Source="avares://HellMapManager/Assets/keyboard.png" />
-            <Image IsVisible="{Binding IsTag}" Source="avares://HellMapManager/Assets/check_circle.png" />
-            <Image IsVisible="{Binding IsExTag}" Source="avares://HellMapManager/Assets/unpublished.png" />
+            <Image IsVisible="{Binding IsCondition}" Source="avares://HellMapManager/Assets/check_circle.png" />
+            <Image IsVisible="{Binding IsExCondition}" Source="avares://HellMapManager/Assets/unpublished.png" />
             <Image IsVisible="{Binding IsTo}" Source="avares://HellMapManager/Assets/sports_score.png" />
             <Image IsVisible="{Binding IsCost}" Source="avares://HellMapManager/Assets/timer.png" />
             <TextBlock Text="{Binding Value}" />
