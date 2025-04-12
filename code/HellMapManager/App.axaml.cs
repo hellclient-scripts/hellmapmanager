@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using HellMapManager.ViewModels;
 using HellMapManager.Views;
 using HellMapManager.States;
+using System.Diagnostics.CodeAnalysis;
 
 namespace HellMapManager;
 
@@ -39,6 +40,7 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
+    [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
     private void DisableAvaloniaDataAnnotationValidation()
     {
         // Get an array of plugins to remove

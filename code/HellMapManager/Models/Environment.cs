@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using HellMapManager.Utils.Formatter;
 
 namespace HellMapManager.Models;
