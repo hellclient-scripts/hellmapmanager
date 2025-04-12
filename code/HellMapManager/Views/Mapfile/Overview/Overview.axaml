@@ -9,20 +9,179 @@
   d:DesignWidth="800"
   x:DataType="vm:MainWindowViewModel"
   mc:Ignorable="d">
-  <StackPanel Margin="20">
-    <TextBlock Text="地图名:" />
-    <TextBlock Text="{Binding GetMapNameLabel}" />
-    <TextBlock Text="描述:" />
-    <TextBlock Text="{Binding GetMapDescLabel}" />
-    <TextBlock Text="编码:" />
-    <TextBlock Text="{Binding GetMapEncodingLabel}" />
-    <TextBlock Text="房间数量:" />
-    <TextBlock Text="{Binding GetMapRoomsCount}" />
-    <TextBlock Text="别名数量:" />
-    <TextBlock Text="{Binding GetMapAliasesCount}" />
-    <TextBlock Text="路线数量:" />
-    <TextBlock Text="{Binding GetMapRoutesCount}" />
-    <TextBlock Text="变量数量:" />
-    <TextBlock Text="{Binding GetMapVariablesCount}" />
-  </StackPanel>
+  <DockPanel>
+    <StackPanel
+      Width="200"
+      Margin="20"
+      DockPanel.Dock="Left">
+      <TextBlock Text="地图名:" />
+      <TextBlock Text="{Binding GetMapNameLabel}" />
+      <TextBlock Text="编码:" />
+      <TextBlock Text="{Binding GetMapEncodingLabel}" />
+      <TextBlock Text="描述:" />
+      <TextBlock Text="{Binding GetMapDescLabel}" />
+    </StackPanel>
+    <Border Padding="10">
+      <ScrollViewer>
+        <WrapPanel>
+          <WrapPanel.Styles>
+            <Style Selector="Border.Summary">
+              <Setter Property="BorderBrush" Value="#ff999999" />
+              <Setter Property="BorderThickness" Value="1" />
+              <Setter Property="CornerRadius" Value="3" />
+              <Setter Property="Padding" Value="10" />
+              <Setter Property="Margin" Value="20" />
+              <Setter Property="Width" Value="200" />
+              <Setter Property="Height" Value="180" />
+              <Setter Property="HorizontalAlignment" Value="Center" />
+              <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+            <Style Selector="Panel.Icon">
+              <Setter Property="Width" Value="48" />
+            </Style>
+            <Style Selector="Panel.Icon Image">
+              <Setter Property="Width" Value="32" />
+              <Setter Property="Height" Value="32" />
+              <Setter Property="HorizontalAlignment" Value="Center" />
+              <Setter Property="VerticalAlignment" Value="Top" />
+            </Style>
+            <Style Selector="Border.Summary TextBlock.Label">
+              <Setter Property="FontWeight" Value="Bold" />
+
+            </Style>
+          </WrapPanel.Styles>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/home.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">房间</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapRoomsCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">地图的基本数据，用Key标识的房间互相之间的出口关系。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/id_card.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">别名</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapAliasesCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">根据使用场景对房间设置的别名。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/route.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">线路</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapRoutesCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">有顺序的房间ID列表，代表一条固定路线。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/footprint.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">足迹</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapTracesCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">记录特定对象可能的出现位置。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/south_america.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">地区</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapRegionsCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">在代码中对每一个房间对应的业务意义起得别名。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/my_location.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">定位</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapLandmarksCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">在代码中对每一个房间对应的业务意义起得别名。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/flight.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">捷径</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapShortcutsCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">在代码中对每一个房间对应的业务意义起得别名。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/database.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">变量</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapVariablesCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">储存脚本中可能需要用到的和地图信息有关的字符串</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/camera.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">快照</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapSnapshotsCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">房间在不同时间里的信息现场。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+          <Border Classes="Summary">
+            <DockPanel>
+              <Panel Classes="Icon">
+                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/query_stats.png" />
+              </Panel>
+              <DockPanel>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">查询</TextBlock>
+                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
+                  共计<Run Text="{Binding GetMapQueriesCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">预存的查询条件队列。</TextBlock>
+              </DockPanel>
+            </DockPanel>
+          </Border>
+        </WrapPanel>
+      </ScrollViewer>
+    </Border>
+  </DockPanel>
 </UserControl>

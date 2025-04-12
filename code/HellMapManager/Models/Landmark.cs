@@ -9,6 +9,7 @@ public class Landmark
     public string Key { get; set; } = "";
     public string Type { get; set; } = "";
     public string Value { get; set; } = "";
+    public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
     public bool Validated()
     {
@@ -22,7 +23,8 @@ public class Landmark
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Type),//1
                 HMMFormatter.Escape(Value),//2
-                HMMFormatter.Escape(Desc),//3
+                HMMFormatter.Escape(Group),//3
+                HMMFormatter.Escape(Desc),//4
             ])
         );
     }
@@ -34,6 +36,7 @@ public class Landmark
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Type = HMMFormatter.UnescapeAt(list, 1);
         result.Value = HMMFormatter.UnescapeAt(list, 2);
+        result.Group = HMMFormatter.UnescapeAt(list, 3);
         result.Desc = HMMFormatter.UnescapeAt(list, 3);
         return result;
     }

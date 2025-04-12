@@ -38,10 +38,36 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get => this.AppState.Current != null ? (this.AppState.Current.Map.Routes.Count) : 0;
     }
+    public int GetMapTracesCount
+    {
+        get => this.AppState.Current != null ? (this.AppState.Current.Map.Traces.Count) : 0;
+    }
+    public int GetMapRegionsCount
+    {
+        get => this.AppState.Current != null ? (this.AppState.Current.Map.Regions.Count) : 0;
+    }
+
+    public int GetMapLandmarksCount
+    {
+        get => this.AppState.Current != null ? (this.AppState.Current.Map.Landmarks.Count) : 0;
+    }
+    public int GetMapShortcutsCount
+    {
+        get => this.AppState.Current != null ? (this.AppState.Current.Map.Shortcuts.Count) : 0;
+    }
     public int GetMapVariablesCount
     {
         get => this.AppState.Current != null ? (this.AppState.Current.Map.Variables.Count) : 0;
     }
+    public int GetMapSnapshotsCount
+    {
+        get => this.AppState.Current != null ? (this.AppState.Current.Map.Snapshots.Count) : 0;
+    }
+    public int GetMapQueriesCount
+    {
+        get => this.AppState.Current != null ? (this.AppState.Current.Map.Querys.Count) : 0;
+    }
+
     public string GetMapNameLabel
     {
         get => this.AppState.Current != null ? (this.AppState.Current.Map.Info.NameLabel) : "";
