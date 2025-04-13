@@ -1,16 +1,10 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
-namespace HellMapManager.Utils.Formatter;
+namespace HellMapManager.Models;
 
 
-public class Condition(string key, bool not)
-{
-    public string Key { get; set; } = key;
-    public bool Not { get; set; } = not;
-}
 
 public class Token(string unesacped, string escaped)
 {
@@ -18,19 +12,6 @@ public class Token(string unesacped, string escaped)
     public string Unescaped { get; set; } = unesacped;
 }
 
-public class KeyValue(string key, string value)
-{
-    public string Key { get; set; } = key;
-    public string Value { get; set; } = value;
-    public string UnescapeKey()
-    {
-        return HMMFormatter.Unescape(Key);
-    }
-    public string UnescapeValue()
-    {
-        return HMMFormatter.Unescape(Value);
-    }
-}
 //四层简单结构格式化工具
 //只支持列表和键值对列表，最多支持3层
 public class HMMFormatter

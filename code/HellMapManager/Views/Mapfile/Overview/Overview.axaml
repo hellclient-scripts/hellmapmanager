@@ -36,6 +36,9 @@
               <Setter Property="HorizontalAlignment" Value="Center" />
               <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
+            <Style Selector="Border.Summary:pointerover">
+              <Setter Property="Background" Value="#fff4f4f4" />
+            </Style>
             <Style Selector="Panel.Icon">
               <Setter Property="Width" Value="48" />
             </Style>
@@ -137,7 +140,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">捷径</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计<Run Text="{Binding GetMapShortcutsCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">在代码中对每一个房间对应的业务意义起得别名。</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">能从任何符合条件的房间直达的路径。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>
@@ -150,7 +153,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">变量</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计<Run Text="{Binding GetMapVariablesCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">储存脚本中可能需要用到的和地图信息有关的字符串</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">储存脚本中可能需要用到的和地图信息有关的字符串。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>
