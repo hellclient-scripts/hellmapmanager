@@ -114,7 +114,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">地区</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计<Run Text="{Binding GetMapRegionsCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">在代码中对每一个房间对应的业务意义起得别名。</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">将一系列的房间分组或者房间定义为一个区域</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>
@@ -127,7 +127,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">定位</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计<Run Text="{Binding GetMapLandmarksCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">在代码中对每一个房间对应的业务意义起得别名。</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">用于定位当前房间位置的信息</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>

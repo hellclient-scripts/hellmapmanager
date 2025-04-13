@@ -23,4 +23,5 @@ public class Environment
     public List<string> Whitelist = [];
     public List<string> Blocklist = [];
     public List<Link> BlockedLinks = [];
+    public int MaxExitCost=0;
 }

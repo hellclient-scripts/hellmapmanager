@@ -5,19 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace HellMapManager.Models;
 
 
-public class RoomData(string key, string value)
-{
-    public string Key { get; set; } = key;
-    public string Value { get; set; } = value;
-    public bool Validated()
-    {
-        return Key != "" && Value != "";
-    }
-    public RoomData Clone()
-    {
-        return new RoomData(Key, Value);
-    }
-}
+
 
 //房间的数据结构
 public partial class Room
@@ -34,7 +22,7 @@ public partial class Room
     public List<string> Tags = [];
     //房间出口列表
     public List<Exit> Exits { get; set; } = [];
-    public List<RoomData> Data { get; set; } = [];
+    public List<Data> Data { get; set; } = [];
     public bool Validated()
     {
         return Key != "";
@@ -54,7 +42,7 @@ public partial class Room
     }
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyValue1(EncodeKey,
+        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
             HMMFormatter.EncodeList1([
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Name),//1
@@ -65,13 +53,13 @@ public partial class Room
                     e=>HMMFormatter.EncodeList3([
                         HMMFormatter.Escape(e.Command),//5-0
                         HMMFormatter.Escape(e.To),//5-1
-                    HMMFormatter.EncodeList4(e.Conditions.ConvertAll(HMMFormatter.EscapeCondition)),//5-2
+                    HMMFormatter.EncodeList4(e.Conditions.ConvertAll(c=>HMMFormatter.EncodeToggleValue(ToggleValue.FromCondition(c)))),//5-2
                     HMMFormatter.Escape(HMMFormatter.Escape(e.Cost.ToString())),//5-4
                     ])
                 )),
                 HMMFormatter.EncodeList2(//6
                     Data.ConvertAll(
-                        d=>HMMFormatter.EncodeKeyValue3(HMMFormatter.Escape(d.Key),HMMFormatter.Escape(d.Value))
+                        d=>HMMFormatter.EncodeKeyValue3(KeyValue.FromData(d))
                         )
                     ),
              ])
@@ -94,17 +82,12 @@ public partial class Room
             {
                 Command = HMMFormatter.UnescapeAt(list, 0),
                 To = HMMFormatter.UnescapeAt(list, 1),
-                Conditions = HMMFormatter.DecodeList4(HMMFormatter.At(list, 2)).ConvertAll(HMMFormatter.UnescapeCondition),
+                Conditions = HMMFormatter.DecodeList4(HMMFormatter.At(list, 2)).ConvertAll(d => HMMFormatter.DecodeToggleValue(d).ToCondition()),
                 Cost = HMMFormatter.UnescapeInt(HMMFormatter.At(list, 3), 0),
             };
         });
         result.Data = HMMFormatter.DecodeList2(HMMFormatter.At(list, 6)).ConvertAll(
-            d =>
-            {
-                var kv = HMMFormatter.DecodeKeyValue3(d);
-                return new RoomData(kv.UnescapeKey(), kv.UnescapeValue());
-            }
-        );
+            d => HMMFormatter.DecodeKeyValue3(d).ToData());
         return result;
     }
 }
@@ -138,7 +121,7 @@ public partial class Room
     {
         Data.Sort((x, y) => x.Key.CompareTo(y.Key));
     }
-    private void AddData(RoomData rd)
+    private void AddData(Data rd)
     {
         Data.RemoveAll((d) => d.Key == rd.Key);
         if (rd.Value != "")
@@ -146,7 +129,7 @@ public partial class Room
             Data.Add(rd);
         }
     }
-    public void SetDatas(List<RoomData> list)
+    public void SetDatas(List<Data> list)
     {
         foreach (var rd in list)
         {

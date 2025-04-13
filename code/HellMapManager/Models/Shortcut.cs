@@ -17,15 +17,15 @@ public partial class Shortcut : Exit
 
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyValue1(EncodeKey,
+        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
             HMMFormatter.EncodeList1([
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(RoomConditions.ConvertAll(HMMFormatter.EscapeCondition)),//3
+                HMMFormatter.EncodeList2(RoomConditions.ConvertAll(d=>HMMFormatter.EncodeToggleValue(ToggleValue.FromCondition(d)))),//3
                 HMMFormatter.Escape(Command),//4
                 HMMFormatter.Escape(To),//5
-                HMMFormatter.EncodeList2(Conditions.ConvertAll(HMMFormatter.EscapeCondition)),//6
+                HMMFormatter.EncodeList2(Conditions.ConvertAll(d=>HMMFormatter.EncodeToggleValue(ToggleValue.FromCondition(d)))),//6
                 HMMFormatter.Escape(HMMFormatter.Escape(Cost.ToString())),//7
             ])
         );
@@ -38,10 +38,10 @@ public partial class Shortcut : Exit
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
-        result.RoomConditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(HMMFormatter.UnescapeCondition);
+        result.RoomConditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleValue(d).ToCondition());
         result.Command = HMMFormatter.UnescapeAt(list, 4);
         result.To = HMMFormatter.UnescapeAt(list, 5);
-        result.Conditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 6)).ConvertAll(HMMFormatter.UnescapeCondition);
+        result.Conditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 6)).ConvertAll(d => HMMFormatter.DecodeToggleValue(d).ToCondition());
         result.Cost = HMMFormatter.UnescapeIntAt(list, 7, 0);
         return result;
     }

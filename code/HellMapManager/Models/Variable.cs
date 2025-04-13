@@ -16,7 +16,7 @@ public class Variable
 
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyValue1(EncodeKey,
+        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
             HMMFormatter.EncodeList1([
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Value),//1

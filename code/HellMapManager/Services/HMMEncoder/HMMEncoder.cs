@@ -25,7 +25,7 @@ public class MapHeadData
     }
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyValue1(CurrentFormat, HMMFormatter.Escape(EncodeEncoding(Encoding)));
+        return HMMFormatter.EncodeKeyAndValue1(CurrentFormat, HMMFormatter.Escape(EncodeEncoding(Encoding)));
     }
     public static MapHeadData Decode(string val)
     {

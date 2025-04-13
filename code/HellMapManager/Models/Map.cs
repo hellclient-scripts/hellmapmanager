@@ -37,7 +37,7 @@ public partial class MapInfo
 
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyValue1(EncodeKey,
+        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
             HMMFormatter.EncodeList1([
                 HMMFormatter.Escape(Name),//0
                 HMMFormatter.Escape(UpdatedTime.ToString()),//1

@@ -1,10 +1,69 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace HellMapManager.Models;
 
+public class KeyValue(string key, string value)
+{
+    public string Key { get; set; } = key;
+    public string Value { get; set; } = value;
+    public string UnescapeKey()
+    {
+        return HMMFormatter.Unescape(Key);
+    }
+    public string UnescapeValue()
+    {
+        return HMMFormatter.Unescape(Value);
+    }
+    public Data ToData()
+    {
+        return new Data(HMMFormatter.Unescape(Key), HMMFormatter.Unescape(Value));
+    }
+    public static KeyValue FromData(Data k)
+    {
+        return new KeyValue(HMMFormatter.Escape(k.Key), HMMFormatter.Escape(k.Value));
+    }
 
+
+}
+
+public class ToggleValue(string value, bool not)
+{
+    public bool Not { get; set; } = not;
+    public string Value { get; set; } = value;
+    public string UnescapeValue()
+    {
+        return HMMFormatter.Unescape(Value);
+    }
+    public Condition ToCondition()
+    {
+        return new Condition(HMMFormatter.Unescape(Value), Not);
+    }
+    public static ToggleValue FromCondition(Condition c)
+    {
+        return new ToggleValue(HMMFormatter.Escape(c.Key), c.Not);
+    }
+
+}
+
+public class ToggleKV(string key, string value, bool not)
+{
+    public bool Not = not;
+    public string Key = key;
+    public string Value = value;
+    public TypedCondition ToTypedCondition()
+    {
+        return new TypedCondition(HMMFormatter.Unescape(Key), HMMFormatter.Unescape(Value), Not);
+    }
+    public static ToggleKV FromTypedCondition(TypedCondition c)
+    {
+        return new ToggleKV(HMMFormatter.Escape(c.Key), HMMFormatter.Escape(c.Value), c.Not);
+    }
+    public string NotLabel { get => Not ? HMMFormatter.TokenNot.Unescaped : ""; }
+
+}
 
 public class Token(string unesacped, string escaped)
 {
@@ -59,18 +118,28 @@ public class HMMFormatter
         .Replace(TokenEscape.Escaped, TokenEscape.Unescaped)
         .ToString();
     }
-    public static string EncodeKeyValue1(string key, string value)
+    public static string EncodeKeyAndValue1(string key, string val)
     {
-        return $"{key}{TokenKey1.Unescaped}{value}";
+        return EncodeKeyValue1(new KeyValue(key, val));
     }
+
+    public static string EncodeKeyValue1(KeyValue kv)
+    {
+        return $"{kv.Key}{TokenKey1.Unescaped}{kv.Value}";
+    }
+
     public static KeyValue DecodeKeyValue1(string val)
     {
         var decoded = val.Split(TokenKey1.Unescaped, 2);
         return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
     }
-    public static string EncodeKeyValue2(string key, string value)
+    public static string EncodeKeyAndValue2(string key, string val)
     {
-        return $"{key}{TokenKey2.Unescaped}{value}";
+        return EncodeKeyValue2(new KeyValue(key, val));
+    }
+    public static string EncodeKeyValue2(KeyValue kv)
+    {
+        return $"{kv.Key}{TokenKey2.Unescaped}{kv.Value}";
     }
 
     public static KeyValue DecodeKeyValue2(string val)
@@ -78,24 +147,73 @@ public class HMMFormatter
         var decoded = val.Split(TokenKey2.Unescaped, 2);
         return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
     }
-    public static string EncodeKeyValue3(string key, string value)
+    public static string EncodeKeyAndValue3(string key, string val)
     {
-        return $"{key}{TokenKey3.Unescaped}{value}";
+        return EncodeKeyValue3(new KeyValue(key, val));
+    }
+    public static string EncodeKeyValue3(KeyValue kv)
+    {
+        return $"{kv.Key}{TokenKey3.Unescaped}{kv.Value}";
     }
     public static KeyValue DecodeKeyValue3(string val)
     {
         var decoded = val.Split(TokenKey3.Unescaped, 2);
         return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
     }
-    public static string EncodeKeyValue4(string key, string value)
+    public static string EncodeKeyAndValue4(string key, string val)
     {
-        return $"{key}{TokenKey4.Unescaped}{value}";
+        return EncodeKeyValue4(new KeyValue(key, val));
+    }
+    public static string EncodeKeyValue4(KeyValue kv)
+    {
+        return $"{kv.Key}{TokenKey4.Unescaped}{kv.Value}";
     }
     public static KeyValue DecodeKeyValue4(string val)
     {
         var decoded = val.Split(TokenKey4.Unescaped, 2);
         return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
     }
+    public static string EncodeToggleKV1(ToggleKV kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue1(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKV DecodeToggleKV1(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue1(v.Value);
+        return new ToggleKV(kv.Key, kv.Value, v.Not);
+    }
+    public static string EncodeToggleKV2(ToggleKV kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue2(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKV DecodeToggleKV2(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue2(v.Value);
+        return new ToggleKV(kv.Key, kv.Value, v.Not);
+    }
+    public static string EncodeToggleKV3(ToggleKV kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue3(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKV DecodeToggleKV3(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue3(v.Value);
+        return new ToggleKV(kv.Key, kv.Value, v.Not);
+    }
+    public static string EncodeToggleKV4(ToggleKV kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue4(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKV DecodeToggleKV4(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue4(v.Value);
+        return new ToggleKV(kv.Key, kv.Value, v.Not);
+    }
+
     public static string EncodeList1(List<string> items)
     {
         return string.Join(TokenSep1.Unescaped, items);
@@ -151,13 +269,13 @@ public class HMMFormatter
     {
         return UnescapeInt(At(list, index), defaultValue);
     }
-    public static string EscapeCondition(Condition c)
+    public static string EncodeToggleValue(ToggleValue v)
     {
-        return (c.Not ? "!" : "") + Escape(c.Key);
+        return (v.Not ? TokenNot.Unescaped : "") + v.Value;
     }
-    public static Condition UnescapeCondition(string val)
+    public static ToggleValue DecodeToggleValue(string val)
     {
-        var not = val.Length > 0 && val.StartsWith('!');
+        var not = val.Length > 0 && val.StartsWith(TokenNot.Unescaped);
         string key;
         if (not)
         {
@@ -167,10 +285,7 @@ public class HMMFormatter
         {
             key = val;
         }
-        return new Condition(Escape(key), not);
-    }
-    public static Condition UnescapeConditionAt(List<string> list, int index)
-    {
-        return UnescapeCondition(At(list, index));
+        return new ToggleValue(key, not);
+
     }
 }

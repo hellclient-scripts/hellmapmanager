@@ -37,12 +37,12 @@ public class Region
 
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyValue1(EncodeKey,
+        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
             HMMFormatter.EncodeList1([
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeKeyValue2(HMMFormatter.Escape(d.Type==RegionItemType.Zone?"Zone":"Room"),HMMFormatter.EscapeCondition(d.Value)))),//3
+                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeKeyAndValue2(HMMFormatter.Escape(d.Type==RegionItemType.Zone?"Zone":"Room"),HMMFormatter.EncodeToggleValue(ToggleValue.FromCondition(d.Value))))),//3
             ])
         );
     }
@@ -57,7 +57,7 @@ public class Region
         result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d =>
         {
             var kv = HMMFormatter.DecodeKeyValue2(d);
-            return new RegionItem(kv.UnescapeKey() == "Zone" ? RegionItemType.Zone : RegionItemType.Room, HMMFormatter.UnescapeCondition(kv.Value));
+            return new RegionItem(kv.UnescapeKey() == "Zone" ? RegionItemType.Zone : RegionItemType.Room, HMMFormatter.DecodeToggleValue(kv.Value).ToCondition());
         });
         return result;
     }
