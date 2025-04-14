@@ -220,14 +220,24 @@ public class HMMFormatter
     }
     public static List<string> DecodeList1(string val)
     {
+        if (val == "")
+        {
+            return [];
+        }
+
         return [.. val.Split(TokenSep1.Unescaped)];
     }
     public static string EncodeList2(List<string> items)
     {
+
         return string.Join(TokenSep2.Unescaped, items);
     }
     public static List<string> DecodeList2(string val)
     {
+        if (val == "")
+        {
+            return [];
+        }
         return [.. val.Split(TokenSep2.Unescaped)];
     }
     public static string EncodeList3(List<string> items)
@@ -236,6 +246,11 @@ public class HMMFormatter
     }
     public static List<string> DecodeList3(string val)
     {
+        if (val == "")
+        {
+            return [];
+        }
+
         return [.. val.Split(TokenSep3.Unescaped)];
     }
     public static string EncodeList4(List<string> items)
@@ -244,6 +259,10 @@ public class HMMFormatter
     }
     public static List<string> DecodeList4(string val)
     {
+        if (val == "")
+        {
+            return [];
+        }
         return [.. val.Split(TokenSep4.Unescaped)];
     }
     public static string At(List<string> list, int index)

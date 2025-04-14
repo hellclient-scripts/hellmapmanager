@@ -75,8 +75,8 @@ public class Exit
         {
             var labels = new List<ExitLabel>
             {
-                new ExitLabel(ExitLabel.Types.Command, Command),
-                new ExitLabel(ExitLabel.Types.To, To)
+                new(ExitLabel.Types.Command, Command),
+                new(ExitLabel.Types.To, To)
             };
             foreach (var c in Conditions)
             {
