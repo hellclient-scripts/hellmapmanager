@@ -30,9 +30,7 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(GetMapNameLabel));
             OnPropertyChanged(nameof(GetMapEncodingLabel));
             OnPropertyChanged(nameof(GetMapPathLabel));
-
-
-
+            OnPropertyChanged(nameof(GetMapDescLabel));
         };
     }
     public int GetMapRoomsCount

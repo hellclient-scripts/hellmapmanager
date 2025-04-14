@@ -17,7 +17,7 @@ public partial class MapInfo
     public string Name { get; set; } = "";
     public string NameLabel { get => Name == "" ? "<未命名>" : Name; }
     public string Desc { get; set; } = "";
-    public string DescLabel { get => Name == "" ? "<无描述>" : Name; }
+    public string DescLabel { get => Desc == "" ? "<无描述>" : Desc; }
     public long UpdatedTime { get; set; } = 0;
     public static MapInfo Empty(string name, string desc)
     {
