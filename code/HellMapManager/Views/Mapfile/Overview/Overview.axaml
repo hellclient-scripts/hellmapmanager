@@ -58,7 +58,9 @@
               <Setter Property="TextAlignment" Value="Right" />
               <Setter Property="Padding" Value="0 5" />
             </Style>
-
+            <Style Selector="Border.Summary TextBlock">
+              <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
           </WrapPanel.Styles>
           <Border Classes="Summary">
             <DockPanel>

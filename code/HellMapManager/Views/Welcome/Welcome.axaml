@@ -1,0 +1,118 @@
+<UserControl
+  x:Class="HellMapManager.Views.Welcome.Welcome"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.ViewModels"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:MainWindowViewModel"
+  mc:Ignorable="d">
+  <UserControl.Styles>
+    <Style Selector="Border.Intro">
+      <Setter Property="Padding" Value="0 0 0 20" />
+    </Style>
+    <Style Selector="TextBlock.Title">
+      <Setter Property="FontSize" Value="32" />
+      <Setter Property="LineHeight" Value="44" />
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="TextBlock.Desc">
+      <Setter Property="FontSize" Value="24" />
+      <Setter Property="LineHeight" Value="36" />
+      <Setter Property="Foreground" Value="#ff555555" />
+    </Style>
+    <Style Selector="TextBlock.CommandLabel">
+      <Setter Property="Padding" Value="0 10 0 10" />
+      <Setter Property="FontSize" Value="20" />
+      <Setter Property="LineHeight" Value="26" />
+    </Style>
+    <Style Selector="Border.Command">
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Padding" Value="0 2 0 2" />
+    </Style>
+    <Style Selector=".Command TextBlock">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="LineHeight" Value="24" />
+      <Setter Property="Foreground" Value="#ff115ea3" />
+      <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+    <Style Selector=".Command Image">
+      <Setter Property="Width" Value="16" />
+      <Setter Property="Height" Value="16" />
+    </Style>
+  </UserControl.Styles>
+  <Panel>
+    <DockPanel
+      Width="700"
+      Height="500"
+      HorizontalAlignment="Center"
+      VerticalAlignment="Center">
+      <Border
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        Classes="Intro"
+        DockPanel.Dock="Top">
+        <StackPanel>
+          <TextBlock VerticalAlignment="Top" Classes="Title">Hell Map Manager</TextBlock>
+          <TextBlock VerticalAlignment="Bottom" Classes="Desc">聚焦Mud地图数据</TextBlock>
+        </StackPanel>
+      </Border>
+      <DockPanel>
+        <StackPanel Width="350" DockPanel.Dock="Left">
+          <TextBlock Classes="CommandLabel">启动</TextBlock>
+          <Panel ToolTip.Tip="新建一个HMM地图文件">
+            <Border Classes="Command" Tapped="OnNew">
+              <WrapPanel>
+                <Image Source="avares://HellMapManager/Assets/note_add.png" />
+                <TextBlock Text="新建地图" />
+              </WrapPanel>
+            </Border>
+          </Panel>
+          <Panel ToolTip.Tip="打开一个现有的HMM地图文件">
+            <Border Classes="Command" Tapped="OnOpen">
+              <WrapPanel>
+                <Image Source="avares://HellMapManager/Assets/file_open.png" />
+                <TextBlock Text="打开地图" />
+              </WrapPanel>
+            </Border>
+          </Panel>
+          <TextBlock Classes="CommandLabel">最近</TextBlock>
+          <ItemsControl ItemsSource="{Binding Recents}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Panel ToolTip.Tip="{Binding Detail}">
+                  <Border Classes="Command" Tapped="OnOpenRecent">
+                    <WrapPanel>
+                      <TextBlock Text="{Binding Label}" />
+                    </WrapPanel>
+                  </Border>
+                </Panel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+        <StackPanel />
+        <StackPanel>
+          <TextBlock Classes="CommandLabel">入门</TextBlock>
+
+          <ItemsControl ItemsSource="{Binding HelpLinks}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Panel ToolTip.Tip="{Binding Intro}">
+                  <Border Classes="Command" Tapped="OnOpenLink">
+                    <WrapPanel>
+                      <Image Source="avares://HellMapManager/Assets/info.png" />
+                      <TextBlock Text="{Binding Name}" />
+                    </WrapPanel>
+                  </Border>
+                </Panel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </DockPanel>
+    </DockPanel>
+  </Panel>
+</UserControl>

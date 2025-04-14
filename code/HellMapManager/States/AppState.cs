@@ -41,12 +41,17 @@ public partial class AppState
     }
     private void AddRecent(RecentFile recent)
     {
-        this.Settings.Recents.RemoveAll(r => r.Path == recent.Path);
-        this.Settings.Recents.Insert(0, recent);
-        if (this.Settings.Recents.Count > AppPreset.MaxRecents)
+        if (Settings.Recents.Count > 0 && Settings.Recents[0].Path == recent.Path && Settings.Recents[0].Name == recent.Name)
         {
-            this.Settings.Recents = this.Settings.Recents.GetRange(0, AppPreset.MaxRecents);
+            return;
         }
+        Settings.Recents.RemoveAll(r => r.Path == recent.Path);
+        Settings.Recents.Insert(0, recent);
+        if (Settings.Recents.Count > AppPreset.MaxRecents)
+        {
+            Settings.Recents = Settings.Recents.GetRange(0, AppPreset.MaxRecents);
+        }
+        RaiseSettingsUpdatedEvent(this);
     }
     private void LoadFile(string file)
     {

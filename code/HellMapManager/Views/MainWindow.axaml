@@ -1,58 +1,82 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:HellMapManager.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:mapfile="clr-namespace:HellMapManager.Views.Mapfile"
-        xmlns:overview="clr-namespace:HellMapManager.Views.Mapfile.Overview"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="HellMapManager.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/app.ico"
-        Title="{Binding TitleInfo}"
-        >
+<Window
+  x:Class="HellMapManager.Views.MainWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mapfile="clr-namespace:HellMapManager.Views.Mapfile"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.ViewModels"
+  xmlns:welcome="clr-namespace:HellMapManager.Views.Welcome"
+  Title="{Binding TitleInfo}"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:MainWindowViewModel"
+  Icon="/Assets/app.ico"
+  mc:Ignorable="d">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-    <DockPanel>
+  <Design.DataContext>
+    <!--
+      This only sets the DataContext for the previewer in an IDE,
+      to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
+    -->
+    <vm:MainWindowViewModel />
+  </Design.DataContext>
+  <DockPanel>
     <Menu DockPanel.Dock="Top">
-      <MenuItem Header="文件(_F)" >
-        <MenuItem Header="新建(_N)"  Command="{Binding OnNew}"/>
-        <MenuItem Header="打开(_O)"  Command="{Binding OnOpen}"/>
-        <MenuItem Header="保存(_S)"  Command="{Binding OnSave}" IsEnabled="{Binding IsFileModified}"/>
-        <MenuItem Header="另存为(_A)"  Command="{Binding OnSaveAs}" IsEnabled="{Binding IsFileOpend}"/>
-        <MenuItem Header="关闭(_C)"  Command="{Binding OnClose}" IsEnabled="{Binding IsFileOpend}"/>
-        <Separator/>
-        <MenuItem Header="打开最近文件(_R)"  ItemsSource="{Binding Recents}" x:Name="Recents">
+      <MenuItem Header="文件(_F)">
+        <MenuItem Command="{Binding OnNew}" Header="新建(_N)" />
+        <MenuItem Command="{Binding OnOpen}" Header="打开(_O)" />
+        <MenuItem
+          Command="{Binding OnSave}"
+          Header="保存(_S)"
+          IsEnabled="{Binding IsFileModified}" />
+        <MenuItem
+          Command="{Binding OnSaveAs}"
+          Header="另存为(_A)"
+          IsEnabled="{Binding IsFileOpend}" />
+        <MenuItem
+          Command="{Binding OnClose}"
+          Header="关闭(_C)"
+          IsEnabled="{Binding IsFileOpend}" />
+        <Separator />
+        <MenuItem
+          x:Name="Recents"
+          Header="打开最近文件(_R)"
+          ItemsSource="{Binding Recents}">
           <ItemsControl.ItemTemplate>
-          <DataTemplate>
-            <MenuItem Header="{Binding Label}" Command="{Binding #Recents.((vm:MainWindowViewModel)DataContext).OnOpenRecent}" CommandParameter="{Binding Path}"/>
-          </DataTemplate>
+            <DataTemplate>
+              <MenuItem
+                Command="{Binding #Recents.((vm:MainWindowViewModel)DataContext).OnOpenRecent}"
+                CommandParameter="{Binding Path}"
+                Header="{Binding Label}" />
+            </DataTemplate>
           </ItemsControl.ItemTemplate>
         </MenuItem>
-        <Separator/>
-        <MenuItem Header="还原(_R)"  Command="{Binding OnRevert}" IsEnabled="{Binding IsFileOpend}"/>
-        <Separator/>
-        <MenuItem Header="退出(_E)" Command="{Binding OnExit}"/>
+        <Separator />
+        <MenuItem
+          Command="{Binding OnRevert}"
+          Header="还原(_R)"
+          IsEnabled="{Binding IsFileOpend}" />
+        <Separator />
+        <MenuItem Command="{Binding OnExit}" Header="退出(_E)" />
       </MenuItem>
-      <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}">
-      </MenuItem>
-      
-      <MenuItem Header="导出(_X)" IsEnabled="{Binding IsFileOpend}">
-      </MenuItem>
+      <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}" />
+
+      <MenuItem Header="导出(_X)" IsEnabled="{Binding IsFileOpend}" />
       <MenuItem Header="导入(_I)" IsEnabled="{Binding IsFileOpend}">
-        <MenuItem Header="导入UTF8编码的RoomsH文件"  Command="{Binding OnImportRoomsH}"/>
+        <MenuItem Command="{Binding OnImportRoomsH}" Header="导入UTF8编码的RoomsH文件" />
       </MenuItem>
 
       <MenuItem Header="帮助(_H)">
-        <MenuItem Header="关于(_A)"/>
+        <MenuItem Header="关于(_A)" />
       </MenuItem>
     </Menu>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding CanShowWelcome}"/>
-    <mapfile:MapFile  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsVisible="{Binding IsFileOpend}"/>
-    </DockPanel>
+    <Panel>
+      <welcome:Welcome IsVisible="{Binding CanShowWelcome}" />
+      <mapfile:MapFile
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        IsVisible="{Binding IsFileOpend}" />
+    </Panel>
+  </DockPanel>
 </Window>

@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using HellMapManager.Services;
 
 namespace HellMapManager.States;
@@ -11,11 +10,17 @@ public partial class AppState
     public event EventHandler? MapFileUpdatedEvent;
     public void RaiseMapFileUpdatedEvent(object? sender)
     {
-        this.MapFileUpdatedEvent?.Invoke(sender, EventArgs.Empty);
+        MapFileUpdatedEvent?.Invoke(sender, EventArgs.Empty);
     }
     public event ShowRelationMapEventHandler? ShowRelationMapEvent;
     public void RaiseShowRelationMapEvent(object? sender, RelationMapItem rm)
     {
-        this.ShowRelationMapEvent?.Invoke(sender, rm);
+        ShowRelationMapEvent?.Invoke(sender, rm);
     }
+    public event EventHandler? SettingsUpdatedEvent;
+    public void RaiseSettingsUpdatedEvent(object? sender)
+    {
+        SettingsUpdatedEvent?.Invoke(sender, EventArgs.Empty);
+    }
+
 }

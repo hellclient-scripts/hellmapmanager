@@ -33,7 +33,7 @@ public partial class MainWindowViewModel : ViewModelBase
             await this.AppState.OpenFile();
         }
     }
-    public async Task OnNew()
+    public async void OnNew()
     {
         if (await AppState.ConfirmModified())
         {
@@ -87,7 +87,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public String TitleInfo
     {
-        get => (AppState.Current == null ? "" : (AppState.Current.Modified ? "* " : "") + (AppState.Current.Path != "" ? AppState.Current.Path : "<未保存>") + " ") + "HellMapManager";
+        get => (AppState.Current == null ? "" : (AppState.Current.Modified ? "* " : "") + (AppState.Current.Path != "" ? AppState.Current.Path : "<未保存>") + " ") + "Hell Map Manager";
     }
     public bool CanShowWelcome
     {
