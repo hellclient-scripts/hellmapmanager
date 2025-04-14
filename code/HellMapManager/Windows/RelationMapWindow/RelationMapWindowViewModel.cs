@@ -15,7 +15,7 @@ public class ViewItem
 {
     public ViewItem(RelationMapItem item)
     {
-        this.Item = item;
+        Item = item;
     }
     public RelationMapItem Item { get; set; }
     public bool IsLevel0 { get => Item.Depth == 0; }
@@ -198,10 +198,10 @@ public class RelationMapWindowViewModel : ObservableObject
                     AddHistory(Item.Room.Key);
                 }
                 Item = item;
-                OnPropertyChanged(nameof(this.MyGraph));
-                OnPropertyChanged(nameof(this.Title));
-                OnPropertyChanged(nameof(this.Current));
-                OnPropertyChanged(nameof(this.HasHistory));
+                OnPropertyChanged(nameof(MyGraph));
+                OnPropertyChanged(nameof(Title));
+                OnPropertyChanged(nameof(Current));
+                OnPropertyChanged(nameof(HasHistory));
                 RefreshEvent?.Invoke(this, EventArgs.Empty);
             }
 

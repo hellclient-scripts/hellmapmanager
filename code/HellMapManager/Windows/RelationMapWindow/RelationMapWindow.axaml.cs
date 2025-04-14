@@ -16,9 +16,9 @@ public partial class RelationMapWindow : Window
     public RelationMapWindow(RelationMapWindowViewModel vm)
     {
         InitializeComponent();
-        this.DataContext = vm;
-        vm.RefreshEvent += this.Refresh;
-        this.Closing += Dispose;
+        DataContext = vm;
+        vm.RefreshEvent += Refresh;
+        Closing += Dispose;
     }
     public void Refresh(object? sender, EventArgs e)
     {
@@ -43,9 +43,8 @@ public partial class RelationMapWindow : Window
         if (sender is Border)
         {
             var bo = (Border)sender;
-            if (bo.DataContext is ViewItem)
+            if (bo.DataContext is ViewItem vi)
             {
-                var vi = (ViewItem)bo.DataContext;
                 ((RelationMapWindowViewModel)DataContext!).EnterViewItem(vi);
             }
         }
@@ -54,13 +53,10 @@ public partial class RelationMapWindow : Window
 
     public void OnExitDoubleTapped(object sender, TappedEventArgs args)
     {
-        if (sender is ComponentExit.Exit)
+        if (sender is ComponentExit.Exit s)
         {
-            var s = (ComponentExit.Exit)sender;
-            if (s.DataContext is Exit)
+            if (s.DataContext is Exit ex)
             {
-                var ex = (Exit)s.DataContext;
-                var p = this.Find<Panel>("RoomDetail")!;
                 ((RelationMapWindowViewModel)DataContext!).EnterRoomKey(ex.To);
             }
         }

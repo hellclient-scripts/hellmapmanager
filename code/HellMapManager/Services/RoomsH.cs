@@ -72,15 +72,15 @@ public class RoomFormatter
         var RoomDef = new StringBuilder(Escape(room.Group));
         foreach (string tag in room.Tags)
         {
-            RoomDef.Append("+").Append(Escape(tag));
+            RoomDef.Append('+').Append(Escape(tag));
         }
         var RoomDesc = new StringBuilder(Escape(room.Name));
         if (room.Group != "" || room.Tags.Count > 0)
         {
             RoomDesc.Append(RoomDef);
         }
-        var RoomInfo = new StringBuilder(Escape(room.Key)).Append("=").Append(RoomDesc);
-        var Line = RoomInfo.Append("|").Append(AllExits);
+        var RoomInfo = new StringBuilder(Escape(room.Key)).Append('=').Append(RoomDesc);
+        var Line = RoomInfo.Append('|').Append(AllExits);
         return Line;
     }
     public static Room? DecodeRoom(string line)

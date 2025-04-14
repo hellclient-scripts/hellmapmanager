@@ -2,7 +2,6 @@ using HellMapManager.Models;
 using HellMapManager.Services;
 using HellMapManager.Interfaces;
 using System.Threading.Tasks;
-using System;
 namespace HellMapManager.States;
 
 
@@ -10,35 +9,43 @@ public partial class AppState(IAppUI ui)
 {
     public IAppUI UI = ui;
     public MapFile? Current;
-    public Settings Settings = new Settings();
+    public Settings Settings = new();
 
     public async Task OpenFile()
     {
         var file = await UI.AskLoadFile();
         if (file != "")
         {
-            this.LoadFile(file);
+            LoadFile(file);
         }
     }
     public void OpenRecent(string file)
     {
         if (file != "")
         {
-            this.LoadFile(file);
+            LoadFile(file);
         }
     }
 
     public async Task SaveAs()
     {
-        if (this.Current != null)
+        if (Current != null)
         {
             var file = await UI.AskSaveAs();
             if (file != "")
             {
-                this.SaveFile(file);
+                SaveFile(file);
             }
         }
     }
+    public void Save()
+    {
+        if (Current != null)
+        {
+            SaveFile(Current.Path);
+        }
+    }
+
     private void AddRecent(RecentFile recent)
     {
         if (Settings.Recents.Count > 0 && Settings.Recents[0].Path == recent.Path && Settings.Recents[0].Name == recent.Name)
@@ -65,28 +72,28 @@ public partial class AppState(IAppUI ui)
                 Path = file,
             };
             Current.RebuldCache();
-            this.AddRecent(Current.ToRecentFile());
-            this.RaiseMapFileUpdatedEvent(this);
+            AddRecent(Current.ToRecentFile());
+            RaiseMapFileUpdatedEvent(this);
         }
     }
     private void SaveFile(string file)
     {
-        if (this.Current != null)
+        if (Current != null)
         {
-            this.Current.Map.Sort();
-            HMMFile.Save(file, this.Current);
-            this.Current.Modified = false;
-            this.Current.Path = file;
-            this.AddRecent(Current.ToRecentFile());
-            this.RaiseMapFileUpdatedEvent(this);
+            Current.Map.Sort();
+            HMMFile.Save(file, Current);
+            Current.Modified = false;
+            Current.Path = file;
+            AddRecent(Current.ToRecentFile());
+            RaiseMapFileUpdatedEvent(this);
         }
     }
     private void ImportRoomsHFile(string file)
     {
-        if (this.Current != null)
+        if (Current != null)
         {
-            this.Current.ImportRooms(RoomsH.Open(file));
-            this.RaiseMapFileUpdatedEvent(this);
+            Current.ImportRooms(RoomsH.Open(file));
+            RaiseMapFileUpdatedEvent(this);
         }
     }
 
@@ -95,7 +102,7 @@ public partial class AppState(IAppUI ui)
         var file = await UI.AskLoadFile();
         if (file != "")
         {
-            this.LoadFile(file);
+            LoadFile(file);
         }
 
     }
@@ -104,7 +111,7 @@ public partial class AppState(IAppUI ui)
         var file = await UI.AskImportRoomsH();
         if (file != "")
         {
-            this.ImportRoomsHFile(file);
+            ImportRoomsHFile(file);
         }
 
     }
@@ -117,21 +124,21 @@ public partial class AppState(IAppUI ui)
     public void NewMap()
     {
         var mapfile = MapFile.Empty("", "");
-        this.SetCurrent(mapfile);
+        SetCurrent(mapfile);
     }
     public void SetCurrent(MapFile mapfile)
     {
-        this.Current = mapfile;
-        this.RaiseMapFileUpdatedEvent(this);
+        Current = mapfile;
+        RaiseMapFileUpdatedEvent(this);
     }
     public void CloseCurrent()
     {
-        this.Current = null;
-        this.RaiseMapFileUpdatedEvent(this);
+        Current = null;
+        RaiseMapFileUpdatedEvent(this);
     }
     public async Task<bool> ConfirmModified()
     {
-        if (this.Current == null || !this.Current.Modified)
+        if (Current == null || !Current.Modified)
         {
             return true;
         }
@@ -139,7 +146,7 @@ public partial class AppState(IAppUI ui)
     }
     public async Task<bool> ConfirmImport()
     {
-        if (this.Current == null || !this.Current.Modified)
+        if (Current == null || !Current.Modified)
         {
             return true;
         }

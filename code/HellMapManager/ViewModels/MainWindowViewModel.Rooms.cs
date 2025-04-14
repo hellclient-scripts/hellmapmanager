@@ -3,9 +3,6 @@ using HellMapManager.States;
 using System.Collections.ObjectModel;
 using HellMapManager.Models;
 using HellMapManager.Services;
-using HellMapManager.Windows.RelationMapWindow;
-using Microsoft.Msagl.DebugHelpers;
-using System.Threading.Tasks;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -19,7 +16,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public ObservableCollection<Room> GetRooms
     {
-        get => new ObservableCollection<Room>(this.AppState.Current != null ? (this.AppState.Current.Map.Rooms).ToArray() : []);
+        get => new ObservableCollection<Room>(AppState.Current != null ? (AppState.Current.Map.Rooms).ToArray() : []);
     }
     public void OnDumpRoom(Room room)
     {

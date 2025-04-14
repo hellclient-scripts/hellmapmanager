@@ -2,7 +2,6 @@
 using HellMapManager.States;
 using System.Collections.ObjectModel;
 using HellMapManager.Models;
-using System.Threading.Tasks;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -30,7 +29,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (await AppState.ConfirmModified())
         {
-            await this.AppState.OpenFile();
+            await AppState.OpenFile();
         }
     }
     public async void OnNew()
@@ -45,14 +44,14 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (await AppState.ConfirmImport())
         {
-            await this.AppState.ImportRoomsH();
+            await AppState.ImportRoomsH();
         }
     }
     public void OnExit()
     {
-        this.AppState.Exit();
+        AppState.Exit();
     }
-    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(this.AppState.Settings.Recents.ToArray()); }
+    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppState.Settings.Recents.ToArray()); }
     public async void OnOpenRecent(String file)
     {
         if (await AppState.ConfirmModified())
@@ -62,10 +61,21 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public void OnSave()
     {
+        if (AppState.Current is not null)
+        {
+            if (AppState.Current.Path != "")
+            {
+
+            }
+            else
+            {
+                OnSaveAs();
+            }
+        }
     }
     public bool IsFileModified
     {
-        get => this.AppState.Current != null && this.AppState.Current.Modified;
+        get => AppState.Current != null && AppState.Current.Modified;
     }
     public async void OnSaveAs()
     {
@@ -75,7 +85,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (await AppState.ConfirmModified())
         {
-            this.AppState.CloseCurrent();
+            AppState.CloseCurrent();
         }
     }
     public async void OnRevert()
@@ -91,10 +101,10 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public bool CanShowWelcome
     {
-        get => this.AppState.Current == null;
+        get => AppState.Current == null;
     }
     public bool IsFileOpend
     {
-        get => this.AppState.Current != null;
+        get => AppState.Current != null;
     }
 }
