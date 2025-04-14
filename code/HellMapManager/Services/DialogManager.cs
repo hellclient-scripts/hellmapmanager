@@ -58,7 +58,7 @@ public class DialogManager(IClassicDesktopStyleApplicationLifetime desktop) : IA
     {
         get => new("压缩地图HMZ文件")
         {
-            Patterns = ["*.hmm"],
+            Patterns = ["*.hmz"],
         };
     }
     public static FilePickerFileType HMMAllFileType

@@ -1,20 +1,51 @@
 
 using System.IO;
+using System.IO.Compression;
+
 using HellMapManager.Models;
+using HellMapManager.States;
 namespace HellMapManager.Services;
 
 public class HMMFile
 {
     public static void Save(string name, MapFile mf)
     {
-        using var fileStream = new FileStream(name, FileMode.Create);
         var result = HMMEncoder.HMMEncoder.Encode(mf);
-
-        fileStream.Write(result);
+        if (name.EndsWith(".hmz"))
+        {
+            using FileStream zipToOpen = new(name, FileMode.OpenOrCreate);
+            using ZipArchive archive = new(zipToOpen, ZipArchiveMode.Update);
+            ZipArchiveEntry hmmEntry = archive.CreateEntry(AppPreset.ZipEnityName);
+            using var memoryStream = new MemoryStream(result);
+            memoryStream.CopyTo(hmmEntry.Open());
+        }
+        else
+        {
+            using var fileStream = new FileStream(name, FileMode.Create);
+            fileStream.Write(result);
+        }
     }
     public static Map? Open(string name)
     {
-        var body = File.ReadAllBytes(name);
+        byte[] body;
+        if (name.EndsWith(".hmz"))
+        {
+            using FileStream zipToOpen = new(name, FileMode.Open);
+            using ZipArchive archive = new(zipToOpen, ZipArchiveMode.Read);
+            ZipArchiveEntry? hmmEntry = archive.GetEntry(AppPreset.ZipEnityName);
+            if (hmmEntry is null)
+            {
+                return null;
+            }
+            using var memoryStream = new MemoryStream();
+            hmmEntry.Open().CopyTo(memoryStream);
+            body = memoryStream.ToArray();
+        }
+        else
+        {
+            body = File.ReadAllBytes(name);
+        }
+
         return HMMEncoder.HMMEncoder.Decode(body)!.Map;
     }
 }

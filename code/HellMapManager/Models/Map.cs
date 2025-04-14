@@ -60,7 +60,7 @@ public partial class MapInfo
 
 public partial class Map
 {
-    public MapEncoding Encoding { get; set; } = MapEncoding.GB18030;
+    public MapEncoding Encoding { get; set; } = MapEncoding.Default;
     public static string CurrentVersion = "1.0";
     public bool Compressed { get; set; } = false;
 
