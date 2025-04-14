@@ -22,5 +22,10 @@ public partial class AppState
     {
         SettingsUpdatedEvent?.Invoke(sender, EventArgs.Empty);
     }
+    public event EventHandler? ExitEvent;
+    public void RaiseExitEvent(object? sender)
+    {
+        ExitEvent?.Invoke(sender, EventArgs.Empty);
+    }
 
 }

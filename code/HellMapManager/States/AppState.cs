@@ -1,20 +1,20 @@
 using HellMapManager.Models;
 using HellMapManager.Services;
-using Avalonia.Controls.ApplicationLifetimes;
+using HellMapManager.Interfaces;
 using System.Threading.Tasks;
 using System;
 namespace HellMapManager.States;
 
 
-public partial class AppState
+public partial class AppState(IAppUI ui)
 {
+    public IAppUI UI = ui;
     public MapFile? Current;
     public Settings Settings = new Settings();
-    public required IClassicDesktopStyleApplicationLifetime Desktop;
 
     public async Task OpenFile()
     {
-        var file = await DialogManager.LoadFile(this.Desktop.MainWindow!);
+        var file = await UI.AskLoadFile();
         if (file != "")
         {
             this.LoadFile(file);
@@ -32,7 +32,7 @@ public partial class AppState
     {
         if (this.Current != null)
         {
-            var file = await DialogManager.SaveAs(this.Desktop.MainWindow!);
+            var file = await UI.AskSaveAs();
             if (file != "")
             {
                 this.SaveFile(file);
@@ -92,7 +92,7 @@ public partial class AppState
 
     public async Task Open()
     {
-        var file = await DialogManager.LoadFile(this.Desktop.MainWindow!);
+        var file = await UI.AskLoadFile();
         if (file != "")
         {
             this.LoadFile(file);
@@ -101,7 +101,7 @@ public partial class AppState
     }
     public async Task ImportRoomsH()
     {
-        var file = await DialogManager.ImportRoomsH(this.Desktop.MainWindow!);
+        var file = await UI.AskImportRoomsH();
         if (file != "")
         {
             this.ImportRoomsHFile(file);
@@ -111,7 +111,7 @@ public partial class AppState
 
     public void Exit()
     {
-        this.Desktop.Shutdown(0);
+        RaiseExitEvent(this);
     }
 
     public void NewMap()
@@ -135,7 +135,7 @@ public partial class AppState
         {
             return true;
         }
-        return await DialogManager.ConfirmModifiedDialog();
+        return await UI.ConfirmModified();
     }
     public async Task<bool> ConfirmImport()
     {
@@ -143,7 +143,7 @@ public partial class AppState
         {
             return true;
         }
-        return await DialogManager.ConfirmImportDialog();
+        return await UI.ConfirmImport();
     }
 
 

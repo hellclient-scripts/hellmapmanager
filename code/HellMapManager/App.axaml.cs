@@ -8,7 +8,7 @@ using HellMapManager.Views;
 using HellMapManager.States;
 using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Services;
-
+using HellMapManager.Interfaces;
 namespace HellMapManager;
 
 public partial class App : Application
@@ -28,11 +28,9 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            var appstate = new AppState
-            {
-                Desktop = desktop
-            };
+            var appstate = new AppState(new DialogManager(desktop));
             appstate.MapFileUpdatedEvent += settingsHelper.WriteSettingsFile;
+            appstate.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
             var mw = new MainWindow()
             {
                 AppState = appstate,

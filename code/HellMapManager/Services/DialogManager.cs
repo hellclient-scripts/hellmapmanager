@@ -5,17 +5,20 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using MsBox.Avalonia;
-using MsBox.Avalonia.Enums;
+
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Models;
 using System.Collections.Generic;
+using Avalonia.Controls.ApplicationLifetimes;
+using HellMapManager.Interfaces;
 namespace HellMapManager.Services;
 
-public class DialogManager
+public class DialogManager(IClassicDesktopStyleApplicationLifetime desktop) : IAppUI
 {
-    public static async Task<String> LoadFile(object sender)
+    public IClassicDesktopStyleApplicationLifetime Desktop = desktop;
+    public async Task<string> AskLoadFile()
     {
-        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)sender);
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop);
 
         // 启动异步操作以打开对话框。
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -31,9 +34,9 @@ public class DialogManager
         }
         return "";
     }
-    public static async Task<String> ImportRoomsH(object sender)
+    public async Task<string> AskImportRoomsH()
     {
-        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)sender);
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop);
 
         // 启动异步操作以打开对话框。
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -53,9 +56,9 @@ public class DialogManager
     {
         Patterns = new[] { "*.hmm" },
     };
-    public static async Task<String> SaveAs(object sender)
+    public async Task<string> AskSaveAs()
     {
-        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)sender);
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop);
 
         var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
@@ -67,7 +70,7 @@ public class DialogManager
         return file == null ? "" : file.Path.AbsolutePath;
     }
 
-    public static async Task<bool> ConfirmModifiedDialog()
+    public async Task<bool> ConfirmModified()
     {
         var ps = new MessageBoxCustomParams
         {
@@ -84,7 +87,7 @@ public class DialogManager
         return choice == "是";
 
     }
-    public static async Task<bool> ConfirmImportDialog()
+    public async Task<bool> ConfirmImport()
     {
         var ps = new MessageBoxCustomParams
         {
