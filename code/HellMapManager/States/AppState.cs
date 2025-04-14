@@ -75,7 +75,7 @@ public partial class AppState(IAppUI ui)
         {
             this.Current.Map.Sort();
             HMMFile.Save(file, this.Current);
-            this.Current.MarkAsModified();
+            this.Current.Modified = false;
             this.Current.Path = file;
             this.AddRecent(Current.ToRecentFile());
             this.RaiseMapFileUpdatedEvent(this);

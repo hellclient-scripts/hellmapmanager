@@ -12,6 +12,13 @@
   <DockPanel>
     <ScrollViewer DockPanel.Dock="Left">
       <StackPanel Width="200" Margin="20">
+        <StackPanel.Styles>
+          <Style Selector="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+          </Style>
+        </StackPanel.Styles>
+        <TextBlock Text="路径:" />
+        <TextBlock Text="{Binding GetMapPathLabel}" />
         <TextBlock Text="地图名:" />
         <TextBlock Text="{Binding GetMapNameLabel}" />
         <TextBlock Text="编码:" />
@@ -70,7 +77,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">房间</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapRoomsCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapRoomsCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">地图的基本数据，用Key标识的房间互相之间的出口关系。</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -83,7 +90,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">别名</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapAliasesCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapAliasesCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">根据使用场景对房间设置的别名。</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -96,7 +103,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">线路</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapRoutesCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapRoutesCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">有顺序的房间ID列表，代表一条固定路线。</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -109,7 +116,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">足迹</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapTracesCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapTracesCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">记录特定对象可能的出现位置。</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -122,7 +129,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">地区</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapRegionsCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapRegionsCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">将一系列的房间分组或者房间定义为一个区域</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -135,7 +142,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">定位</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapLandmarksCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapLandmarksCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">用于定位当前房间位置的信息</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -148,7 +155,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">捷径</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapShortcutsCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapShortcutsCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">能从任何符合条件的房间直达的路径。</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -161,7 +168,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">变量</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapVariablesCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapVariablesCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">储存脚本中可能需要用到的和地图信息有关的字符串。</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -174,7 +181,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">快照</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapSnapshotsCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapSnapshotsCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">房间在不同时间里的信息现场。</TextBlock>
               </DockPanel>
             </DockPanel>
@@ -187,7 +194,7 @@
               <DockPanel>
                 <TextBlock Classes="Label" DockPanel.Dock="Top">查询</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计<Run Text="{Binding GetMapQueriesCount}" /></TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapQueriesCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">预存的查询条件队列。</TextBlock>
               </DockPanel>
             </DockPanel>

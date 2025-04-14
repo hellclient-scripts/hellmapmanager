@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace HellMapManager.Models;
 
 public class RecentFile
@@ -9,10 +11,12 @@ public class RecentFile
     }
     public string Name { get; set; } = "";
     public string Path { get; set; } = "";
+    [JsonIgnore]
     public string Detail
     {
         get => $"地图名{Name}:\n地图文件路径:{Path}";
     }
+    [JsonIgnore]
     public string Label
     {
         get => (this.Name == "" ? "<未命名>" : this.Name) + " " + this.Path;

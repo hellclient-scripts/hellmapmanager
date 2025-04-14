@@ -18,7 +18,7 @@ public class DialogManager(IClassicDesktopStyleApplicationLifetime desktop) : IA
     public IClassicDesktopStyleApplicationLifetime Desktop = desktop;
     public async Task<string> AskLoadFile()
     {
-        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop);
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
 
         // 启动异步操作以打开对话框。
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -36,7 +36,7 @@ public class DialogManager(IClassicDesktopStyleApplicationLifetime desktop) : IA
     }
     public async Task<string> AskImportRoomsH()
     {
-        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop);
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
 
         // 启动异步操作以打开对话框。
         var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -58,7 +58,7 @@ public class DialogManager(IClassicDesktopStyleApplicationLifetime desktop) : IA
     };
     public async Task<string> AskSaveAs()
     {
-        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop);
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
 
         var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {

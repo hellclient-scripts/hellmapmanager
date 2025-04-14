@@ -19,9 +19,18 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(GetMapRoomsCount));
             OnPropertyChanged(nameof(GetMapAliasesCount));
             OnPropertyChanged(nameof(GetMapRoutesCount));
+            OnPropertyChanged(nameof(GetMapTracesCount));
+            OnPropertyChanged(nameof(GetMapRegionsCount));
+            OnPropertyChanged(nameof(GetMapLandmarksCount));
+            OnPropertyChanged(nameof(GetMapShortcutsCount));
+            OnPropertyChanged(nameof(GetMapSnapshotsCount));
             OnPropertyChanged(nameof(GetMapVariablesCount));
+            OnPropertyChanged(nameof(GetMapQueriesCount));
+
             OnPropertyChanged(nameof(GetMapNameLabel));
             OnPropertyChanged(nameof(GetMapEncodingLabel));
+            OnPropertyChanged(nameof(GetMapPathLabel));
+
 
 
         };
@@ -67,11 +76,20 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get => this.AppState.Current != null ? (this.AppState.Current.Map.Querys.Count) : 0;
     }
+    public string GetMapPathLabel
+    {
+        get => this.AppState.Current != null ? (this.AppState.Current.Path != "" ? AppState.Current.Path : "<未保存>") : "";
+    }
 
     public string GetMapNameLabel
     {
         get => this.AppState.Current != null ? (this.AppState.Current.Map.Info.NameLabel) : "";
     }
+    public string GetMapNamePath
+    {
+        get => this.AppState.Current != null ? (this.AppState.Current.Path) : "";
+    }
+
     public string GetMapEncodingLabel
     {
         get

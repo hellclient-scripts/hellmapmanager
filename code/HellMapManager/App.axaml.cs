@@ -9,6 +9,7 @@ using HellMapManager.States;
 using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Services;
 using HellMapManager.Interfaces;
+using System.IO;
 namespace HellMapManager;
 
 public partial class App : Application
@@ -20,17 +21,22 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var path = System.Environment.ProcessPath;
+        var path = Path.GetDirectoryName(System.Environment.ProcessPath);
         var settingspath = System.IO.Path.Join([path, AppPreset.SettingsFileName]);
         var settingsHelper = new SettingsHelper(settingspath);
+        var settings = settingsHelper.Load();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
             var appstate = new AppState(new DialogManager(desktop));
-            appstate.MapFileUpdatedEvent += settingsHelper.WriteSettingsFile;
+            appstate.MapFileUpdatedEvent += (sender, args) => { settingsHelper.Save(appstate.Settings); };
             appstate.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
+            if (settings is not null)
+            {
+                appstate.Settings = settings;
+            }
             var mw = new MainWindow()
             {
                 AppState = appstate,
