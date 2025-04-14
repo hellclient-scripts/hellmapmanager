@@ -55,23 +55,23 @@ public partial class Trace
 {
     public void Sort()
     {
-        this.Locations.Sort((x, y) => x.CompareTo(y));
+        Locations.Sort((x, y) => x.CompareTo(y));
     }
     public void RemoveLocations(List<string> loctions)
     {
         foreach (var l in loctions)
         {
-            this.Locations.Remove(l);
+            Locations.Remove(l);
         }
-        this.Sort();
+        Sort();
     }
     public void AddLocations(List<string> loctions)
     {
         foreach (var l in loctions)
         {
-            this.Locations.Remove(l);
-            this.Locations.Add(l);
+            Locations.Remove(l);
+            Locations.Add(l);
         }
-        this.Sort();
+        Sort();
     }
 }

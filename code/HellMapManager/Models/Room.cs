@@ -91,12 +91,8 @@ public partial class Room
         return result;
     }
 }
-public partial class Room
+public partial class Room()
 {
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Room))]
-    public Room()
-    {
-    }
     //房间的key,必须唯一，不能为空
     public int ExitsCount
     {
@@ -104,7 +100,7 @@ public partial class Room
     }
     public string AllTags
     {
-        get => String.Join(" , ", this.Tags.ToArray());
+        get => String.Join(" , ", Tags.ToArray());
     }
     public bool HasExitTo(string key)
     {

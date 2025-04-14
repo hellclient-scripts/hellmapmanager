@@ -2,15 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace HellMapManager.Models;
 
-public class RecentFile
+public class RecentFile(string name, string path)
 {
-    public RecentFile(string name, string path)
-    {
-        Name = name;
-        Path = path;
-    }
-    public string Name { get; set; } = "";
-    public string Path { get; set; } = "";
+    public string Name { get; set; } = name;
+    public string Path { get; set; } = path;
     [JsonIgnore]
     public string Detail
     {
@@ -19,6 +14,6 @@ public class RecentFile
     [JsonIgnore]
     public string Label
     {
-        get => (this.Name == "" ? "<未命名>" : this.Name) + " " + this.Path;
+        get => (Name == "" ? "<未命名>" : Name) + " " + Path;
     }
 }

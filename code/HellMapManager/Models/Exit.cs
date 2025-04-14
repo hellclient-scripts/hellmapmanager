@@ -22,23 +22,23 @@ public class ExitLabel
     }
     public bool IsCommand
     {
-        get => this.Type == Types.Command;
+        get => Type == Types.Command;
     }
     public bool IsCondition
     {
-        get => this.Type == Types.Condition;
+        get => Type == Types.Condition;
     }
     public bool IsExCondition
     {
-        get => this.Type == Types.ExCondition;
+        get => Type == Types.ExCondition;
     }
     public bool IsTo
     {
-        get => this.Type == Types.To;
+        get => Type == Types.To;
     }
     public bool IsCost
     {
-        get => this.Type == Types.Cost;
+        get => Type == Types.Cost;
     }
     public Types Type { get; set; }
     public string Value { get; set; }

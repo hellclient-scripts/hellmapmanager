@@ -3,5 +3,5 @@ namespace HellMapManager.Models;
 
 public class Cache
 {
-    public Dictionary<string, Room> Rooms = new Dictionary<string, Room>();
+    public Dictionary<string, Room> Rooms = [];
 }
