@@ -26,16 +26,11 @@
                   <Setter Property="FontStyle" Value="Italic" />
                   <Setter Property="Foreground" Value="#FF333333" />
                </Style>
-               <Style Selector="TextBlock.Count">
-                  <Setter Property="Margin" Value="0 5" />
-               </Style>
                <Style Selector="TextBlock">
                   <Setter Property="TextWrapping" Value="Wrap" />
                </Style>
             </StackPanel.Styles>
             <TextBlock Classes="Title">房间列表</TextBlock>
-            <TextBlock Classes="Count">
-               共计&#160;<Run Text="{Binding GetMapRoomsCount}" /></TextBlock>
             <TextBlock Classes="Desc">
                房间信息是MUD地图信息的基本数据。<LineBreak />
                每个房间的游戏由Key,与其他房间的出口信息，标签，分组组成。<LineBreak />
@@ -47,19 +42,23 @@
             <Style Selector="TextBox#Filter">
                <Setter Property="Width" Value="200" />
             </Style>
+            <Style Selector="DataGrid SelectableTextBlock">
+               <Setter Property="Padding" Value="10 0" />
+            </Style>
+
          </DockPanel.Styles>
          <WrapPanel DockPanel.Dock="Top">
             <TextBox
                Name="Filter"
-               Watermark="搜索"
                Text="{Binding RoomsFilter}"
-               TextChanged="OnFilter" />
+               TextChanged="OnFilter"
+               Watermark="过滤" />
          </WrapPanel>
          <Panel DockPanel.Dock="Bottom">
             <WrapPanel HorizontalAlignment="Right">
-            <TextBlock Text="{Binding FilteredRooms.Count}" />
-            <TextBlock Text="/" />
-            <TextBlock Text="{Binding GetMapRoomsCount}" />
+               <TextBlock Text="{Binding FilteredRooms.Count}" />
+               <TextBlock Text="/" />
+               <TextBlock Text="{Binding GetMapRoomsCount}" />
             </WrapPanel>
          </Panel>
          <DataGrid
@@ -67,30 +66,44 @@
             Margin="5"
             BorderBrush="Gray"
             BorderThickness="1"
+            CanUserResizeColumns="True"
             GridLinesVisibility="All"
             IsReadOnly="True"
             ItemsSource="{Binding FilteredRooms}">
             <DataGrid.Columns>
-               <DataGridTextColumn
-                  Width="160"
-                  Binding="{Binding Key}"
-                  Header="房间主键" />
-               <DataGridTextColumn
-                  Width="160"
-                  Binding="{Binding Name}"
-                  Header="房间名" />
-               <DataGridTextColumn
-                  Width="160"
-                  Binding="{Binding Group}"
-                  Header="分组" />
+               <DataGridTemplateColumn Width="160" Header="房间主键">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate>
+                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Key}" />
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
+               <DataGridTemplateColumn Width="160" Header="房间名">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate>
+                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
+               <DataGridTemplateColumn Width="160" Header="分组">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate>
+                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Group}" />
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
                <DataGridTextColumn
                   Width="100"
                   Binding="{Binding ExitsCount}"
                   Header="出口数量" />
-               <DataGridTextColumn
-                  Width="200"
-                  Binding="{Binding AllTags}"
-                  Header="房间标签" />
+               <DataGridTemplateColumn Width="160" Header="房间标签">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate>
+                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding AllTags}" />
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
+
                <DataGridTemplateColumn Header="操作">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
