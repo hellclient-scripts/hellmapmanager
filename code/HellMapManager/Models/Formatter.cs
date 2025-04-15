@@ -48,21 +48,20 @@ public class ToggleValue(string value, bool not)
 
 }
 
-public class ToggleKV(string key, string value, bool not)
+public class ToggleKeyValues(string key, List<string> values, bool not)
 {
     public bool Not = not;
     public string Key = key;
-    public string Value = value;
-    public TypedCondition ToTypedCondition()
-    {
-        return new TypedCondition(HMMFormatter.Unescape(Key), HMMFormatter.Unescape(Value), Not);
-    }
-    public static ToggleKV FromTypedCondition(TypedCondition c)
-    {
-        return new ToggleKV(HMMFormatter.Escape(c.Key), HMMFormatter.Escape(c.Value), c.Not);
-    }
+    public List<string> Values = values;
     public string NotLabel { get => Not ? HMMFormatter.TokenNot.Unescaped : ""; }
-
+    public TypedConditions ToTypedConditions()
+    {
+        return new TypedConditions(HMMFormatter.Unescape(Key), Values.ConvertAll(HMMFormatter.Unescape), Not);
+    }
+    public static ToggleKeyValues FromTypedConditions(TypedConditions c)
+    {
+        return new ToggleKeyValues(HMMFormatter.Escape(c.Key), c.Conditions.ConvertAll(HMMFormatter.Escape), c.Not);
+    }
 }
 
 public class Token(string unesacped, string escaped)
@@ -173,45 +172,45 @@ public class HMMFormatter
         var decoded = val.Split(TokenKey4.Unescaped, 2);
         return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
     }
-    public static string EncodeToggleKV1(ToggleKV kv)
+    public static string EncodeToggleKeyValues1(ToggleKeyValues kv)
     {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue1(kv.Key, kv.Value), kv.Not));
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue1(kv.Key, EncodeList1(kv.Values)), kv.Not));
     }
-    public static ToggleKV DecodeToggleKV1(string val)
+    public static ToggleKeyValues DecodeToggleKeyValues1(string val)
     {
         var v = DecodeToggleValue(val);
         var kv = DecodeKeyValue1(v.Value);
-        return new ToggleKV(kv.Key, kv.Value, v.Not);
+        return new ToggleKeyValues(kv.Key, DecodeList1(kv.Value), v.Not);
     }
-    public static string EncodeToggleKV2(ToggleKV kv)
+    public static string EncodeToggleKeyValues2(ToggleKeyValues kv)
     {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue2(kv.Key, kv.Value), kv.Not));
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue2(kv.Key, EncodeList2(kv.Values)), kv.Not));
     }
-    public static ToggleKV DecodeToggleKV2(string val)
+    public static ToggleKeyValues DecodeToggleKeyValues2(string val)
     {
         var v = DecodeToggleValue(val);
         var kv = DecodeKeyValue2(v.Value);
-        return new ToggleKV(kv.Key, kv.Value, v.Not);
+        return new ToggleKeyValues(kv.Key, DecodeList2(kv.Value), v.Not);
     }
-    public static string EncodeToggleKV3(ToggleKV kv)
+    public static string EncodeToggleKeyValues3(ToggleKeyValues kv)
     {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue3(kv.Key, kv.Value), kv.Not));
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue3(kv.Key, EncodeList3(kv.Values)), kv.Not));
     }
-    public static ToggleKV DecodeToggleKV3(string val)
+    public static ToggleKeyValues DecodeToggleKeyValues3(string val)
     {
         var v = DecodeToggleValue(val);
         var kv = DecodeKeyValue3(v.Value);
-        return new ToggleKV(kv.Key, kv.Value, v.Not);
+        return new ToggleKeyValues(kv.Key, DecodeList3(kv.Value), v.Not);
     }
-    public static string EncodeToggleKV4(ToggleKV kv)
+    public static string EncodeToggleKeyValues4(ToggleKeyValues kv)
     {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue4(kv.Key, kv.Value), kv.Not));
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue4(kv.Key, EncodeList4(kv.Values)), kv.Not));
     }
-    public static ToggleKV DecodeToggleKV4(string val)
+    public static ToggleKeyValues DecodeToggleKeyValues4(string val)
     {
         var v = DecodeToggleValue(val);
         var kv = DecodeKeyValue4(v.Value);
-        return new ToggleKV(kv.Key, kv.Value, v.Not);
+        return new ToggleKeyValues(kv.Key, DecodeList4(kv.Value), v.Not);
     }
 
     public static string EncodeList1(List<string> items)

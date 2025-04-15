@@ -11,7 +11,7 @@ public class Query
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
 
-    public List<TypedCondition> Items { get; set; } = [];
+    public List<TypedConditions> Items { get; set; } = [];
 
     public bool Validated()
     {
@@ -26,7 +26,7 @@ public class Query
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeToggleKV3(ToggleKV.FromTypedCondition(d)))),//3
+                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeToggleKeyValues3(ToggleKeyValues.FromTypedConditions(d)))),//3
             ])
         );
     }
@@ -38,7 +38,7 @@ public class Query
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
-        result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleKV3(d).ToTypedCondition());
+        result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleKeyValues3(d).ToTypedConditions());
         return result;
     }
 

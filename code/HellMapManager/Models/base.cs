@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace HellMapManager.Models;
 
 public class Condition(string key, bool not)
@@ -6,10 +8,10 @@ public class Condition(string key, bool not)
     public bool Not { get; set; } = not;
 }
 
-public class TypedCondition(string key, string value, bool not)
+public class TypedConditions(string key, List<string> conditions, bool not)
 {
     public string Key { get; set; } = key;
-    public string Value { get; set; } = value;
+    public List<string> Conditions { get; set; } = conditions;
     public bool Not { get; set; } = not;
 
 }
