@@ -71,6 +71,7 @@
         <MenuItem Header="关于(_A)" />
       </MenuItem>
     </Menu>
+    <Border BorderBrush="#FFeeeeee" BorderThickness="0 1 0 0" Height="20" DockPanel.Dock="Bottom" />
     <Panel>
       <welcome:Welcome IsVisible="{Binding CanShowWelcome}" />
       <mapfile:MapFile

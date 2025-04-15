@@ -133,5 +133,37 @@ public partial class Room()
         }
         Data.Sort((x, y) => x.Key.CompareTo(y.Key));
     }
+
+    public bool Filter(string val)
+    {
+        if (Name.Contains(val) ||
+            Desc.Contains(val) ||
+            Group.Contains(val))
+        {
+            return true;
+        }
+        foreach (var tag in Tags)
+        {
+            if (tag.Contains(val))
+            {
+                return true;
+            }
+        }
+        foreach (var data in Data)
+        {
+            if (data.Key.Contains(val) || data.Value.Contains(val))
+            {
+                return true;
+            }
+        }
+        foreach (var exit in Exits)
+        {
+            if (exit.Command.Contains(val) || exit.To.Contains(val))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

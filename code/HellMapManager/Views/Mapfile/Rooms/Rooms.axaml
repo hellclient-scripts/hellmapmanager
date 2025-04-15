@@ -42,33 +42,55 @@
                一般情况下，不要直接使用房间Key，而是通过别名，线路，地区或者足迹来使用房间信息，避免数据和代码过度耦合。</TextBlock>
          </StackPanel>
       </ScrollViewer>
-      <Grid>
+      <DockPanel>
+         <DockPanel.Styles>
+            <Style Selector="TextBox#Filter">
+               <Setter Property="Width" Value="200" />
+            </Style>
+         </DockPanel.Styles>
+         <WrapPanel DockPanel.Dock="Top">
+            <TextBox
+               Name="Filter"
+               Watermark="搜索"
+               Text="{Binding RoomsFilter}"
+               TextChanged="OnFilter" />
+         </WrapPanel>
+         <Panel DockPanel.Dock="Bottom">
+            <WrapPanel HorizontalAlignment="Right">
+            <TextBlock Text="{Binding FilteredRooms.Count}" />
+            <TextBlock Text="/" />
+            <TextBlock Text="{Binding GetMapRoomsCount}" />
+            </WrapPanel>
+         </Panel>
          <DataGrid
             x:Name="AllRooms"
-            Margin="20"
+            Margin="5"
             BorderBrush="Gray"
             BorderThickness="1"
             GridLinesVisibility="All"
             IsReadOnly="True"
-            ItemsSource="{Binding GetRooms}">
+            ItemsSource="{Binding FilteredRooms}">
             <DataGrid.Columns>
                <DataGridTextColumn
-                  Width="200"
+                  Width="160"
                   Binding="{Binding Key}"
                   Header="房间主键" />
                <DataGridTextColumn
-                  Width="200"
+                  Width="160"
                   Binding="{Binding Name}"
                   Header="房间名" />
                <DataGridTextColumn
-                  Width="200"
+                  Width="160"
                   Binding="{Binding Group}"
-                  Header="区域" />
+                  Header="分组" />
                <DataGridTextColumn
-                  Width="200"
+                  Width="100"
                   Binding="{Binding ExitsCount}"
                   Header="出口数量" />
-               <DataGridTextColumn Binding="{Binding AllTags}" Header="房间标签" />
+               <DataGridTextColumn
+                  Width="200"
+                  Binding="{Binding AllTags}"
+                  Header="房间标签" />
                <DataGridTemplateColumn Header="操作">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
@@ -90,6 +112,6 @@
                </DataGridTemplateColumn>
             </DataGrid.Columns>
          </DataGrid>
-      </Grid>
+      </DockPanel>
    </DockPanel>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using System;
 using HellMapManager.States;
 using HellMapManager.Models;
+using System.Collections.ObjectModel;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -10,6 +11,7 @@ public partial class MainWindowViewModel : ViewModelBase
         AppState.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(GetMapRoomsCount));
+            OnPropertyChanged(nameof(FilteredRooms));
             OnPropertyChanged(nameof(GetMapAliasesCount));
             OnPropertyChanged(nameof(GetMapRoutesCount));
             OnPropertyChanged(nameof(GetMapTracesCount));
@@ -33,6 +35,30 @@ public partial class MainWindowViewModel : ViewModelBase
     public int GetMapRoomsCount
     {
         get => AppState.Current != null ? (AppState.Current.Map.Rooms.Count) : 0;
+    }
+    public string RoomsFilter { get; set; } = "";
+    public void FilterRooms()
+    {
+        OnPropertyChanged(nameof(FilteredRooms));
+    }
+    public ObservableCollection<Room> FilteredRooms
+    {
+        get
+        {
+            if (AppState.Current != null)
+            {
+                var rooms = AppState.Current.Map.Rooms;
+                if (string.IsNullOrEmpty(RoomsFilter))
+                {
+                    return new ObservableCollection<Room>(rooms);
+                }
+                else
+                {
+                    return new ObservableCollection<Room>(rooms.FindAll(r => r.Filter(RoomsFilter)));
+                }
+            }
+            return [];
+        }
     }
     public int GetMapAliasesCount
     {
