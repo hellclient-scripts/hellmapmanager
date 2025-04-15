@@ -10,7 +10,38 @@
    x:DataType="vm:MainWindowViewModel"
    mc:Ignorable="d">
    <DockPanel LastChildFill="True">
-      <TextBlock DockPanel.Dock="Top" Text="{Binding GetMapRoomsCount}" />
+      <ScrollViewer DockPanel.Dock="Left">
+         <StackPanel Width="200" Margin="10">
+            <StackPanel.Styles>
+               <Style Selector="TextBlock">
+                  <Setter Property="TextWrapping" Value="Wrap" />
+               </Style>
+               <Style Selector="TextBlock.Title">
+                  <Setter Property="FontSize" Value="24" />
+                  <Setter Property="LineHeight" Value="30" />
+                  <Setter Property="FontWeight" Value="Bold" />
+               </Style>
+               <Style Selector="TextBlock.Desc">
+                  <Setter Property="Margin" Value="0 5" />
+                  <Setter Property="FontStyle" Value="Italic" />
+                  <Setter Property="Foreground" Value="#FF333333" />
+               </Style>
+               <Style Selector="TextBlock.Count">
+                  <Setter Property="Margin" Value="0 5" />
+               </Style>
+               <Style Selector="TextBlock">
+                  <Setter Property="TextWrapping" Value="Wrap" />
+               </Style>
+            </StackPanel.Styles>
+            <TextBlock Classes="Title">房间列表</TextBlock>
+            <TextBlock Classes="Count">
+               共计&#160;<Run Text="{Binding GetMapRoomsCount}" /></TextBlock>
+            <TextBlock Classes="Desc">
+               房间信息是MUD地图信息的基本数据。<LineBreak />
+               每个房间的游戏由Key,与其他房间的出口信息，标签，分组组成。<LineBreak />
+               一般情况下，不要直接使用房间Key，而是通过别名，线路，地区或者足迹来使用房间信息，避免数据和代码过度耦合。</TextBlock>
+         </StackPanel>
+      </ScrollViewer>
       <Grid>
          <DataGrid
             x:Name="AllRooms"
@@ -42,9 +73,9 @@
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
                         <Button
+                           Margin="2"
                            Command="{Binding #AllRooms.((vm:MainWindowViewModel)DataContext).OnDumpRoom}"
-                           CommandParameter="{Binding .}"
-                           Margin="2">
+                           CommandParameter="{Binding .}">
                            <ToolTip.Tip>
                               <TextBlock>查看房间关系地图</TextBlock>
                            </ToolTip.Tip>
