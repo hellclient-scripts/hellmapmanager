@@ -51,7 +51,7 @@ public partial class MapInfo
         var kv = HMMFormatter.DecodeKeyValue1(val);
         var list = HMMFormatter.DecodeList1(kv.Value);
         result.Name = HMMFormatter.UnescapeAt(list, 0);
-        result.UpdatedTime = HMMFormatter.UnescapeIntAt(list, 0, -1);
+        result.UpdatedTime = HMMFormatter.UnescapeIntAt(list, 1, -1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
         return result;
     }

@@ -24,6 +24,7 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(GetMapEncodingLabel));
             OnPropertyChanged(nameof(GetMapPathLabel));
             OnPropertyChanged(nameof(GetMapDescLabel));
+            OnPropertyChanged(nameof(LastModifiedLabel));
         };
     }
     public int GetMapRoomsCount
@@ -99,9 +100,24 @@ public partial class MainWindowViewModel : ViewModelBase
             return "";
         }
     }
+    public string LastModifiedLabel
+    {
+        get => AppState.Current != null ? (DateTimeOffset.FromUnixTimeSeconds(AppState.Current.Map.Info.UpdatedTime).LocalDateTime.ToString("yyyy-MM-dd HH:mmss")) : "";
+    }
     public string GetMapDescLabel
     {
         get => AppState.Current != null ? (AppState.Current.Map.Info.DescLabel) : "";
     }
-
+    public bool IsMapPathEmpty
+    {
+        get => AppState.Current != null ? (AppState.Current.Path == "") : true;
+    }
+    public bool IsMapNameEmpty
+    {
+        get => AppState.Current != null ? (AppState.Current.Map.Info.Name == "") : true;
+    }
+    public bool IsMapDescEmpty
+    {
+        get => AppState.Current != null ? (AppState.Current.Map.Info.Name == "") : true;
+    }
 }

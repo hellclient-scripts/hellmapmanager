@@ -15,7 +15,7 @@
     HorizontalAlignment="Stretch"
     VerticalAlignment="Stretch"
     LastChildFill="True">
-    <TabControl Margin="5">
+    <TabControl Margin="5" Name="MainTab">
       <TabItem Header="概览">
         <overview:Overview HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
