@@ -1,8 +1,11 @@
 using System;
-using Avalonia;
+using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using Avalonia.VisualTree;
+using Avalonia.Interactivity;
+using HellMapManager.Models;
+using HellMapManager.States;
+using HellMapManager.ViewModels;
+using HellMapManager.Windows.UpdateMapWindow;
 
 namespace HellMapManager.Views.Mapfile.Overview;
 
@@ -53,6 +56,23 @@ public partial class Overview : UserControl
                         tab.SelectedIndex = 10;
                         break;
                 }
+            }
+        }
+    }
+    public async void OnUpdateButtonClicked(object? sender, RoutedEventArgs args)
+    {
+        if (DataContext is MainWindowViewModel vm && vm.AppState.Current is not null)
+        {
+            var settings = vm.AppState.Current.ToSettings();
+            var nwm = new UpdateMapWindowViewModel(vm.AppState, settings);
+            var nw = new UpdateMapWindow
+            {
+                DataContext = nwm
+            };
+            var result = await nw.ShowDialog<MapSettings>((TopLevel.GetTopLevel(this) as Window)!);
+            if (result != null)
+            {
+                nwm.AppState.UpdateSettings(result);
             }
         }
     }

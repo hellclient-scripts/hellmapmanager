@@ -65,7 +65,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if (AppState.Current.Path != "")
             {
-
+                AppState.Save();
             }
             else
             {

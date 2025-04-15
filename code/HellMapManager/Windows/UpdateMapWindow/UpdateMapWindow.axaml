@@ -1,0 +1,60 @@
+<Window
+  x:Class="HellMapManager.Windows.UpdateMapWindow.UpdateMapWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.Windows.UpdateMapWindow"
+  Title="更新地图信息"
+  Width="600"
+  Height="400"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:UpdateMapWindowViewModel"
+  mc:Ignorable="d">
+  <Window.Styles>
+    <Style Selector="Border#Main">
+      <Setter Property="Padding" Value="10" />
+    </Style>
+    <Style Selector="Button">
+      <Setter Property="Margin" Value="10 0 0 0" />
+      <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+    <Style Selector="TextBox.TextArea">
+      <Setter Property="Height" Value="200" />
+    </Style>
+
+  </Window.Styles>
+  <Border Name="Main">
+    <DockPanel>
+      <Panel HorizontalAlignment="Right" DockPanel.Dock="Bottom">
+        <WrapPanel Classes="Bottons">
+          <Button Classes="accent" Click="OnSave">保存</Button>
+          <Button Click="OnClose" IsCancel="True">取消</Button>
+        </WrapPanel>
+      </Panel>
+      <StackPanel>
+        <TextBlock DockPanel.Dock="Left" Text="名称:" />
+        <TextBox Text="{Binding Settings.Name}" Watermark="地图名称" />
+        <TextBlock DockPanel.Dock="Left" Text="编码:" />
+        <ComboBox
+          ItemsSource="{Binding Items}"
+          SelectedValue="{Binding Path=Settings.Encoding}"
+          SelectedValueBinding="{Binding Key}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock x:DataType="vm:EncodingItem" Text="{Binding Label}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBlock DockPanel.Dock="Left" Text="描述:" />
+        <TextBox
+          AcceptsReturn="True"
+          Classes="TextArea"
+          Text="{Binding Settings.Desc}"
+          Watermark="地图名称" />
+      </StackPanel>
+    </DockPanel>
+  </Border>
+</Window>

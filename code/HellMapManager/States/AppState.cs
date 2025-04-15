@@ -152,6 +152,16 @@ public partial class AppState(IAppUI ui)
         }
         return await UI.ConfirmImport();
     }
-
+    public void UpdateSettings(MapSettings s)
+    {
+        if (Current != null)
+        {
+            Current.Map.Encoding = s.Encoding;
+            Current.Map.Info.Name = s.Name;
+            Current.Map.Info.Desc = s.Desc;
+            Current.MarkAsModified();
+            RaiseMapFileUpdatedEvent(this);
+        }
+    }
 
 }

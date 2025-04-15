@@ -4,6 +4,12 @@ using System.Text;
 
 namespace HellMapManager.Models;
 
+public class MapSettings
+{
+    public string Name { get; set; } = "";
+    public string Desc { get; set; } = "";
+    public MapEncoding Encoding { get; set; } = MapEncoding.Default;
+}
 public enum MapEncoding
 {
     Default,
@@ -78,7 +84,7 @@ public partial class Map
 
     public void Sort()
     {
-        this.Rooms.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+        Rooms.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
     }
     public static Map Empty(string name, string desc)
     {
@@ -119,9 +125,9 @@ public class MapFile
     }
     private void InsertRoom(Room room)
     {
-        this.Map.Rooms.RemoveAll(r => r.Key == room.Key);
-        this.Map.Rooms.Add(room);
-        this.Cache.Rooms[room.Key] = room;
+        Map.Rooms.RemoveAll(r => r.Key == room.Key);
+        Map.Rooms.Add(room);
+        Cache.Rooms[room.Key] = room;
     }
     public void ImportRooms(List<Room> rooms)
     {
@@ -132,10 +138,19 @@ public class MapFile
     }
     public void RebuldCache()
     {
-        this.Cache = new Cache();
-        foreach (var room in this.Map.Rooms)
+        Cache = new Cache();
+        foreach (var room in Map.Rooms)
         {
-            this.Cache.Rooms[room.Key] = room;
+            Cache.Rooms[room.Key] = room;
         }
+    }
+    public MapSettings ToSettings()
+    {
+        return new MapSettings
+        {
+            Name = Map.Info.Name,
+            Desc = Map.Info.Desc,
+            Encoding = Map.Encoding,
+        };
     }
 }

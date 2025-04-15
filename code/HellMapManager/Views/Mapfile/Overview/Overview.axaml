@@ -15,7 +15,8 @@
         <Button
           Margin="5"
           HorizontalAlignment="Right"
-          VerticalAlignment="Bottom">
+          VerticalAlignment="Bottom"
+          Click="OnUpdateButtonClicked">
           <TextBlock>编辑信息</TextBlock>
         </Button>
       </Panel>
@@ -38,23 +39,23 @@
               <Setter Property="FontWeight" Value="Bold" />
             </Style>
           </StackPanel.Styles>
-          <TextBlock Classes="MapPath Label" Text="路径:" />
-          <TextBlock
-            Classes="MapPath Content"
-            Classes.Empty="{Binding IsMapPathEmpty}"
-            Text="{Binding GetMapPathLabel}" />
           <TextBlock Classes="MapName Label" Text="地图名:" />
           <TextBlock
             Classes="MapName Content"
             Classes.Empty="{Binding IsMapNameEmpty}"
             Text="{Binding GetMapNameLabel}" />
-          <TextBlock Classes="MapEncoding Label" Text="编码:" />
-          <TextBlock Classes="MapEncoding Content" Text="{Binding GetMapEncodingLabel}" />
           <TextBlock Classes="MapDesc Label" Text="描述:" />
           <TextBlock
             Classes="MapDesc Content"
-            Classes.Empty="{Binding IsMapPathEmpty}"
+            Classes.Empty="{Binding IsMapDescEmpty}"
             Text="{Binding GetMapDescLabel}" />
+          <TextBlock Classes="MapPath Label" Text="路径:" />
+          <TextBlock
+            Classes="MapPath Content"
+            Classes.Empty="{Binding IsMapPathEmpty}"
+            Text="{Binding GetMapPathLabel}" />
+          <TextBlock Classes="MapEncoding Label" Text="编码:" />
+          <TextBlock Classes="MapEncoding Content" Text="{Binding GetMapEncodingLabel}" />
           <TextBlock Classes="MapDesc Label" Text="最后更新:" />
           <TextBlock Classes="MapDesc Content" Text="{Binding LastModifiedLabel}" />
         </StackPanel>
@@ -102,7 +103,10 @@
               <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
           </WrapPanel.Styles>
-          <Border Classes="Summary" Name="WidgetRoom" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetRoom"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/home.png" />
@@ -115,7 +119,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetAlias" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetAlias"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/id_card.png" />
@@ -128,7 +135,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetRoute" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetRoute"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/route.png" />
@@ -141,7 +151,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetTrace" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetTrace"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/footprint.png" />
@@ -154,7 +167,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetRegion" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetRegion"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/south_america.png" />
@@ -167,7 +183,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetLandmark" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetLandmark"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/my_location.png" />
@@ -180,7 +199,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetShortcut" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetShortcut"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/flight.png" />
@@ -193,7 +215,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetVariable" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetVariable"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/database.png" />
@@ -206,7 +231,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetSnapshot" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetSnapshot"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/camera.png" />
@@ -219,7 +247,10 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border Classes="Summary" Name="WidgetQuery" Tapped="OnWidgetClicked">
+          <Border
+            Name="WidgetQuery"
+            Classes="Summary"
+            Tapped="OnWidgetClicked">
             <DockPanel>
               <Panel Classes="Icon">
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/query_stats.png" />
