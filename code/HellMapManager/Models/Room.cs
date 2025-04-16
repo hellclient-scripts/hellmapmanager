@@ -33,8 +33,8 @@ public partial class Room
         {
             Key = Key,
             Name = Name,
-            Desc = Desc,
             Group = Group,
+            Desc = Desc,
             Tags = Tags.GetRange(0, Tags.Count),
             Exits = Exits.ConvertAll(e => e.Clone()),
             Data = Data.ConvertAll(d => d.Clone()),
@@ -46,8 +46,8 @@ public partial class Room
             HMMFormatter.EncodeList1([
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Name),//1
-                HMMFormatter.Escape(Desc),//2
-                HMMFormatter.Escape(Group),//3
+                HMMFormatter.Escape(Group),//2
+                HMMFormatter.Escape(Desc),//
                 HMMFormatter.EncodeList2(Tags.ConvertAll(HMMFormatter.Escape)),//4
                 HMMFormatter.EncodeList2(Exits.ConvertAll(//5
                     e=>HMMFormatter.EncodeList3([
@@ -72,8 +72,8 @@ public partial class Room
         var list = HMMFormatter.DecodeList1(kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Name = HMMFormatter.UnescapeAt(list, 1);
-        result.Desc = HMMFormatter.UnescapeAt(list, 2);
-        result.Group = HMMFormatter.UnescapeAt(list, 3);
+        result.Group = HMMFormatter.UnescapeAt(list, 2);
+        result.Desc = HMMFormatter.UnescapeAt(list, 3);
         result.Tags = HMMFormatter.DecodeList2(HMMFormatter.At(list, 4)).ConvertAll(HMMFormatter.Unescape);
         result.Exits = HMMFormatter.DecodeList2(HMMFormatter.At(list, 5)).ConvertAll(d =>
         {

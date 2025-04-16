@@ -47,7 +47,7 @@
             </Style>
          </DockPanel.Styles>
          <DockPanel Margin="5,0" DockPanel.Dock="Top">
-            <Button Classes="New accent">
+            <Button Classes="New accent" Click="OnNew">
                <TextBlock>添加房间</TextBlock>
             </Button>
             <TextBox
@@ -111,19 +111,47 @@
                <DataGridTemplateColumn Header="操作">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
-                        <Button
-                           Margin="2"
-                           Command="{Binding #AllRooms.((vm:MainWindowViewModel)DataContext).OnDumpRoom}"
-                           CommandParameter="{Binding .}">
-                           <ToolTip.Tip>
-                              <TextBlock>查看房间关系地图</TextBlock>
-                           </ToolTip.Tip>
-                           <Image
-                              Width="16"
-                              Height="16"
-                              Source="avares://HellMapManager/Assets/travel_explore.png" />
-
-                        </Button>
+                        <WrapPanel>
+                           <Button Margin="2" Click="OnView">
+                              <ToolTip.Tip>
+                                 <TextBlock>查看房间</TextBlock>
+                              </ToolTip.Tip>
+                              <Image
+                                 Width="16"
+                                 Height="16"
+                                 Source="avares://HellMapManager/Assets/read_more.png" />
+                           </Button>
+                           <Button Margin="2" Click="OnEdit">
+                              <ToolTip.Tip>
+                                 <TextBlock>编辑房间</TextBlock>
+                              </ToolTip.Tip>
+                              <Image
+                                 Width="16"
+                                 Height="16"
+                                 Source="avares://HellMapManager/Assets/edit.png" />
+                           </Button>
+                           <Button
+                              Margin="2"
+                              Command="{Binding #AllRooms.((vm:MainWindowViewModel)DataContext).OnDumpRoom}"
+                              CommandParameter="{Binding .}">
+                              <ToolTip.Tip>
+                                 <TextBlock>查看房间关系地图</TextBlock>
+                              </ToolTip.Tip>
+                              <Image
+                                 Width="16"
+                                 Height="16"
+                                 Source="avares://HellMapManager/Assets/travel_explore.png" />
+                           </Button>
+                           <Button Margin="10,2,2,2" Click="OnEdit">
+                              <ToolTip.Tip>
+                                 <TextBlock>删除房间</TextBlock>
+                              </ToolTip.Tip>
+                              <Image
+                                 Width="16"
+                                 Height="16"
+                                 Source="avares://HellMapManager/Assets/delete.png" />
+                           </Button>
+                        </WrapPanel>
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>

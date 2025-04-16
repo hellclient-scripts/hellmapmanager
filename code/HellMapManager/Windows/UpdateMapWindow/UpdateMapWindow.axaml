@@ -8,9 +8,10 @@
   Title="更新地图信息"
   Width="600"
   Height="400"
-  d:DesignHeight="450"
+  d:DesignHeight="550"
   d:DesignWidth="800"
   x:DataType="vm:UpdateMapWindowViewModel"
+  Icon="/Assets/app.ico"
   mc:Ignorable="d">
   <Window.Styles>
     <Style Selector="Border#Main">
@@ -23,7 +24,9 @@
     <Style Selector="TextBox.TextArea">
       <Setter Property="Height" Value="200" />
     </Style>
-
+    <Style Selector="TextBlock.Label">
+      <Setter Property="Margin" Value="0 5 0 5" />
+    </Style>
   </Window.Styles>
   <Border Name="Main">
     <DockPanel>
@@ -33,28 +36,29 @@
           <Button Click="OnClose" IsCancel="True">取消</Button>
         </WrapPanel>
       </Panel>
-      <StackPanel>
-        <TextBlock DockPanel.Dock="Left" Text="名称:" />
-        <TextBox Text="{Binding Settings.Name}" Watermark="地图名称" />
-        <TextBlock DockPanel.Dock="Left" Text="编码:" />
-        <ComboBox
-          ItemsSource="{Binding Items}"
-          SelectedValue="{Binding Path=Settings.Encoding}"
-          SelectedValueBinding="{Binding Key}">
-          <ComboBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock x:DataType="vm:EncodingItem" Text="{Binding Label}" />
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
-
-        <TextBlock DockPanel.Dock="Left" Text="描述:" />
-        <TextBox
-          AcceptsReturn="True"
-          Classes="TextArea"
-          Text="{Binding Settings.Desc}"
-          Watermark="地图名称" />
-      </StackPanel>
+      <ScrollViewer>
+        <StackPanel>
+          <TextBlock Classes="Label" Text="名称:" />
+          <TextBox Text="{Binding Settings.Name}" Watermark="地图名称" />
+          <TextBlock Classes="Label" Text="编码:" />
+          <ComboBox
+            ItemsSource="{Binding Items}"
+            SelectedValue="{Binding Path=Settings.Encoding}"
+            SelectedValueBinding="{Binding Key}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock x:DataType="vm:EncodingItem" Text="{Binding Label}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock Classes="Label" Text="描述:" />
+          <TextBox
+            AcceptsReturn="True"
+            Classes="TextArea"
+            Text="{Binding Settings.Desc}"
+            Watermark="地图名称" />
+        </StackPanel>
+      </ScrollViewer>
     </DockPanel>
   </Border>
 </Window>

@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 
 
 namespace HellMapManager.Windows.UpdateMapWindow;
-public class EncodingItem(MapEncoding key, string label)
+public class EncodingItem(MapEncoding key, string label):ObservableObject
 {
     public MapEncoding Key { get; } = key;
     public string Label { get; } = label;
