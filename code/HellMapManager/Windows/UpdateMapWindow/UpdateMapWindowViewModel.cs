@@ -5,15 +5,14 @@ using System.Collections.ObjectModel;
 
 
 namespace HellMapManager.Windows.UpdateMapWindow;
-public class EncodingItem(MapEncoding key, string label):ObservableObject
+public class EncodingItem(MapEncoding key, string label) : ObservableObject
 {
     public MapEncoding Key { get; } = key;
     public string Label { get; } = label;
 }
-public class UpdateMapWindowViewModel(AppState appstate, MapSettings settings) : ObservableObject
+public class UpdateMapWindowViewModel(MapSettings settings) : ObservableObject
 {
 
-    public AppState AppState { get; set; } = appstate;
     public MapSettings Settings { get; set; } = settings;
     public static ObservableCollection<EncodingItem> Items
     {

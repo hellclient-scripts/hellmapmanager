@@ -89,13 +89,11 @@ public class ViewItem
 
 public class RelationMapWindowViewModel : ObservableObject
 {
-    public RelationMapWindowViewModel(AppState state, RelationMapItem item)
+    public RelationMapWindowViewModel(RelationMapItem item)
     {
-        AppState = state;
         Item = item;
     }
     public List<string> Histories = [];
-    public AppState AppState;
     public RelationMapItem Item;
     public string Title
     {
@@ -173,7 +171,7 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     public void EnterViewItem(object obj)
     {
-        if (obj is ViewItem && AppState.Current is not null)
+        if (obj is ViewItem && AppState.Main.Current is not null)
         {
             var vi = (ViewItem)obj;
             EnterRoomKey(vi.Item.Room.Key);
@@ -185,9 +183,9 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     private void DoEnterRoomKey(string key, bool modfiyHistory)
     {
-        if (key != "" && AppState.Current is not null)
+        if (key != "" && AppState.Main.Current is not null)
         {
-            var item = Mapper.RelationMap(AppState.Current, key, AppPreset.RelationMaxDepth);
+            var item = Mapper.RelationMap(AppState.Main.Current, key, AppPreset.RelationMaxDepth);
             if (item is not null)
             {
                 if (modfiyHistory)

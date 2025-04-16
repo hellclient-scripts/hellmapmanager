@@ -29,17 +29,16 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            var appstate = new AppState(new DialogManager(desktop));
-            appstate.MapFileUpdatedEvent += (sender, args) => { settingsHelper.Save(appstate.Settings); };
-            appstate.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
+            AppState.Main.UI = new DialogManager(desktop);
+            AppState.Main.MapFileUpdatedEvent += (sender, args) => { settingsHelper.Save(AppState.Main.Settings); };
+            AppState.Main.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
             if (settings is not null)
             {
-                appstate.Settings = settings;
+                AppState.Main.Settings = settings;
             }
             var mw = new MainWindow()
             {
-                AppState = appstate,
-                DataContext = new MainWindowViewModel(appstate)
+                DataContext = new MainWindowViewModel()
             };
             desktop.MainWindow = mw;
             mw.InitWindow();

@@ -7,10 +7,9 @@ namespace HellMapManager.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
 
-    public MainWindowViewModel(AppState state)
+    public MainWindowViewModel()
     {
-        AppState = state;
-        AppState.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(Recents));
             OnPropertyChanged(nameof(IsFileModified));
@@ -23,49 +22,48 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public partial void InitOverview();
     public partial void InitRooms();
-    public AppState AppState;
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
     {
-        if (await AppState.ConfirmModified())
+        if (await AppState.Main.ConfirmModified())
         {
-            await AppState.OpenFile();
+            await AppState.Main.OpenFile();
         }
     }
     public async void OnNew()
     {
-        if (await AppState.ConfirmModified())
+        if (await AppState.Main.ConfirmModified())
         {
-            AppState.NewMap();
+            AppState.Main.NewMap();
         }
 
     }
     public async void OnImportRoomsH()
     {
-        if (await AppState.ConfirmImport())
+        if (await AppState.Main.ConfirmImport())
         {
-            await AppState.ImportRoomsH();
+            await AppState.Main.ImportRoomsH();
         }
     }
     public void OnExit()
     {
-        AppState.Exit();
+        AppState.Main.Exit();
     }
-    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppState.Settings.Recents.ToArray()); }
+    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppState.Main.Settings.Recents.ToArray()); }
     public async void OnOpenRecent(String file)
     {
-        if (await AppState.ConfirmModified())
+        if (await AppState.Main.ConfirmModified())
         {
-            AppState.OpenRecent(file);
+            AppState.Main.OpenRecent(file);
         }
     }
     public void OnSave()
     {
-        if (AppState.Current is not null)
+        if (AppState.Main.Current is not null)
         {
-            if (AppState.Current.Path != "")
+            if (AppState.Main.Current.Path != "")
             {
-                AppState.Save();
+                AppState.Main.Save();
             }
             else
             {
@@ -75,36 +73,36 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public bool IsFileModified
     {
-        get => AppState.Current != null && AppState.Current.Modified;
+        get => AppState.Main.Current != null && AppState.Main.Current.Modified;
     }
     public async void OnSaveAs()
     {
-        await AppState.SaveAs();
+        await AppState.Main.SaveAs();
     }
     public async void OnClose()
     {
-        if (await AppState.ConfirmModified())
+        if (await AppState.Main.ConfirmModified())
         {
-            AppState.CloseCurrent();
+            AppState.Main.CloseCurrent();
         }
     }
     public async void OnRevert()
     {
-        if (await AppState.ConfirmModified())
+        if (await AppState.Main.ConfirmModified())
         {
         }
 
     }
     public String TitleInfo
     {
-        get => (AppState.Current == null ? "" : (AppState.Current.Modified ? "* " : "") + (AppState.Current.Path != "" ? AppState.Current.Path : "<未保存>") + " ") + "Hell Map Manager";
+        get => (AppState.Main.Current == null ? "" : (AppState.Main.Current.Modified ? "* " : "") + (AppState.Main.Current.Path != "" ? AppState.Main.Current.Path : "<未保存>") + " ") + "Hell Map Manager";
     }
     public bool CanShowWelcome
     {
-        get => AppState.Current == null;
+        get => AppState.Main.Current == null;
     }
     public bool IsFileOpend
     {
-        get => AppState.Current != null;
+        get => AppState.Main.Current != null;
     }
 }

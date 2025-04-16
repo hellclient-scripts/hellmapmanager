@@ -61,10 +61,10 @@ public partial class Overview : UserControl
     }
     public async void OnUpdateButtonClicked(object? sender, RoutedEventArgs args)
     {
-        if (DataContext is MainWindowViewModel vm && vm.AppState.Current is not null)
+        if (DataContext is MainWindowViewModel vm && AppState.Main.Current is not null)
         {
-            var settings = vm.AppState.Current.ToSettings();
-            var nwm = new UpdateMapWindowViewModel(vm.AppState, settings);
+            var settings = AppState.Main.Current.ToSettings();
+            var nwm = new UpdateMapWindowViewModel(settings);
             var nw = new UpdateMapWindow
             {
                 DataContext = nwm
@@ -72,7 +72,7 @@ public partial class Overview : UserControl
             var result = await nw.ShowDialog<MapSettings>((TopLevel.GetTopLevel(this) as Window)!);
             if (result != null)
             {
-                nwm.AppState.UpdateSettings(result);
+                AppState.Main.UpdateSettings(result);
             }
         }
     }

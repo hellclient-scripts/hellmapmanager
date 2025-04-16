@@ -10,14 +10,13 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
-    public required AppState AppState;
     public void InitWindow()
     {
-        AppState.ShowRelationMapEvent += this.ShowRelationMap;
+        AppState.Main.ShowRelationMapEvent += this.ShowRelationMap;
     }
     public async void ShowRelationMap(object? sender, RelationMapItem rm)
     {
-        var vm = new RelationMapWindowViewModel(AppState, rm);
+        var vm = new RelationMapWindowViewModel(rm);
         var Window = new RelationMapWindow(vm);
         await Window.ShowDialog(this);
     }

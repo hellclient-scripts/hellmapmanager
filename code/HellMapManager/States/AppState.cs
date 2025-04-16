@@ -7,6 +7,7 @@ namespace HellMapManager.States;
 
 public partial class AppState(IAppUI ui)
 {
+    public static readonly AppState Main = new(new DummyAppUI());
     public IAppUI UI = ui;
     public MapFile? Current;
     public Settings Settings = new();
