@@ -45,15 +45,19 @@
             <Style Selector="DataGrid SelectableTextBlock">
                <Setter Property="Padding" Value="10 0" />
             </Style>
-
          </DockPanel.Styles>
-         <WrapPanel DockPanel.Dock="Top">
+         <DockPanel Margin="5,0" DockPanel.Dock="Top">
+            <Button Classes="New accent">
+               <TextBlock>添加房间</TextBlock>
+            </Button>
             <TextBox
                Name="Filter"
+               HorizontalAlignment="Right"
+               DockPanel.Dock="Right"
                Text="{Binding RoomsFilter}"
                TextChanged="OnFilter"
                Watermark="过滤" />
-         </WrapPanel>
+         </DockPanel>
          <Panel DockPanel.Dock="Bottom">
             <WrapPanel HorizontalAlignment="Right">
                <TextBlock Text="{Binding FilteredRooms.Count}" />

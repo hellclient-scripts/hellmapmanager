@@ -136,7 +136,8 @@ public partial class Room()
 
     public bool Filter(string val)
     {
-        if (Name.Contains(val) ||
+        if (Key.Contains(val) ||
+            Name.Contains(val) ||
             Desc.Contains(val) ||
             Group.Contains(val))
         {
