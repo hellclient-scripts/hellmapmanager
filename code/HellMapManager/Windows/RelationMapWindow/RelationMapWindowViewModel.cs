@@ -171,9 +171,9 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     public void EnterViewItem(object obj)
     {
-        if (obj is ViewItem && AppState.Main.Current is not null)
+        if (obj is ViewItem item && AppState.Main.Current is not null)
         {
-            var vi = (ViewItem)obj;
+            var vi = item;
             EnterRoomKey(vi.Item.Room.Key);
         }
     }

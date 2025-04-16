@@ -20,7 +20,7 @@ public class EditRoomWindowViewModel(Room? row, bool view) : ObservableObject
                 ? "新建房间"
                 : ViewMode ? $"查看房间 {Raw.Name}({Raw.Key})" : $"编辑房间 {Raw.Name}({Raw.Key})";
     }
-    public bool Editable { get => (Raw is not null) && !Editing; }
+    public bool Editable { get => (Raw is not null) && ViewMode; }
     public bool Editing { get; set; } = false;
     public void EnterEdit()
     {

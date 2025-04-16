@@ -4,6 +4,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:exit="using:HellMapManager.Views.Components.Exit"
+  xmlns:itemlist="using:HellMapManager.Views.Components.ItemList"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="using:HellMapManager.Windows.EditRoomWindow"
   Title="{Binding Title}"
@@ -74,6 +75,18 @@
             <TextBox Text="{Binding Item.Name}" Watermark="房间名" />
             <TextBlock Classes="Label" Text="分组:" />
             <TextBox Text="{Binding Item.Group}" Watermark="房间分组" />
+
+            <TextBlock Classes="Label" Text="出口:" />
+            <Panel Classes="Content">
+              <itemlist:ItemList Classes="RoomExits Content" ItemsSource="{Binding Item.Exits}">
+                <itemlist:ItemList.ItemTemplate>
+                  <DataTemplate>
+                    <exit:Exit Padding="0,2" DataContext="{Binding .}" />
+                  </DataTemplate>
+                </itemlist:ItemList.ItemTemplate>
+              </itemlist:ItemList>
+            </Panel>
+
             <TextBlock Classes="Label" Text="描述:" />
             <TextBox
               AcceptsReturn="True"
