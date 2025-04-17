@@ -81,7 +81,7 @@
             <TextBox Text="{Binding Item.Group}" Watermark="房间分组" />
             <TextBlock Classes="Label" Text="标签:" />
             <StackPanel Classes="Content">
-              <WrapPanel Margin="12,0">
+              <WrapPanel Margin="12,2">
                 <Button
                   Margin="0"
                   HorizontalAlignment="Left"
@@ -133,7 +133,7 @@
                             Height="16"
                             Source="avares://HellMapManager/Assets/edit.png" />
                         </Button>
-                        <Button Margin="0">
+                        <Button Margin="0" Click="OnRemoveExit">
                           <ToolTip.Tip>
                             <TextBlock>删除</TextBlock>
                           </ToolTip.Tip>
@@ -149,7 +149,7 @@
                 </itemlist:UpDownList.ItemTemplate>
                 <itemlist:UpDownList.Action>
                   <DataTemplate>
-                    <Button Margin="0">
+                    <Button Margin="0" Click="OnNewExit">
                       <ToolTip.Tip>
                         <TextBlock>新建</TextBlock>
                       </ToolTip.Tip>
@@ -165,7 +165,7 @@
             </Panel>
             <TextBlock Classes="Label" Text="数据:" />
             <StackPanel Classes="Content">
-              <WrapPanel Margin="12,0">
+              <WrapPanel Margin="12,2">
                 <Button
                   Margin="0"
                   HorizontalAlignment="Left"

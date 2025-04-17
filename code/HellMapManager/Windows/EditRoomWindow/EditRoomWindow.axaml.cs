@@ -115,6 +115,22 @@ public partial class EditRoomWindow : Window
         }
     }
 
+    public async void OnNewExit(object? sender, RoutedEventArgs args)
+    {
+        if (DataContext is EditRoomWindowViewModel vm)
+        {
+            var wvm = new EditExitWindowViewModel(null, vm.ExitValidator);
+            var editExitWindow = new EditExitWindow.EditExitWindow()
+            {
+                DataContext = wvm
+            };
+            var result = await editExitWindow.ShowDialog<Exit?>((TopLevel.GetTopLevel(this) as Window)!);
+            if (result is not null)
+            {
+                vm.Item.Exits.Add(result);
+            }
+        }
+    }
 
     public async void OnEditExit(object? sender, RoutedEventArgs args)
     {
@@ -133,6 +149,17 @@ public partial class EditRoomWindow : Window
                     vm.Item.Exits.Remove(data);
                     vm.Item.Exits.Add(result);
                 }
+            }
+        }
+    }
+    public async void OnRemoveExit(object? sender, RoutedEventArgs args)
+    {
+        if (DataContext is EditRoomWindowViewModel vm)
+        {
+            if (sender is not null && sender is Button bn && bn.DataContext is Exit exit)
+            {
+                if (await DialogHelper.Confirm("删除", "确定要删除该元素吗？") == false) return;
+                vm.Item.Exits.Remove(exit);
             }
         }
     }

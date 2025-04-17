@@ -47,10 +47,6 @@ public partial class ExitForm : ObservableObject
         {
             return err;
         }
-        if (To == "")
-        {
-            return "目标不能为空";
-        }
         if (Command == "")
         {
             return "指令不能为空";

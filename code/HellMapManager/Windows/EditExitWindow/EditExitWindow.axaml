@@ -60,7 +60,7 @@
           <TextBlock Classes="Label" Text="指令:" />
           <TextBox Text="{Binding Item.Command}" Watermark="指令" />
           <TextBlock Classes="Label" Text="耗时:" />
-          <TextBox Text="{Binding Item.Cost}" Watermark="耗时" />
+          <NumericUpDown Increment="1" Value="{Binding Item.Cost}" />
         </StackPanel>
       </ScrollViewer>
     </DockPanel>
