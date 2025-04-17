@@ -2,9 +2,9 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HellMapManager.Views.Components.ItemList;
+namespace HellMapManager.Views.Components.UpDownList;
 
-public class ItemListViewModel : ObservableObject
+public class UpDownListViewModel : ObservableObject
 {
     public bool CanUp { get; set; } = false;
     public bool CanDown { get; set; } = false;

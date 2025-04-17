@@ -5,10 +5,9 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Models;
 using Avalonia.Controls.ApplicationLifetimes;
-using HellMapManager.Interfaces;
-namespace HellMapManager.Services;
+namespace HellMapManager.Interfaces;
 
-public class DialogManager(IClassicDesktopStyleApplicationLifetime desktop) : IAppUI
+public class DesktopUI(IClassicDesktopStyleApplicationLifetime desktop) : IAppUI
 {
     public IClassicDesktopStyleApplicationLifetime Desktop = desktop;
     public async Task<string> AskLoadFile()
@@ -98,8 +97,8 @@ public class DialogManager(IClassicDesktopStyleApplicationLifetime desktop) : IA
         var box = MessageBoxManager.GetMessageBoxCustom(ps);
         var choice = await box.ShowAsync();
         return choice == "是";
-
     }
+    
     public async Task<bool> ConfirmImport()
     {
         var ps = new MessageBoxCustomParams

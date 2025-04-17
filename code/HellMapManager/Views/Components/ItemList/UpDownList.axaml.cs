@@ -5,41 +5,42 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
-using System.Collections.Specialized;
-using CommunityToolkit.Mvvm.ComponentModel;
-namespace HellMapManager.Views.Components.ItemList;
+using HellMapManager.Services;
+namespace HellMapManager.Views.Components.UpDownList;
 
-public partial class ItemList : UserControl
+public partial class UpDownList : UserControl
 {
-    static ItemList()
-    {
-        AffectsRender<ItemList>(ItemsSourceProperty, ItemTemplateProperty);
-    }
-    public ItemList()
+    public UpDownList()
     {
         InitializeComponent();
-        this.Find<WrapPanel>("Bottons")!.DataContext = new ItemListViewModel();
+        this.Find<WrapPanel>("Bottons")!.DataContext = new UpDownListViewModel();
     }
     public static readonly StyledProperty<IList> ItemsSourceProperty =
-AvaloniaProperty.Register<ItemList, IList>(nameof(ItemsSourceProperty));
+AvaloniaProperty.Register<UpDownList, IList>(nameof(ItemsSourceProperty));
 
     public IList ItemsSource
     {
         get => GetValue(ItemsSourceProperty);
-        set => SetValue(ItemsSourceProperty, value);
     }
     public static readonly StyledProperty<IDataTemplate> ItemTemplateProperty
-        = AvaloniaProperty.Register<ItemList, IDataTemplate>(nameof(ItemTemplateProperty));
+        = AvaloniaProperty.Register<UpDownList, IDataTemplate>(nameof(ItemTemplateProperty));
     public IDataTemplate ItemTemplate
     {
         get => GetValue(ItemTemplateProperty);
         set => SetValue(ItemTemplateProperty, value);
     }
+    public static readonly StyledProperty<IDataTemplate> ActionProperty
+    = AvaloniaProperty.Register<UpDownList, IDataTemplate>(nameof(ActionProperty));
+    public IDataTemplate Action
+    {
+        get => GetValue(ActionProperty);
+        set => SetValue(ActionProperty, value);
+    }
 
     public void OnSelectionChanged(object? sender, SelectionChangedEventArgs args)
     {
         var Bottons = this.Find<WrapPanel>("Bottons")!;
-        if (Bottons.DataContext is ItemListViewModel vm)
+        if (Bottons.DataContext is UpDownListViewModel vm)
         {
             vm.SetSelection(this.Find<ListBox>("Items")!);
         }
@@ -70,10 +71,11 @@ AvaloniaProperty.Register<ItemList, IList>(nameof(ItemsSourceProperty));
             lb.SelectedIndex = index + 1;
         }
     }
-    public void OnRemove(object? sender, RoutedEventArgs args)
+    public async void OnRemove(object? sender, RoutedEventArgs args)
     {
         var lb = this.Find<ListBox>("Items")!;
         if (lb.SelectedItem is null) return;
+        if (await DialogHelper.Confirm("删除", "确定要删除该元素吗？") == false) return;
         var index = lb.SelectedIndex;
         ItemsSource.RemoveAt(index);
         if (index >= ItemsSource.Count)

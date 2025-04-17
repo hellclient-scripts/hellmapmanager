@@ -4,11 +4,11 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:exit="using:HellMapManager.Views.Components.Exit"
-  xmlns:itemlist="using:HellMapManager.Views.Components.ItemList"
+  xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="using:HellMapManager.Windows.EditRoomWindow"
   Title="{Binding Title}"
-  Width="600"
+  Width="700"
   d:DesignHeight="450"
   d:DesignWidth="800"
   x:DataType="vm:EditRoomWindowViewModel"
@@ -67,7 +67,7 @@
         </WrapPanel>
       </Panel>
       <ScrollViewer>
-        <StackPanel>
+        <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
             <TextBox Text="{Binding Item.Key}" Watermark="房间主键" />
@@ -78,15 +78,50 @@
 
             <TextBlock Classes="Label" Text="出口:" />
             <Panel Classes="Content">
-              <itemlist:ItemList Classes="RoomExits Content" ItemsSource="{Binding Item.Exits}">
-                <itemlist:ItemList.ItemTemplate>
+              <itemlist:UpDownList Classes="RoomExits Content" ItemsSource="{Binding Item.Exits}">
+                <itemlist:UpDownList.ItemTemplate>
                   <DataTemplate>
-                    <exit:Exit Padding="0,2" DataContext="{Binding .}" />
+                    <DockPanel>
+                      <WrapPanel DockPanel.Dock="Right">
+                        <Button Margin="0">
+                          <ToolTip.Tip>
+                            <TextBlock>编辑</TextBlock>
+                          </ToolTip.Tip>
+                          <Image
+                            Width="16"
+                            Height="16"
+                            Source="avares://HellMapManager/Assets/edit.png" />
+                        </Button>
+                        <Button Margin="0">
+                          <ToolTip.Tip>
+                            <TextBlock>删除</TextBlock>
+                          </ToolTip.Tip>
+                          <Image
+                            Width="16"
+                            Height="16"
+                            Source="avares://HellMapManager/Assets/delete.png" />
+                        </Button>
+                      </WrapPanel>
+                      <exit:Exit Padding="0,2" DataContext="{Binding .}" />
+                    </DockPanel>
                   </DataTemplate>
-                </itemlist:ItemList.ItemTemplate>
-              </itemlist:ItemList>
-            </Panel>
+                </itemlist:UpDownList.ItemTemplate>
+                <itemlist:UpDownList.Action>
+                  <DataTemplate>
+                    <Button Margin="0">
+                      <ToolTip.Tip>
+                        <TextBlock>新建</TextBlock>
+                      </ToolTip.Tip>
+                      <Image
+                        Width="16"
+                        Height="16"
+                        Source="avares://HellMapManager/Assets/add.png" />
+                    </Button>
 
+                  </DataTemplate>
+                </itemlist:UpDownList.Action>
+              </itemlist:UpDownList>
+            </Panel>
             <TextBlock Classes="Label" Text="描述:" />
             <TextBox
               AcceptsReturn="True"
