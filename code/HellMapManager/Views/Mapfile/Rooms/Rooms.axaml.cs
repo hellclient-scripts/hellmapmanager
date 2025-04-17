@@ -7,6 +7,7 @@ using HellMapManager.ViewModels;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditRoomWindow;
 using Avalonia.Interactivity;
+using HellMapManager.States;
 
 namespace HellMapManager.Views.Mapfile.Rooms;
 
@@ -37,7 +38,8 @@ public partial class Rooms : UserControl
             var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                // vm.AddRoom(result);
+                AppState.Main.Current!.InsertRoom(result);
+                AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,7 +56,9 @@ public partial class Rooms : UserControl
                 var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    // vm.AddRoom(result);
+                    AppState.Main.Current!.UpdateRoom(room, result);
+                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+
                 }
             }
         }

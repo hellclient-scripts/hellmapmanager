@@ -71,25 +71,26 @@
             BorderBrush="Gray"
             BorderThickness="1"
             CanUserResizeColumns="True"
+            CanUserSortColumns="True"
             GridLinesVisibility="All"
             IsReadOnly="True"
             ItemsSource="{Binding FilteredRooms}">
             <DataGrid.Columns>
-               <DataGridTemplateColumn Width="160" Header="房间主键">
+               <DataGridTemplateColumn Width="160" Header="房间主键" CanUserSort="true" SortMemberPath="Key">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
                         <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Key}" />
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-               <DataGridTemplateColumn Width="160" Header="房间名">
+               <DataGridTemplateColumn Width="160" Header="房间名" CanUserSort="true" SortMemberPath="Name">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
                         <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-               <DataGridTemplateColumn Width="160" Header="分组">
+               <DataGridTemplateColumn Width="160" Header="分组"  CanUserSort="true" SortMemberPath="Group">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
                         <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Group}" />

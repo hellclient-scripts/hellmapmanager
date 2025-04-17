@@ -5,16 +5,19 @@ using System.Collections.Generic;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Models;
+using Microsoft.VisualBasic;
 
+public delegate string ExternalValidator(RoomForm room);
 public partial class RoomForm : ObservableObject
 {
-    public RoomForm()
+    public RoomForm(ExternalValidator checker)
     {
-        Exits = new ObservableCollection<Exit>();
-        Data = new ObservableCollection<Data>();
-        Tags = new ObservableCollection<string>();
+        Exits = [];
+        Data = [];
+        Tags = [];
+        ExternalValidator = checker;
     }
-    public RoomForm(Room room) 
+    public RoomForm(Room room, ExternalValidator checker)
     {
         Key = room.Key;
         Name = room.Name;
@@ -23,8 +26,10 @@ public partial class RoomForm : ObservableObject
         Tags = new ObservableCollection<string>(room.Tags);
         Exits = new ObservableCollection<Exit>(room.Exits);
         Data = new ObservableCollection<Data>(room.Data);
+        ExternalValidator = checker;
     }
-    public Room ToRoom(){
+    public Room ToRoom()
+    {
         return new Room()
         {
             Key = Key,
@@ -36,10 +41,24 @@ public partial class RoomForm : ObservableObject
             Data = [.. Data]
         };
     }
+    public ExternalValidator ExternalValidator;
     public string Key { get; set; } = "";
     public string Name { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
+    public string Validate()
+    {
+        var err = ExternalValidator(this);
+        if (err != "")
+        {
+            return err;
+        }
+        if (Key == "")
+        {
+            return "房间主键不能为空";
+        }
+        return "";
+    }
     public ObservableCollection<string> Tags { get; set; } = [];
     public ObservableCollection<Exit> Exits { get; set; } = [];
     public ObservableCollection<Data> Data { get; set; } = [];

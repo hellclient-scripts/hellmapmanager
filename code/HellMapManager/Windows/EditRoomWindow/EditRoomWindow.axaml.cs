@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
-using HellMapManager.Models;
+using HellMapManager.Services;
 namespace HellMapManager.Windows.EditRoomWindow;
 
 public partial class EditRoomWindow : Window
@@ -15,6 +15,12 @@ public partial class EditRoomWindow : Window
     {
         if (DataContext is EditRoomWindowViewModel vm)
         {
+            var err = vm.Item.Validate();
+            if (err != "")
+            {
+                DialogHelper.Alert("验证失败", err);
+                return;
+            }
             Close(vm.Item.ToRoom());
         }
     }

@@ -23,5 +23,20 @@ public class DialogHelper
         var choice = await box.ShowAsync();
         return choice == "是";
     }
+    public static async void Alert(string title, string body)
+    {
+        var ps = new MessageBoxCustomParams
+        {
+            ButtonDefinitions =
+                [
+                    new() { Name = "确定",IsDefault=true },
+                ],
+            ContentTitle = title,
+            ContentMessage = body,
+        };
+        var box = MessageBoxManager.GetMessageBoxCustom(ps);
+        await box.ShowAsync();
+        return;
+    }
 
 }
