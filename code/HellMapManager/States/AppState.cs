@@ -129,6 +129,8 @@ public partial class AppState(IAppUI ui)
             }
             Current.InsertRoom(current);
             Current.Map.Sort();
+            Current.MarkAsModified();
+            RaiseMapFileUpdatedEvent(this);
         }
     }
     public async Task Open()
