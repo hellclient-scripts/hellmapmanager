@@ -41,6 +41,13 @@ public partial class RoomForm : ObservableObject
             Data = [.. Data]
         };
     }
+    public void Sort()
+    {
+        Data = new ObservableCollection<Data>(this.Data.OrderBy(x => x.Key));
+        Tags = new ObservableCollection<string>(this.Tags.OrderBy(x => x));
+        OnPropertyChanged(nameof(Data));
+        OnPropertyChanged(nameof(Tags));
+    }
     public ExternalValidator ExternalValidator;
     public string Key { get; set; } = "";
     public string Name { get; set; } = "";

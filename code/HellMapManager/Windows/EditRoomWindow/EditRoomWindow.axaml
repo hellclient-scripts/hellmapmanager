@@ -82,7 +82,10 @@
             <TextBlock Classes="Label" Text="标签:" />
             <StackPanel Classes="Content">
               <WrapPanel Margin="12,0">
-                <Button Margin="0" HorizontalAlignment="Left">
+                <Button
+                  Margin="0"
+                  HorizontalAlignment="Left"
+                  Click="OnNewTag">
                   <ToolTip.Tip>
                     <TextBlock>新建</TextBlock>
                   </ToolTip.Tip>
@@ -97,7 +100,7 @@
                   <DataTemplate>
                     <DockPanel>
                       <WrapPanel DockPanel.Dock="Right">
-                        <Button Margin="0">
+                        <Button Margin="0" Click="OnRemoveTag">
                           <ToolTip.Tip>
                             <TextBlock>删除</TextBlock>
                           </ToolTip.Tip>
@@ -107,7 +110,7 @@
                             Source="avares://HellMapManager/Assets/delete.png" />
                         </Button>
                       </WrapPanel>
-                      <roomdata:RoomData Padding="0,2" DataContext="{Binding .}" />
+                      <TextBlock Padding="0,2" Text="{Binding .}" />
                     </DockPanel>
                   </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -163,7 +166,10 @@
             <TextBlock Classes="Label" Text="数据:" />
             <StackPanel Classes="Content">
               <WrapPanel Margin="12,0">
-                <Button Margin="0" HorizontalAlignment="Left">
+                <Button
+                  Margin="0"
+                  HorizontalAlignment="Left"
+                  Click="OnNewData">
                   <ToolTip.Tip>
                     <TextBlock>新建</TextBlock>
                   </ToolTip.Tip>
@@ -178,7 +184,7 @@
                   <DataTemplate>
                     <DockPanel>
                       <WrapPanel DockPanel.Dock="Right">
-                        <Button Margin="0">
+                        <Button Margin="0" Click="OnEditData">
                           <ToolTip.Tip>
                             <TextBlock>编辑</TextBlock>
                           </ToolTip.Tip>
@@ -187,7 +193,7 @@
                             Height="16"
                             Source="avares://HellMapManager/Assets/edit.png" />
                         </Button>
-                        <Button Margin="0">
+                        <Button Margin="0" Click="OnRemoveData">
                           <ToolTip.Tip>
                             <TextBlock>删除</TextBlock>
                           </ToolTip.Tip>

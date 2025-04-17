@@ -38,7 +38,7 @@ public partial class Rooms : UserControl
             var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.Current!.InsertRoom(result);
+                AppState.Main.InsertRoom(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
@@ -56,7 +56,7 @@ public partial class Rooms : UserControl
                 var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.Current!.UpdateRoom(room, result);
+                    AppState.Main.UpdateRoom(room, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }

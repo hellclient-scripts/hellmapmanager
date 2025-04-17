@@ -1,0 +1,64 @@
+<Window
+  x:Class="HellMapManager.Windows.NewTagWindow.NewTagWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.Windows.NewTagWindow"
+  Title="{Binding Title}"
+  Width="700"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:NewTagWindowViewModel"
+  Icon="/Assets/app.ico"
+  mc:Ignorable="d">
+  <Window.Styles>
+    <Style Selector="Border#Main">
+      <Setter Property="Padding" Value="10" />
+    </Style>
+    <Style Selector="Button">
+      <Setter Property="Margin" Value="10 0 0 0" />
+      <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+    <Style Selector="TextBox.TextArea">
+      <Setter Property="Height" Value="200" />
+    </Style>
+    <Style Selector="SelectableTextBlock.TextArea">
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="TextBlock.Label">
+      <Setter Property="Margin" Value="0 5 0 5" />
+    </Style>
+    <Style Selector="Panel.Content">
+      <Setter Property="Margin" Value="5 0 5 0" />
+    </Style>
+    <Style Selector="StackPanel.Content">
+      <Setter Property="Margin" Value="5 0 5 0" />
+    </Style>
+
+  </Window.Styles>
+  <Border Name="Main">
+    <DockPanel>
+      <Panel HorizontalAlignment="Right" DockPanel.Dock="Bottom">
+        <WrapPanel Classes="Bottons">
+          <Button
+            Classes="accent"
+            Click="OnSave"
+            IsDefault="True">
+            保存
+          </Button>
+          <Button Click="OnClose" IsCancel="True">
+            取消
+          </Button>
+        </WrapPanel>
+      </Panel>
+      <ScrollViewer>
+        <StackPanel Margin="20">
+          <TextBlock Classes="Label" Text="标签:" />
+          <TextBox Text="{Binding Item.Key}" Watermark="标签" />
+        </StackPanel>
+      </ScrollViewer>
+    </DockPanel>
+  </Border>
+</Window>

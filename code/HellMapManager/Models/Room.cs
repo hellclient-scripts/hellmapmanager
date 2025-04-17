@@ -100,7 +100,7 @@ public partial class Room()
     }
     public string AllTags
     {
-        get => String.Join(" , ", Tags.ToArray());
+        get => String.Join(",", Tags.ToArray());
     }
     public bool HasExitTo(string key)
     {

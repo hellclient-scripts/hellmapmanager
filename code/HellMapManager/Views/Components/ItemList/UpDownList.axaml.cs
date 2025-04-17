@@ -71,17 +71,4 @@ AvaloniaProperty.Register<UpDownList, IList>(nameof(ItemsSourceProperty));
             lb.SelectedIndex = index + 1;
         }
     }
-    public async void OnRemove(object? sender, RoutedEventArgs args)
-    {
-        var lb = this.Find<ListBox>("Items")!;
-        if (lb.SelectedItem is null) return;
-        if (await DialogHelper.Confirm("删除", "确定要删除该元素吗？") == false) return;
-        var index = lb.SelectedIndex;
-        ItemsSource.RemoveAt(index);
-        if (index >= ItemsSource.Count)
-        {
-            index = ItemsSource.Count - 1;
-        }
-        lb.SelectedIndex = index;
-    }
 }

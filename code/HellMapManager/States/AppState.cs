@@ -86,7 +86,6 @@ public partial class AppState(IAppUI ui)
             Current.Modified = false;
             Current.Path = file;
             AddRecent(Current.ToRecentFile());
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     private void ImportRoomsHFile(string file)
@@ -94,10 +93,44 @@ public partial class AppState(IAppUI ui)
         if (Current != null)
         {
             Current.ImportRooms(RoomsH.Open(file));
+            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
+    public void InsertRoom(Room room)
+    {
+        if (Current != null)
+        {
 
+            Current.InsertRoom(room);
+            Current.Map.Sort();
+            Current.MarkAsModified();
+            RaiseMapFileUpdatedEvent(this);
+        }
+    }
+    public void RemoveRoom(string key)
+    {
+        if (Current != null)
+        {
+
+            Current.RemoveRoom(key);
+            Current.MarkAsModified();
+            RaiseMapFileUpdatedEvent(this);
+        }
+    }
+    public void UpdateRoom(Room old, Room current)
+    {
+        if (Current != null)
+        {
+
+            if (old.Key != current.Key)
+            {
+                Current.RemoveRoom(old.Key);
+            }
+            Current.InsertRoom(current);
+            Current.Map.Sort();
+        }
+    }
     public async Task Open()
     {
         var file = await UI.AskLoadFile();
@@ -161,7 +194,7 @@ public partial class AppState(IAppUI ui)
             Current.Map.Info.Name = s.Name;
             Current.Map.Info.Desc = s.Desc;
             Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
+            RaiseSettingsUpdatedEvent(this);
         }
     }
 

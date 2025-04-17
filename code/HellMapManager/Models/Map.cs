@@ -123,35 +123,18 @@ public class MapFile
     {
         return new RecentFile(Map.Info.Name, Path);
     }
-    private void _insertRoom(Room room)
+    public void InsertRoom(Room room)
     {
         Map.Rooms.RemoveAll(r => r.Key == room.Key);
         Map.Rooms.Add(room);
         Cache.Rooms[room.Key] = room;
     }
-    private void _removeRoom(string key)
+    public void RemoveRoom(string key)
     {
         Map.Rooms.RemoveAll(r => r.Key == key);
         Cache.Rooms.Remove(key);
     }
-    public void InsertRoom(Room room)
-    {
-        this._insertRoom(room);
-        this.Map.Sort();
-    }
-    public void RemoveRoom(string key)
-    {
-        this._removeRoom(key);
-    }
-    public void UpdateRoom(Room old, Room current)
-    {
-        if (old.Key != current.Key)
-        {
-            this._removeRoom(old.Key);
-        }
-        this._insertRoom(current);
-        this.Map.Sort();
-    }
+
     public void ImportRooms(List<Room> rooms)
     {
         foreach (var room in rooms)

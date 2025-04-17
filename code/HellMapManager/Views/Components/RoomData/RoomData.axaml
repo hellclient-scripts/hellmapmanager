@@ -18,8 +18,10 @@
         <TextBlock Text="{Binding Value}" TextWrapping="Wrap" />
       </StackPanel>
     </ToolTip.Tip>
-    <TextBlock Text="{Binding Key}" TextWrapping="Wrap">
-      <Run FontWeight="Bold" Text="{Binding Key}" /><Run FontWeight="Bold" Text=":" /><Run Text="{Binding Value}" />
+    <TextBlock TextWrapping="Wrap">
+      <Run FontWeight="Bold" Text="{Binding Key}" />
+      <Run FontWeight="Bold" Text=":" />
+      <Run Text="{Binding Value}" />
     </TextBlock>
   </Border>
 </UserControl>
