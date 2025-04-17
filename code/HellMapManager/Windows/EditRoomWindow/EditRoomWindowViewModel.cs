@@ -4,10 +4,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace HellMapManager.Windows.EditRoomWindow;
 
-public class EditRoomWindowViewModel(Room? row, bool view) : ObservableObject
+public class EditRoomWindowViewModel(Room? raw, bool view) : ObservableObject
 {
-    public Room? Raw { get; set; } = row;
-    public Room Item { get; set; } = (row is not null) ? row.Clone() : new Room();
+    public Room? Raw { get; set; } = raw;
+    public RoomForm Item { get; set; } = (raw is not null) ? new RoomForm(raw.Clone()) : new RoomForm();
     public bool View { get; set; } = view;
     public bool ViewMode
     {
@@ -26,7 +26,7 @@ public class EditRoomWindowViewModel(Room? row, bool view) : ObservableObject
     {
         if (Raw is not null)
         {
-            Item = Raw.Clone();
+            Item = new RoomForm(Raw);
             Editing = true;
             OnPropertyChanged(nameof(Editable));
             OnPropertyChanged(nameof(ViewMode));

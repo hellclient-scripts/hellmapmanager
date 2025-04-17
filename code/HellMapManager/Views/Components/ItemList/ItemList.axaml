@@ -5,18 +5,64 @@
   xmlns:controls="using:HellMapManager.Views.Components.ItemList"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.Views.Components.ItemList"
   d:DesignHeight="450"
   d:DesignWidth="800"
+  x:DataType="vm:ItemListViewModel"
   mc:Ignorable="d">
   <StackPanel>
-    <ItemsControl ItemsSource="{Binding $parent[controls:ItemList].ItemsSource}">
-      <ItemsControl.ItemTemplate>
+    <DockPanel>
+      <WrapPanel
+        Name="Bottons"
+        HorizontalAlignment="Right"
+        DockPanel.Dock="Right">
+        <WrapPanel.Styles>
+          <Style Selector="Button">
+            <Setter Property="Margin" Value="0 0 0 0" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+          </Style>
+        </WrapPanel.Styles>
+        <Button Click="OnUp" IsEnabled="{Binding CanUp}">
+          <ToolTip.Tip>
+            <TextBlock>选定元素上移</TextBlock>
+          </ToolTip.Tip>
+          <Image
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/arrow_upward.png" />
+        </Button>
+        <Button Click="OnDown" IsEnabled="{Binding CanDown}">
+          <ToolTip.Tip>
+            <TextBlock>选定元素下移</TextBlock>
+          </ToolTip.Tip>
+          <Image
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/arrow_downward.png" />
+        </Button>
+        <Button Click="OnRemove" IsEnabled="{Binding CanDelete}">
+          <ToolTip.Tip>
+            <TextBlock>删除选定元素</TextBlock>
+          </ToolTip.Tip>
+          <Image
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/delete.png" />
+        </Button>
+        <Panel />
+      </WrapPanel>
+    </DockPanel>
+    <ListBox
+      Name="Items"
+      ItemsSource="{Binding $parent[controls:ItemList].ItemsSource}"
+      SelectionChanged="OnSelectionChanged">
+      <ListBox.ItemTemplate>
         <DataTemplate>
           <Border>
             <ContentControl Content="{Binding .}" ContentTemplate="{Binding $parent[controls:ItemList].ItemTemplate}" />
           </Border>
         </DataTemplate>
-      </ItemsControl.ItemTemplate>
-    </ItemsControl>
+      </ListBox.ItemTemplate>
+    </ListBox>
   </StackPanel>
 </UserControl>

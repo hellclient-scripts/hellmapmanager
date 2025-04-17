@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
-
+using HellMapManager.Models;
 namespace HellMapManager.Windows.EditRoomWindow;
 
 public partial class EditRoomWindow : Window
@@ -15,7 +15,7 @@ public partial class EditRoomWindow : Window
     {
         if (DataContext is EditRoomWindowViewModel vm)
         {
-            Close(vm.Item);
+            Close(vm.Item.ToRoom());
         }
     }
     public void OnClose(object? sender, RoutedEventArgs args)
