@@ -6,6 +6,7 @@
   xmlns:exit="using:HellMapManager.Views.Components.Exit"
   xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:roomdata="using:HellMapManager.Views.Components.RoomData"
   xmlns:vm="using:HellMapManager.Windows.EditRoomWindow"
   Title="{Binding Title}"
   Width="700"
@@ -32,6 +33,9 @@
       <Setter Property="Margin" Value="0 5 0 5" />
     </Style>
     <Style Selector="Panel.Content">
+      <Setter Property="Margin" Value="5 0 5 0" />
+    </Style>
+    <Style Selector="StackPanel.Content">
       <Setter Property="Margin" Value="5 0 5 0" />
     </Style>
 
@@ -75,6 +79,40 @@
             <TextBox Text="{Binding Item.Name}" Watermark="房间名" />
             <TextBlock Classes="Label" Text="分组:" />
             <TextBox Text="{Binding Item.Group}" Watermark="房间分组" />
+            <TextBlock Classes="Label" Text="标签:" />
+            <StackPanel Classes="Content">
+              <WrapPanel Margin="12,0">
+                <Button Margin="0" HorizontalAlignment="Left">
+                  <ToolTip.Tip>
+                    <TextBlock>新建</TextBlock>
+                  </ToolTip.Tip>
+                  <Image
+                    Width="16"
+                    Height="16"
+                    Source="avares://HellMapManager/Assets/add.png" />
+                </Button>
+              </WrapPanel>
+              <ListBox Classes="RoomTags Content" ItemsSource="{Binding Item.Tags}">
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <DockPanel>
+                      <WrapPanel DockPanel.Dock="Right">
+                        <Button Margin="0">
+                          <ToolTip.Tip>
+                            <TextBlock>删除</TextBlock>
+                          </ToolTip.Tip>
+                          <Image
+                            Width="16"
+                            Height="16"
+                            Source="avares://HellMapManager/Assets/delete.png" />
+                        </Button>
+                      </WrapPanel>
+                      <roomdata:RoomData Padding="0,2" DataContext="{Binding .}" />
+                    </DockPanel>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </StackPanel>
 
             <TextBlock Classes="Label" Text="出口:" />
             <Panel Classes="Content">
@@ -122,6 +160,50 @@
                 </itemlist:UpDownList.Action>
               </itemlist:UpDownList>
             </Panel>
+            <TextBlock Classes="Label" Text="数据:" />
+            <StackPanel Classes="Content">
+              <WrapPanel Margin="12,0">
+                <Button Margin="0" HorizontalAlignment="Left">
+                  <ToolTip.Tip>
+                    <TextBlock>新建</TextBlock>
+                  </ToolTip.Tip>
+                  <Image
+                    Width="16"
+                    Height="16"
+                    Source="avares://HellMapManager/Assets/add.png" />
+                </Button>
+              </WrapPanel>
+              <ListBox Classes="RoomData Content" ItemsSource="{Binding Item.Data}">
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <DockPanel>
+                      <WrapPanel DockPanel.Dock="Right">
+                        <Button Margin="0">
+                          <ToolTip.Tip>
+                            <TextBlock>编辑</TextBlock>
+                          </ToolTip.Tip>
+                          <Image
+                            Width="16"
+                            Height="16"
+                            Source="avares://HellMapManager/Assets/edit.png" />
+                        </Button>
+                        <Button Margin="0">
+                          <ToolTip.Tip>
+                            <TextBlock>删除</TextBlock>
+                          </ToolTip.Tip>
+                          <Image
+                            Width="16"
+                            Height="16"
+                            Source="avares://HellMapManager/Assets/delete.png" />
+                        </Button>
+                      </WrapPanel>
+                      <roomdata:RoomData Padding="0,2" DataContext="{Binding .}" />
+                    </DockPanel>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </StackPanel>
+
             <TextBlock Classes="Label" Text="描述:" />
             <TextBox
               AcceptsReturn="True"
@@ -142,12 +224,32 @@
             <Panel Classes="Content">
               <SelectableTextBlock Text="{Binding Item.Group}" />
             </Panel>
+            <TextBlock Classes="Label" Text="标签:" />
+            <Panel Classes="Content">
+              <ItemsControl Classes="RoomTags Content" ItemsSource="{Binding Item.Tags}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Padding="0,2" DataContext="{Binding .}" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </Panel>
             <TextBlock Classes="Label" Text="出口:" />
             <Panel Classes="Content">
               <ItemsControl Classes="RoomExits Content" ItemsSource="{Binding Item.Exits}">
                 <ItemsControl.ItemTemplate>
                   <DataTemplate>
                     <exit:Exit Padding="0,2" DataContext="{Binding .}" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </Panel>
+            <TextBlock Classes="Label" Text="数据:" />
+            <Panel Classes="Content">
+              <ItemsControl Classes="RoomData Content" ItemsSource="{Binding Item.Data}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <roomdata:RoomData Padding="0,2" DataContext="{Binding .}" />
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
