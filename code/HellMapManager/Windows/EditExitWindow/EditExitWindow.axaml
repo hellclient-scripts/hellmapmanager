@@ -2,6 +2,7 @@
   x:Class="HellMapManager.Windows.EditExitWindow.EditExitWindow"
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:condition="using:HellMapManager.Views.Components.Condition"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -59,6 +60,43 @@
           <TextBox Text="{Binding Item.To}" Watermark="目标" />
           <TextBlock Classes="Label" Text="指令:" />
           <TextBox Text="{Binding Item.Command}" Watermark="指令" />
+          <TextBlock Classes="Label" Text="条件:" />
+          <StackPanel Classes="Content">
+            <WrapPanel Margin="12,2">
+              <Button
+                Margin="0"
+                HorizontalAlignment="Left"
+                Click="OnNewCondition">
+                <ToolTip.Tip>
+                  <TextBlock>新建</TextBlock>
+                </ToolTip.Tip>
+                <Image
+                  Width="16"
+                  Height="16"
+                  Source="avares://HellMapManager/Assets/add.png" />
+              </Button>
+            </WrapPanel>
+            <ListBox Classes="RoomConditions Content" ItemsSource="{Binding Item.Conditions}">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <DockPanel>
+                    <WrapPanel DockPanel.Dock="Right">
+                      <Button Margin="0" Click="OnRemoveCondition">
+                        <ToolTip.Tip>
+                          <TextBlock>删除</TextBlock>
+                        </ToolTip.Tip>
+                        <Image
+                          Width="16"
+                          Height="16"
+                          Source="avares://HellMapManager/Assets/delete.png" />
+                      </Button>
+                    </WrapPanel>
+                    <condition:Condition Padding="0,2" />
+                  </DockPanel>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </StackPanel>
           <TextBlock Classes="Label" Text="耗时:" />
           <NumericUpDown Increment="1" Value="{Binding Item.Cost}" />
         </StackPanel>

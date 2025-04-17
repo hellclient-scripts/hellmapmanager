@@ -1,6 +1,7 @@
 ﻿using System;
 using HellMapManager.Models;
 using HellMapManager.States;
+using HellMapManager.Windows.NewConditionWindow;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -18,5 +19,16 @@ public class EditExitWindowViewModel : ObservableObject
     public string Title
     {
         get => Raw is null ? "新建出口" : $"编辑出口";
+    }
+    public string ConditionValidator(ConditionForm form)
+    {
+        foreach (var data in Item.Conditions)
+        {
+            if (data.Key == form.Key)
+            {
+                return "条件主键已存在";
+            }
+        }
+        return "";
     }
 }

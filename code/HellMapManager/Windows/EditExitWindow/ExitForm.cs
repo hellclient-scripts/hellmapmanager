@@ -40,6 +40,24 @@ public partial class ExitForm : ObservableObject
     public string To { get; set; } = "";
     public ObservableCollection<Condition> Conditions { get; set; } = [];
     public int Cost { get; set; } = 1;
+
+    public void Sort()
+    {
+        var list = new List<Condition>(this.Conditions);
+        list.Sort(((x, y) =>
+        {
+            if (x.Not == y.Not)
+            {
+                return x.Key.CompareTo(y.Key);
+            }
+            else
+            {
+                return x.Not.CompareTo(y.Not);
+            }
+        }));
+        Conditions = new ObservableCollection<Condition>(list);
+        OnPropertyChanged(nameof(Conditions));
+    }
     public string Validate()
     {
         var err = ExternalValidator(this);
