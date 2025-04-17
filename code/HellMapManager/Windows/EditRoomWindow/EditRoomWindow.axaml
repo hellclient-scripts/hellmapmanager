@@ -124,7 +124,7 @@
                   <DataTemplate>
                     <DockPanel>
                       <WrapPanel DockPanel.Dock="Right">
-                        <Button Margin="0">
+                        <Button Margin="0" Click="OnEditExit">
                           <ToolTip.Tip>
                             <TextBlock>编辑</TextBlock>
                           </ToolTip.Tip>

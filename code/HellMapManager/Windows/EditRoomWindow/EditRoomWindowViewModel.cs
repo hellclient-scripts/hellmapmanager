@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Windows.EditDataWindow;
 using System.Linq;
 using HellMapManager.Windows.NewTagWindow;
+using HellMapManager.Windows.EditExitWindow;
 
 namespace HellMapManager.Windows.EditRoomWindow;
 
@@ -88,5 +89,8 @@ public class EditRoomWindowViewModel : ObservableObject
         }
         return "";
     }
-
+    public string ExitValidator(ExitForm form)
+    {
+        return "";
+    }
 }
