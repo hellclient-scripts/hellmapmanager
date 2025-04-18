@@ -53,7 +53,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppState.Main.Settings.Recents.ToArray()); }
     public async void OnOpenRecent(String file)
     {
-            await AppUI.Main.OnOpenRecent(file);
+        await AppUI.Main.OnOpenRecent(file);
     }
     public bool IsFileModified
     {
@@ -74,12 +74,9 @@ public partial class MainWindowViewModel : ViewModelBase
             AppState.Main.CloseCurrent();
         }
     }
-    public async void OnRevert()
+    public void OnRevert()
     {
-        if (await AppUI.Main.ConfirmModified())
-        {
-        }
-
+        AppUI.Main.Revert();
     }
     public string TitleInfo
     {

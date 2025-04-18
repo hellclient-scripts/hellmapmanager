@@ -164,7 +164,7 @@ public class AppUI(AppState appState)
     {
         if (AppState.Current == null || !AppState.Current.Modified)
         {
-            ConfirmedExit=true;
+            ConfirmedExit = true;
             return true;
         }
         var ps = new MessageBoxCustomParams
@@ -231,6 +231,22 @@ public class AppUI(AppState appState)
 
         }
     }
+    public async void Revert()
+    {
+        if (await ConfirmModified())
+        {
+            try
+            {
+                AppState.Revert();
+            }
+            catch (Exception ex)
+            {
+                Alert("打开失败", ex.Message);
+            }
+        }
+    }
+
+
     public async Task SaveAs()
     {
         if (AppState.Current != null)
