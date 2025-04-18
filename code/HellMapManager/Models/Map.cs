@@ -190,7 +190,24 @@ public class MapFile
         Cache.Routes.Remove(key);
     }
 
-
+    public void ImportTraces(List<Trace> traces)
+    {
+        foreach (var trace in traces)
+        {
+            InsertTrace(trace);
+        }
+    }
+    public void InsertTrace(Trace trace)
+    {
+        Map.Traces.RemoveAll(r => r.Key == trace.Key);
+        Map.Traces.Add(trace);
+        Cache.Traces[trace.Key] = trace;
+    }
+    public void RemoveTrace(string key)
+    {
+        Map.Traces.RemoveAll(r => r.Key == key);
+        Cache.Traces.Remove(key);
+    }
     public void RebuldCache()
     {
         Cache = new Cache();

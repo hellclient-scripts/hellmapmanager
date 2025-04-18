@@ -82,7 +82,7 @@
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Desc}"
-              Watermark="房间描述" />
+              Watermark="别名描述" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />

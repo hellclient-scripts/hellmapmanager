@@ -7,32 +7,32 @@ namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public partial void InitRoutes()
+    public partial void InitTraces()
     {
         AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
-            OnPropertyChanged(nameof(FilteredRoutes));
+            OnPropertyChanged(nameof(FilteredTraces));
         };
     }
-    public string RoutesFilter { get; set; } = "";
-    public void FilterRoutes()
+    public string TracesFilter { get; set; } = "";
+    public void FilterTraces()
     {
-        OnPropertyChanged(nameof(FilteredRoutes));
+        OnPropertyChanged(nameof(FilteredTraces));
     }
-    public ObservableCollection<Route> FilteredRoutes
+    public ObservableCollection<Trace> FilteredTraces
     {
         get
         {
             if (AppState.Main.Current != null)
             {
-                var routes = AppState.Main.Current.Map.Routes;
-                if (string.IsNullOrEmpty(RoutesFilter))
+                var traces = AppState.Main.Current.Map.Traces;
+                if (string.IsNullOrEmpty(TracesFilter))
                 {
-                    return new ObservableCollection<Route>(routes);
+                    return new ObservableCollection<Trace>(traces);
                 }
                 else
                 {
-                    return new ObservableCollection<Route>(routes.FindAll(r => r.Filter(RoutesFilter)));
+                    return new ObservableCollection<Trace>(traces.FindAll(r => r.Filter(TracesFilter)));
                 }
             }
             return [];

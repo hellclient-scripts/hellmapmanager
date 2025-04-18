@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 
 
@@ -55,6 +56,7 @@ public partial class Trace
 {
     public void Arrange()
     {
+        Locations.Distinct();
         Locations.Sort((x, y) => x.CompareTo(y));
     }
     public void RemoveLocations(List<string> loctions)
@@ -73,5 +75,26 @@ public partial class Trace
             Locations.Add(l);
         }
         Arrange();
+    }
+    public bool Filter(string val)
+    {
+        if (Key.Contains(val) ||
+            Desc.Contains(val) ||
+            Group.Contains(val))
+        {
+            return true;
+        }
+        foreach (var room in Locations)
+        {
+            if (room.Contains(val))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public int LocationsCount
+    {
+        get => Locations.Count;
     }
 }

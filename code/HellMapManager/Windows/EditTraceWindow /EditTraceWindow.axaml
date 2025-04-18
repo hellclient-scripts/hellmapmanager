@@ -1,15 +1,15 @@
 <Window
-  x:Class="HellMapManager.Windows.EditRouteWindow.EditRouteWindow"
+  x:Class="HellMapManager.Windows.EditTraceWindow.EditTraceWindow"
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:vm="using:HellMapManager.Windows.EditRouteWindow"
+  xmlns:vm="using:HellMapManager.Windows.EditTraceWindow"
   Title="{Binding Title}"
   Width="700"
   d:DesignHeight="450"
   d:DesignWidth="800"
-  x:DataType="vm:EditRouteWindowViewModel"
+  x:DataType="vm:EditTraceWindowViewModel"
   Icon="/Assets/app.ico"
   mc:Ignorable="d">
   <Window.Styles>
@@ -85,7 +85,7 @@
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Desc}"
-              Watermark="路线描述" />
+              Watermark="足迹描述" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
