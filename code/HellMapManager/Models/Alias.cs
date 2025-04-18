@@ -3,7 +3,7 @@
 
 namespace HellMapManager.Models;
 
-public class Alias
+public partial class Alias
 {
     public Alias() { }
     public string Key { get; set; } = "";
@@ -47,4 +47,19 @@ public class Alias
         result.Group = HMMFormatter.UnescapeAt(list, 3);
         return result;
     }
+}
+public partial class Alias
+{
+    public bool Filter(string val)
+    {
+        if (Key.Contains(val) ||
+            Value.Contains(val) ||
+            Desc.Contains(val) ||
+            Group.Contains(val))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

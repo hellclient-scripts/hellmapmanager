@@ -20,9 +20,11 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         InitOverview();
         InitRooms();
+        InitAliases();
     }
     public partial void InitOverview();
     public partial void InitRooms();
+    public partial void InitAliases();
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
     {

@@ -7,35 +7,36 @@ namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public partial void InitRooms()
+    public partial void InitAliases()
     {
         AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
-            OnPropertyChanged(nameof(FilteredRooms));
+            OnPropertyChanged(nameof(FilteredAliases));
         };
     }
-    public string RoomsFilter { get; set; } = "";
-    public void FilterRooms()
+    public string AliasesFilter { get; set; } = "";
+    public void FilterAliases()
     {
-        OnPropertyChanged(nameof(FilteredRooms));
+        OnPropertyChanged(nameof(FilteredAliases));
     }
-    public ObservableCollection<Room> FilteredRooms
+    public ObservableCollection<Alias> FilteredAliases
     {
         get
         {
             if (AppState.Main.Current != null)
             {
-                var rooms = AppState.Main.Current.Map.Rooms;
-                if (string.IsNullOrEmpty(RoomsFilter))
+                var aliases = AppState.Main.Current.Map.Aliases;
+                if (string.IsNullOrEmpty(AliasesFilter))
                 {
-                    return new ObservableCollection<Room>(rooms);
+                    return new ObservableCollection<Alias>(aliases);
                 }
                 else
                 {
-                    return new ObservableCollection<Room>(rooms.FindAll(r => r.Filter(RoomsFilter)));
+                    return new ObservableCollection<Alias>(aliases.FindAll(r => r.Filter(AliasesFilter)));
                 }
             }
             return [];
         }
     }
+
 }

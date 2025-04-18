@@ -2,6 +2,7 @@
   x:Class="HellMapManager.Views.Mapfile.MapFile"
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:aliases="clr-namespace:HellMapManager.Views.Mapfile.Aliases"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:overview="clr-namespace:HellMapManager.Views.Mapfile.Overview"
@@ -15,7 +16,7 @@
     HorizontalAlignment="Stretch"
     VerticalAlignment="Stretch"
     LastChildFill="True">
-    <TabControl Margin="5" Name="MainTab">
+    <TabControl Name="MainTab" Margin="5">
       <TabItem Header="概览">
         <overview:Overview HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
@@ -23,7 +24,7 @@
         <rooms:Rooms HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="别名">
-        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+        <aliases:Aliases HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="线路">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>
