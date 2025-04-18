@@ -19,7 +19,7 @@
       <Button Click="OnPick" DockPanel.Dock="Right">
         <Image Source="avares://HellMapManager/Assets/dataset.png" />
       </Button>
-      <TextBox Text="{Binding $parent[controls:RoomPicker].Room}" Watermark="{Binding $parent[controls:RoomPicker].Watermark}" />
+      <TextBox Text="{Binding $parent[controls:RoomPicker].Room},Mode=TwoWay" Watermark="{Binding $parent[controls:RoomPicker].Watermark}" />
     </DockPanel>
   </Border>
 </UserControl>

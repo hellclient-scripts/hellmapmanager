@@ -3,13 +3,14 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
 using HellMapManager.Windows.PickRoomWindow;
+using Avalonia.Data;
 
 namespace HellMapManager.Views.Components.RoomPicker;
 
 public partial class RoomPicker : UserControl
 {
-    public static readonly StyledProperty<string> RoomProperty
-    = AvaloniaProperty.Register<RoomPicker, string>(nameof(RoomProperty));
+    public static StyledProperty<string> RoomProperty
+    = AvaloniaProperty.Register<RoomPicker, string>(nameof(RoomProperty),defaultBindingMode: BindingMode.TwoWay);
     public string Room
     {
         get => GetValue(RoomProperty);

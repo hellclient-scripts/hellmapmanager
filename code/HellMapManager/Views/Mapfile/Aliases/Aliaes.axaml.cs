@@ -5,7 +5,7 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using HellMapManager.ViewModels;
 using HellMapManager.Models;
-using HellMapManager.Windows.EditRoomWindow;
+using HellMapManager.Windows.EditAliasWindow;
 using Avalonia.Interactivity;
 using HellMapManager.States;
 using HellMapManager.Services;
@@ -32,34 +32,34 @@ public partial class Aliases : UserControl
     {
         if (DataContext is MainWindowViewModel vm)
         {
-            var editRoomWindow = new EditRoomWindow()
+            var window = new EditAliasWindow()
             {
-                DataContext = new EditRoomWindowViewModel(null, false)
+                DataContext = new EditAliasWindowViewModel(null, false)
             };
 
 
-            var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
+            var result = await window.ShowDialog<Alias?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertRoom(result);
+                AppState.Main.InsertAlias(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
     public async void OnEdit(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Room room)
+        if (sender is not null && sender is Button bn && bn.DataContext is Alias alias)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
-                var editRoomWindow = new EditRoomWindow()
+                var window = new EditAliasWindow()
                 {
-                    DataContext = new EditRoomWindowViewModel(room, false)
+                    DataContext = new EditAliasWindowViewModel(alias, false)
                 };
-                var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
+                var result = await window.ShowDialog<Alias?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoom(room, result);
+                    AppState.Main.UpdateAlias(alias, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -68,18 +68,18 @@ public partial class Aliases : UserControl
     }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Room room)
+        if (sender is not null && sender is Button bn && bn.DataContext is Alias alias)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
-                var editRoomWindow = new EditRoomWindow()
+                var window = new EditAliasWindow()
                 {
-                    DataContext = new EditRoomWindowViewModel(room, true)
+                    DataContext = new EditAliasWindowViewModel(alias, true)
                 };
-                var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
+                var result = await window.ShowDialog<Alias?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoom(room, result);
+                    AppState.Main.UpdateAlias(alias, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -87,10 +87,10 @@ public partial class Aliases : UserControl
     }
     public async void OnRemove(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Room room)
+        if (sender is not null && sender is Button bn && bn.DataContext is Alias alias)
         {
             if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.RemoveRoom(room.Key);
+            AppState.Main.RemoveAlias(alias.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

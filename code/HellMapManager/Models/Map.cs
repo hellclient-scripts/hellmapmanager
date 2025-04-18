@@ -145,7 +145,6 @@ public class MapFile
         Map.Rooms.RemoveAll(r => r.Key == key);
         Cache.Rooms.Remove(key);
     }
-
     public void ImportRooms(List<Room> rooms)
     {
         foreach (var room in rooms)
@@ -153,6 +152,27 @@ public class MapFile
             InsertRoom(room);
         }
     }
+
+    public void ImportAliases(List<Alias> aliases)
+    {
+        foreach (var alias in aliases)
+        {
+            InsertAlias(alias);
+        }
+    }
+    public void InsertAlias(Alias alias)
+    {
+        Map.Aliases.RemoveAll(r => r.Key == alias.Key);
+        Map.Aliases.Add(alias);
+        Cache.Aliases[alias.Key] = alias;
+    }
+    public void RemoveAlias(string key)
+    {
+        Map.Aliases.RemoveAll(r => r.Key == key);
+        Cache.Aliases.Remove(key);
+    }
+
+
     public void RebuldCache()
     {
         Cache = new Cache();
