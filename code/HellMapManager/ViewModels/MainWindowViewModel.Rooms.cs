@@ -18,12 +18,4 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get => new ObservableCollection<Room>(AppState.Main.Current != null ? (AppState.Main.Current.Map.Rooms).ToArray() : []);
     }
-    public void OnDumpRoom(Room room)
-    {
-        var rm = Mapper.RelationMap(AppState.Main.Current!, room.Key, AppPreset.RelationMaxDepth);
-        if (rm is not null)
-        {
-            AppState.Main.RaiseShowRelationMapEvent(this, rm);
-        }
-    }
 }

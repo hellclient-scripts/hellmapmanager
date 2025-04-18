@@ -3,7 +3,6 @@ using HellMapManager.Services;
 
 namespace HellMapManager.States;
 
-public delegate void ShowRelationMapEventHandler(object? sender, RelationMapItem rm);
 
 public partial class AppState
 {
@@ -11,11 +10,6 @@ public partial class AppState
     public void RaiseMapFileUpdatedEvent(object? sender)
     {
         MapFileUpdatedEvent?.Invoke(sender, EventArgs.Empty);
-    }
-    public event ShowRelationMapEventHandler? ShowRelationMapEvent;
-    public void RaiseShowRelationMapEvent(object? sender, RelationMapItem rm)
-    {
-        ShowRelationMapEvent?.Invoke(sender, rm);
     }
     public event EventHandler? SettingsUpdatedEvent;
     public void RaiseSettingsUpdatedEvent(object? sender)

@@ -8,6 +8,9 @@ using HellMapManager.Models;
 using HellMapManager.Windows.EditRoomWindow;
 using Avalonia.Interactivity;
 using HellMapManager.States;
+using HellMapManager.Services;
+using HellMapManager.Windows.RelationMapWindow;
+
 
 namespace HellMapManager.Views.Mapfile.Rooms;
 
@@ -82,5 +85,27 @@ public partial class Rooms : UserControl
             }
         }
     }
+    public async void OnDumpRoom(object? sender, RoutedEventArgs args)
+    {
+        if (sender is not null && sender is Button bn && bn.DataContext is Room room)
+        {
+            var rm = Mapper.RelationMap(AppState.Main.Current!, room.Key, AppPreset.RelationMaxDepth);
+            if (rm is not null)
+            {
+                var vm = new RelationMapWindowViewModel(rm);
+                var Window = new RelationMapWindow(vm);
+                await Window.ShowDialog(AppUI.Main.Desktop.MainWindow!);
+            }
+        }
+    }
 
+    public async void OnRemove(object? sender, RoutedEventArgs args)
+    {
+        if (sender is not null && sender is Button bn && bn.DataContext is Room room)
+        {
+            if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
+            AppState.Main.RemoveRoom(room.Key);
+            AppState.Main.RaiseMapFileUpdatedEvent(this);
+        }
+    }
 }

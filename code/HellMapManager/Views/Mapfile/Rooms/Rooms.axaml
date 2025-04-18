@@ -133,7 +133,7 @@
                            </Button>
                            <Button
                               Margin="2"
-                              Command="{Binding #AllRooms.((vm:MainWindowViewModel)DataContext).OnDumpRoom}"
+                              Click="OnDumpRoom"
                               CommandParameter="{Binding .}">
                               <ToolTip.Tip>
                                  <TextBlock>查看房间关系地图</TextBlock>
@@ -143,7 +143,7 @@
                                  Height="16"
                                  Source="avares://HellMapManager/Assets/travel_explore.png" />
                            </Button>
-                           <Button Margin="10,2,2,2" Click="OnEdit">
+                           <Button Margin="10,2,2,2" Click="OnRemove">
                               <ToolTip.Tip>
                                  <TextBlock>删除房间</TextBlock>
                               </ToolTip.Tip>

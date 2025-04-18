@@ -106,12 +106,12 @@
                   Classes="accent"
                   Click="OnPick">
                   <ToolTip.Tip>
-                    <TextBlock>选择房间</TextBlock>
+                    <TextBlock>选择该房间</TextBlock>
                   </ToolTip.Tip>
                   <Image
                     Width="16"
                     Height="16"
-                    Source="avares://HellMapManager/Assets/read_more.png" />
+                    Source="avares://HellMapManager/Assets/input.png" />
                 </Button>
               </WrapPanel>
             </DataTemplate>
