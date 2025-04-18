@@ -6,6 +6,8 @@ using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Models;
 using Avalonia.Controls.ApplicationLifetimes;
 using HellMapManager.States;
+using System;
+using Avalonia.Rendering.Composition;
 
 namespace HellMapManager.Services;
 
@@ -157,21 +159,59 @@ public class AppUI(AppState appState)
         var choice = await box.ShowAsync();
         return choice == "是";
     }
+    public bool ConfirmedExit = false;
+    public async Task<bool> ConfirmExit()
+    {
+        if (AppState.Current == null || !AppState.Current.Modified)
+        {
+            ConfirmedExit=true;
+            return true;
+        }
+        var ps = new MessageBoxCustomParams
+        {
+            ButtonDefinitions =
+                [
+                    new ButtonDefinition { Name = "是",IsDefault=true },
+                    new ButtonDefinition { Name = "否",IsCancel=true },
+                ],
+            ContentTitle = "退出",
+            ContentMessage = "当前文件有未保存的修改，是否退出？",
+        };
+        var box = MessageBoxManager.GetMessageBoxCustom(ps);
+        var choice = await box.ShowAsync();
+        ConfirmedExit = (choice == "是");
+        return ConfirmedExit;
+    }
+
     public async Task ImportRoomsH()
     {
         var file = await AskImportRoomsH();
         if (file != "")
         {
-            AppState.ImportRoomsHFile(file);
+            try
+            {
+                AppState.ImportRoomsHFile(file);
+            }
+            catch (Exception ex)
+            {
+                Alert("导入失败", ex.Message);
+            }
         }
-
     }
     public async Task Open()
     {
         var file = await AskLoadFile();
         if (file != "")
         {
-            AppState.LoadFile(file);
+            try
+            {
+                AppState.LoadFile(file);
+            }
+            catch (Exception ex)
+            {
+                Alert("打开失败", ex.Message);
+            }
+
         }
 
     }
@@ -180,7 +220,15 @@ public class AppUI(AppState appState)
         var file = await AskLoadFile();
         if (file != "")
         {
-           AppState.LoadFile(file);
+            try
+            {
+                AppState.LoadFile(file);
+            }
+            catch (Exception ex)
+            {
+                Alert("打开失败", ex.Message);
+            }
+
         }
     }
     public async Task SaveAs()
@@ -190,7 +238,52 @@ public class AppUI(AppState appState)
             var file = await AskSaveAs();
             if (file != "")
             {
-                AppState.SaveFile(file);
+                try
+                {
+                    AppState.SaveFile(file);
+                }
+                catch (Exception ex)
+                {
+                    Alert("保存失败", ex.Message);
+                }
+            }
+        }
+    }
+    public async Task Save()
+    {
+        if (AppState.Main.Current is not null)
+        {
+            if (AppState.Main.Current.Path != "")
+            {
+                try
+                {
+
+                    AppState.Main.Save();
+                }
+                catch (Exception ex)
+                {
+                    Alert("保存失败", ex.Message);
+                }
+            }
+            else
+            {
+                await SaveAs();
+            }
+        }
+    }
+
+    public async Task OnOpenRecent(String file)
+    {
+        if (await ConfirmModified())
+        {
+            try
+            {
+
+                AppState.Main.OpenRecent(file);
+            }
+            catch (Exception ex)
+            {
+                Alert("打开失败", ex.Message);
             }
         }
     }

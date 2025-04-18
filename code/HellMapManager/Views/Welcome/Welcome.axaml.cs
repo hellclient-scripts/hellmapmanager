@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using HellMapManager.Models;
+using HellMapManager.Services;
 using HellMapManager.ViewModels;
 namespace HellMapManager.Views.Welcome;
 
@@ -32,10 +33,8 @@ public partial class Welcome : UserControl
         {
             if (border.DataContext is RecentFile rf)
             {
-                if (DataContext is MainWindowViewModel vm)
-                {
-                    vm.OnOpenRecent(rf.Path);
-                }
+
+                     AppUI.Main.OnOpenRecent(rf.Path);
             }
         }
     }

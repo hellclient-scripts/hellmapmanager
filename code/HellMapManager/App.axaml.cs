@@ -9,6 +9,7 @@ using HellMapManager.States;
 using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Services;
 using System.IO;
+using Avalonia.Remote.Protocol.Viewport;
 namespace HellMapManager;
 
 public partial class App : Application
@@ -43,9 +44,21 @@ public partial class App : Application
                 DataContext = new MainWindowViewModel()
             };
             desktop.MainWindow = mw;
-            mw.InitWindow();
-        }
+            mw.Closing += async (s, e) =>
+            {
+                if (!AppUI.Main.ConfirmedExit)
+                {
+                    e.Cancel = true;
+                    if (await AppUI.Main.ConfirmExit())
+                    {
+                        if (AppUI.Main.ConfirmedExit)
+                            mw.Close();
 
+                    }
+                }
+            }
+        ;
+        }
         base.OnFrameworkInitializationCompleted();
     }
 

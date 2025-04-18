@@ -53,28 +53,15 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppState.Main.Settings.Recents.ToArray()); }
     public async void OnOpenRecent(String file)
     {
-        if (await AppUI.Main.ConfirmModified())
-        {
-            AppState.Main.OpenRecent(file);
-        }
-    }
-    public void OnSave()
-    {
-        if (AppState.Main.Current is not null)
-        {
-            if (AppState.Main.Current.Path != "")
-            {
-                AppState.Main.Save();
-            }
-            else
-            {
-                OnSaveAs();
-            }
-        }
+            await AppUI.Main.OnOpenRecent(file);
     }
     public bool IsFileModified
     {
         get => AppState.Main.Current != null && AppState.Main.Current.Modified;
+    }
+    public async void OnSave()
+    {
+        await AppUI.Main.Save();
     }
     public async void OnSaveAs()
     {
