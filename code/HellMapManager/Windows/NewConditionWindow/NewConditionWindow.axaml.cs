@@ -18,7 +18,7 @@ public partial class NewConditionWindow : Window
             var err = vm.Item.Validate();
             if (err != "")
             {
-                DialogHelper.Alert("验证失败", err);
+                AppUI.Alert("验证失败", err);
                 return;
             }
             Close(vm.Item.ToCondition());

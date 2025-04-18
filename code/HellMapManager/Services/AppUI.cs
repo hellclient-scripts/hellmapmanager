@@ -5,11 +5,46 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Models;
 using Avalonia.Controls.ApplicationLifetimes;
-namespace HellMapManager.Interfaces;
+using HellMapManager.States;
 
-public class DesktopUI(IClassicDesktopStyleApplicationLifetime desktop) : IAppUI
+namespace HellMapManager.Services;
+
+public class AppUI(AppState appState)
 {
-    public IClassicDesktopStyleApplicationLifetime Desktop = desktop;
+    public static readonly AppUI Main = new(new AppState());
+    public AppState AppState = appState;
+    public IClassicDesktopStyleApplicationLifetime Desktop = new ClassicDesktopStyleApplicationLifetime();
+    public static async Task<bool> Confirm(string title, string body)
+    {
+        var ps = new MessageBoxCustomParams
+        {
+            ButtonDefinitions =
+                [
+                    new() { Name = "是",IsDefault=true },
+                    new() { Name = "否",IsCancel=true },
+                ],
+            ContentTitle = title,
+            ContentMessage = body,
+        };
+        var box = MessageBoxManager.GetMessageBoxCustom(ps);
+        var choice = await box.ShowAsync();
+        return choice == "是";
+    }
+    public static async void Alert(string title, string body)
+    {
+        var ps = new MessageBoxCustomParams
+        {
+            ButtonDefinitions =
+                [
+                    new() { Name = "确定",IsDefault=true },
+                ],
+            ContentTitle = title,
+            ContentMessage = body,
+        };
+        var box = MessageBoxManager.GetMessageBoxCustom(ps);
+        await box.ShowAsync();
+        return;
+    }
     public async Task<string> AskLoadFile()
     {
         var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
@@ -84,11 +119,15 @@ public class DesktopUI(IClassicDesktopStyleApplicationLifetime desktop) : IAppUI
 
     public async Task<bool> ConfirmModified()
     {
+        if (AppState.Current == null || !AppState.Current.Modified)
+        {
+            return true;
+        }
         var ps = new MessageBoxCustomParams
         {
             ButtonDefinitions =
-                [
-                    new() { Name = "是",IsDefault=true },
+        [
+            new() { Name = "是",IsDefault=true },
                     new() { Name = "否",IsCancel=true },
                 ],
             ContentTitle = "文件未保存",
@@ -98,9 +137,12 @@ public class DesktopUI(IClassicDesktopStyleApplicationLifetime desktop) : IAppUI
         var choice = await box.ShowAsync();
         return choice == "是";
     }
-    
     public async Task<bool> ConfirmImport()
     {
+        if (AppState.Current == null || !AppState.Current.Modified)
+        {
+            return true;
+        }
         var ps = new MessageBoxCustomParams
         {
             ButtonDefinitions =
@@ -114,6 +156,43 @@ public class DesktopUI(IClassicDesktopStyleApplicationLifetime desktop) : IAppUI
         var box = MessageBoxManager.GetMessageBoxCustom(ps);
         var choice = await box.ShowAsync();
         return choice == "是";
+    }
+    public async Task ImportRoomsH()
+    {
+        var file = await AskImportRoomsH();
+        if (file != "")
+        {
+            AppState.ImportRoomsHFile(file);
+        }
+
+    }
+    public async Task Open()
+    {
+        var file = await AskLoadFile();
+        if (file != "")
+        {
+            AppState.LoadFile(file);
+        }
+
+    }
+    public async Task OpenFile()
+    {
+        var file = await AskLoadFile();
+        if (file != "")
+        {
+           AppState.LoadFile(file);
+        }
+    }
+    public async Task SaveAs()
+    {
+        if (AppState.Current != null)
+        {
+            var file = await AskSaveAs();
+            if (file != "")
+            {
+                AppState.SaveFile(file);
+            }
+        }
     }
 
 }

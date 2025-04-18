@@ -23,7 +23,7 @@ public partial class EditRoomWindow : Window
             var err = vm.Item.Validate();
             if (err != "")
             {
-                DialogHelper.Alert("验证失败", err);
+                AppUI.Alert("验证失败", err);
                 return;
             }
             Close(vm.Item.ToRoom());
@@ -80,7 +80,7 @@ public partial class EditRoomWindow : Window
         {
             if (sender is not null && sender is Button bn && bn.DataContext is Data data)
             {
-                if (await DialogHelper.Confirm("删除", "确定要删除该元素吗？") == false) return;
+                if (await AppUI.Confirm("删除", "确定要删除该元素吗？") == false) return;
                 vm.Item.Data.Remove(data);
                 vm.Item.Sort();
             }
@@ -109,7 +109,7 @@ public partial class EditRoomWindow : Window
         {
             if (sender is not null && sender is Button bn && bn.DataContext is string tag)
             {
-                if (await DialogHelper.Confirm("删除", "确定要删除该元素吗？") == false) return;
+                if (await AppUI.Confirm("删除", "确定要删除该元素吗？") == false) return;
                 vm.Item.Tags.Remove(tag);
             }
         }
@@ -158,7 +158,7 @@ public partial class EditRoomWindow : Window
         {
             if (sender is not null && sender is Button bn && bn.DataContext is Exit exit)
             {
-                if (await DialogHelper.Confirm("删除", "确定要删除该元素吗？") == false) return;
+                if (await AppUI.Confirm("删除", "确定要删除该元素吗？") == false) return;
                 vm.Item.Exits.Remove(exit);
             }
         }

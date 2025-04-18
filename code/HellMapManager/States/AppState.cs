@@ -1,25 +1,15 @@
 using HellMapManager.Models;
 using HellMapManager.Services;
-using HellMapManager.Interfaces;
 using System.Threading.Tasks;
 namespace HellMapManager.States;
 
 
-public partial class AppState(IAppUI ui)
+public partial class AppState()
 {
-    public static readonly AppState Main = new(new DummyAppUI());
-    public IAppUI UI = ui;
+    public static readonly AppState Main = new();
     public MapFile? Current;
     public Settings Settings = new();
 
-    public async Task OpenFile()
-    {
-        var file = await UI.AskLoadFile();
-        if (file != "")
-        {
-            LoadFile(file);
-        }
-    }
     public void OpenRecent(string file)
     {
         if (file != "")
@@ -28,17 +18,6 @@ public partial class AppState(IAppUI ui)
         }
     }
 
-    public async Task SaveAs()
-    {
-        if (Current != null)
-        {
-            var file = await UI.AskSaveAs();
-            if (file != "")
-            {
-                SaveFile(file);
-            }
-        }
-    }
     public void Save()
     {
         if (Current != null)
@@ -61,7 +40,7 @@ public partial class AppState(IAppUI ui)
         }
         RaiseSettingsUpdatedEvent(this);
     }
-    private void LoadFile(string file)
+    public void LoadFile(string file)
     {
         var mf = HMMFile.Open(file);
         if (mf != null)
@@ -77,7 +56,7 @@ public partial class AppState(IAppUI ui)
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    private void SaveFile(string file)
+    public void SaveFile(string file)
     {
         if (Current != null)
         {
@@ -88,7 +67,7 @@ public partial class AppState(IAppUI ui)
             AddRecent(Current.ToRecentFile());
         }
     }
-    private void ImportRoomsHFile(string file)
+    public void ImportRoomsHFile(string file)
     {
         if (Current != null)
         {
@@ -133,24 +112,7 @@ public partial class AppState(IAppUI ui)
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public async Task Open()
-    {
-        var file = await UI.AskLoadFile();
-        if (file != "")
-        {
-            LoadFile(file);
-        }
 
-    }
-    public async Task ImportRoomsH()
-    {
-        var file = await UI.AskImportRoomsH();
-        if (file != "")
-        {
-            ImportRoomsHFile(file);
-        }
-
-    }
 
     public void Exit()
     {
@@ -171,22 +133,6 @@ public partial class AppState(IAppUI ui)
     {
         Current = null;
         RaiseMapFileUpdatedEvent(this);
-    }
-    public async Task<bool> ConfirmModified()
-    {
-        if (Current == null || !Current.Modified)
-        {
-            return true;
-        }
-        return await UI.ConfirmModified();
-    }
-    public async Task<bool> ConfirmImport()
-    {
-        if (Current == null || !Current.Modified)
-        {
-            return true;
-        }
-        return await UI.ConfirmImport();
     }
     public void UpdateSettings(MapSettings s)
     {

@@ -20,7 +20,7 @@ public partial class EditExitWindow : Window
             var err = vm.Item.Validate();
             if (err != "")
             {
-                DialogHelper.Alert("验证失败", err);
+                AppUI.Alert("验证失败", err);
                 return;
             }
             Close(vm.Item.ToExit());
@@ -56,7 +56,7 @@ public partial class EditExitWindow : Window
         {
             if (sender is not null && sender is Button bn && bn.DataContext is Condition c)
             {
-                if (await DialogHelper.Confirm("删除", "确定要删除该元素吗？") == false) return;
+                if (await AppUI.Confirm("删除", "确定要删除该元素吗？") == false) return;
                 vm.Item.Conditions.Remove(c);
             }
         }

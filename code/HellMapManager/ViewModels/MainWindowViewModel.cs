@@ -2,6 +2,7 @@
 using HellMapManager.States;
 using System.Collections.ObjectModel;
 using HellMapManager.Models;
+using HellMapManager.Services;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -25,14 +26,14 @@ public partial class MainWindowViewModel : ViewModelBase
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
     {
-        if (await AppState.Main.ConfirmModified())
+        if (await AppUI.Main.ConfirmModified())
         {
-            await AppState.Main.OpenFile();
+            await AppUI.Main.OpenFile();
         }
     }
     public async void OnNew()
     {
-        if (await AppState.Main.ConfirmModified())
+        if (await AppUI.Main.ConfirmModified())
         {
             AppState.Main.NewMap();
         }
@@ -40,9 +41,9 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public async void OnImportRoomsH()
     {
-        if (await AppState.Main.ConfirmImport())
+        if (await AppUI.Main.ConfirmImport())
         {
-            await AppState.Main.ImportRoomsH();
+            await AppUI.Main.ImportRoomsH();
         }
     }
     public void OnExit()
@@ -52,7 +53,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppState.Main.Settings.Recents.ToArray()); }
     public async void OnOpenRecent(String file)
     {
-        if (await AppState.Main.ConfirmModified())
+        if (await AppUI.Main.ConfirmModified())
         {
             AppState.Main.OpenRecent(file);
         }
@@ -77,23 +78,23 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public async void OnSaveAs()
     {
-        await AppState.Main.SaveAs();
+        await AppUI.Main.SaveAs();
     }
     public async void OnClose()
     {
-        if (await AppState.Main.ConfirmModified())
+        if (await AppUI.Main.ConfirmModified())
         {
             AppState.Main.CloseCurrent();
         }
     }
     public async void OnRevert()
     {
-        if (await AppState.Main.ConfirmModified())
+        if (await AppUI.Main.ConfirmModified())
         {
         }
 
     }
-    public String TitleInfo
+    public string TitleInfo
     {
         get => (AppState.Main.Current == null ? "" : (AppState.Main.Current.Modified ? "* " : "") + (AppState.Main.Current.Path != "" ? AppState.Main.Current.Path : "<未保存>") + " ") + "Hell Map Manager";
     }

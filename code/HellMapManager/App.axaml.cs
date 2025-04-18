@@ -7,7 +7,6 @@ using HellMapManager.ViewModels;
 using HellMapManager.Views;
 using HellMapManager.States;
 using System.Diagnostics.CodeAnalysis;
-using HellMapManager.Interfaces;
 using HellMapManager.Services;
 using System.IO;
 namespace HellMapManager;
@@ -25,12 +24,14 @@ public partial class App : Application
         var settingspath = System.IO.Path.Join([path, AppPreset.SettingsFileName]);
         var settingsHelper = new SettingsHelper(settingspath);
         var settings = settingsHelper.Load();
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            AppState.Main.UI = new DesktopUI(desktop);
+            AppUI.Main.AppState = AppState.Main;
+            AppUI.Main.Desktop = desktop;
             AppState.Main.SettingsUpdatedEvent += (sender, args) => { settingsHelper.Save(AppState.Main.Settings); };
             AppState.Main.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
             if (settings is not null)
