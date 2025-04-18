@@ -66,7 +66,7 @@ public partial class AppState()
     {
         if (Current != null)
         {
-            Current.Map.Sort();
+            Current.Map.Arrange();
             HMMFile.Save(file, Current);
             Current.Modified = false;
             Current.Path = file;
@@ -88,7 +88,7 @@ public partial class AppState()
         {
 
             Current.InsertRoom(room);
-            Current.Map.Sort();
+            Current.Map.Arrange();
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -113,7 +113,7 @@ public partial class AppState()
                 Current.RemoveRoom(old.Key);
             }
             Current.InsertRoom(current);
-            Current.Map.Sort();
+            Current.Map.Arrange();
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

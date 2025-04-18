@@ -49,7 +49,7 @@ public partial class EditRoomWindow : Window
             if (result is not null)
             {
                 vm.Item.Data.Add(result);
-                vm.Item.Sort();
+                vm.Item.Arrange();
             }
         }
     }
@@ -69,7 +69,7 @@ public partial class EditRoomWindow : Window
                 {
                     vm.Item.Data.Remove(data);
                     vm.Item.Data.Add(result);
-                    vm.Item.Sort();
+                    vm.Item.Arrange();
                 }
             }
         }
@@ -82,7 +82,7 @@ public partial class EditRoomWindow : Window
             {
                 if (await AppUI.Confirm("删除", "确定要删除该元素吗？") == false) return;
                 vm.Item.Data.Remove(data);
-                vm.Item.Sort();
+                vm.Item.Arrange();
             }
         }
     }
@@ -99,7 +99,7 @@ public partial class EditRoomWindow : Window
             if (result is not null)
             {
                 vm.Item.Tags.Add(result);
-                vm.Item.Sort();
+                vm.Item.Arrange();
             }
         }
     }

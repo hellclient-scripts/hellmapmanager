@@ -53,7 +53,7 @@ public partial class Trace
 
 public partial class Trace
 {
-    public void Sort()
+    public void Arrange()
     {
         Locations.Sort((x, y) => x.CompareTo(y));
     }
@@ -63,7 +63,7 @@ public partial class Trace
         {
             Locations.Remove(l);
         }
-        Sort();
+        Arrange();
     }
     public void AddLocations(List<string> loctions)
     {
@@ -72,6 +72,6 @@ public partial class Trace
             Locations.Remove(l);
             Locations.Add(l);
         }
-        Sort();
+        Arrange();
     }
 }

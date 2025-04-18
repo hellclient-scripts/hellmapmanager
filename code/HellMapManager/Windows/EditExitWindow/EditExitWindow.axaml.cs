@@ -46,7 +46,7 @@ public partial class EditExitWindow : Window
             if (result is not null)
             {
                 vm.Item.Conditions.Add(result);
-                vm.Item.Sort();
+                vm.Item.Arrange();
             }
         }
     }

@@ -41,7 +41,7 @@ public partial class RoomForm : ObservableObject
             Data = [.. Data]
         };
     }
-    public void Sort()
+    public void Arrange()
     {
         Data = new ObservableCollection<Data>(this.Data.OrderBy(x => x.Key));
         Tags = new ObservableCollection<string>(this.Tags.OrderBy(x => x));

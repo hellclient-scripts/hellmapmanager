@@ -41,7 +41,7 @@ public partial class ExitForm : ObservableObject
     public ObservableCollection<Condition> Conditions { get; set; } = [];
     public int Cost { get; set; } = 1;
 
-    public void Sort()
+    public void Arrange()
     {
         var list = new List<Condition>(this.Conditions);
         list.Sort(((x, y) =>

@@ -113,7 +113,7 @@ public partial class Room()
         }
         return false;
     }
-    public void Sort()
+    public void Arrange()
     {
         Data.Sort((x, y) => x.Key.CompareTo(y.Key));
     }
