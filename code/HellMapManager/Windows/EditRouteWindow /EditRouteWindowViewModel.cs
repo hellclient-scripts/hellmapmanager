@@ -8,18 +8,18 @@ using System.Linq;
 using HellMapManager.Windows.NewTagWindow;
 using HellMapManager.Windows.EditExitWindow;
 
-namespace HellMapManager.Windows.EditAliasWindow;
+namespace HellMapManager.Windows.EditRouteWindow;
 
-public class EditAliasWindowViewModel : ObservableObject
+public class EditRouteWindowViewModel : ObservableObject
 {
-    public EditAliasWindowViewModel(Alias? raw, bool view)
+    public EditRouteWindowViewModel(Route? raw, bool view)
     {
         Raw = raw;
-        Item = (raw is not null) ? new AliasForm(raw.Clone(), Checker) : new AliasForm(Checker);
+        Item = (raw is not null) ? new RouteForm(raw, Checker) : new RouteForm(Checker);
         View = view;
     }
-    public Alias? Raw { get; set; }
-    public AliasForm Item { get; set; }
+    public Route? Raw { get; set; }
+    public RouteForm Item { get; set; }
     public bool View { get; set; }
     public bool ViewMode
     {
@@ -29,8 +29,8 @@ public class EditAliasWindowViewModel : ObservableObject
     {
         get =>
             Raw is null
-                ? "新建别名"
-                : ViewMode ? $"查看别名 {Raw.Key})" : $"编辑别名 {Raw.Key}";
+                ? "新建路线"
+                : ViewMode ? $"查看路线 {Raw.Key})" : $"编辑路线 {Raw.Key}";
     }
     public bool Editable { get => (Raw is not null) && ViewMode; }
     public bool Editing { get; set; } = false;
@@ -38,7 +38,7 @@ public class EditAliasWindowViewModel : ObservableObject
     {
         if (Raw is not null)
         {
-            Item = new AliasForm(Raw, Checker);
+            Item = new RouteForm(Raw, Checker);
             Editing = true;
             OnPropertyChanged(nameof(Item));
             OnPropertyChanged(nameof(Editable));
@@ -56,11 +56,11 @@ public class EditAliasWindowViewModel : ObservableObject
         OnPropertyChanged(nameof(Editing));
         OnPropertyChanged(nameof(Title));
     }
-    public string Checker(AliasForm model)
+    public string Checker(RouteForm form)
     {
-        if (AppState.Main.Current!.Cache.Aliases.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
+        if (AppState.Main.Current!.Cache.Aliases.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
         {
-            return "别名主键已存在";
+            return "路线主键已存在";
         }
         return "";
     }

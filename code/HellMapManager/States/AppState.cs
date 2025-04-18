@@ -71,6 +71,7 @@ public partial class AppState()
             Current.Modified = false;
             Current.Path = file;
             AddRecent(Current.ToRecentFile());
+            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void Exit()

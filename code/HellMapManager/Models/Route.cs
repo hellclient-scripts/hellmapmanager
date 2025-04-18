@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HellMapManager.Models;
 
-public class Route
+public partial class Route
 {
     public Route() { }
     public string Key { get; set; } = "";
@@ -38,6 +38,39 @@ public class Route
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
         result.Rooms = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(HMMFormatter.Unescape);
         return result;
+    }
+
+}
+
+public partial class Route
+{
+    public int RoomsCount
+    {
+        get => Rooms.Count;
+    }
+    public string AllRooms
+    {
+        get
+        {
+            return string.Join(";", Rooms);
+        }
+    }
+    public bool Filter(string val)
+    {
+        if (Key.Contains(val) ||
+            Desc.Contains(val) ||
+            Group.Contains(val))
+        {
+            return true;
+        }
+        foreach (var room in Rooms)
+        {
+            if (room.Contains(val))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

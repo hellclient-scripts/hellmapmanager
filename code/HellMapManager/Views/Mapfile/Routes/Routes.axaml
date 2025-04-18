@@ -1,5 +1,5 @@
 <UserControl
-   x:Class="HellMapManager.Views.Mapfile.Aliases.Aliases"
+   x:Class="HellMapManager.Views.Mapfile.Routes.Routes"
    xmlns="https://github.com/avaloniaui"
    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -30,11 +30,11 @@
                   <Setter Property="TextWrapping" Value="Wrap" />
                </Style>
             </StackPanel.Styles>
-            <TextBlock Classes="Title">别名列表</TextBlock>
+            <TextBlock Classes="Title">路线列表</TextBlock>
             <TextBlock Classes="Desc">
-               别名是根据Mud业务逻辑对房间做的映射。<LineBreak />
-               一般情况下，脚本里应该更具具体位置的业务逻辑，比如NPC,道具，任务等，为房间起别名。<LineBreak />
-               这样地图或者NPC调整时，无需改动代码。</TextBlock>
+               路线是有顺序的房间ID的列表。<LineBreak />
+               一般用于固定路径的遍历。<LineBreak />
+               应该在机器中处理好部分房间不能进入后的跳过遍历。</TextBlock>
          </StackPanel>
       </ScrollViewer>
       <DockPanel>
@@ -48,25 +48,25 @@
          </DockPanel.Styles>
          <DockPanel Margin="5,0" DockPanel.Dock="Top">
             <Button Classes="New accent" Click="OnNew">
-               <TextBlock>添加别名</TextBlock>
+               <TextBlock>添加路线</TextBlock>
             </Button>
             <TextBox
                Name="Filter"
                HorizontalAlignment="Right"
                DockPanel.Dock="Right"
-               Text="{Binding AliasesFilter}"
+               Text="{Binding RoutesFilter}"
                TextChanged="OnFilter"
                Watermark="过滤" />
          </DockPanel>
          <Panel DockPanel.Dock="Bottom">
             <WrapPanel HorizontalAlignment="Right">
-               <TextBlock Text="{Binding FilteredAliases.Count}" />
+               <TextBlock Text="{Binding FilteredRoutes.Count}" />
                <TextBlock Text="/" />
-               <TextBlock Text="{Binding GetMapAliasesCount}" />
+               <TextBlock Text="{Binding GetMapRoutesCount}" />
             </WrapPanel>
          </Panel>
          <DataGrid
-            x:Name="AllAliases"
+            x:Name="AllRoutes"
             Margin="5"
             BorderBrush="Gray"
             BorderThickness="1"
@@ -74,12 +74,12 @@
             CanUserSortColumns="True"
             GridLinesVisibility="All"
             IsReadOnly="True"
-            ItemsSource="{Binding FilteredAliases}">
+            ItemsSource="{Binding FilteredRoutes}">
             <DataGrid.Columns>
                <DataGridTemplateColumn
                   Width="160"
                   CanUserSort="true"
-                  Header="别名主键"
+                  Header="路线主键"
                   SortMemberPath="Key">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
@@ -90,11 +90,11 @@
                <DataGridTemplateColumn
                   Width="160"
                   CanUserSort="true"
-                  Header="别名值"
-                  SortMemberPath="Value">
+                  Header="路线值"
+                  SortMemberPath="RoomsCount">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
-                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Value}" />
+                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding RoomsCount}" />
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
@@ -121,7 +121,7 @@
                         <WrapPanel Margin="10,0,20,0">
                            <Button Margin="2" Click="OnView">
                               <ToolTip.Tip>
-                                 <TextBlock>查看别名</TextBlock>
+                                 <TextBlock>查看路线</TextBlock>
                               </ToolTip.Tip>
                               <Image
                                  Width="16"
@@ -130,7 +130,7 @@
                            </Button>
                            <Button Margin="2" Click="OnEdit">
                               <ToolTip.Tip>
-                                 <TextBlock>编辑别名</TextBlock>
+                                 <TextBlock>编辑路线</TextBlock>
                               </ToolTip.Tip>
                               <Image
                                  Width="16"
@@ -139,7 +139,7 @@
                            </Button>
                            <Button Margin="10,2,2,2" Click="OnRemove">
                               <ToolTip.Tip>
-                                 <TextBlock>删除别名</TextBlock>
+                                 <TextBlock>删除路线</TextBlock>
                               </ToolTip.Tip>
                               <Image
                                  Width="16"

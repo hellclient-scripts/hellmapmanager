@@ -27,14 +27,14 @@ public partial class Welcome : UserControl
             vm.OnNew();
         }
     }
-    public void OnOpenRecent(object? sender, Avalonia.Input.TappedEventArgs e)
+    public async void OnOpenRecent(object? sender, Avalonia.Input.TappedEventArgs e)
     {
         if (sender is not null && sender is Border border)
         {
             if (border.DataContext is RecentFile rf)
             {
 
-                     AppUI.Main.OnOpenRecent(rf.Path);
+                await AppUI.Main.OnOpenRecent(rf.Path);
             }
         }
     }

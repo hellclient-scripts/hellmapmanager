@@ -171,6 +171,24 @@ public class MapFile
         Map.Aliases.RemoveAll(r => r.Key == key);
         Cache.Aliases.Remove(key);
     }
+    public void ImportRoutes(List<Route> routes)
+    {
+        foreach (var route in routes)
+        {
+            InsertRoute(route);
+        }
+    }
+    public void InsertRoute(Route route)
+    {
+        Map.Routes.RemoveAll(r => r.Key == route.Key);
+        Map.Routes.Add(route);
+        Cache.Routes[route.Key] = route;
+    }
+    public void RemoveRoute(string key)
+    {
+        Map.Routes.RemoveAll(r => r.Key == key);
+        Cache.Routes.Remove(key);
+    }
 
 
     public void RebuldCache()

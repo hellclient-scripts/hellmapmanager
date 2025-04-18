@@ -53,6 +53,10 @@ public partial class RoomForm : ObservableObject
     public string Name { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
+    public ObservableCollection<string> Tags { get; set; } = [];
+    public ObservableCollection<Exit> Exits { get; set; } = [];
+    public ObservableCollection<Data> Data { get; set; } = [];
+
     public string Validate()
     {
         var err = ExternalValidator(this);
@@ -66,8 +70,5 @@ public partial class RoomForm : ObservableObject
         }
         return "";
     }
-    public ObservableCollection<string> Tags { get; set; } = [];
-    public ObservableCollection<Exit> Exits { get; set; } = [];
-    public ObservableCollection<Data> Data { get; set; } = [];
 
 }

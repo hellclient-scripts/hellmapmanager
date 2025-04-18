@@ -7,6 +7,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:overview="clr-namespace:HellMapManager.Views.Mapfile.Overview"
   xmlns:rooms="clr-namespace:HellMapManager.Views.Mapfile.Rooms"
+  xmlns:routes="clr-namespace:HellMapManager.Views.Mapfile.Routes"
   xmlns:vm="using:HellMapManager.ViewModels"
   d:DesignHeight="450"
   d:DesignWidth="800"
@@ -27,7 +28,7 @@
         <aliases:Aliases HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="线路">
-        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+        <routes:Routes HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="足迹">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>
