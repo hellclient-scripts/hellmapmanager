@@ -1,0 +1,25 @@
+<UserControl
+  x:Class="HellMapManager.Views.Components.RoomPicker.RoomPicker"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="using:HellMapManager.Views.Components.RoomPicker"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  mc:Ignorable="d">
+  <UserControl.Styles>
+    <Style Selector="Border Image">
+      <Setter Property="Width" Value="18" />
+      <Setter Property="Height" Value="18" />
+    </Style>
+  </UserControl.Styles>
+  <Border>
+    <DockPanel>
+      <Button Click="OnPick" DockPanel.Dock="Right">
+        <Image Source="avares://HellMapManager/Assets/dataset.png" />
+      </Button>
+      <TextBox Text="{Binding $parent[controls:RoomPicker].Room}" Watermark="{Binding $parent[controls:RoomPicker].Watermark}" />
+    </DockPanel>
+  </Border>
+</UserControl>

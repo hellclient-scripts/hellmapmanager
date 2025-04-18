@@ -1,0 +1,123 @@
+<Window
+  x:Class="HellMapManager.Windows.PickRoomWindow.PickRoomWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.Windows.PickRoomWindow"
+  Title="选取房间"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:PickRoomWindowViewModel"
+  mc:Ignorable="d">
+  <DockPanel Margin="20">
+    <DockPanel.Styles>
+      <Style Selector="TextBox#Filter">
+        <Setter Property="Width" Value="200" />
+      </Style>
+      <Style Selector="DataGrid SelectableTextBlock">
+        <Setter Property="Padding" Value="10 0" />
+      </Style>
+    </DockPanel.Styles>
+    <Panel Margin="5,0" DockPanel.Dock="Top">
+      <TextBox
+        Name="Filter"
+        HorizontalAlignment="Right"
+        Text="{Binding RoomsFilter}"
+        TextChanged="OnFilter"
+        Watermark="过滤" />
+    </Panel>
+    <Panel DockPanel.Dock="Bottom">
+      <WrapPanel HorizontalAlignment="Right">
+        <TextBlock Text="{Binding FilteredRooms.Count}" />
+        <TextBlock Text="/" />
+        <TextBlock Text="{Binding GetMapRoomsCount}" />
+      </WrapPanel>
+    </Panel>
+    <DataGrid
+      x:Name="AllRooms"
+      Margin="5"
+      BorderBrush="Gray"
+      BorderThickness="1"
+      CanUserResizeColumns="True"
+      CanUserSortColumns="True"
+      GridLinesVisibility="All"
+      IsReadOnly="True"
+      ItemsSource="{Binding FilteredRooms}">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn
+          Width="160"
+          CanUserSort="true"
+          Header="房间主键"
+          SortMemberPath="Key">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Key}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          Width="160"
+          CanUserSort="true"
+          Header="房间名"
+          SortMemberPath="Name">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          Width="160"
+          CanUserSort="true"
+          Header="分组"
+          SortMemberPath="Group">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Group}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn
+          Width="100"
+          Binding="{Binding ExitsCount}"
+          Header="出口数量" />
+        <DataGridTemplateColumn Width="160" Header="房间标签">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding AllTags}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Width="*" Header="房间描述">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Desc}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
+        <DataGridTemplateColumn Width="50" Header="操作">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <WrapPanel>
+                <Button
+                  Margin="2"
+                  Classes="accent"
+                  Click="OnPick">
+                  <ToolTip.Tip>
+                    <TextBlock>选择房间</TextBlock>
+                  </ToolTip.Tip>
+                  <Image
+                    Width="16"
+                    Height="16"
+                    Source="avares://HellMapManager/Assets/read_more.png" />
+                </Button>
+              </WrapPanel>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </DockPanel>
+</Window>

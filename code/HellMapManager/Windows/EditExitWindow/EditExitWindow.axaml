@@ -5,6 +5,8 @@
   xmlns:condition="using:HellMapManager.Views.Components.Condition"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
+  xmlns:roompicker="using:HellMapManager.Views.Components.RoomPicker"
+  
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:vm="using:HellMapManager.Windows.EditExitWindow"
   Title="{Binding Title}"
@@ -57,7 +59,7 @@
       <ScrollViewer>
         <StackPanel Margin="20">
           <TextBlock Classes="Label" Text="目标:" />
-          <TextBox Text="{Binding Item.To}" Watermark="目标" />
+          <roompicker:RoomPicker Room="{Binding Item.To}" Watermark="目标" />
           <TextBlock Classes="Label" Text="指令:" />
           <TextBox Text="{Binding Item.Command}" Watermark="指令" />
           <TextBlock Classes="Label" Text="条件:" />

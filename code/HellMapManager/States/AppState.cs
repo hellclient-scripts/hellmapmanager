@@ -134,7 +134,7 @@ public partial class AppState()
         Current = null;
         RaiseMapFileUpdatedEvent(this);
     }
-    public void UpdateSettings(MapSettings s)
+    public void UpdateMapSettings(MapSettings s)
     {
         if (Current != null)
         {
@@ -142,7 +142,7 @@ public partial class AppState()
             Current.Map.Info.Name = s.Name;
             Current.Map.Info.Desc = s.Desc;
             Current.MarkAsModified();
-            RaiseSettingsUpdatedEvent(this);
+            RaiseMapFileUpdatedEvent(this);
         }
     }
 

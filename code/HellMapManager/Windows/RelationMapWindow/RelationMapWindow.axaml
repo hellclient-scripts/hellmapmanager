@@ -21,22 +21,7 @@
       Name="RoomDetail"
       Width="300"
       Background="#FFEEEEEE"
-      DockPanel.Dock="Right">
-      <DockPanel>
-        <Panel DockPanel.Dock="Bottom">
-          <SplitButton
-            Margin="5"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Classes="accent">
-            <SplitButton.Flyout>
-              <MenuFlyout Placement="Bottom">
-                <MenuItem Header="删除房间" />
-              </MenuFlyout>
-            </SplitButton.Flyout>
-            <TextBlock>编辑房间</TextBlock>
-          </SplitButton>
-        </Panel>
+      DockPanel.Dock="Left">
         <ScrollViewer>
           <Border Padding="10">
             <StackPanel>
@@ -115,8 +100,7 @@
             </StackPanel>
           </Border>
         </ScrollViewer>
-      </DockPanel>
-    </Panel>
+      </Panel>
     <Panel Height="22" DockPanel.Dock="Bottom">
       <Border HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock
@@ -201,7 +185,7 @@
                     </ContextMenu>
                   </Border.ContextMenu>
                   <StackPanel>
-                    <TextBlock Text="{Binding LabelWithKey}" />
+                    <SelectableTextBlock Text="{Binding LabelWithKey}" />
                     <TextBlock Text="{Binding Tags}" />
                   </StackPanel>
                 </Border>
@@ -211,7 +195,7 @@
         </paz:ZoomBorder>
         <Button
           Canvas.Top="10"
-          Canvas.Right="10"
+          Canvas.Right="30"
           Width="42"
           Height="42"
           Tapped="OnRefreshButtonDoubleTapped">
@@ -228,7 +212,7 @@
         </Button>
         <Button
           Canvas.Top="10"
-          Canvas.Right="62"
+          Canvas.Right="82"
           Width="42"
           Height="42"
           Command="{Binding OnHistoryBack}"

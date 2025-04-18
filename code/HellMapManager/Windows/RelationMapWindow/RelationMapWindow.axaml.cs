@@ -2,8 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.PanAndZoom;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
-using HellMapManager.Services;
 using ComponentExit = HellMapManager.Views.Components.Exit;
 using HellMapManager.Models;
 using System;

@@ -72,7 +72,7 @@ public partial class Overview : UserControl
             var result = await nw.ShowDialog<MapSettings>((TopLevel.GetTopLevel(this) as Window)!);
             if (result != null)
             {
-                AppState.Main.UpdateSettings(result);
+                AppState.Main.UpdateMapSettings(result);
             }
         }
     }
