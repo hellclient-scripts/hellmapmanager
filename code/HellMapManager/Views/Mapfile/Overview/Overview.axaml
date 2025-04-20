@@ -247,22 +247,6 @@
               </DockPanel>
             </DockPanel>
           </Border>
-          <Border
-            Name="WidgetQuery"
-            Classes="Summary"
-            Tapped="OnWidgetClicked">
-            <DockPanel>
-              <Panel Classes="Icon">
-                <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/query_stats.png" />
-              </Panel>
-              <DockPanel>
-                <TextBlock Classes="Label" DockPanel.Dock="Top">查询</TextBlock>
-                <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计&#160;<Run Text="{Binding GetMapQueriesCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">预存的查询条件队列。</TextBlock>
-              </DockPanel>
-            </DockPanel>
-          </Border>
         </WrapPanel>
       </ScrollViewer>
     </Border>

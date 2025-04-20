@@ -80,7 +80,6 @@ public partial class Map
     public List<Trace> Traces { get; set; } = [];
     public List<Shortcut> Shortcuts { get; set; } = [];
     public List<Snapshot> Snapshots { get; set; } = [];
-    public List<Query> Querys { get; set; } = [];
 
     public void Arrange()
     {
@@ -93,8 +92,6 @@ public partial class Map
         Shortcuts.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
         Variables.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
         Snapshots.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : x.Timestamp.CompareTo(y.Timestamp)));
-        Querys.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-
 
     }
     public static Map Empty(string name, string desc)

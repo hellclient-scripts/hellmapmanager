@@ -59,7 +59,6 @@ public class HMMEncoder
         mf.Map.Traces.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Shortcuts.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Snapshots.ForEach(r => { results.Add(r.Encode()); });
-        mf.Map.Querys.ForEach(r => { results.Add(r.Encode()); });
 
         return GetEncoding(head.Encoding).GetBytes(string.Join("\n", results));
     }
@@ -170,12 +169,6 @@ public class HMMEncoder
                             {
                                 var model = Snapshot.Decode(data);
                                 if (model.Validated()) { mf.Map.Snapshots.Add(model); }
-                            }
-                            break;
-                        case Query.EncodeKey:
-                            {
-                                var model = Query.Decode(data);
-                                if (model.Validated()) { mf.Map.Querys.Add(model); }
                             }
                             break;
                     }

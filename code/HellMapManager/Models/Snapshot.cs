@@ -6,8 +6,9 @@ public partial class Snapshot
     public string Key { get; set; } = "";
     public int Timestamp = 0;
     public string Group { get; set; } = "";
+    public string Type { get; set; } = "";
 
-    public List<Data> Data { get; set; } = [];
+    public string Value { get; set; } = "";
     public bool Validated()
     {
         return Key != "" && Timestamp > 0;
@@ -21,7 +22,8 @@ public partial class Snapshot
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Timestamp.ToString()),//1
                 HMMFormatter.Escape(Group),//2
-                HMMFormatter.EncodeList2(Data.ConvertAll(d=>HMMFormatter.EncodeKeyValue2(KeyValue.FromData(d)))),//3
+                HMMFormatter.Escape(Type),//3
+                                HMMFormatter.Escape(Value),//4
             ])
         );
     }
@@ -33,7 +35,8 @@ public partial class Snapshot
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Timestamp = HMMFormatter.UnescapeIntAt(list, 1, -1);
         result.Group = HMMFormatter.UnescapeAt(list, 2);
-        result.Data = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeKeyValue2(d).ToData());
+        result.Type = HMMFormatter.UnescapeAt(list, 3);
+        result.Value = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
 

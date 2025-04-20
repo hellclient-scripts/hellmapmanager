@@ -19,7 +19,6 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(GetMapShortcutsCount));
             OnPropertyChanged(nameof(GetMapSnapshotsCount));
             OnPropertyChanged(nameof(GetMapVariablesCount));
-            OnPropertyChanged(nameof(GetMapQueriesCount));
 
             OnPropertyChanged(nameof(GetMapNameLabel));
             OnPropertyChanged(nameof(GetMapEncodingLabel));
@@ -68,10 +67,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public int GetMapSnapshotsCount
     {
         get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Snapshots.Count) : 0;
-    }
-    public int GetMapQueriesCount
-    {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Querys.Count) : 0;
     }
     public string GetMapPathLabel
     {
