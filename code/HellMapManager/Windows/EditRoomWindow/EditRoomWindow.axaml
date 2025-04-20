@@ -78,7 +78,7 @@
             <TextBlock Classes="Label" Text="名称:" />
             <TextBox Text="{Binding Item.Name}" Watermark="房间名" />
             <TextBlock Classes="Label" Text="分组:" />
-            <TextBox Text="{Binding Item.Group}" Watermark="房间分组" />
+            <TextBox Text="{Binding Item.Group}" Watermark="分组" />
             <TextBlock Classes="Label" Text="标签:" />
             <StackPanel Classes="Content">
               <WrapPanel Margin="12,2">

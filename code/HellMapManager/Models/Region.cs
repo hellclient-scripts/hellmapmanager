@@ -9,18 +9,35 @@ public enum RegionItemType
     Room,
     Zone,
 }
-public class RegionItem(RegionItemType type, Condition value)
+public class RegionItem(RegionItemType type, string value, bool not)
 {
+    public bool Not { get; set; } = not;
     public RegionItemType Type { get; set; } = type;
-    public Condition Value { get; set; } = value;
+    public string Value { get; set; } = value;
     public bool Validated()
     {
-        return Value.Key != "";
+        return Value != "";
     }
+    public bool IsRoom
+    {
 
+        get => Type == RegionItemType.Room;
+    }
+    public string ExcludeLabel
+    {
+        get => Not ? "-" : "+";
+    }
+    public string Label
+    {
+        get => (Not ? "排除" : "加入") + (Type == RegionItemType.Room ? "房间" : "区域") + " " + Value;
+    }
+    public RegionItem Clone()
+    {
+        return new RegionItem(Type, Value, Not);
+    }
 }
 
-public class Region
+public partial class Region
 {
 
     public string Key { get; set; } = "";
@@ -33,6 +50,16 @@ public class Region
     {
         return Key != "";
     }
+    public Region Clone()
+    {
+        return new Region()
+        {
+            Key = Key,
+            Group = Group,
+            Desc = Desc,
+            Items = Items.ConvertAll(d => d),
+        };
+    }
     public const string EncodeKey = "Region";
 
     public string Encode()
@@ -42,7 +69,7 @@ public class Region
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeKeyAndValue2(HMMFormatter.Escape(d.Type==RegionItemType.Zone?"Zone":"Room"),HMMFormatter.EncodeToggleValue(ToggleValue.FromCondition(d.Value))))),//3
+                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeToggleKeyValue2(ToggleKeyValue.FromRegionItem(d)))),//3
             ])
         );
     }
@@ -54,12 +81,29 @@ public class Region
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
-        result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d =>
-        {
-            var kv = HMMFormatter.DecodeKeyValue2(d);
-            return new RegionItem(kv.UnescapeKey() == "Zone" ? RegionItemType.Zone : RegionItemType.Room, HMMFormatter.DecodeToggleValue(kv.Value).ToCondition());
-        });
+        result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleKeyValue2(d).ToRegionItem());
         return result;
     }
 
+}
+
+public partial class Region
+{
+    public bool Filter(string val)
+    {
+        if (Key.Contains(val) ||
+            Desc.Contains(val) ||
+            Group.Contains(val))
+        {
+            return true;
+        }
+        foreach (var item in Items)
+        {
+            if (item.Value.Contains(val))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

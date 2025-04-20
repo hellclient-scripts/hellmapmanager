@@ -47,7 +47,21 @@ public class ToggleValue(string value, bool not)
     }
 
 }
+public class ToggleKeyValue(string key, string value, bool not)
+{
+    public bool Not = not;
+    public string Key = key;
+    public string Value = value;
+    public RegionItem ToRegionItem()
+    {
+        return new RegionItem(HMMFormatter.Unescape(Key) == "Room" ? RegionItemType.Room : RegionItemType.Zone, HMMFormatter.Unescape(Value), Not);
+    }
+    public static ToggleKeyValue FromRegionItem(RegionItem i)
+    {
+        return new ToggleKeyValue(HMMFormatter.Escape(i.Type == RegionItemType.Room ? "Room" : "Zone"), HMMFormatter.Escape(i.Value), i.Not);
+    }
 
+}
 public class ToggleKeyValues(string key, List<string> values, bool not)
 {
     public bool Not = not;
@@ -172,6 +186,47 @@ public class HMMFormatter
         var decoded = val.Split(TokenKey4.Unescaped, 2);
         return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
     }
+    public static string EncodeToggleKeyValue1(ToggleKeyValue kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue1(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKeyValue DecodeToggleKeyValue1(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue1(v.Value);
+        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
+    }
+    public static string EncodeToggleKeyValue2(ToggleKeyValue kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue2(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKeyValue DecodeToggleKeyValue2(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue2(v.Value);
+        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
+    }
+    public static string EncodeToggleKeyValue3(ToggleKeyValue kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue3(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKeyValue DecodeToggleKeyValue3(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue3(v.Value);
+        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
+    }
+    public static string EncodeToggleKeyValue4(ToggleKeyValue kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue4(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKeyValue DecodeToggleKeyValue4(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue4(v.Value);
+        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
+    }
+
     public static string EncodeToggleKeyValues1(ToggleKeyValues kv)
     {
         return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue1(kv.Key, EncodeList1(kv.Values)), kv.Not));

@@ -202,8 +202,26 @@ public class MapFile
     }
     public void RemoveTrace(string key)
     {
-        Map.Traces.RemoveAll(r => r.Key == key);
-        Cache.Traces.Remove(key);
+        Map.Regions.RemoveAll(r => r.Key == key);
+        Cache.Regions.Remove(key);
+    }
+    public void ImportRegions(List<Region> regions)
+    {
+        foreach (var region in regions)
+        {
+            InsertRegion(region);
+        }
+    }
+    public void InsertRegion(Region region)
+    {
+        Map.Regions.RemoveAll(r => r.Key == region.Key);
+        Map.Regions.Add(region);
+        Cache.Regions[region.Key] = region;
+    }
+    public void RemoveRegion(string key)
+    {
+        Map.Regions.RemoveAll(r => r.Key == key);
+        Cache.Regions.Remove(key);
     }
     public void RebuldCache()
     {

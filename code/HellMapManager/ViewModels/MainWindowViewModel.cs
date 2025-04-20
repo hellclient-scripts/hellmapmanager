@@ -23,6 +23,7 @@ public partial class MainWindowViewModel : ViewModelBase
         InitAliases();
         InitRoutes();
         InitTraces();
+        InitRegions();
     }
 
     public partial void InitOverview();
@@ -30,6 +31,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public partial void InitAliases();
     public partial void InitRoutes();
     public partial void InitTraces();
+    public partial void InitRegions();
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
     {

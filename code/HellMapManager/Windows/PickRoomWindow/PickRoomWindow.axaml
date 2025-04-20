@@ -89,13 +89,6 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn Width="*" Header="房间描述">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Desc}" />
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
 
         <DataGridTemplateColumn Width="50" Header="操作">
           <DataGridTemplateColumn.CellTemplate>

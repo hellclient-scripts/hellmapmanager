@@ -7,5 +7,5 @@ public class Cache
     public Dictionary<string, Alias> Aliases = [];
     public Dictionary<string, Route> Routes = [];
     public Dictionary<string, Trace> Traces = [];
-
+    public Dictionary<string, Region> Regions = [];
 }

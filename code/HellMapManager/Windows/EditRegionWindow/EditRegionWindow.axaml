@@ -1,15 +1,17 @@
 <Window
-  x:Class="HellMapManager.Windows.EditTraceWindow.EditTraceWindow"
+  x:Class="HellMapManager.Windows.EditRegionWindow.EditRegionWindow"
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:vm="using:HellMapManager.Windows.EditTraceWindow"
+  xmlns:regionitem="using:HellMapManager.Views.Components.RegionItem"
+  xmlns:vm="using:HellMapManager.Windows.EditRegionWindow"
   Title="{Binding Title}"
   Width="700"
   d:DesignHeight="450"
   d:DesignWidth="800"
-  x:DataType="vm:EditTraceWindowViewModel"
+  x:DataType="vm:EditRegionWindowViewModel"
   Icon="/Assets/app.ico"
   mc:Ignorable="d">
   <Window.Styles>
@@ -71,21 +73,61 @@
         <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
-            <TextBox Text="{Binding Item.Key}" Watermark="路线主键" />
+            <TextBox Text="{Binding Item.Key}" Watermark="地区主键" />
             <TextBlock Classes="Label" Text="分组:" />
             <TextBox Text="{Binding Item.Group}" Watermark="分组" />
-            <TextBlock Classes="Label" Text="房间列表,一行一个房间" />
-            <TextBox
-              AcceptsReturn="True"
-              Classes="TextArea"
-              Text="{Binding Item.Rooms}"
-              Watermark="房间列表" />
+            <TextBlock Classes="Label" Text="元素:" />
+            <Panel Classes="Content">
+              <itemlist:UpDownList Classes="RegionItems Content" ItemsSource="{Binding Item.Items}">
+                <itemlist:UpDownList.ItemTemplate>
+                  <DataTemplate>
+                    <DockPanel>
+                      <WrapPanel DockPanel.Dock="Right">
+                        <Button Margin="0" Click="OnEditItem">
+                          <ToolTip.Tip>
+                            <TextBlock>编辑</TextBlock>
+                          </ToolTip.Tip>
+                          <Image
+                            Width="16"
+                            Height="16"
+                            Source="avares://HellMapManager/Assets/edit.png" />
+                        </Button>
+                        <Button Margin="0" Click="OnRemoveItem">
+                          <ToolTip.Tip>
+                            <TextBlock>删除</TextBlock>
+                          </ToolTip.Tip>
+                          <Image
+                            Width="16"
+                            Height="16"
+                            Source="avares://HellMapManager/Assets/delete.png" />
+                        </Button>
+                      </WrapPanel>
+                      <regionitem:RegionItem Padding="0,2" DataContext="{Binding .}" />
+                    </DockPanel>
+                  </DataTemplate>
+                </itemlist:UpDownList.ItemTemplate>
+                <itemlist:UpDownList.Action>
+                  <DataTemplate>
+                    <Button Margin="0" Click="OnNewItem">
+                      <ToolTip.Tip>
+                        <TextBlock>新建</TextBlock>
+                      </ToolTip.Tip>
+                      <Image
+                        Width="16"
+                        Height="16"
+                        Source="avares://HellMapManager/Assets/add.png" />
+                    </Button>
+
+                  </DataTemplate>
+                </itemlist:UpDownList.Action>
+              </itemlist:UpDownList>
+            </Panel>
             <TextBlock Classes="Label" Text="描述:" />
             <TextBox
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Desc}"
-              Watermark="足迹描述" />
+              Watermark="地区描述" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
@@ -96,9 +138,15 @@
             <Panel Classes="Content">
               <SelectableTextBlock Text="{Binding Item.Group}" />
             </Panel>
-            <TextBlock Classes="Label" Text="房间列表:" />
+            <TextBlock Classes="Label" Text="元素:" />
             <Panel Classes="Content">
-              <SelectableTextBlock Text="{Binding Item.Rooms}" />
+              <ItemsControl Classes="RegionItems Content" ItemsSource="{Binding Item.Items}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <regionitem:RegionItem Padding="0,2" DataContext="{Binding .}" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
             </Panel>
             <TextBlock Classes="Label" Text="描述:" />
             <Panel Classes="Content">

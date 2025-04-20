@@ -6,6 +6,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:overview="clr-namespace:HellMapManager.Views.Mapfile.Overview"
+  xmlns:regions="clr-namespace:HellMapManager.Views.Mapfile.Regions"
   xmlns:rooms="clr-namespace:HellMapManager.Views.Mapfile.Rooms"
   xmlns:routes="clr-namespace:HellMapManager.Views.Mapfile.Routes"
   xmlns:traces="clr-namespace:HellMapManager.Views.Mapfile.Traces"
@@ -35,7 +36,7 @@
         <traces:Traces HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="地区">
-        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+        <regions:Regions HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="定位">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>

@@ -1,0 +1,57 @@
+namespace HellMapManager.Windows.EditRegionWindow;
+
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
+using HellMapManager.Models;
+
+public delegate string ExternalValidator(RegionForm room);
+public partial class RegionForm : ObservableObject
+{
+    public RegionForm(ExternalValidator checker)
+    {
+        ExternalValidator = checker;
+    }
+    public RegionForm(Region region, ExternalValidator checker)
+    {
+        Key = region.Key;
+        Group = region.Group;
+        Desc = region.Desc;
+        Items = [.. region.Items];
+        ExternalValidator = checker;
+    }
+    public Region ToRegion()
+    {
+        return new Region()
+        {
+            Key = Key,
+            Group = Group,
+            Desc = Desc,
+            Items = new(Items),
+        };
+    }
+    public void Arrange()
+    {
+    }
+    public ExternalValidator ExternalValidator;
+    public string Key { get; set; } = "";
+    public string Group { get; set; } = "";
+    public string Desc { get; set; } = "";
+    public ObservableCollection<RegionItem> Items { get; set; } = [];
+
+    public string Validate()
+    {
+        var err = ExternalValidator(this);
+        if (err != "")
+        {
+            return err;
+        }
+        if (Key == "")
+        {
+            return "别名主键不能为空";
+        }
+
+        return "";
+    }
+}
