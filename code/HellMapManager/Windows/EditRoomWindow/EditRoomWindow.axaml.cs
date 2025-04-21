@@ -8,6 +8,7 @@ using HellMapManager.Windows.EditDataWindow;
 using HellMapManager.Windows.EditExitWindow;
 using HellMapManager.Windows.NewTagWindow;
 using System;
+using System.Linq;
 namespace HellMapManager.Windows.EditRoomWindow;
 
 public partial class EditRoomWindow : Window
@@ -67,8 +68,14 @@ public partial class EditRoomWindow : Window
                 var result = await editDataWindow.ShowDialog<Data?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    vm.Item.Data.Remove(data);
-                    vm.Item.Data.Add(result);
+                    foreach (var (index, item) in vm.Item.Data.Index())
+                    {
+                        if (item == data)
+                        {
+                            vm.Item.Data[index] = result;
+                            break;
+                        }
+                    }
                     vm.Item.Arrange();
                 }
             }
@@ -146,8 +153,14 @@ public partial class EditRoomWindow : Window
                 var result = await editExitWindow.ShowDialog<Exit?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    vm.Item.Exits.Remove(data);
-                    vm.Item.Exits.Add(result);
+                    foreach (var (index, item) in vm.Item.Exits.Index())
+                    {
+                        if (item == data)
+                        {
+                            vm.Item.Exits[index] = result;
+                            break;
+                        }
+                    }
                 }
             }
         }

@@ -5,7 +5,8 @@ using Avalonia.Interactivity;
 using HellMapManager.Services;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditRegionItemWindow;
-using System;
+using System.Linq;
+
 namespace HellMapManager.Windows.EditRegionWindow;
 
 public partial class EditRegionWindow : Window
@@ -14,7 +15,7 @@ public partial class EditRegionWindow : Window
     {
         InitializeComponent();
     }
-        public async void OnNewItem(object? sender, RoutedEventArgs args)
+    public async void OnNewItem(object? sender, RoutedEventArgs args)
     {
         if (DataContext is EditRegionWindowViewModel vm)
         {
@@ -45,8 +46,14 @@ public partial class EditRegionWindow : Window
                 var result = await editExitWindow.ShowDialog<RegionItem?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    vm.Item.Items.Remove(data);
-                    vm.Item.Items.Add(result);
+                    foreach (var (index, item) in vm.Item.Items.Index())
+                    {
+                        if (item == data)
+                        {
+                            vm.Item.Items[index] = result;
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -98,5 +105,5 @@ public partial class EditRegionWindow : Window
             vm.CancelEdit();
         }
     }
-    
+
 }
