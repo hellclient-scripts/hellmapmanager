@@ -223,6 +223,26 @@ public class MapFile
         Map.Regions.RemoveAll(r => r.Key == key);
         Cache.Regions.Remove(key);
     }
+
+    public void ImportLandmarks(List<Landmark> regions)
+    {
+        foreach (var region in regions)
+        {
+            InsertLandmark(region);
+        }
+    }
+    public void InsertLandmark(Landmark landmark)
+    {
+        Map.Landmarks.RemoveAll(r => r.Key == landmark.Key && r.Type == landmark.Type);
+        Map.Landmarks.Add(landmark);
+        Cache.Landmarks[landmark.UniqueKey] = landmark;
+    }
+    public void RemoveLandmark(string key, string Type)
+    {
+        Map.Landmarks.RemoveAll(r => r.Key == key && r.Type == Type);
+        Cache.Landmarks.Remove(key);
+    }
+
     public void RebuldCache()
     {
         Cache = new Cache();

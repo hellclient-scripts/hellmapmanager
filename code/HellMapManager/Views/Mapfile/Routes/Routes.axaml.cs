@@ -87,10 +87,10 @@ public partial class Routes : UserControl
     }
     public async void OnRemove(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Route alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Route model)
         {
-            if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.RemoveRoute(alias.Key);
+            if (await AppUI.Confirm("删除", "确定要删除该路线吗？") == false) return;
+            AppState.Main.RemoveRoute(model.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

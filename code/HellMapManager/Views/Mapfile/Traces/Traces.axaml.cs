@@ -87,10 +87,10 @@ public partial class Traces : UserControl
     }
     public async void OnRemove(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Trace alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Trace model)
         {
-            if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.RemoveTrace(alias.Key);
+            if (await AppUI.Confirm("删除", "确定要删除该足迹吗？") == false) return;
+            AppState.Main.RemoveTrace(model.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

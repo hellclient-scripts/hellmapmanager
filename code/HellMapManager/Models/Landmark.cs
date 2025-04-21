@@ -1,9 +1,11 @@
 
 
 
+using HellMapManager.Utils;
+
 namespace HellMapManager.Models;
 
-public class Landmark
+public partial class Landmark
 {
     public Landmark() { }
     public string Key { get; set; } = "";
@@ -39,5 +41,33 @@ public class Landmark
         result.Group = HMMFormatter.UnescapeAt(list, 3);
         result.Desc = HMMFormatter.UnescapeAt(list, 3);
         return result;
+    }
+    public Landmark Clone()
+    {
+        return new Landmark()
+        {
+            Key = Key,
+            Type = Type,
+            Value = Value,
+            Group = Group,
+            Desc = Desc,
+        };
+    }
+}
+
+public partial class Landmark
+{
+    public bool Filter(string filter)
+    {
+        if (Key.Contains(filter) || Type.Contains(filter) || Value.Contains(filter) || Group.Contains(filter) || Desc.Contains(filter))
+        {
+            return true;
+        }
+        return false;
+    }
+    public string UniqueKey
+
+    {
+        get => UniqueKeyUtil.Join([Key, Type]);
     }
 }

@@ -8,4 +8,6 @@ public class Cache
     public Dictionary<string, Route> Routes = [];
     public Dictionary<string, Trace> Traces = [];
     public Dictionary<string, Region> Regions = [];
+    public Dictionary<string, Landmark> Landmarks = [];
+
 }
