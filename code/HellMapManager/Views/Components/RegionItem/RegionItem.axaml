@@ -10,13 +10,15 @@
   x:DataType="models:RegionItem"
   mc:Ignorable="d">
   <UserControl.Styles>
-    <Style Selector="Border" />
+    <Style Selector="Border">
+      <Setter Property="Padding" Value="2 0" />
+    </Style>
     <Style Selector="Border Image">
       <Setter Property="Width" Value="18" />
       <Setter Property="Height" Value="18" />
     </Style>
     <Style Selector="Border TextBlock">
-      <Setter Property="Padding" Value="5 0" />
+      <Setter Property="Padding" Value="0" />      
       <Setter Property="LineHeight" Value="18" />
       <Setter Property="Height" Value="18" />
     </Style>
