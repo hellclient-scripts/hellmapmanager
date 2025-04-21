@@ -15,6 +15,20 @@ public partial class Shortcut : Exit
     }
     public const string EncodeKey = "Shortcut";
 
+    public new Shortcut Clone()
+    {
+        return new Shortcut()
+        {
+            Key = Key,
+            Command = Command,
+            To = To,
+            RoomConditions = new(RoomConditions),
+            Conditions = new(Conditions),
+            Cost = Cost,
+            Group = Group,
+            Desc = Desc,
+        };
+    }
     public string Encode()
     {
         return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
@@ -44,5 +58,13 @@ public partial class Shortcut : Exit
         result.Conditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 6)).ConvertAll(d => HMMFormatter.DecodeToggleValue(d).ToCondition());
         result.Cost = HMMFormatter.UnescapeIntAt(list, 7, 0);
         return result;
+    }
+    public bool Filter(string val)
+    {
+        if (Key.Contains(val) || Command.Contains(val) || To.Contains(val) || Group.Contains(val) || Desc.Contains(val))
+        {
+            return true;
+        }
+        return false;
     }
 }

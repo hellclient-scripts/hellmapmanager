@@ -50,7 +50,9 @@ public class EditTraceWindowViewModel : ObservableObject
     }
     public void CancelEdit()
     {
+        Item = (Raw is not null) ? new TraceForm(Raw, Checker) : new TraceForm(Checker);
         Editing = false;
+        OnPropertyChanged(nameof(Item));
         OnPropertyChanged(nameof(Editable));
         OnPropertyChanged(nameof(ViewMode));
         OnPropertyChanged(nameof(Editing));

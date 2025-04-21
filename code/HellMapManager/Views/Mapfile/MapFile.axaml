@@ -11,6 +11,8 @@
   xmlns:rooms="clr-namespace:HellMapManager.Views.Mapfile.Rooms"
   xmlns:routes="clr-namespace:HellMapManager.Views.Mapfile.Routes"
   xmlns:traces="clr-namespace:HellMapManager.Views.Mapfile.Traces"
+  xmlns:shortcuts="clr-namespace:HellMapManager.Views.Mapfile.Shortcuts"
+
   xmlns:vm="using:HellMapManager.ViewModels"
   d:DesignHeight="450"
   d:DesignWidth="800"
@@ -43,7 +45,7 @@
         <landmarks:Landmarks HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="捷径">
-        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+        <shortcuts:Shortcuts HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="变量">
         <TextBlock Margin="5">This is tab 3 content</TextBlock>

@@ -25,6 +25,7 @@ public partial class MainWindowViewModel : ViewModelBase
         InitTraces();
         InitRegions();
         InitLandmarks();
+        InitShortcuts();
     }
 
     public partial void InitOverview();
@@ -34,6 +35,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public partial void InitTraces();
     public partial void InitRegions();
     public partial void InitLandmarks();
+    public partial void InitShortcuts();
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()
     {

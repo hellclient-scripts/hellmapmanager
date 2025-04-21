@@ -9,5 +9,6 @@ public class Cache
     public Dictionary<string, Trace> Traces = [];
     public Dictionary<string, Region> Regions = [];
     public Dictionary<string, Landmark> Landmarks = [];
+    public Dictionary<string, Shortcut> Shortcuts = [];
 
 }

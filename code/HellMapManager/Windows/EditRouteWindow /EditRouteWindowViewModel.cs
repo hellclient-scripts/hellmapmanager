@@ -50,7 +50,9 @@ public class EditRouteWindowViewModel : ObservableObject
     }
     public void CancelEdit()
     {
+        Item = (Raw is not null) ? new RouteForm(Raw, Checker) : new RouteForm(Checker);
         Editing = false;
+        OnPropertyChanged(nameof(Item));
         OnPropertyChanged(nameof(Editable));
         OnPropertyChanged(nameof(ViewMode));
         OnPropertyChanged(nameof(Editing));

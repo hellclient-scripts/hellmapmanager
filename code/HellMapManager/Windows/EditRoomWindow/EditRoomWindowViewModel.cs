@@ -50,7 +50,9 @@ public class EditRoomWindowViewModel : ObservableObject
     }
     public void CancelEdit()
     {
+        Item = (Raw is not null) ? new RoomForm(Raw.Clone(), Checker) : new RoomForm(Checker);
         Editing = false;
+        OnPropertyChanged(nameof(Item));
         OnPropertyChanged(nameof(Editable));
         OnPropertyChanged(nameof(ViewMode));
         OnPropertyChanged(nameof(Editing));

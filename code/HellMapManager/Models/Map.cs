@@ -224,11 +224,11 @@ public class MapFile
         Cache.Regions.Remove(key);
     }
 
-    public void ImportLandmarks(List<Landmark> regions)
+    public void ImportLandmarks(List<Landmark> models)
     {
-        foreach (var region in regions)
+        foreach (var model in models)
         {
-            InsertLandmark(region);
+            InsertLandmark(model);
         }
     }
     public void InsertLandmark(Landmark landmark)
@@ -241,6 +241,25 @@ public class MapFile
     {
         Map.Landmarks.RemoveAll(r => r.Key == key && r.Type == Type);
         Cache.Landmarks.Remove(key);
+    }
+
+    public void ImportShortcuts(List<Shortcut> models)
+    {
+        foreach (var model in models)
+        {
+            InsertShortcut(model);
+        }
+    }
+    public void InsertShortcut(Shortcut model)
+    {
+        Map.Shortcuts.RemoveAll(r => r.Key == model.Key);
+        Map.Shortcuts.Add(model);
+        Cache.Shortcuts[model.Key] = model;
+    }
+    public void RemoveShortcut(string key)
+    {
+        Map.Shortcuts.RemoveAll(r => r.Key == key);
+        Cache.Shortcuts.Remove(key);
     }
 
     public void RebuldCache()

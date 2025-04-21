@@ -48,7 +48,9 @@ public class EditRegionWindowViewModel : ObservableObject
     }
     public void CancelEdit()
     {
+        Item = (Raw is not null) ? new RegionForm(Raw.Clone(), Checker) : new RegionForm(Checker);
         Editing = false;
+        OnPropertyChanged(nameof(Item));
         OnPropertyChanged(nameof(Editable));
         OnPropertyChanged(nameof(ViewMode));
         OnPropertyChanged(nameof(Editing));

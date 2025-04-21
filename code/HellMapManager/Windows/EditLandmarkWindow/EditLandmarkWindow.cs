@@ -46,7 +46,9 @@ public class EditLandmarkWindowViewModel : ObservableObject
     }
     public void CancelEdit()
     {
+        Item = (Raw is not null) ? new LandmarkForm(Raw.Clone(), Checker) : new LandmarkForm(Checker);
         Editing = false;
+        OnPropertyChanged(nameof(Item));
         OnPropertyChanged(nameof(Editable));
         OnPropertyChanged(nameof(ViewMode));
         OnPropertyChanged(nameof(Editing));
