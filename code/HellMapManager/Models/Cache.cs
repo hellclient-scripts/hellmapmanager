@@ -10,5 +10,6 @@ public class Cache
     public Dictionary<string, Region> Regions = [];
     public Dictionary<string, Landmark> Landmarks = [];
     public Dictionary<string, Shortcut> Shortcuts = [];
+    public Dictionary<string, Variable> Variables = [];
 
 }

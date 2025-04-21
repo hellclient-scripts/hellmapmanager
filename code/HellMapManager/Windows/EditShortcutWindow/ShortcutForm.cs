@@ -1,4 +1,5 @@
 namespace HellMapManager.Windows.EditShortcutWindow;
+using System.Collections.Generic;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Models;
@@ -39,6 +40,34 @@ public partial class ShortcutForm : ObservableObject
     }
     public void Arrange()
     {
+        var list = new List<Condition>(this.Conditions);
+        list.Sort(((x, y) =>
+        {
+            if (x.Not == y.Not)
+            {
+                return x.Key.CompareTo(y.Key);
+            }
+            else
+            {
+                return x.Not.CompareTo(y.Not);
+            }
+        }));
+        Conditions = new ObservableCollection<Condition>(list);
+        OnPropertyChanged(nameof(Conditions));
+        list = new List<Condition>(this.RoomConditions);
+        list.Sort(((x, y) =>
+        {
+            if (x.Not == y.Not)
+            {
+                return x.Key.CompareTo(y.Key);
+            }
+            else
+            {
+                return x.Not.CompareTo(y.Not);
+            }
+        }));
+        RoomConditions = new ObservableCollection<Condition>(list);
+        OnPropertyChanged(nameof(RoomConditions));
     }
     public ExternalValidator ExternalValidator;
     public string Key { get; set; } = "";

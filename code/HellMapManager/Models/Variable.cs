@@ -36,4 +36,38 @@ public class Variable
         result.Desc = HMMFormatter.UnescapeAt(list, 3);
         return result;
     }
+    public Variable Clone()
+    {
+        return new Variable()
+        {
+            Key = Key,
+            Value = Value,
+            Group = Group,
+            Desc = Desc,
+        };
+    }
+    public bool Filter(string filter)
+    {
+        if (filter == "")
+        {
+            return true;
+        }
+        if (Key.Contains(filter))
+        {
+            return true;
+        }
+        if (Value.Contains(filter))
+        {
+            return true;
+        }
+        if (Group.Contains(filter))
+        {
+            return true;
+        }
+        if (Desc.Contains(filter))
+        {
+            return true;
+        }
+        return false;
+    }
 }

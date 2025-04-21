@@ -261,7 +261,24 @@ public class MapFile
         Map.Shortcuts.RemoveAll(r => r.Key == key);
         Cache.Shortcuts.Remove(key);
     }
-
+    public void ImportVariables(List<Variable> models)
+    {
+        foreach (var model in models)
+        {
+            InsertVariable(model);
+        }
+    }
+    public void InsertVariable(Variable model)
+    {
+        Map.Variables.RemoveAll(r => r.Key == model.Key);
+        Map.Variables.Add(model);
+        Cache.Variables[model.Key] = model;
+    }
+    public void RemoveVariable(string key)
+    {
+        Map.Variables.RemoveAll(r => r.Key == key);
+        Cache.Variables.Remove(key);
+    }
     public void RebuldCache()
     {
         Cache = new Cache();
