@@ -1,14 +1,29 @@
 
+using System;
 using System.Collections.Generic;
+using Avalonia.Input;
 namespace HellMapManager.Models;
 public partial class Snapshot
 {
+    public static Snapshot Create(string key, string type, string value, string group)
+    {
+        return new Snapshot()
+        {
+            Key = key,
+
+            Type = type,
+            Value = value,
+            Timestamp = (int)(new DateTimeOffset(DateTime.UtcNow)).ToUnixTimeSeconds(),
+            Group = group,
+        };
+    }
     public string Key { get; set; } = "";
     public int Timestamp = 0;
     public string Group { get; set; } = "";
     public string Type { get; set; } = "";
 
     public string Value { get; set; } = "";
+    public string TimeLabel { get => DateTimeOffset.FromUnixTimeSeconds(Timestamp).LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss"); }
     public bool Validated()
     {
         return Key != "" && Timestamp > 0;
@@ -39,5 +54,23 @@ public partial class Snapshot
         result.Value = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
-
+    public Snapshot Clone()
+    {
+        return new Snapshot()
+        {
+            Key = Key,
+            Timestamp = Timestamp,
+            Group = Group,
+            Type = Type,
+            Value = Value,
+        };
+    }
+    public bool Filter(string filter)
+    {
+        if (Key.Contains(filter) || Type.Contains(filter) || Value.Contains(filter) || Group.Contains(filter))
+        {
+            return true;
+        }
+        return false;
+    }
 }

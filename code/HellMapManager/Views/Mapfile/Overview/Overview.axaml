@@ -115,7 +115,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">房间</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计&#160;<Run Text="{Binding GetMapRoomsCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">地图的基本数据，用Key标识的房间互相之间的出口关系。</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">地图的基本数据，用主键标识的房间互相之间的出口关系。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>
