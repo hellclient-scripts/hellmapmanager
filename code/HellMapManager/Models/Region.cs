@@ -106,4 +106,8 @@ public partial class Region
         }
         return false;
     }
+    public int ItemsCount
+    {
+        get => Items.Count;
+    }
 }

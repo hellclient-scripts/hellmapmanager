@@ -34,8 +34,7 @@
             <TextBlock Classes="Desc">
                地区是一系列房间的集合。<LineBreak />
                在HMM中，地区是按顺序对指定的房间和房间分组做加入和排除处理，最后查询出一系列无顺序的房间。<LineBreak />
-               由于地区的计算比较复杂，建议在脚本中做缓存处理。
-               </TextBlock>
+               由于地区的计算比较复杂，建议在脚本中做缓存处理。</TextBlock>
          </StackPanel>
       </ScrollViewer>
       <DockPanel>
@@ -99,25 +98,21 @@
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-               <DataGridTemplateColumn Width="*" Header="元素">
+               <DataGridTemplateColumn
+                  Width="160"
+                  Header="元素数量"
+                  SortMemberPath="ItemsCount">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
-                        <ItemsControl ItemsSource="{Binding Items}">
-                           <ItemsControl.ItemsPanel>
-                              <ItemsPanelTemplate>
-                                 <WrapPanel Margin="5"/>
-                              </ItemsPanelTemplate>
-                           </ItemsControl.ItemsPanel>
-                           <ItemsControl.ItemTemplate>
-                              <DataTemplate>
-                                 <regionitem:RegionItem />
-                              </DataTemplate>
-                           </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding ItemsCount}" />
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-
+               <DataGridTemplateColumn Width="*" Header="">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate />
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
                <DataGridTemplateColumn Width="160" Header="操作">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
