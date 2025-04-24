@@ -10,7 +10,7 @@ public class Escaper
     public const string EscapedToken = "\\\\";
     private class _internalItem(string unescaped, string escaped)
     {
-        public string Placeholder = EscapedToPlaceHolder(escaped);
+        public string Placeholder = EscapeToPlaceHolder(escaped);
         public string Unescaped = unescaped;
         public string Escaped = escaped;
     }
@@ -18,11 +18,11 @@ public class Escaper
     private const string _internalToken = "$";
     private const string _placeholderInternal = "$0";
     private const string _placeholderToken = "$1";
-    private static string EscapedToPlaceHolder(string str)
+    private static string EscapeToPlaceHolder(string str)
     {
         return str.Replace(_internalToken, _placeholderInternal).Replace(EscapedToken, _placeholderToken);
     }
-    private static string UnescapedFromPlaceHolder(string str)
+    private static string UnescapeFromPlaceHolder(string str)
     {
         return str.Replace(_placeholderInternal, _internalToken).Replace(_placeholderToken, Token);
     }
@@ -42,13 +42,13 @@ public class Escaper
     }
     public string Unescape(string str)
     {
-        str = EscapedToPlaceHolder(str);
+        str = EscapeToPlaceHolder(str);
         foreach (var item in _items)
         {
             str = str.Replace(item.Escaped, item.Placeholder);
         }
         str = str.Replace(Token, "");
-        str = UnescapedFromPlaceHolder(str);
+        str = UnescapeFromPlaceHolder(str);
         return str;
     }
 }
