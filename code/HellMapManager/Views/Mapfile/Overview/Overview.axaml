@@ -21,8 +21,14 @@
         </Button>
       </Panel>
       <ScrollViewer DockPanel.Dock="Left">
-        <StackPanel Width="200" Margin="20">
+        <StackPanel Width="200" Margin="10">
           <StackPanel.Styles>
+            <Style Selector="TextBlock.Title">
+              <Setter Property="FontSize" Value="24" />
+              <Setter Property="LineHeight" Value="30" />
+              <Setter Property="FontWeight" Value="Bold" />
+              <Setter Property="Margin" Value="0 0 0 12" />
+            </Style>
             <Style Selector="TextBlock">
               <Setter Property="TextWrapping" Value="Wrap" />
             </Style>
@@ -39,6 +45,7 @@
               <Setter Property="FontWeight" Value="Bold" />
             </Style>
           </StackPanel.Styles>
+          <TextBlock Classes="Title">概览</TextBlock>
           <TextBlock Classes="MapName Label" Text="地图名:" />
           <TextBlock
             Classes="MapName Content"

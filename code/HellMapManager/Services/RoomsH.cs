@@ -13,31 +13,31 @@ public class RoomFormatter
     public static string Escape(string val)
     {
         return new StringBuilder(val)
-        .Replace("%", "%25")
-        .Replace("\n", "%0A")
-        .Replace("=", "%3D")
-        .Replace("@", "%40")
-        .Replace("+", "%2B")
-        .Replace("|", "%7C")
-        .Replace(">", "%3E")
-        .Replace("<", "%3C")
-        .Replace(",", "%2C")
-        .Replace("$", "%24")
+        .Replace("\\", "\\x5c")
+        .Replace("\n", "\\x0A")
+        .Replace("=", "\\x3D")
+        .Replace("@", "\\x40")
+        .Replace("+", "\\x2B")
+        .Replace("|", "\\x7C")
+        .Replace(">", "\\x3E")
+        .Replace("<", "\\x3C")
+        .Replace(",", "\\x2C")
+        .Replace("%", "\\x24")
         .ToString();
     }
     public static string Unescape(string val)
     {
         return new StringBuilder(val)
-        .Replace("%0A", "\n")
-        .Replace("%3D", "=")
-        .Replace("%40", "@")
-        .Replace("%2B", "+")
-        .Replace("%7C", "|")
-        .Replace("%3E", ">")
-        .Replace("%3C", "<")
-        .Replace("%2C", ",")
-        .Replace("%24", "$")
-        .Replace("%25", "%")
+        .Replace("\\x0A", "\n")
+        .Replace("\\x3D", "=")
+        .Replace("\\x40", "@")
+        .Replace("\\x2B", "+")
+        .Replace("\\x7C", "|")
+        .Replace("\\x3E", ">")
+        .Replace("\\x3C", "<")
+        .Replace("\\x2C", ",")
+        .Replace("\\x24", "%")
+        .Replace("\\x5c", "\\")
         .ToString();
     }
     public static StringBuilder EncodeRoom(Room room)
@@ -47,7 +47,7 @@ public class RoomFormatter
         {
             var ToRoom = exit.To;
             var Cost = exit.Cost == 1 ? "" : exit.Cost.ToString();
-            var ExitDef = new StringBuilder(Escape(ToRoom)).Append(Cost == "" ? "" : ("$" + Escape(Cost)));
+            var ExitDef = new StringBuilder(Escape(ToRoom)).Append(Cost == "" ? "" : ("%" + Escape(Cost)));
             var CondExit = new StringBuilder(Escape(exit.Command));
             foreach (var extag in exit.Conditions)
             {
@@ -153,7 +153,7 @@ public class RoomFormatter
                 {
                     continue;
                 }
-                var ExitAndCost = CommandAndExitDef[1].Split("$", 2);
+                var ExitAndCost = CommandAndExitDef[1].Split("%", 2);
                 exit.To = Unescape(ExitAndCost[0].Trim());
                 if (exit.To == "")
                 {
