@@ -5,40 +5,30 @@ using System.IO;
 
 using HellMapManager.Models;
 using System;
+using HellMapManager.Utils;
 
 
 namespace HellMapManager.Services;
 public class RoomFormatter
 {
+    public static readonly Escaper Escaper = (new Escaper())
+    .WithItem("\n", "\\n")
+    .WithItem("=", "\\=")
+    .WithItem("@", "\\@")
+    .WithItem("+", "\\+")
+    .WithItem("|", "\\|")
+    .WithItem(">", "\\>")
+    .WithItem("<", "\\<")
+    .WithItem(",", "\\,")
+    .WithItem("%", "\\%")
+    ;
     public static string Escape(string val)
     {
-        return new StringBuilder(val)
-        .Replace("\\", "\\x5c")
-        .Replace("\n", "\\x0A")
-        .Replace("=", "\\x3D")
-        .Replace("@", "\\x40")
-        .Replace("+", "\\x2B")
-        .Replace("|", "\\x7C")
-        .Replace(">", "\\x3E")
-        .Replace("<", "\\x3C")
-        .Replace(",", "\\x2C")
-        .Replace("%", "\\x24")
-        .ToString();
+        return Escaper.Escape(val);
     }
     public static string Unescape(string val)
     {
-        return new StringBuilder(val)
-        .Replace("\\x0A", "\n")
-        .Replace("\\x3D", "=")
-        .Replace("\\x40", "@")
-        .Replace("\\x2B", "+")
-        .Replace("\\x7C", "|")
-        .Replace("\\x3E", ">")
-        .Replace("\\x3C", "<")
-        .Replace("\\x2C", ",")
-        .Replace("\\x24", "%")
-        .Replace("\\x5c", "\\")
-        .ToString();
+        return Escaper.Unescape(val);
     }
     public static StringBuilder EncodeRoom(Room room)
     {
