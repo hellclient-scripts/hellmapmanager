@@ -10,10 +10,10 @@
   xmlns:regions="clr-namespace:HellMapManager.Views.Mapfile.Regions"
   xmlns:rooms="clr-namespace:HellMapManager.Views.Mapfile.Rooms"
   xmlns:routes="clr-namespace:HellMapManager.Views.Mapfile.Routes"
-  xmlns:traces="clr-namespace:HellMapManager.Views.Mapfile.Traces"
   xmlns:shortcuts="clr-namespace:HellMapManager.Views.Mapfile.Shortcuts"
+  xmlns:snapshots="clr-namespace:HellMapManager.Views.Mapfile.Snapshots"
+  xmlns:traces="clr-namespace:HellMapManager.Views.Mapfile.Traces"
   xmlns:variables="clr-namespace:HellMapManager.Views.Mapfile.Variables"
-
   xmlns:vm="using:HellMapManager.ViewModels"
   d:DesignHeight="450"
   d:DesignWidth="800"
@@ -52,7 +52,7 @@
         <variables:Variables HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="快照">
-        <TextBlock Margin="5">This is tab 3 content</TextBlock>
+        <snapshots:Snapshots HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
     </TabControl>
   </DockPanel>

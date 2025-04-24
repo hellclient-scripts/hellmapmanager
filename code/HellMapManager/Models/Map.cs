@@ -279,6 +279,15 @@ public class MapFile
         Map.Variables.RemoveAll(r => r.Key == key);
         Cache.Variables.Remove(key);
     }
+    public void InsertSnapshot(Snapshot model)
+    {
+        RemoveSnapshot(model);
+        Map.Snapshots.Add(model);
+    }
+    public void RemoveSnapshot(Snapshot model)
+    {
+        Map.Snapshots.RemoveAll(r => r.Key == model.Key && r.Type == model.Type && r.Value == model.Value);
+    }
     public void RebuldCache()
     {
         Cache = new Cache();

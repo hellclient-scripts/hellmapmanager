@@ -64,7 +64,7 @@
             Click="OnClose"
             IsCancel="True"
             IsVisible="{Binding !Editing}">
-            取消
+            关闭
           </Button>
         </WrapPanel>
       </Panel>

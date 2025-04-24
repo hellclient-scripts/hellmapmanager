@@ -3,12 +3,12 @@ namespace HellMapManager.States;
 
 public partial class AppState
 {
-    public void InsertVariable(Variable landmark)
+    public void InsertVariable(Variable model)
     {
         if (Current != null)
         {
 
-            Current.InsertVariable(landmark);
+            Current.InsertVariable(model);
             Current.Map.Arrange();
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);

@@ -1,15 +1,16 @@
 <Window
-  x:Class="HellMapManager.Windows.EditRouteWindow.EditRouteWindow"
+  x:Class="HellMapManager.Windows.EditSnapshotWindow.EditSnapshotWindow"
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:vm="using:HellMapManager.Windows.EditRouteWindow"
+  xmlns:roompicker="using:HellMapManager.Views.Components.RoomPicker"
+  xmlns:vm="using:HellMapManager.Windows.EditSnapshotWindow"
   Title="{Binding Title}"
   Width="700"
   d:DesignHeight="450"
   d:DesignWidth="800"
-  x:DataType="vm:EditRouteWindowViewModel"
+  x:DataType="vm:EditSnapshotWindowViewModel"
   Icon="/Assets/app.ico"
   mc:Ignorable="d">
   <Window.Styles>
@@ -48,12 +49,6 @@
             保存
           </Button>
           <Button
-            Classes="accent"
-            Click="OnEnterEditing"
-            IsVisible="{Binding Editable}">
-            编辑
-          </Button>
-          <Button
             Click="OnCancel"
             IsCancel="True"
             IsVisible="{Binding Editing}">
@@ -71,38 +66,34 @@
         <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
-            <TextBox Text="{Binding Item.Key}" Watermark="路线主键" />
+            <TextBox Text="{Binding Item.Key}" Watermark="快照主键" />
+            <TextBlock Classes="Label" Text="类型:" />
+            <TextBox Text="{Binding Item.Type}" Watermark="快照类型" />
+            <TextBlock Classes="Label" Text="值:" />
+            <TextBox
+              AcceptsReturn="True"
+              Classes="TextArea"
+              Text="{Binding Item.Value}"
+              Watermark="快照值" />
             <TextBlock Classes="Label" Text="分组:" />
             <TextBox Text="{Binding Item.Group}" Watermark="分组" />
-            <TextBlock Classes="Label" Text="房间列表,一行一个房间" />
-            <TextBox
-              AcceptsReturn="True"
-              Classes="TextArea"
-              Text="{Binding Item.Rooms}"
-              Watermark="房间列表" />
-            <TextBlock Classes="Label" Text="描述:" />
-            <TextBox
-              AcceptsReturn="True"
-              Classes="TextArea"
-              Text="{Binding Item.Desc}"
-              Watermark="路线描述" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
             <Panel Classes="Content">
               <SelectableTextBlock Text="{Binding Item.Key}" />
             </Panel>
+            <TextBlock Classes="Label" Text="类型:" />
+            <Panel Classes="Content">
+              <SelectableTextBlock Text="{Binding Item.Type}" />
+            </Panel>
+            <TextBlock Classes="Label" Text="值:" />
+            <Panel Classes="Content TextArea">
+              <SelectableTextBlock Text="{Binding Item.Value}" />
+            </Panel>
             <TextBlock Classes="Label" Text="分组:" />
             <Panel Classes="Content">
               <SelectableTextBlock Text="{Binding Item.Group}" />
-            </Panel>
-            <TextBlock Classes="Label" Text="房间列表:" />
-            <Panel Classes="Content">
-              <SelectableTextBlock Text="{Binding Item.Rooms}" />
-            </Panel>
-            <TextBlock Classes="Label" Text="描述:" />
-            <Panel Classes="Content">
-              <SelectableTextBlock Classes="TextArea" Text="{Binding Item.Desc}" />
             </Panel>
           </StackPanel>
         </StackPanel>

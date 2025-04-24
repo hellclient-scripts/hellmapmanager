@@ -24,7 +24,6 @@
                </Style>
                <Style Selector="TextBlock.Desc">
                   <Setter Property="Margin" Value="0 5" />
-                  <Setter Property="FontStyle" Value="Italic" />
                   <Setter Property="Foreground" Value="#FF333333" />
                </Style>
                <Style Selector="TextBlock">
