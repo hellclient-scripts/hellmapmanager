@@ -24,14 +24,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateRegion(Region old, Region current)
+    public void UpdateRegion(string key, Region current)
     {
         if (Current != null)
         {
 
-            if (old.Key != current.Key)
+            if (key != current.Key)
             {
-                Current.RemoveRegion(old.Key);
+                Current.RemoveRegion(key);
             }
             Current.InsertRegion(current);
             Current.Map.Arrange();

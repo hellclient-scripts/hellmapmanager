@@ -24,14 +24,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateRoute(Route old, Route current)
+    public void UpdateRoute(string key, Route current)
     {
         if (Current != null)
         {
 
-            if (old.Key != current.Key)
+            if (key != current.Key)
             {
-                Current.RemoveRoute(old.Key);
+                Current.RemoveRoute(key);
             }
             Current.InsertRoute(current);
             Current.Map.Arrange();

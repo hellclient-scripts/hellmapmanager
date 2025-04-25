@@ -89,7 +89,7 @@ public partial class Snapshots : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Snapshot model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该快照吗？") == false) return;
-            AppState.Main.RemoveSnapshot(model);
+            AppState.Main.RemoveSnapshot(model.Key,model.Type,model.Value);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

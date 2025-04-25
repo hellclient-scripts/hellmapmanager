@@ -59,7 +59,7 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRegion(alias, result);
+                    AppState.Main.UpdateRegion(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRegion(alias, result);
+                    AppState.Main.UpdateRegion(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

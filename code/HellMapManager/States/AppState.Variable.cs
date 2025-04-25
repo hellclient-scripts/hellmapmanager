@@ -24,14 +24,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateVariable(Variable old, Variable current)
+    public void UpdateVariable(string key, Variable current)
     {
         if (Current != null)
         {
 
-            if (old.Key != current.Key)
+            if (key != current.Key)
             {
-                Current.RemoveVariable(old.Key);
+                Current.RemoveVariable(key);
             }
             Current.InsertVariable(current);
             Current.Map.Arrange();

@@ -59,7 +59,7 @@ public partial class Aliases : UserControl
                 var result = await window.ShowDialog<Alias?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateAlias(alias, result);
+                    AppState.Main.UpdateAlias(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Aliases : UserControl
                 var result = await window.ShowDialog<Alias?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateAlias(alias, result);
+                    AppState.Main.UpdateAlias(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

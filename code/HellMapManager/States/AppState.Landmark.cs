@@ -24,14 +24,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateLandmark(Landmark old, Landmark current)
+    public void UpdateLandmark(string key, string type, Landmark current)
     {
         if (Current != null)
         {
 
-            if (old.Key != current.Key)
+            if (key != current.Key || type != current.Type)
             {
-                Current.RemoveLandmark(old.Key, old.Type);
+                Current.RemoveLandmark(key, type);
             }
             Current.InsertLandmark(current);
             Current.Map.Arrange();

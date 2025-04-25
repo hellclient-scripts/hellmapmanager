@@ -59,7 +59,7 @@ public partial class Shortcuts : UserControl
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateShortcut(alias, result);
+                    AppState.Main.UpdateShortcut(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Shortcuts : UserControl
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateShortcut(alias, result);
+                    AppState.Main.UpdateShortcut(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

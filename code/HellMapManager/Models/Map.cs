@@ -281,10 +281,10 @@ public class MapFile
     }
     public void InsertSnapshot(Snapshot model)
     {
-        RemoveSnapshot(model);
+        RemoveSnapshot(model.Key, model.Type, model.Value);
         Map.Snapshots.Add(model);
     }
-    public void RemoveSnapshot(string key,string type,string value)
+    public void RemoveSnapshot(string key, string type, string value)
     {
         Map.Snapshots.RemoveAll(r => r.Key == key && r.Type == type && r.Value == value);
     }

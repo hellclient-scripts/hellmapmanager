@@ -1,3 +1,4 @@
+using Avalonia.Input;
 using HellMapManager.Models;
 using HellMapManager.Services;
 namespace HellMapManager.States;
@@ -34,14 +35,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateRoom(Room old, Room current)
+    public void UpdateRoom(string key, Room current)
     {
         if (Current != null)
         {
 
-            if (old.Key != current.Key)
+            if (key != current.Key)
             {
-                Current.RemoveRoom(old.Key);
+                Current.RemoveRoom(key);
             }
             Current.InsertRoom(current);
             Current.Map.Arrange();

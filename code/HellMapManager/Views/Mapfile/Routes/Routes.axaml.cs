@@ -59,7 +59,7 @@ public partial class Routes : UserControl
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoute(alias, result);
+                    AppState.Main.UpdateRoute(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Routes : UserControl
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoute(alias, result);
+                    AppState.Main.UpdateRoute(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

@@ -59,7 +59,7 @@ public partial class Traces : UserControl
                 var result = await window.ShowDialog<Trace?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateTrace(alias, result);
+                    AppState.Main.UpdateTrace(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Traces : UserControl
                 var result = await window.ShowDialog<Trace?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateTrace(alias, result);
+                    AppState.Main.UpdateTrace(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

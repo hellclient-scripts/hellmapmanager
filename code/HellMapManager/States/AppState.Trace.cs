@@ -24,14 +24,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateTrace(Trace old, Trace current)
+    public void UpdateTrace(string key, Trace current)
     {
         if (Current != null)
         {
 
-            if (old.Key != current.Key)
+            if (key != current.Key)
             {
-                Current.RemoveTrace(old.Key);
+                Current.RemoveTrace(key);
             }
             Current.InsertTrace(current);
             Current.Map.Arrange();

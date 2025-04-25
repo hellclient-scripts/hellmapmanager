@@ -24,14 +24,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateShortcut(Shortcut old, Shortcut current)
+    public void UpdateShortcut(string key, Shortcut current)
     {
         if (Current != null)
         {
 
-            if (old.Key != current.Key)
+            if (key != current.Key)
             {
-                Current.RemoveShortcut(old.Key);
+                Current.RemoveShortcut(key);
             }
             Current.InsertShortcut(current);
             Current.Map.Arrange();

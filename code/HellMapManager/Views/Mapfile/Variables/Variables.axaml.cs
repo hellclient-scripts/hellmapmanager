@@ -58,7 +58,7 @@ public partial class Variables : UserControl
                 var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateVariable(alias, result);
+                    AppState.Main.UpdateVariable(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -78,7 +78,7 @@ public partial class Variables : UserControl
                 var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateVariable(alias, result);
+                    AppState.Main.UpdateVariable(alias.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

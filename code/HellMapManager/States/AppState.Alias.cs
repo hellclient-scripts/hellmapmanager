@@ -24,14 +24,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateAlias(Alias old, Alias current)
+    public void UpdateAlias(string key, Alias current)
     {
         if (Current != null)
         {
 
-            if (old.Key != current.Key)
+            if (key != current.Key)
             {
-                Current.RemoveAlias(old.Key);
+                Current.RemoveAlias(key);
             }
             Current.InsertAlias(current);
             Current.Map.Arrange();

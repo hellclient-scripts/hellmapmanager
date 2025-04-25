@@ -58,7 +58,7 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateLandmark(alias, result);
+                    AppState.Main.UpdateLandmark(alias.Key, alias.Type, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -78,7 +78,7 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateLandmark(alias, result);
+                    AppState.Main.UpdateLandmark(alias.Key, alias.Type, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

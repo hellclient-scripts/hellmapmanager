@@ -14,12 +14,12 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveSnapshot(Snapshot model)
+    public void RemoveSnapshot(string key,string type,string value)
     {
         if (Current != null)
         {
 
-            Current.RemoveSnapshot(model.Key, model.Type, model.Value);
+            Current.RemoveSnapshot(key, type, value);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
