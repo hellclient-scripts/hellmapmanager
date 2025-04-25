@@ -108,12 +108,13 @@
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-               <DataGridTemplateColumn Width="*" Header="">
+               <DataGridTemplateColumn Width="*" Header="消息">
                   <DataGridTemplateColumn.CellTemplate>
-                     <DataTemplate />
+                     <DataTemplate>
+                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Message}" />
+                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-
                <DataGridTemplateColumn Width="160" Header="操作">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>

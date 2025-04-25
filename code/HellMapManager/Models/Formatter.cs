@@ -133,7 +133,7 @@ public class HMMFormatter
     public static KeyValue DecodeKeyValue1(string val)
     {
         var decoded = val.Split(TokenKey1.Unescaped, 2);
-        return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
+        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
     public static string EncodeKeyAndValue2(string key, string val)
     {
@@ -147,7 +147,7 @@ public class HMMFormatter
     public static KeyValue DecodeKeyValue2(string val)
     {
         var decoded = val.Split(TokenKey2.Unescaped, 2);
-        return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
+        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
     public static string EncodeKeyAndValue3(string key, string val)
     {
@@ -160,7 +160,7 @@ public class HMMFormatter
     public static KeyValue DecodeKeyValue3(string val)
     {
         var decoded = val.Split(TokenKey3.Unescaped, 2);
-        return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
+        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
     public static string EncodeKeyAndValue4(string key, string val)
     {
@@ -173,7 +173,7 @@ public class HMMFormatter
     public static KeyValue DecodeKeyValue4(string val)
     {
         var decoded = val.Split(TokenKey4.Unescaped, 2);
-        return new KeyValue(decoded[0], decoded.Count() > 1 ? decoded[1] : "");
+        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
     public static string EncodeToggleKeyValue1(ToggleKeyValue kv)
     {

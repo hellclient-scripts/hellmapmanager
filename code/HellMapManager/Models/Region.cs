@@ -45,6 +45,7 @@ public partial class Region
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
 
+    public string Message { get; set; } = "";
     public List<RegionItem> Items { get; set; } = [];
     public bool Validated()
     {
@@ -58,6 +59,7 @@ public partial class Region
             Group = Group,
             Desc = Desc,
             Items = Items.ConvertAll(d => d),
+            Message = Message,
         };
     }
     public const string EncodeKey = "Region";
@@ -70,6 +72,7 @@ public partial class Region
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
                 HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeToggleKeyValue2(ToggleKeyValue.FromRegionItem(d)))),//3
+                HMMFormatter.Escape(Message),//4
             ])
         );
     }
@@ -82,6 +85,7 @@ public partial class Region
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
         result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleKeyValue2(d).ToRegionItem());
+        result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
 
@@ -93,7 +97,8 @@ public partial class Region
     {
         if (Key.Contains(val) ||
             Desc.Contains(val) ||
-            Group.Contains(val))
+            Group.Contains(val) ||
+            Message.Contains(val))
         {
             return true;
         }

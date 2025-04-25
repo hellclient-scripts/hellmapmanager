@@ -20,6 +20,7 @@ public partial class RegionForm : ObservableObject
         Desc = region.Desc;
         Items = [.. region.Items];
         ExternalValidator = checker;
+        Message=region.Message;
     }
     public Region ToRegion()
     {
@@ -29,6 +30,7 @@ public partial class RegionForm : ObservableObject
             Group = Group,
             Desc = Desc,
             Items = new(Items),
+            Message = Message,
         };
     }
     public void Arrange()
@@ -38,6 +40,7 @@ public partial class RegionForm : ObservableObject
     public string Key { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
+    public string Message{ get; set; } = "";
     public ObservableCollection<RegionItem> Items { get; set; } = [];
 
     public string Validate()

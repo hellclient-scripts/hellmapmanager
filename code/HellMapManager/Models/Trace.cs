@@ -10,6 +10,7 @@ public partial class Trace
     public string Key { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
+    public string Message { get; set; } = "";
 
     public List<string> Locations { get; set; } = [];
     public Trace Clone()
@@ -18,6 +19,8 @@ public partial class Trace
         {
             Key = Key,
             Locations = Locations.GetRange(0, Locations.Count),
+            Group = Group,
+            Message = Message,
         };
 
     }
@@ -35,6 +38,7 @@ public partial class Trace
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
                 HMMFormatter.EncodeList2(Locations.ConvertAll(HMMFormatter.Escape)),//3
+                HMMFormatter.Escape(Message),//4
             ])
         );
     }
@@ -47,6 +51,7 @@ public partial class Trace
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
         result.Locations = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(HMMFormatter.Unescape);
+        result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
 
@@ -80,7 +85,8 @@ public partial class Trace
     {
         if (Key.Contains(val) ||
             Desc.Contains(val) ||
-            Group.Contains(val))
+            Group.Contains(val) ||
+            Message.Contains(val))
         {
             return true;
         }

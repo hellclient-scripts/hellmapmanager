@@ -31,9 +31,9 @@
             </StackPanel.Styles>
             <TextBlock Classes="Title">快照列表</TextBlock>
             <TextBlock Classes="Desc">
-               快照是记录房间再某个时间点的特定状态<LineBreak />
-               一般情况下，快照只有新建，删除的操作<LineBreak />
-               如果同主键，类型，值的快照存在，那么就是快照做一次更新，只变动更新时间。
+               快照是记录特定房间在某个时间点的特定状态。<LineBreak />
+               一般情况下，快照只有创建，删除的操作。<LineBreak />
+               创建快照时如果同主键，类型，值的快照存在，那么就是快照做一次刷新，只变动更新时间。
                </TextBlock>
          </StackPanel>
       </ScrollViewer>

@@ -20,6 +20,7 @@ public partial class AliasForm : ObservableObject
         Value = alias.Value;
         Group = alias.Group;
         Desc = alias.Desc;
+        Message=alias.Message;
         ExternalValidator = checker;
     }
     public Alias ToAlias()
@@ -30,6 +31,7 @@ public partial class AliasForm : ObservableObject
             Value = Value,
             Group = Group,
             Desc = Desc,
+            Message = Message,
         };
     }
     public void Arrange()
@@ -40,6 +42,7 @@ public partial class AliasForm : ObservableObject
     public string Value { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
+    public string Message{ get; set; } = "";
     public string Validate()
     {
         var err = ExternalValidator(this);

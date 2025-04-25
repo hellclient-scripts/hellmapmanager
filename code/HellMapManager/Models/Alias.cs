@@ -1,6 +1,7 @@
 
 
 
+
 namespace HellMapManager.Models;
 
 public partial class Alias
@@ -10,6 +11,7 @@ public partial class Alias
     public string Value { get; set; } = "";
     public string Desc { get; set; } = "";
     public string Group { get; set; } = "";
+    public string Message { get; set; } = "";
     public bool Validated()
     {
         return Key != "" && Value != "";
@@ -22,6 +24,7 @@ public partial class Alias
             Value = Value,
             Desc = Desc,
             Group = Group,
+            Message = Message,
         };
     }
     public const string EncodeKey = "Alias";
@@ -31,8 +34,10 @@ public partial class Alias
             HMMFormatter.EncodeList1([
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Value),//1
-                HMMFormatter.Escape(Desc),//2
-                HMMFormatter.Escape(Group),//3
+                HMMFormatter.Escape(Group),//2
+                HMMFormatter.Escape(Desc),//3
+                HMMFormatter.Escape(Message),//4
+
             ])
         );
     }
@@ -43,8 +48,9 @@ public partial class Alias
         var list = HMMFormatter.DecodeList1(kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Value = HMMFormatter.UnescapeAt(list, 1);
-        result.Desc = HMMFormatter.UnescapeAt(list, 2);
-        result.Group = HMMFormatter.UnescapeAt(list, 3);
+        result.Group = HMMFormatter.UnescapeAt(list, 2);
+        result.Desc = HMMFormatter.UnescapeAt(list, 3);
+        result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
 }
@@ -55,7 +61,9 @@ public partial class Alias
         if (Key.Contains(val) ||
             Value.Contains(val) ||
             Desc.Contains(val) ||
-            Group.Contains(val))
+            Group.Contains(val) ||
+            Message.Contains(val)
+            )
         {
             return true;
         }

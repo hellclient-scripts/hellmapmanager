@@ -20,6 +20,7 @@ public partial class RouteForm : ObservableObject
         Desc = route.Desc;
         _rooms = route.Rooms;
         ExternalValidator = checker;
+        Message=route.Message;
     }
     public Route ToRoute()
     {
@@ -29,6 +30,7 @@ public partial class RouteForm : ObservableObject
             Group = Group,
             Desc = Desc,
             Rooms = _rooms,
+            Message = Message,
         };
     }
     public void Arrange()
@@ -39,6 +41,7 @@ public partial class RouteForm : ObservableObject
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
     private List<string> _rooms = [];
+    public string Message{ get; set; } = "";
     public string Rooms
     {
         get => string.Join("\n", _rooms);

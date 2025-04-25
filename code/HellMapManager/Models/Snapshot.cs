@@ -35,10 +35,10 @@ public partial class Snapshot
         return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
             HMMFormatter.EncodeList1([
                 HMMFormatter.Escape(Key),//0
-                HMMFormatter.Escape(Timestamp.ToString()),//1
-                HMMFormatter.Escape(Group),//2
-                HMMFormatter.Escape(Type),//3
-                                HMMFormatter.Escape(Value),//4
+                HMMFormatter.Escape(Type),//1
+                HMMFormatter.Escape(Value),//2
+                HMMFormatter.Escape(Group),//3
+                HMMFormatter.Escape(Timestamp.ToString()),//4
             ])
         );
     }
@@ -48,10 +48,10 @@ public partial class Snapshot
         var kv = HMMFormatter.DecodeKeyValue1(val);
         var list = HMMFormatter.DecodeList1(kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
-        result.Timestamp = HMMFormatter.UnescapeIntAt(list, 1, -1);
-        result.Group = HMMFormatter.UnescapeAt(list, 2);
-        result.Type = HMMFormatter.UnescapeAt(list, 3);
-        result.Value = HMMFormatter.UnescapeAt(list, 4);
+        result.Type = HMMFormatter.UnescapeAt(list, 1);
+        result.Value = HMMFormatter.UnescapeAt(list, 2);
+        result.Group = HMMFormatter.UnescapeAt(list, 3);
+        result.Timestamp = HMMFormatter.UnescapeIntAt(list, 4, -1);
         return result;
     }
     public Snapshot Clone()

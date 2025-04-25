@@ -20,6 +20,7 @@ public partial class TraceForm : ObservableObject
         Desc = trace.Desc;
         _locations = trace.Locations;
         ExternalValidator = checker;
+        Message = trace.Message;
     }
     public Trace ToTrace()
     {
@@ -29,6 +30,7 @@ public partial class TraceForm : ObservableObject
             Group = Group,
             Desc = Desc,
             Locations = _locations,
+            Message = Message,
         };
     }
     public void Arrange()
@@ -39,6 +41,7 @@ public partial class TraceForm : ObservableObject
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
     private List<string> _locations = [];
+    public string Message { get; set; } = "";
     public string Rooms
     {
         get => string.Join("\n", _locations);

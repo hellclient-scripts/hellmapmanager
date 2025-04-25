@@ -35,8 +35,6 @@ public class EscaperTest
         Assert.Equal("This is a test $0 string.", escaper.Unescape("This is a test \\$0 string."));
         Assert.Equal("This is a test $1 string.", escaper.Unescape("This is a test \\$1 string."));
         Assert.Equal("This is a test $2 string.", escaper.Unescape("This is a test \\$2 string."));
-
-
     }
     [Fact]
     public void TestInternal()
@@ -48,7 +46,7 @@ public class EscaperTest
         Assert.Equal("$0", escaper.Unescape("\\$0"));
         Assert.Equal("$1", escaper.Unescape("\\$1"));
         Assert.Equal("$2", escaper.Unescape("\\$2"));
-        
+
         Assert.Equal("\\$", escaper.Escape("$"));
         Assert.Equal("\\$0", escaper.Escape("$0"));
         Assert.Equal("\\$1", escaper.Escape("$1"));
@@ -56,7 +54,6 @@ public class EscaperTest
 
         Assert.Equal("$$", escaper.Unescape("\\$\\$"));
         Assert.Equal("\\$\\$", escaper.Escape("$$"));
-
     }
     [Fact]
     public void TestMulti()
@@ -67,6 +64,5 @@ public class EscaperTest
         .WithItem("$", "\\$")
         ;
         Assert.Equal("a\n%$b\\n\\%\\$$0$1\\$0\\$1", escaper.Unescape("a\\n\\%\\$b\\\\n\\\\%\\\\$\\$0\\$1\\\\$0\\\\$1"));
-
     }
 }

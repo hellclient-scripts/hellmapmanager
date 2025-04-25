@@ -9,7 +9,7 @@ public partial class Route
     public string Key { get; set; } = "";
     public string Desc { get; set; } = "";
     public string Group { get; set; } = "";
-
+    public string Message { get; set; } = "";
     public List<string> Rooms = [];
     public bool Validated()
     {
@@ -25,6 +25,7 @@ public partial class Route
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
                 HMMFormatter.EncodeList2(Rooms.ConvertAll(HMMFormatter.Escape)),//3
+                HMMFormatter.Escape(Message),//4
             ])
         );
     }
@@ -37,6 +38,7 @@ public partial class Route
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
         result.Rooms = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(HMMFormatter.Unescape);
+        result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
 
@@ -59,7 +61,8 @@ public partial class Route
     {
         if (Key.Contains(val) ||
             Desc.Contains(val) ||
-            Group.Contains(val))
+            Group.Contains(val) ||
+            Message.Contains(val))
         {
             return true;
         }
