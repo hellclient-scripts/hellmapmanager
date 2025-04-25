@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using HellMapManager.Utils;
 namespace HellMapManager.Models;
 
 public class KeyValue(string key, string value)
@@ -67,7 +67,7 @@ public class ToggleKeyValues(string key, List<string> values, bool not)
     public bool Not = not;
     public string Key = key;
     public List<string> Values = values;
-    public string NotLabel { get => Not ? HMMFormatter.TokenNot.Unescaped : ""; }
+    public string NotLabel { get => Not ? "!" : ""; }
     public TypedConditions ToTypedConditions()
     {
         return new TypedConditions(HMMFormatter.Unescape(Key), Values.ConvertAll(HMMFormatter.Unescape), Not);
@@ -78,58 +78,47 @@ public class ToggleKeyValues(string key, List<string> values, bool not)
     }
 }
 
-public class Token(string unesacped, string escaped)
-{
-    public string Escaped { get; set; } = escaped;
-    public string Unescaped { get; set; } = unesacped;
-}
+
 
 //四层简单结构格式化工具
 //只支持列表和键值对列表，最多支持3层
 public class HMMFormatter
 {
-    public static Token TokenEscape { get; } = new("%", "%25");
-    public static Token TokenKey1 { get; } = new(">", "%3E");
-    public static Token TokenKey2 { get; } = new(":", "%3A");
-    public static Token TokenKey3 { get; } = new("=", "%3D");
-    public static Token TokenKey4 { get; } = new("@", "%40");
-    public static Token TokenSep1 { get; } = new("|", "%7C");
-    public static Token TokenSep2 { get; } = new(";", "%3B");
-    public static Token TokenSep3 { get; } = new(",", "%2C");
-    public static Token TokenSep4 { get; } = new("&", "%26");
-    public static Token TokenNot { get; } = new("!", "%21");
-    public static Token TokenNewline { get; } = new("\n", "%0A");
+    private class Token(string unesacped, string escaped)
+    {
+        public string Escaped { get; set; } = escaped;
+        public string Unescaped { get; set; } = unesacped;
+    }
+    private static Token TokenKey1 { get; } = new(">", "\\>");
+    private static Token TokenKey2 { get; } = new(":", "\\:");
+    private static Token TokenKey3 { get; } = new("=", "\\=");
+    private static Token TokenKey4 { get; } = new("@", "\\@");
+    private static Token TokenSep1 { get; } = new("|", "\\|");
+    private static Token TokenSep2 { get; } = new(";", "\\;");
+    private static Token TokenSep3 { get; } = new(",", "\\,");
+    private static Token TokenSep4 { get; } = new("&", "\\&");
+    private static Token TokenNot { get; } = new("!", "\\!");
+    private static Token TokenNewline { get; } = new("\n", "\\n");
+    public static readonly Escaper Escaper = (new Escaper())
+        .WithItem(TokenKey1.Unescaped, TokenKey1.Escaped)
+        .WithItem(TokenKey2.Unescaped, TokenKey2.Escaped)
+        .WithItem(TokenKey3.Unescaped, TokenKey3.Escaped)
+        .WithItem(TokenKey4.Unescaped, TokenKey4.Escaped)
+        .WithItem(TokenSep1.Unescaped, TokenSep1.Escaped)
+        .WithItem(TokenSep2.Unescaped, TokenSep2.Escaped)
+        .WithItem(TokenSep3.Unescaped, TokenSep3.Escaped)
+        .WithItem(TokenSep4.Unescaped, TokenSep4.Escaped)
+        .WithItem(TokenNot.Unescaped, TokenNot.Escaped)
+        .WithItem(TokenNewline.Unescaped, TokenNewline.Escaped)
+;
+
     public static string Escape(string val)
     {
-        return new StringBuilder(val)
-        .Replace(TokenEscape.Unescaped, TokenEscape.Escaped)
-        .Replace(TokenKey1.Unescaped, TokenKey1.Escaped)
-        .Replace(TokenKey2.Unescaped, TokenKey2.Escaped)
-        .Replace(TokenKey3.Unescaped, TokenKey3.Escaped)
-        .Replace(TokenKey4.Unescaped, TokenKey4.Escaped)
-        .Replace(TokenSep1.Unescaped, TokenSep1.Escaped)
-        .Replace(TokenSep2.Unescaped, TokenSep2.Escaped)
-        .Replace(TokenSep3.Unescaped, TokenSep3.Escaped)
-        .Replace(TokenSep4.Unescaped, TokenSep4.Escaped)
-        .Replace(TokenNot.Unescaped, TokenNot.Escaped)
-        .Replace(TokenNewline.Unescaped, TokenNewline.Escaped)
-        .ToString();
+        return Escaper.Escape(val);
     }
     public static string Unescape(string val)
     {
-        return new StringBuilder(val)
-        .Replace(TokenNewline.Escaped, TokenNewline.Unescaped)
-        .Replace(TokenNot.Escaped, TokenNot.Unescaped)
-        .Replace(TokenSep4.Escaped, TokenSep4.Unescaped)
-        .Replace(TokenSep3.Escaped, TokenSep3.Unescaped)
-        .Replace(TokenSep2.Escaped, TokenSep2.Unescaped)
-        .Replace(TokenSep1.Escaped, TokenSep1.Unescaped)
-        .Replace(TokenKey4.Escaped, TokenKey4.Unescaped)
-        .Replace(TokenKey3.Escaped, TokenKey3.Unescaped)
-        .Replace(TokenKey2.Escaped, TokenKey2.Unescaped)
-        .Replace(TokenKey1.Escaped, TokenKey1.Unescaped)
-        .Replace(TokenEscape.Escaped, TokenEscape.Unescaped)
-        .ToString();
+        return Escaper.Unescape(val);
     }
     public static string EncodeKeyAndValue1(string key, string val)
     {
