@@ -284,9 +284,9 @@ public class MapFile
         RemoveSnapshot(model);
         Map.Snapshots.Add(model);
     }
-    public void RemoveSnapshot(Snapshot model)
+    public void RemoveSnapshot(string key,string type,string value)
     {
-        Map.Snapshots.RemoveAll(r => r.Key == model.Key && r.Type == model.Type && r.Value == model.Value);
+        Map.Snapshots.RemoveAll(r => r.Key == key && r.Type == type && r.Value == value);
     }
     public void RebuldCache()
     {

@@ -19,7 +19,7 @@ public partial class AppState
         if (Current != null)
         {
 
-            Current.RemoveSnapshot(model);
+            Current.RemoveSnapshot(model.Key, model.Type, model.Value);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
