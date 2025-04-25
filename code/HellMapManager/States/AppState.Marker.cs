@@ -3,37 +3,37 @@ namespace HellMapManager.States;
 
 public partial class AppState
 {
-    public void InsertAlias(Alias alias)
+    public void InsertMarker(Marker marker)
     {
         if (Current != null)
         {
 
-            Current.InsertAlias(alias);
+            Current.InsertMarker(marker);
             Current.Map.Arrange();
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveAlias(string key)
+    public void RemoveMarker(string key)
     {
         if (Current != null)
         {
 
-            Current.RemoveAlias(key);
+            Current.RemoveMarker(key);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateAlias(string key, Alias current)
+    public void UpdateMarker(string key, Marker current)
     {
         if (Current != null)
         {
 
             if (key != current.Key)
             {
-                Current.RemoveAlias(key);
+                Current.RemoveMarker(key);
             }
-            Current.InsertAlias(current);
+            Current.InsertMarker(current);
             Current.Map.Arrange();
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);

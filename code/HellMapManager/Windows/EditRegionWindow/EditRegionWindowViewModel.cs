@@ -58,7 +58,7 @@ public class EditRegionWindowViewModel : ObservableObject
     }
     public string Checker(RegionForm form)
     {
-        if (AppState.Main.Current!.Cache.Aliases.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
+        if (AppState.Main.Current!.Cache.Markers.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
         {
             return "地区主键已存在";
         }

@@ -20,7 +20,7 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         InitOverview();
         InitRooms();
-        InitAliases();
+        InitMarkers();
         InitRoutes();
         InitTraces();
         InitRegions();
@@ -32,7 +32,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public partial void InitOverview();
     public partial void InitRooms();
-    public partial void InitAliases();
+    public partial void InitMarkers();
     public partial void InitRoutes();
     public partial void InitTraces();
     public partial void InitRegions();

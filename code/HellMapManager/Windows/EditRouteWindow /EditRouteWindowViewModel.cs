@@ -60,7 +60,7 @@ public class EditRouteWindowViewModel : ObservableObject
     }
     public string Checker(RouteForm form)
     {
-        if (AppState.Main.Current!.Cache.Aliases.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
+        if (AppState.Main.Current!.Cache.Markers.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
         {
             return "路线主键已存在";
         }

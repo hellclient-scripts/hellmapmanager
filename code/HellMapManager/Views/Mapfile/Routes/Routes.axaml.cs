@@ -48,18 +48,18 @@ public partial class Routes : UserControl
     }
     public async void OnEdit(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Route alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Route model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditRouteWindow()
                 {
-                    DataContext = new EditRouteWindowViewModel(alias, false)
+                    DataContext = new EditRouteWindowViewModel(model, false)
                 };
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoute(alias.Key, result);
+                    AppState.Main.UpdateRoute(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -68,18 +68,18 @@ public partial class Routes : UserControl
     }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Route alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Route model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditRouteWindow()
                 {
-                    DataContext = new EditRouteWindowViewModel(alias, true)
+                    DataContext = new EditRouteWindowViewModel(model, true)
                 };
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoute(alias.Key, result);
+                    AppState.Main.UpdateRoute(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

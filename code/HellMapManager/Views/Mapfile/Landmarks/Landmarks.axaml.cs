@@ -47,18 +47,18 @@ public partial class Landmarks : UserControl
     }
     public async void OnEdit(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Landmark alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Landmark marker)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditLandmarkWindow()
                 {
-                    DataContext = new EditLandmarkWindowViewModel(alias, false)
+                    DataContext = new EditLandmarkWindowViewModel(marker, false)
                 };
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateLandmark(alias.Key, alias.Type, result);
+                    AppState.Main.UpdateLandmark(marker.Key, marker.Type, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -67,18 +67,18 @@ public partial class Landmarks : UserControl
     }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Landmark alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Landmark marker)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditLandmarkWindow()
                 {
-                    DataContext = new EditLandmarkWindowViewModel(alias, true)
+                    DataContext = new EditLandmarkWindowViewModel(marker, true)
                 };
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateLandmark(alias.Key, alias.Type, result);
+                    AppState.Main.UpdateLandmark(marker.Key, marker.Type, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

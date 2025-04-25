@@ -4,9 +4,9 @@
 
 namespace HellMapManager.Models;
 
-public partial class Alias
+public partial class Marker
 {
-    public Alias() { }
+    public Marker() { }
     public string Key { get; set; } = "";
     public string Value { get; set; } = "";
     public string Desc { get; set; } = "";
@@ -16,9 +16,9 @@ public partial class Alias
     {
         return Key != "" && Value != "";
     }
-    public Alias Clone()
+    public Marker Clone()
     {
-        return new Alias
+        return new Marker
         {
             Key = Key,
             Value = Value,
@@ -27,7 +27,7 @@ public partial class Alias
             Message = Message,
         };
     }
-    public const string EncodeKey = "Alias";
+    public const string EncodeKey = "Marker";
     public string Encode()
     {
         return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
@@ -41,9 +41,9 @@ public partial class Alias
             ])
         );
     }
-    public static Alias Decode(string val)
+    public static Marker Decode(string val)
     {
-        var result = new Alias();
+        var result = new Marker();
         var kv = HMMFormatter.DecodeKeyValue1(val);
         var list = HMMFormatter.DecodeList1(kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
@@ -54,7 +54,7 @@ public partial class Alias
         return result;
     }
 }
-public partial class Alias
+public partial class Marker
 {
     public bool Filter(string val)
     {

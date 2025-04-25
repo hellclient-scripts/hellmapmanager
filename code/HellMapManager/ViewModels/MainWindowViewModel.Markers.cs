@@ -7,32 +7,32 @@ namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public partial void InitAliases()
+    public partial void InitMarkers()
     {
         AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
-            OnPropertyChanged(nameof(FilteredAliases));
+            OnPropertyChanged(nameof(FilteredMarkers));
         };
     }
-    public string AliasesFilter { get; set; } = "";
-    public void FilterAliases()
+    public string MarkersFilter { get; set; } = "";
+    public void FilterMarkers()
     {
-        OnPropertyChanged(nameof(FilteredAliases));
+        OnPropertyChanged(nameof(FilteredMarkers));
     }
-    public ObservableCollection<Alias> FilteredAliases
+    public ObservableCollection<Marker> FilteredMarkers
     {
         get
         {
             if (AppState.Main.Current != null)
             {
-                var aliases = AppState.Main.Current.Map.Aliases;
-                if (string.IsNullOrEmpty(AliasesFilter))
+                var markers = AppState.Main.Current.Map.Markers;
+                if (string.IsNullOrEmpty(MarkersFilter))
                 {
-                    return new ObservableCollection<Alias>(aliases);
+                    return new ObservableCollection<Marker>(markers);
                 }
                 else
                 {
-                    return new ObservableCollection<Alias>(aliases.FindAll(r => r.Filter(AliasesFilter)));
+                    return new ObservableCollection<Marker>(markers.FindAll(r => r.Filter(MarkersFilter)));
                 }
             }
             return [];

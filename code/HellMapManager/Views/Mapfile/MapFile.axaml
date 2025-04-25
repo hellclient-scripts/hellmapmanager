@@ -2,7 +2,7 @@
   x:Class="HellMapManager.Views.Mapfile.MapFile"
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:aliases="clr-namespace:HellMapManager.Views.Mapfile.Aliases"
+  xmlns:markers="clr-namespace:HellMapManager.Views.Mapfile.Markers"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:landmarks="clr-namespace:HellMapManager.Views.Mapfile.Landmarks"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -30,8 +30,8 @@
       <TabItem Header="房间">
         <rooms:Rooms HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
-      <TabItem Header="别名">
-        <aliases:Aliases HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+      <TabItem Header="标记">
+        <markers:Markers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="线路">
         <routes:Routes HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />

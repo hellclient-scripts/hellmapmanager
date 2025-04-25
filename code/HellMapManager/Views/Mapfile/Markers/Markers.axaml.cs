@@ -5,18 +5,18 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using HellMapManager.ViewModels;
 using HellMapManager.Models;
-using HellMapManager.Windows.EditAliasWindow;
+using HellMapManager.Windows.EditMarkerWindow;
 using Avalonia.Interactivity;
 using HellMapManager.States;
 using HellMapManager.Services;
 using HellMapManager.Windows.RelationMapWindow;
 
 
-namespace HellMapManager.Views.Mapfile.Aliases;
+namespace HellMapManager.Views.Mapfile.Markers;
 
-public partial class Aliases : UserControl
+public partial class Markers : UserControl
 {
-    public Aliases()
+    public Markers()
     {
         InitializeComponent();
 
@@ -25,41 +25,41 @@ public partial class Aliases : UserControl
     {
         if (DataContext is MainWindowViewModel vm)
         {
-            vm.FilterAliases();
+            vm.FilterMarkers();
         }
     }
     public async void OnNew(object? sender, RoutedEventArgs args)
     {
         if (DataContext is MainWindowViewModel vm)
         {
-            var window = new EditAliasWindow()
+            var window = new EditMarkerWindow()
             {
-                DataContext = new EditAliasWindowViewModel(null, false)
+                DataContext = new EditMarkerWindowViewModel(null, false)
             };
 
 
-            var result = await window.ShowDialog<Alias?>((TopLevel.GetTopLevel(this) as Window)!);
+            var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertAlias(result);
+                AppState.Main.InsertMarker(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
     public async void OnEdit(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Alias alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Marker marker)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
-                var window = new EditAliasWindow()
+                var window = new EditMarkerWindow()
                 {
-                    DataContext = new EditAliasWindowViewModel(alias, false)
+                    DataContext = new EditMarkerWindowViewModel(marker, false)
                 };
-                var result = await window.ShowDialog<Alias?>((TopLevel.GetTopLevel(this) as Window)!);
+                var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateAlias(alias.Key, result);
+                    AppState.Main.UpdateMarker(marker.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -68,18 +68,18 @@ public partial class Aliases : UserControl
     }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Alias alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Marker marker)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
-                var window = new EditAliasWindow()
+                var window = new EditMarkerWindow()
                 {
-                    DataContext = new EditAliasWindowViewModel(alias, true)
+                    DataContext = new EditMarkerWindowViewModel(marker, true)
                 };
-                var result = await window.ShowDialog<Alias?>((TopLevel.GetTopLevel(this) as Window)!);
+                var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateAlias(alias.Key, result);
+                    AppState.Main.UpdateMarker(marker.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -87,10 +87,10 @@ public partial class Aliases : UserControl
     }
     public async void OnRemove(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Alias alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Marker marker)
         {
             if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.RemoveAlias(alias.Key);
+            AppState.Main.RemoveMarker(marker.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

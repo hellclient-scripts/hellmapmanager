@@ -1,4 +1,4 @@
-namespace HellMapManager.Windows.EditAliasWindow;
+namespace HellMapManager.Windows.EditMarkerWindow;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Collections.Generic;
@@ -7,25 +7,25 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Models;
 using Microsoft.VisualBasic;
 
-public delegate string ExternalValidator(AliasForm room);
-public partial class AliasForm : ObservableObject
+public delegate string ExternalValidator(MarkerForm room);
+public partial class MarkerForm : ObservableObject
 {
-    public AliasForm(ExternalValidator checker)
+    public MarkerForm(ExternalValidator checker)
     {
         ExternalValidator = checker;
     }
-    public AliasForm(Alias alias, ExternalValidator checker)
+    public MarkerForm(Marker model, ExternalValidator checker)
     {
-        Key = alias.Key;
-        Value = alias.Value;
-        Group = alias.Group;
-        Desc = alias.Desc;
-        Message=alias.Message;
+        Key = model.Key;
+        Value = model.Value;
+        Group = model.Group;
+        Desc = model.Desc;
+        Message=model.Message;
         ExternalValidator = checker;
     }
-    public Alias ToAlias()
+    public Marker ToMarker()
     {
-        return new Alias()
+        return new Marker()
         {
             Key = Key,
             Value = Value,
@@ -52,7 +52,7 @@ public partial class AliasForm : ObservableObject
         }
         if (Key == "")
         {
-            return "别名主键不能为空";
+            return "标记主键不能为空";
         }
         if (Value == "")
         {

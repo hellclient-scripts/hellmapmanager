@@ -51,7 +51,7 @@ public class HMMEncoder
         };
 
         mf.Map.Rooms.ForEach(d => { results.Add(d.Encode()); });
-        mf.Map.Aliases.ForEach(r => { results.Add(r.Encode()); });
+        mf.Map.Markers.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Landmarks.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Variables.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Routes.ForEach(r => { results.Add(r.Encode()); });
@@ -123,10 +123,10 @@ public class HMMEncoder
                                 if (model.Validated()) { mf.Map.Rooms.Add(model); }
                             }
                             break;
-                        case Alias.EncodeKey:
+                        case Marker.EncodeKey:
                             {
-                                var model = Alias.Decode(data);
-                                if (model.Validated()) { mf.Map.Aliases.Add(model); }
+                                var model = Marker.Decode(data);
+                                if (model.Validated()) { mf.Map.Markers.Add(model); }
                             }
                             break;
                         case Landmark.EncodeKey:

@@ -47,18 +47,18 @@ public partial class Variables : UserControl
     }
     public async void OnEdit(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Variable alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Variable model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditVariableWindow()
                 {
-                    DataContext = new EditVariableWindowViewModel(alias, false)
+                    DataContext = new EditVariableWindowViewModel(model, false)
                 };
                 var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateVariable(alias.Key, result);
+                    AppState.Main.UpdateVariable(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -67,18 +67,18 @@ public partial class Variables : UserControl
     }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Variable alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Variable model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditVariableWindow()
                 {
-                    DataContext = new EditVariableWindowViewModel(alias, true)
+                    DataContext = new EditVariableWindowViewModel(model, true)
                 };
                 var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateVariable(alias.Key, result);
+                    AppState.Main.UpdateVariable(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

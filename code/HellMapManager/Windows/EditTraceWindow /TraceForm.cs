@@ -62,7 +62,7 @@ public partial class TraceForm : ObservableObject
         }
         if (Key == "")
         {
-            return "别名主键不能为空";
+            return "区域主键不能为空";
         }
 
         return "";

@@ -47,18 +47,18 @@ public partial class Snapshots : UserControl
     }
     // public async void OnEdit(object? sender, RoutedEventArgs args)
     // {
-    //     if (sender is not null && sender is Button bn && bn.DataContext is Snapshot alias)
+    //     if (sender is not null && sender is Button bn && bn.DataContext is Snapshot model)
     //     {
     //         if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
     //         {
     //             var window = new EditSnapshotWindow()
     //             {
-    //                 DataContext = new EditSnapshotWindowViewModel(alias, false)
+    //                 DataContext = new EditSnapshotWindowViewModel(model, false)
     //             };
     //             var result = await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
     //             if (result is not null)
     //             {
-    //                 AppState.Main.UpdateSnapshot(alias, result);
+    //                 AppState.Main.UpdateSnapshot(model, result);
     //                 AppState.Main.RaiseMapFileUpdatedEvent(this);
 
     //             }
@@ -67,18 +67,18 @@ public partial class Snapshots : UserControl
     // }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Snapshot alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Snapshot model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditSnapshotWindow()
                 {
-                    DataContext = new EditSnapshotWindowViewModel(alias, true)
+                    DataContext = new EditSnapshotWindowViewModel(model, true)
                 };
                 await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
                 // if (result is not null)
                 // {
-                //     AppState.Main.UpdateSnapshot(alias, result);
+                //     AppState.Main.UpdateSnapshot(model, result);
                 //     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 // }
             }

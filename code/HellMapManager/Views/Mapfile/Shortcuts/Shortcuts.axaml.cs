@@ -48,18 +48,18 @@ public partial class Shortcuts : UserControl
     }
     public async void OnEdit(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Shortcut alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Shortcut model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditShortcutWindow()
                 {
-                    DataContext = new EditShortcutWindowViewModel(alias, false)
+                    DataContext = new EditShortcutWindowViewModel(model, false)
                 };
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateShortcut(alias.Key, result);
+                    AppState.Main.UpdateShortcut(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -68,18 +68,18 @@ public partial class Shortcuts : UserControl
     }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Shortcut alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Shortcut model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditShortcutWindow()
                 {
-                    DataContext = new EditShortcutWindowViewModel(alias, true)
+                    DataContext = new EditShortcutWindowViewModel(model, true)
                 };
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateShortcut(alias.Key, result);
+                    AppState.Main.UpdateShortcut(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

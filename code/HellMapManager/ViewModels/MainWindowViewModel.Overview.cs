@@ -11,7 +11,7 @@ public partial class MainWindowViewModel : ViewModelBase
         AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(GetMapRoomsCount));
-            OnPropertyChanged(nameof(GetMapAliasesCount));
+            OnPropertyChanged(nameof(GetMapMarkersCount));
             OnPropertyChanged(nameof(GetMapRoutesCount));
             OnPropertyChanged(nameof(GetMapTracesCount));
             OnPropertyChanged(nameof(GetMapRegionsCount));
@@ -35,9 +35,9 @@ public partial class MainWindowViewModel : ViewModelBase
         get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Rooms.Count) : 0;
     }
 
-    public int GetMapAliasesCount
+    public int GetMapMarkersCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Aliases.Count) : 0;
+        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Markers.Count) : 0;
     }
     public int GetMapRoutesCount
     {

@@ -72,7 +72,7 @@ public partial class Map
 
     public MapInfo Info { get; set; } = new MapInfo();
     public List<Room> Rooms { get; set; } = [];
-    public List<Alias> Aliases { get; set; } = [];
+    public List<Marker> Markers { get; set; } = [];
     public List<Landmark> Landmarks { get; set; } = [];
     public List<Variable> Variables { get; set; } = [];
     public List<Route> Routes { get; set; } = [];
@@ -84,7 +84,7 @@ public partial class Map
     public void Arrange()
     {
         Rooms.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Aliases.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+        Markers.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
         Routes.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
         Traces.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
         Regions.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
@@ -150,23 +150,23 @@ public class MapFile
         }
     }
 
-    public void ImportAliases(List<Alias> aliases)
+    public void ImportMarkers(List<Marker> markers)
     {
-        foreach (var alias in aliases)
+        foreach (var marker in markers)
         {
-            InsertAlias(alias);
+            InsertMarker(marker);
         }
     }
-    public void InsertAlias(Alias alias)
+    public void InsertMarker(Marker marker)
     {
-        Map.Aliases.RemoveAll(r => r.Key == alias.Key);
-        Map.Aliases.Add(alias);
-        Cache.Aliases[alias.Key] = alias;
+        Map.Markers.RemoveAll(r => r.Key == marker.Key);
+        Map.Markers.Add(marker);
+        Cache.Markers[marker.Key] = marker;
     }
-    public void RemoveAlias(string key)
+    public void RemoveMarker(string key)
     {
-        Map.Aliases.RemoveAll(r => r.Key == key);
-        Cache.Aliases.Remove(key);
+        Map.Markers.RemoveAll(r => r.Key == key);
+        Cache.Markers.Remove(key);
     }
     public void ImportRoutes(List<Route> routes)
     {

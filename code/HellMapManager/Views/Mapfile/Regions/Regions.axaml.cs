@@ -48,18 +48,18 @@ public partial class Regions : UserControl
     }
     public async void OnEdit(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Region alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Region model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditRegionWindow()
                 {
-                    DataContext = new EditRegionWindowViewModel(alias, false)
+                    DataContext = new EditRegionWindowViewModel(model, false)
                 };
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRegion(alias.Key, result);
+                    AppState.Main.UpdateRegion(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -68,18 +68,18 @@ public partial class Regions : UserControl
     }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Region alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Region model)
         {
             if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
             {
                 var window = new EditRegionWindow()
                 {
-                    DataContext = new EditRegionWindowViewModel(alias, true)
+                    DataContext = new EditRegionWindowViewModel(model, true)
                 };
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRegion(alias.Key, result);
+                    AppState.Main.UpdateRegion(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -87,10 +87,10 @@ public partial class Regions : UserControl
     }
     public async void OnRemove(object? sender, RoutedEventArgs args)
     {
-        if (sender is not null && sender is Button bn && bn.DataContext is Region alias)
+        if (sender is not null && sender is Button bn && bn.DataContext is Region model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该地区吗？") == false) return;
-            AppState.Main.RemoveRegion(alias.Key);
+            AppState.Main.RemoveRegion(model.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

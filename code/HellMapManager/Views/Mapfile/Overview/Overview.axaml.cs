@@ -28,7 +28,7 @@ public partial class Overview : UserControl
                     case "WidgetRoom":
                         tab.SelectedIndex = 1;
                         break;
-                    case "WidgetAlias":
+                    case "WidgetMarker":
                         tab.SelectedIndex = 2;
                         break;
                     case "WidgetRoute":

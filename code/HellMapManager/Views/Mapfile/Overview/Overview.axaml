@@ -127,7 +127,7 @@
             </DockPanel>
           </Border>
           <Border
-            Name="WidgetAlias"
+            Name="WidgetMarker"
             Classes="Summary"
             Tapped="OnWidgetClicked">
             <DockPanel>
@@ -135,10 +135,10 @@
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/id_card.png" />
               </Panel>
               <DockPanel>
-                <TextBlock Classes="Label" DockPanel.Dock="Top">别名</TextBlock>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">标记</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
-                  共计&#160;<Run Text="{Binding GetMapAliasesCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">根据使用场景对房间设置的别名。</TextBlock>
+                  共计&#160;<Run Text="{Binding GetMapMarkersCount}" /></TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">根据使用场景对房间设置的标记。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>

@@ -1,16 +1,16 @@
 <Window
-  x:Class="HellMapManager.Windows.EditAliasWindow.EditAliasWindow"
+  x:Class="HellMapManager.Windows.EditMarkerWindow.EditMarkerWindow"
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:roompicker="using:HellMapManager.Views.Components.RoomPicker"
-  xmlns:vm="using:HellMapManager.Windows.EditAliasWindow"
+  xmlns:vm="using:HellMapManager.Windows.EditMarkerWindow"
   Title="{Binding Title}"
   Width="700"
   d:DesignHeight="450"
   d:DesignWidth="800"
-  x:DataType="vm:EditAliasWindowViewModel"
+  x:DataType="vm:EditMarkerWindowViewModel"
   Icon="/Assets/app.ico"
   mc:Ignorable="d">
   <Window.Styles>
@@ -72,9 +72,9 @@
         <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
-            <TextBox Text="{Binding Item.Key}" Watermark="别名主键" />
+            <TextBox Text="{Binding Item.Key}" Watermark="标记主键" />
             <TextBlock Classes="Label" Text="值:" />
-            <roompicker:RoomPicker Room="{Binding Item.Value}" Watermark="别名值" />
+            <roompicker:RoomPicker Room="{Binding Item.Value}" Watermark="标记值" />
             <TextBlock Classes="Label" Text="分组:" />
             <TextBox Text="{Binding Item.Group}" Watermark="分组" />
             <TextBlock Classes="Label" Text="描述:" />
@@ -82,7 +82,7 @@
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Desc}"
-              Watermark="别名描述" />
+              Watermark="标记描述" />
             <TextBlock Classes="Label" Text="消息:" />
             <TextBox
               AcceptsReturn="True"
