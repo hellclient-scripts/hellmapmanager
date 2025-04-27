@@ -1,5 +1,4 @@
 namespace TestProject;
-using HellMapManager.Models;
 using HellMapManager.Utils;
 
 public class UniqueKeyUtilTest

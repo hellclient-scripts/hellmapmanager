@@ -84,16 +84,16 @@ public class ToggleKeyValues(string key, List<string> values, bool not)
 //只支持列表和键值对列表，最多支持3层
 public class HMMFormatter
 {
-    private static Command TokenKey1 { get; } = new Command(">", "1", "\\>");
-    private static Command TokenKey2 { get; } = new Command(":", "2", "\\:");
-    private static Command TokenKey3 { get; } = new Command("=", "3", "\\=");
-    private static Command TokenKey4 { get; } = new Command("@", "4", "\\@");
-    private static Command TokenSep1 { get; } = new Command("|", "5", "\\|");
-    private static Command TokenSep2 { get; } = new Command(";", "6", "\\;");
-    private static Command TokenSep3 { get; } = new Command(",", "7", "\\,");
-    private static Command TokenSep4 { get; } = new Command("&", "8", "\\&");
-    private static Command TokenNot { get; } = new Command("!", "9", "\\!");
-    private static Command TokenNewline { get; } = new Command("\n", "10", "\\n");
+    public static Command TokenKey1 { get; } = new Command(">", "1", "\\>");
+    public static Command TokenKey2 { get; } = new Command(":", "2", "\\:");
+    public static Command TokenKey3 { get; } = new Command("=", "3", "\\=");
+    public static Command TokenKey4 { get; } = new Command("@", "4", "\\@");
+    public static Command TokenSep1 { get; } = new Command("|", "5", "\\|");
+    public static Command TokenSep2 { get; } = new Command(";", "6", "\\;");
+    public static Command TokenSep3 { get; } = new Command(",", "7", "\\,");
+    public static Command TokenSep4 { get; } = new Command("&", "8", "\\&");
+    public static Command TokenNot { get; } = new Command("!", "9", "\\!");
+    public static Command TokenNewline { get; } = new Command("\n", "10", "\\n");
     public static readonly ControlCode Escaper = (new ControlCode())
     .WithCommand(new Command("\\", "0", "\\\\"))
         .WithCommand(TokenKey1)
