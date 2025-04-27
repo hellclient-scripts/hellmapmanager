@@ -89,7 +89,7 @@ public partial class Rooms : UserControl
     {
         if (sender is not null && sender is Button bn && bn.DataContext is Room room)
         {
-            var rm = Mapper.RelationMap(AppState.Main.Current!, room.Key, AppPreset.RelationMaxDepth);
+            var rm = RelationMapper.RelationMap(AppState.Main.Current!, room.Key, AppPreset.RelationMaxDepth);
             if (rm is not null)
             {
                 var vm = new RelationMapWindowViewModel(rm);

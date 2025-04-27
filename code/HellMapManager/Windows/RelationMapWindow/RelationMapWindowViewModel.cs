@@ -185,7 +185,7 @@ public class RelationMapWindowViewModel : ObservableObject
     {
         if (key != "" && AppState.Main.Current is not null)
         {
-            var item = Mapper.RelationMap(AppState.Main.Current, key, AppPreset.RelationMaxDepth);
+            var item = RelationMapper.RelationMap(AppState.Main.Current, key, AppPreset.RelationMaxDepth);
             if (item is not null)
             {
                 if (modfiyHistory)

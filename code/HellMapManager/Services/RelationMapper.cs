@@ -56,7 +56,7 @@ public class RelationMapItem(Room room, int depth)
 
 
 
-public partial class Mapper
+public partial class RelationMapper
 {
     private class Map(MapFile mf, string start, int maxDepth)
     {
