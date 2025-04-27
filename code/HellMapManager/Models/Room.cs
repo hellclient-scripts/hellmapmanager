@@ -116,6 +116,7 @@ public partial class Room()
     public void Arrange()
     {
         Data.Sort((x, y) => x.Key.CompareTo(y.Key));
+        Tags.Sort((x, y) => x.CompareTo(y));
     }
     private void AddData(Data rd)
     {
@@ -124,6 +125,7 @@ public partial class Room()
         {
             Data.Add(rd);
         }
+        Arrange();
     }
     public void SetDatas(List<Data> list)
     {
@@ -131,7 +133,7 @@ public partial class Room()
         {
             AddData(rd);
         }
-        Data.Sort((x, y) => x.Key.CompareTo(y.Key));
+        Arrange();
     }
 
     public bool Filter(string val)

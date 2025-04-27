@@ -61,7 +61,6 @@ public partial class Trace
 {
     public void Arrange()
     {
-        Locations.Distinct();
         Locations.Sort((x, y) => x.CompareTo(y));
     }
     public void RemoveLocations(List<string> loctions)
