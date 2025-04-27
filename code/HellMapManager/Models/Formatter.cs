@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HellMapManager.Utils;
+using HellMapManager.Utils.ControlCode;
 namespace HellMapManager.Models;
 
 public class KeyValue(string key, string value)
@@ -84,41 +84,38 @@ public class ToggleKeyValues(string key, List<string> values, bool not)
 //只支持列表和键值对列表，最多支持3层
 public class HMMFormatter
 {
-    private class Token(string unesacped, string escaped)
-    {
-        public string Escaped { get; set; } = escaped;
-        public string Unescaped { get; set; } = unesacped;
-    }
-    private static Token TokenKey1 { get; } = new(">", "\\>");
-    private static Token TokenKey2 { get; } = new(":", "\\:");
-    private static Token TokenKey3 { get; } = new("=", "\\=");
-    private static Token TokenKey4 { get; } = new("@", "\\@");
-    private static Token TokenSep1 { get; } = new("|", "\\|");
-    private static Token TokenSep2 { get; } = new(";", "\\;");
-    private static Token TokenSep3 { get; } = new(",", "\\,");
-    private static Token TokenSep4 { get; } = new("&", "\\&");
-    private static Token TokenNot { get; } = new("!", "\\!");
-    private static Token TokenNewline { get; } = new("\n", "\\n");
-    public static readonly Escaper Escaper = (new Escaper())
-        .WithItem(TokenKey1.Unescaped, TokenKey1.Escaped)
-        .WithItem(TokenKey2.Unescaped, TokenKey2.Escaped)
-        .WithItem(TokenKey3.Unescaped, TokenKey3.Escaped)
-        .WithItem(TokenKey4.Unescaped, TokenKey4.Escaped)
-        .WithItem(TokenSep1.Unescaped, TokenSep1.Escaped)
-        .WithItem(TokenSep2.Unescaped, TokenSep2.Escaped)
-        .WithItem(TokenSep3.Unescaped, TokenSep3.Escaped)
-        .WithItem(TokenSep4.Unescaped, TokenSep4.Escaped)
-        .WithItem(TokenNot.Unescaped, TokenNot.Escaped)
-        .WithItem(TokenNewline.Unescaped, TokenNewline.Escaped)
+    private static Command TokenKey1 { get; } = new Command(">", "1", "\\>");
+    private static Command TokenKey2 { get; } = new Command(":", "2", "\\:");
+    private static Command TokenKey3 { get; } = new Command("=", "3", "\\=");
+    private static Command TokenKey4 { get; } = new Command("@", "4", "\\@");
+    private static Command TokenSep1 { get; } = new Command("|", "5", "\\|");
+    private static Command TokenSep2 { get; } = new Command(";", "6", "\\;");
+    private static Command TokenSep3 { get; } = new Command(",", "7", "\\,");
+    private static Command TokenSep4 { get; } = new Command("&", "8", "\\&");
+    private static Command TokenNot { get; } = new Command("!", "9", "\\!");
+    private static Command TokenNewline { get; } = new Command("\n", "10", "\\n");
+    public static readonly ControlCode Escaper = (new ControlCode())
+    .WithCommand(new Command("\\", "0", "\\\\"))
+        .WithCommand(TokenKey1)
+        .WithCommand(TokenKey2)
+        .WithCommand(TokenKey3)
+        .WithCommand(TokenKey4)
+        .WithCommand(TokenSep1)
+        .WithCommand(TokenSep2)
+        .WithCommand(TokenSep3)
+        .WithCommand(TokenSep4)
+        .WithCommand(TokenNot)
+        .WithCommand(TokenNewline)
+        .WithCommand(new Command("", "99", "\\"))
 ;
 
     public static string Escape(string val)
     {
-        return Escaper.Escape(val);
+        return Escaper.Encode(val);
     }
     public static string Unescape(string val)
     {
-        return Escaper.Unescape(val);
+        return Escaper.Decode(val);
     }
     public static string EncodeKeyAndValue1(string key, string val)
     {
@@ -127,12 +124,12 @@ public class HMMFormatter
 
     public static string EncodeKeyValue1(KeyValue kv)
     {
-        return $"{kv.Key}{TokenKey1.Unescaped}{kv.Value}";
+        return $"{kv.Key}{TokenKey1.Raw}{kv.Value}";
     }
 
     public static KeyValue DecodeKeyValue1(string val)
     {
-        var decoded = val.Split(TokenKey1.Unescaped, 2);
+        var decoded = val.Split(TokenKey1.Raw, 2);
         return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
     public static string EncodeKeyAndValue2(string key, string val)
@@ -141,12 +138,12 @@ public class HMMFormatter
     }
     public static string EncodeKeyValue2(KeyValue kv)
     {
-        return $"{kv.Key}{TokenKey2.Unescaped}{kv.Value}";
+        return $"{kv.Key}{TokenKey2.Raw}{kv.Value}";
     }
 
     public static KeyValue DecodeKeyValue2(string val)
     {
-        var decoded = val.Split(TokenKey2.Unescaped, 2);
+        var decoded = val.Split(TokenKey2.Raw, 2);
         return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
     public static string EncodeKeyAndValue3(string key, string val)
@@ -155,11 +152,11 @@ public class HMMFormatter
     }
     public static string EncodeKeyValue3(KeyValue kv)
     {
-        return $"{kv.Key}{TokenKey3.Unescaped}{kv.Value}";
+        return $"{kv.Key}{TokenKey3.Raw}{kv.Value}";
     }
     public static KeyValue DecodeKeyValue3(string val)
     {
-        var decoded = val.Split(TokenKey3.Unescaped, 2);
+        var decoded = val.Split(TokenKey3.Raw, 2);
         return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
     public static string EncodeKeyAndValue4(string key, string val)
@@ -168,11 +165,11 @@ public class HMMFormatter
     }
     public static string EncodeKeyValue4(KeyValue kv)
     {
-        return $"{kv.Key}{TokenKey4.Unescaped}{kv.Value}";
+        return $"{kv.Key}{TokenKey4.Raw}{kv.Value}";
     }
     public static KeyValue DecodeKeyValue4(string val)
     {
-        var decoded = val.Split(TokenKey4.Unescaped, 2);
+        var decoded = val.Split(TokenKey4.Raw, 2);
         return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
     public static string EncodeToggleKeyValue1(ToggleKeyValue kv)
@@ -259,7 +256,7 @@ public class HMMFormatter
 
     public static string EncodeList1(List<string> items)
     {
-        return string.Join(TokenSep1.Unescaped, items);
+        return string.Join(TokenSep1.Raw, items);
     }
     public static List<string> DecodeList1(string val)
     {
@@ -268,12 +265,12 @@ public class HMMFormatter
             return [];
         }
 
-        return [.. val.Split(TokenSep1.Unescaped)];
+        return [.. val.Split(TokenSep1.Raw)];
     }
     public static string EncodeList2(List<string> items)
     {
 
-        return string.Join(TokenSep2.Unescaped, items);
+        return string.Join(TokenSep2.Raw, items);
     }
     public static List<string> DecodeList2(string val)
     {
@@ -281,11 +278,11 @@ public class HMMFormatter
         {
             return [];
         }
-        return [.. val.Split(TokenSep2.Unescaped)];
+        return [.. val.Split(TokenSep2.Raw)];
     }
     public static string EncodeList3(List<string> items)
     {
-        return string.Join(TokenSep3.Unescaped, items);
+        return string.Join(TokenSep3.Raw, items);
     }
     public static List<string> DecodeList3(string val)
     {
@@ -294,11 +291,11 @@ public class HMMFormatter
             return [];
         }
 
-        return [.. val.Split(TokenSep3.Unescaped)];
+        return [.. val.Split(TokenSep3.Raw)];
     }
     public static string EncodeList4(List<string> items)
     {
-        return string.Join(TokenSep4.Unescaped, items);
+        return string.Join(TokenSep4.Raw, items);
     }
     public static List<string> DecodeList4(string val)
     {
@@ -306,7 +303,7 @@ public class HMMFormatter
         {
             return [];
         }
-        return [.. val.Split(TokenSep4.Unescaped)];
+        return [.. val.Split(TokenSep4.Raw)];
     }
     public static string At(List<string> list, int index)
     {
@@ -333,11 +330,11 @@ public class HMMFormatter
     }
     public static string EncodeToggleValue(ToggleValue v)
     {
-        return (v.Not ? TokenNot.Unescaped : "") + v.Value;
+        return (v.Not ? TokenNot.Raw : "") + v.Value;
     }
     public static ToggleValue DecodeToggleValue(string val)
     {
-        var not = val.Length > 0 && val.StartsWith(TokenNot.Unescaped);
+        var not = val.Length > 0 && val.StartsWith(TokenNot.Raw);
         string key;
         if (not)
         {
@@ -350,4 +347,13 @@ public class HMMFormatter
         return new ToggleValue(key, not);
 
     }
+    public static List<string> EscapeList(List<string> list)
+    {
+        return list.ConvertAll(Escape);
+    }
+    public static List<string> UnescapeList(List<string> list)
+    {
+        return list.ConvertAll(Unescape);
+    }
+
 }

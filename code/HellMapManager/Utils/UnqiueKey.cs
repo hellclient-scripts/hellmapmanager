@@ -3,17 +3,16 @@ namespace HellMapManager.Utils;
 
 public static class UniqueKeyUtil
 {
-    public const string Sep = "\n";
-    public const string EscapedSep = "\\n";
-    public static readonly Escaper Escaper = (new Escaper())
-    .WithItem(Sep, EscapedSep)
-    ;
+    public const string EscapedSep="\x1B1";
+    public const string EscapeToken="\x1B";
+    public const string EscapedEscapeToken="\x1B0";
     public static string Escape(string val)
     {
-        return Escaper.Escape(val);
+        return val.Replace(EscapeToken, EscapedEscapeToken).Replace("\n", EscapedSep);
     }
     public static string Join(string[] str)
     {
-        return string.Join(Sep, str.Select(s => Escape(s)));
+        var escaped=str.Select(s => Escape(s)).ToArray();
+        return string.Join("\n", escaped);
     }
 }

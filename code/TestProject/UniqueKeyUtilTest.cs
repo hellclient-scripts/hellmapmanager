@@ -7,6 +7,6 @@ public class UniqueKeyUtilTest
     [Fact]
     public void TestBasic()
     {
-        Assert.Equal("a\n\\n\n\\\\n", UniqueKeyUtil.Join(["a","\n","\\n"]));
+        Assert.Equal($"a\n{UniqueKeyUtil.EscapedSep}\n{UniqueKeyUtil.EscapedEscapeToken}", UniqueKeyUtil.Join(["a","\n",UniqueKeyUtil.EscapeToken]));
     }
 }

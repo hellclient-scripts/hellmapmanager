@@ -5,22 +5,24 @@ using System.IO;
 
 using HellMapManager.Models;
 using System;
-using HellMapManager.Utils;
+using HellMapManager.Utils.ControlCode;
 
 
 namespace HellMapManager.Services;
 public class RoomFormatter
 {
-    public static readonly Escaper Escaper = (new Escaper())
-    .WithItem("\n", "\\n")
-    .WithItem("=", "\\=")
-    .WithItem("@", "\\@")
-    .WithItem("+", "\\+")
-    .WithItem("|", "\\|")
-    .WithItem(">", "\\>")
-    .WithItem("<", "\\<")
-    .WithItem(",", "\\,")
-    .WithItem("%", "\\%")
+    public static readonly ControlCode Escaper = (new ControlCode())
+    .WithCommand(new Command("\\", "0", "\\\\"))
+    .WithCommand(new Command("\n", "1", "\\n"))
+    .WithCommand(new Command("=", "2", "\\="))
+    .WithCommand(new Command("@", "3", "\\@"))
+    .WithCommand(new Command("+", "4", "\\+"))
+    .WithCommand(new Command("|", "5", "\\|"))
+    .WithCommand(new Command(">", "5", "\\>"))
+    .WithCommand(new Command("<", "7", "\\<"))
+    .WithCommand(new Command(",", "8", "\\,"))
+    .WithCommand(new Command("%", "9", "\\%"))
+    .WithCommand(new Command("", "99", "\\"))
     ;
     public static string Escape(string val)
     {
@@ -170,18 +172,15 @@ public class RoomsH
 {
     public static List<Room> Open(string file)
     {
-        using (var fileStream = new FileStream(file, FileMode.Open))
-        {
-            using (var sr = new StreamReader(fileStream, Encoding.UTF8))
-            {
-                var body = sr.ReadToEnd();
-                var rooms = Load(body);
-                return rooms;
-            }
-        }
+        using var fileStream = new FileStream(file, FileMode.Open);
+        using var sr = new StreamReader(fileStream, Encoding.UTF8);
+        var body = sr.ReadToEnd();
+        var rooms = Load(body);
+        return rooms;
     }
     public static List<Room> Load(string data)
     {
+        data=RoomFormatter.Escaper.Unpack(data);
         List<Room> result = [];
         var lines = data.Split("\n");
         foreach (string line in lines)

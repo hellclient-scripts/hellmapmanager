@@ -60,7 +60,7 @@ public class HMMEncoder
         mf.Map.Shortcuts.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Snapshots.ForEach(r => { results.Add(r.Encode()); });
 
-        return GetEncoding(head.Encoding).GetBytes(string.Join("\n", results));
+        return GetEncoding(head.Encoding).GetBytes(HMMFormatter.Escaper.Pack(string.Join("\n", results)));
     }
     public static Encoding GetEncoding(MapEncoding me)
     {
@@ -85,6 +85,7 @@ public class HMMEncoder
                 var line = sr.ReadLine();
                 if (line is not null)
                 {
+                    line = HMMFormatter.Escaper.Unpack(line);
                     var head = MapHeadData.Decode(line);
                     if (head.Validated())
                     {
@@ -108,6 +109,7 @@ public class HMMEncoder
                 string? data;
                 while ((data = sr.ReadLine()) != null)
                 {
+                    data = HMMFormatter.Escaper.Unpack(data);
                     var key = HMMFormatter.DecodeKeyValue1(data);
                     switch (key.Key)
                     {
