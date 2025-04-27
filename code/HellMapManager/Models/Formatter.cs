@@ -52,6 +52,15 @@ public class ToggleKeyValue(string key, string value, bool not)
     public bool Not = not;
     public string Key = key;
     public string Value = value;
+    public string UnescapeKey()
+    {
+        return HMMFormatter.Unescape(Key);
+    }
+    public string UnescapeValue()
+    {
+        return HMMFormatter.Unescape(Value);
+    }
+
     public RegionItem ToRegionItem()
     {
         return new RegionItem(HMMFormatter.Unescape(Key) == "Room" ? RegionItemType.Room : RegionItemType.Zone, HMMFormatter.Unescape(Value), Not);
@@ -67,7 +76,6 @@ public class ToggleKeyValues(string key, List<string> values, bool not)
     public bool Not = not;
     public string Key = key;
     public List<string> Values = values;
-    public string NotLabel { get => Not ? "!" : ""; }
     public TypedConditions ToTypedConditions()
     {
         return new TypedConditions(HMMFormatter.Unescape(Key), Values.ConvertAll(HMMFormatter.Unescape), Not);
