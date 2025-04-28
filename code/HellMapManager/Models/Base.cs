@@ -6,6 +6,11 @@ public class Condition(string key, bool not)
 {
     public string Key { get; set; } = key;
     public bool Not { get; set; } = not;
+
+    public bool Equal(Condition model)
+    {
+        return Key == model.Key && Not == model.Not;
+    }
 }
 
 public class TypedConditions(string key, List<string> conditions, bool not)
@@ -26,5 +31,9 @@ public class Data(string key, string value)
     public Data Clone()
     {
         return new Data(Key, Value);
+    }
+    public bool Equal(Data model)
+    {
+        return Key == model.Key && Value == model.Value;
     }
 }

@@ -8,8 +8,8 @@ public class FormatterTest
     [Fact]
     public void TestBasic()
     {
-        Assert.Equal("\\>\\:\\=\\@\\!\\;\\,\\&\\!\\n", HMMFormatter.Escaper.Pack(HMMFormatter.Escape(">:=@!;,&!\n")));
-        Assert.Equal(">:=@!;,&!\n>:=@!;,&!\n", HMMFormatter.Unescape(HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\!\\;\\,\\&\\!\\n>:=@!;,&!\n")));
+        Assert.Equal("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n", HMMFormatter.Escaper.Pack(HMMFormatter.Escape(">:=@!;\\,&!\n")));
+        Assert.Equal(">:=@!;\\,&!\n>:=@!;,&!\n", HMMFormatter.Unescape(HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n>:=@!;,&!\n")));
         Assert.Equal(">:=@!;,&!\n", HMMFormatter.Escaper.Pack(HMMFormatter.Unescape(HMMFormatter.Escape(">:=@!;,&!\n"))));
     }
     private static void IsListEqual(List<string> src, List<string> dst)

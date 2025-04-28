@@ -97,4 +97,23 @@ public class Exit
     {
         get => string.Join(",", Conditions.ConvertAll(d => (d.Not ? "! " : "") + d.Key));
     }
+    public bool Equal(Exit model)
+    {
+        if (Command != model.Command || To != model.To || Cost != model.Cost)
+        {
+            return false;
+        }
+        if (Conditions.Count != model.Conditions.Count)
+        {
+            return false;
+        }
+        for (var i = 0; i < Conditions.Count; i++)
+        {
+            if (!Conditions[i].Equal(model.Conditions[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

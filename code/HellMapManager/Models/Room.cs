@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace HellMapManager.Models;
 
@@ -47,7 +46,7 @@ public partial class Room
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Name),//1
                 HMMFormatter.Escape(Group),//2
-                HMMFormatter.Escape(Desc),//
+                HMMFormatter.Escape(Desc),//3
                 HMMFormatter.EncodeList2(Tags.ConvertAll(HMMFormatter.Escape)),//4
                 HMMFormatter.EncodeList2(Exits.ConvertAll(//5
                     e=>HMMFormatter.EncodeList3([
@@ -113,29 +112,33 @@ public partial class Room
         }
         return false;
     }
-    public void Arrange()
-    {
-        Data.Sort((x, y) => x.Key.CompareTo(y.Key));
-        Tags.Sort((x, y) => x.CompareTo(y));
-    }
-    private void AddData(Data rd)
+    private void DoAddData(Data rd)
     {
         Data.RemoveAll((d) => d.Key == rd.Key);
         if (rd.Value != "")
         {
             Data.Add(rd);
         }
+    }
+    public void SetData(Data rd)
+    {
+        DoAddData(rd);
         Arrange();
     }
     public void SetDatas(List<Data> list)
     {
         foreach (var rd in list)
         {
-            AddData(rd);
+            DoAddData(rd);
         }
         Arrange();
     }
 
+    public void Arrange()
+    {
+        Data.Sort((x, y) => x.Key.CompareTo(y.Key));
+        Tags.Sort((x, y) => x.CompareTo(y));
+    }
     public bool Filter(string val)
     {
         if (Key.Contains(val) ||
@@ -167,6 +170,53 @@ public partial class Room
             }
         }
         return false;
+    }
+
+    public bool Equal(Room model)
+    {
+        if (
+            Key != model.Key ||
+            Name != model.Name ||
+            Group != model.Group ||
+            Desc != model.Desc
+            )
+        {
+            return false;
+        }
+        if (Exits.Count != model.Exits.Count)
+        {
+            return false;
+        }
+        for (var i = 0; i < Exits.Count; i++)
+        {
+            if (!Exits[i].Equal(model.Exits[i]))
+            {
+                return false;
+            }
+        }
+        if (Tags.Count != model.Tags.Count)
+        {
+            return false;
+        }
+        for (var i = 0; i < Tags.Count; i++)
+        {
+            if (Tags[i] != model.Tags[i])
+            {
+                return false;
+            }
+        }
+        if (Data.Count != model.Data.Count)
+        {
+            return false;
+        }
+        for (var i = 0; i < Data.Count; i++)
+        {
+            if (!Data[i].Equal(model.Data[i]))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
