@@ -6,10 +6,17 @@ public class Condition(string key, bool not)
 {
     public string Key { get; set; } = key;
     public bool Not { get; set; } = not;
-
+    public bool Validated()
+    {
+        return Key != "";
+    }
     public bool Equal(Condition model)
     {
         return Key == model.Key && Not == model.Not;
+    }
+    public Condition Clone()
+    {
+        return new Condition(Key, Not);
     }
 }
 
@@ -18,6 +25,33 @@ public class TypedConditions(string key, List<string> conditions, bool not)
     public string Key { get; set; } = key;
     public List<string> Conditions { get; set; } = conditions;
     public bool Not { get; set; } = not;
+    public bool Validated()
+    {
+        return Key != "";
+    }
+    public bool Equal(TypedConditions model)
+    {
+        if (Key != model.Key || Not != model.Not)
+        {
+            return false;
+        }
+        if (Conditions.Count != model.Conditions.Count)
+        {
+            return false;
+        }
+        for (var i = 0; i < Conditions.Count; i++)
+        {
+            if (Conditions[i] != model.Conditions[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public TypedConditions Clone()
+    {
+        return new TypedConditions(Key, new([.. Conditions]), Not);
+    }
 
 }
 public class Data(string key, string value)

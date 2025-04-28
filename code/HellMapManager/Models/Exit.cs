@@ -56,7 +56,7 @@ public class Exit
     public int Cost { get; set; } = 1;
     public bool Validated()
     {
-        return To != "" && Command != "";
+        return Command != "";
     }
     public Exit Clone()
     {
@@ -64,7 +64,7 @@ public class Exit
         {
             Command = Command,
             To = To,
-            Conditions = Conditions.GetRange(0, Conditions.Count),
+            Conditions = Conditions.ConvertAll(m => m.Clone()),
             Cost = Cost,
         };
     }
