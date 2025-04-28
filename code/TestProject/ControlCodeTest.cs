@@ -65,5 +65,6 @@ public class ControlCodeTest
         .WithCommand(new Command("", "4", "\\"))
         ;
         Assert.Equal("a\n%$b\\n\\%\\$$0$1\\$0\\$1", cc.Unescape("a\\n\\%\\$b\\\\n\\\\%\\\\$\\$0\\$1\\\\$0\\\\$1"));
+        Assert.Equal("\\n", cc.Unescape("\\\\n"));
     }
 }

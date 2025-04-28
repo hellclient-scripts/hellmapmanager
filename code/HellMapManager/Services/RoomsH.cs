@@ -18,50 +18,53 @@ public class RoomFormatter
     .WithCommand(new Command("@", "3", "\\@"))
     .WithCommand(new Command("+", "4", "\\+"))
     .WithCommand(new Command("|", "5", "\\|"))
-    .WithCommand(new Command(">", "5", "\\>"))
+    .WithCommand(new Command(">", "6", "\\>"))
     .WithCommand(new Command("<", "7", "\\<"))
     .WithCommand(new Command(",", "8", "\\,"))
     .WithCommand(new Command("%", "9", "\\%"))
+    .WithCommand(new Command(":", "10", "\\:"))
     .WithCommand(new Command("", "99", "\\"))
     ;
     public static string Escape(string val)
     {
-        return Escaper.Escape(val);
+        return Escaper.Encode(val);
     }
     public static string Unescape(string val)
     {
-        return Escaper.Unescape(val);
+        return Escaper.Decode(val);
     }
-    public static StringBuilder EncodeRoom(Room room)
+    public static string EncodeRoom(Room room)
     {
         List<StringBuilder> Exits = [];
         foreach (Exit exit in room.Exits)
         {
             var ToRoom = exit.To;
             var Cost = exit.Cost == 1 ? "" : exit.Cost.ToString();
-            var ExitDef = new StringBuilder(Escape(ToRoom)).Append(Cost == "" ? "" : ("%" + Escape(Cost)));
+            var ExitDef = new StringBuilder(":").Append(Escape(ToRoom)).Append(Cost == "" ? "" : ("%" + Escape(Cost)));
             var CondExit = new StringBuilder(Escape(exit.Command));
+            var Extags = new StringBuilder();
             foreach (var extag in exit.Conditions)
             {
                 if (extag.Not)
                 {
-                    CondExit.Insert(0, Escape(extag.Key)).Insert(0, "<");
+                    Extags.Append(Escape(extag.Key)).Append('<');
                 }
             }
-            var Command = CondExit;
+            var CondCommand = Extags.Append(CondExit);
+            var Tags = new StringBuilder();
             foreach (var tag in exit.Conditions)
             {
                 if (!tag.Not)
                 {
-
-                    Command.Insert(0, Escape(tag.Key)).Insert(0, ">");
+                    Tags.Append(Escape(tag.Key)).Append('>');
                 }
             }
+            var Command = Tags.Append(CondCommand);
             var Exit = Command.Append(ExitDef);
             Exits.Add(Exit);
         }
         var AllExits = new StringBuilder().AppendJoin(",", Exits);
-        var RoomDef = new StringBuilder(Escape(room.Group));
+        var RoomDef = new StringBuilder("@" + Escape(room.Group));
         foreach (string tag in room.Tags)
         {
             RoomDef.Append('+').Append(Escape(tag));
@@ -72,7 +75,7 @@ public class RoomFormatter
             RoomDesc.Append(RoomDef);
         }
         var RoomInfo = new StringBuilder(Escape(room.Key)).Append('=').Append(RoomDesc);
-        var Line = RoomInfo.Append('|').Append(AllExits);
+        var Line = RoomInfo.Append('|').Append(AllExits).ToString();
         return Line;
     }
     public static Room? DecodeRoom(string line)
@@ -100,7 +103,10 @@ public class RoomFormatter
                 for (var i = 1; i < RoomGroupAndRoomTags.Length; i++)
                 {
                     var tag = Unescape(RoomGroupAndRoomTags[i].Trim());
-                    room.Tags.Add(tag);
+                    if (tag != "")
+                    {
+                        room.Tags.Add(tag);
+                    }
                 }
             }
         }
@@ -147,10 +153,6 @@ public class RoomFormatter
                 }
                 var ExitAndCost = CommandAndExitDef[1].Split("%", 2);
                 exit.To = Unescape(ExitAndCost[0].Trim());
-                if (exit.To == "")
-                {
-                    continue;
-                }
                 if (ExitAndCost.Length > 1)
                 {
                     try
@@ -180,7 +182,7 @@ public class RoomsH
     }
     public static List<Room> Load(string data)
     {
-        data=RoomFormatter.Escaper.Unpack(data);
+        data = RoomFormatter.Escaper.Unpack(data);
         List<Room> result = [];
         var lines = data.Split("\n");
         foreach (string line in lines)

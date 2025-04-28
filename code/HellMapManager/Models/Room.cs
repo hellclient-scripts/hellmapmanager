@@ -91,7 +91,7 @@ public partial class Room
         return result;
     }
 }
-public partial class Room()
+public partial class Room
 {
     //房间的key,必须唯一，不能为空
     public int ExitsCount
