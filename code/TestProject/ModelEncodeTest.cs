@@ -255,7 +255,8 @@ public class ModelEncodeTest
         };
     }
     [Fact]
-    public void TestShortcut(){
+    public void TestShortcut()
+    {
         var shortcut = SuffShortcut("");
         shortcut.Arrange();
         Shortcut shortcut2;
@@ -353,5 +354,191 @@ public class ModelEncodeTest
         Assert.True(snapshot.Equal(Snapshot.Decode(snapshot.Encode())));
         snapshot = SuffSnapshot("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
         Assert.True(snapshot.Equal(Snapshot.Decode(snapshot.Encode())));
+    }
+    [Fact]
+    public void TestMap()
+    {
+        var map = new Map();
+        var room1 = new Room() { Key = "1", Group = "2" };
+        var room2 = new Room() { Key = "2", Group = "2" };
+        var room3 = new Room() { Key = "3", Group = "1" };
+        map.Rooms = [room1, room2];
+        map.Arrange();
+        Assert.Equal(room1, map.Rooms[0]);
+        Assert.Equal(room2, map.Rooms[1]);
+        map.Rooms = [room2, room1];
+        map.Arrange();
+        Assert.Equal(room1, map.Rooms[0]);
+        Assert.Equal(room2, map.Rooms[1]);
+        map.Rooms = [room1, room3];
+        map.Arrange();
+        Assert.Equal(room3, map.Rooms[0]);
+        Assert.Equal(room1, map.Rooms[1]);
+        var marker1 = new Marker() { Key = "1", Group = "2" };
+        var marker2 = new Marker() { Key = "2", Group = "2" };
+        var marker3 = new Marker() { Key = "3", Group = "1" };
+        map.Markers = [marker1, marker2];
+        map.Arrange();
+        Assert.Equal(marker1, map.Markers[0]);
+        Assert.Equal(marker2, map.Markers[1]);
+        map.Markers = [marker2, marker1];
+        map.Arrange();
+        Assert.Equal(marker1, map.Markers[0]);
+        Assert.Equal(marker2, map.Markers[1]);
+        map.Markers = [marker1, marker3];
+        map.Arrange();
+        Assert.Equal(marker3, map.Markers[0]);
+        Assert.Equal(marker1, map.Markers[1]);
+        var route1 = new Route() { Key = "1", Group = "2" };
+        var route2 = new Route() { Key = "2", Group = "2" };
+        var route3 = new Route() { Key = "3", Group = "1" };
+        map.Routes = [route1, route2];
+        map.Arrange();
+        Assert.Equal(route1, map.Routes[0]);
+        Assert.Equal(route2, map.Routes[1]);
+        map.Routes = [route2, route1];
+        map.Arrange();
+        Assert.Equal(route1, map.Routes[0]);
+        Assert.Equal(route2, map.Routes[1]);
+        map.Routes = [route1, route3];
+        map.Arrange();
+        Assert.Equal(route3, map.Routes[0]);
+        Assert.Equal(route1, map.Routes[1]);
+        var trace1 = new Trace() { Key = "1", Group = "2" };
+        var trace2 = new Trace() { Key = "2", Group = "2" };
+        var trace3 = new Trace() { Key = "3", Group = "1" };
+        map.Traces = [trace1, trace2];
+        map.Arrange();
+        Assert.Equal(trace1, map.Traces[0]);
+        Assert.Equal(trace2, map.Traces[1]);
+        map.Traces = [trace2, trace1];
+        map.Arrange();
+        Assert.Equal(trace1, map.Traces[0]);
+        Assert.Equal(trace2, map.Traces[1]);
+        map.Traces = [trace1, trace3];
+        map.Arrange();
+        Assert.Equal(trace3, map.Traces[0]);
+        Assert.Equal(trace1, map.Traces[1]);
+        var region1 = new Region() { Key = "1", Group = "2" };
+        var region2 = new Region() { Key = "2", Group = "2" };
+        var region3 = new Region() { Key = "3", Group = "1" };
+        map.Regions = [region1, region2];
+        map.Arrange();
+        Assert.Equal(region1, map.Regions[0]);
+        Assert.Equal(region2, map.Regions[1]);
+        map.Regions = [region2, region1];
+        map.Arrange();
+        Assert.Equal(region1, map.Regions[0]);
+        Assert.Equal(region2, map.Regions[1]);
+        map.Regions = [region1, region3];
+        map.Arrange();
+        Assert.Equal(region3, map.Regions[0]);
+        Assert.Equal(region1, map.Regions[1]);
+        var variable1 = new Variable() { Key = "1", Group = "2" };
+        var variable2 = new Variable() { Key = "2", Group = "2" };
+        var variable3 = new Variable() { Key = "3", Group = "1" };
+        map.Variables = [variable1, variable2];
+        map.Arrange();
+        Assert.Equal(variable1, map.Variables[0]);
+        Assert.Equal(variable2, map.Variables[1]);
+        map.Variables = [variable2, variable1];
+        map.Arrange();
+        Assert.Equal(variable1, map.Variables[0]);
+        Assert.Equal(variable2, map.Variables[1]);
+        map.Variables = [variable1, variable3];
+        map.Arrange();
+        Assert.Equal(variable3, map.Variables[0]);
+        Assert.Equal(variable1, map.Variables[1]);
+        var shortcut1 = new Shortcut() { Key = "1", Group = "2" };
+        var shortcut2 = new Shortcut() { Key = "2", Group = "2" };
+        var shortcut3 = new Shortcut() { Key = "3", Group = "1" };
+        map.Shortcuts = [shortcut1, shortcut2];
+        map.Arrange();
+        Assert.Equal(shortcut1, map.Shortcuts[0]);
+        Assert.Equal(shortcut2, map.Shortcuts[1]);
+        map.Shortcuts = [shortcut2, shortcut1];
+        map.Arrange();
+        Assert.Equal(shortcut1, map.Shortcuts[0]);
+        Assert.Equal(shortcut2, map.Shortcuts[1]);
+        map.Shortcuts = [shortcut1, shortcut3];
+        map.Arrange();
+        Assert.Equal(shortcut3, map.Shortcuts[0]);
+        Assert.Equal(shortcut1, map.Shortcuts[1]);
+        var landmark1 = new Landmark() { Key = "1", Group = "2", Type = "2" };
+        var landmark2 = new Landmark() { Key = "2", Group = "2", Type = "2" };
+        var landmark3 = new Landmark() { Key = "3", Group = "1", Type = "2" };
+        var landmark4 = new Landmark() { Key = "4", Group = "2", Type = "1" };
+        var landmark5 = new Landmark() { Key = "4", Group = "2", Type = "1" };
+        map.Landmarks = [landmark1, landmark2];
+        map.Arrange();
+        Assert.Equal(landmark1, map.Landmarks[0]);
+        Assert.Equal(landmark2, map.Landmarks[1]);
+        map.Landmarks = [landmark2, landmark1];
+        map.Arrange();
+        Assert.Equal(landmark1, map.Landmarks[0]);
+        Assert.Equal(landmark2, map.Landmarks[1]);
+        map.Landmarks = [landmark1, landmark3];
+        map.Arrange();
+        Assert.Equal(landmark3, map.Landmarks[0]);
+        Assert.Equal(landmark1, map.Landmarks[1]);
+        map.Landmarks = [landmark4, landmark3];
+        map.Arrange();
+        Assert.Equal(landmark3, map.Landmarks[0]);
+        Assert.Equal(landmark4, map.Landmarks[1]);
+        map.Landmarks = [landmark5, landmark4];
+        map.Arrange();
+        Assert.Equal(landmark5, map.Landmarks[0]);
+        Assert.Equal(landmark4, map.Landmarks[1]);
+        var snapshot = new Snapshot() { Key = "1", Group = "2", Type = "2", Timestamp = 1, Value = "2" };
+        var snapshot2 = new Snapshot() { Key = "2", Group = "2", Type = "2", Timestamp = 1, Value = "2" };
+        var snapshot3 = new Snapshot() { Key = "3", Group = "1", Type = "2", Timestamp = 1, Value = "2" };
+        var snapshot4 = new Snapshot() { Key = "3", Group = "1", Type = "2", Timestamp = 0, Value = "2" };
+        var snapshot5 = new Snapshot() { Key = "2", Group = "2", Type = "1", Timestamp = 1, Value = "2" };
+        var snapshot6 = new Snapshot() { Key = "2", Group = "2", Type = "1", Timestamp = 1, Value = "1" };
+        map.Snapshots = [snapshot, snapshot2];
+        map.Arrange();
+        Assert.Equal(snapshot, map.Snapshots[0]);
+        Assert.Equal(snapshot2, map.Snapshots[1]);
+        map.Snapshots = [snapshot2, snapshot];
+        map.Arrange();
+        Assert.Equal(snapshot, map.Snapshots[0]);
+        Assert.Equal(snapshot2, map.Snapshots[1]);
+        map.Snapshots = [snapshot, snapshot3];
+        map.Arrange();
+        Assert.Equal(snapshot3, map.Snapshots[0]);
+        Assert.Equal(snapshot, map.Snapshots[1]);
+        map.Snapshots = [snapshot4, snapshot3];
+        map.Arrange();
+        Assert.Equal(snapshot4, map.Snapshots[0]);
+        Assert.Equal(snapshot3, map.Snapshots[1]);
+        map.Snapshots = [snapshot5, snapshot2];
+        map.Arrange();
+        Assert.Equal(snapshot5, map.Snapshots[0]);
+        Assert.Equal(snapshot2, map.Snapshots[1]);
+        map.Snapshots = [snapshot5, snapshot6];
+        map.Arrange();
+        Assert.Equal(snapshot6, map.Snapshots[0]);
+        Assert.Equal(snapshot5, map.Snapshots[1]);
+    }
+    private static MapInfo SuffMapInfo(string suff)
+    {
+        return new MapInfo()
+        {
+            Name = $"name{suff}",
+            Desc = $"desc{suff}",
+        };
+    }
+    [Fact]
+    public void TestMapInfo()
+    {
+        var mapInfo = SuffMapInfo("");
+        var mapInfo2 = mapInfo.Clone();
+        Assert.True(mapInfo.Equal(mapInfo2));
+        mapInfo = SuffMapInfo("");
+        Assert.True(mapInfo.Equal(MapInfo.Decode(mapInfo.Encode())));
+        mapInfo = SuffMapInfo(">:=@!;\\,&!\n");
+        Assert.True(mapInfo.Equal(MapInfo.Decode(mapInfo.Encode())));
+        mapInfo = SuffMapInfo("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(mapInfo.Equal(MapInfo.Decode(mapInfo.Encode())));
     }
 }

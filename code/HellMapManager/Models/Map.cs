@@ -61,14 +61,39 @@ public partial class MapInfo
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
         return result;
     }
+    public MapInfo Clone()
+    {
+        return new MapInfo()
+        {
+            Name = Name,
+            Desc = Desc,
+            UpdatedTime = UpdatedTime,
+        };
+    }
+    public bool Equal(MapInfo model)
+    {
+        if (Name != model.Name)
+        {
+            return false;
+        }
+        if (Desc != model.Desc)
+        {
+            return false;
+        }
+        if (UpdatedTime != model.UpdatedTime)
+        {
+            return false;
+        }
+        return true;
+
+    }
 }
 
 
 public partial class Map
 {
     public MapEncoding Encoding { get; set; } = MapEncoding.Default;
-    public static string CurrentVersion = "1.0";
-    public bool Compressed { get; set; } = false;
+    public const string CurrentVersion = "1.0";
 
     public MapInfo Info { get; set; } = new MapInfo();
     public List<Room> Rooms { get; set; } = [];
@@ -88,11 +113,10 @@ public partial class Map
         Routes.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
         Traces.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
         Regions.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Landmarks.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+        Landmarks.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : x.Type.CompareTo(y.Type)));
         Shortcuts.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
         Variables.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Snapshots.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : x.Timestamp.CompareTo(y.Timestamp)));
-
+        Snapshots.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : (x.Timestamp != y.Timestamp ? x.Timestamp.CompareTo(y.Timestamp) : (x.Type != y.Type ? x.Type.CompareTo(y.Type) : x.Value.CompareTo(y.Value)))));
     }
     public static Map Empty(string name, string desc)
     {
@@ -114,7 +138,7 @@ public class MapFile
     public Map Map { get; set; }
     public string Path = "";
     public bool Modified = true;
-    public Cache Cache = new Cache();
+    public Cache Cache = new();
     public static MapFile Empty(string name, string desc)
     {
         return new MapFile
@@ -287,14 +311,6 @@ public class MapFile
     public void RemoveSnapshot(string key, string type, string value)
     {
         Map.Snapshots.RemoveAll(r => r.Key == key && r.Type == type && r.Value == value);
-    }
-    public void RebuldCache()
-    {
-        Cache = new Cache();
-        foreach (var room in Map.Rooms)
-        {
-            Cache.Rooms[room.Key] = room;
-        }
     }
     public MapSettings ToSettings()
     {

@@ -693,4 +693,66 @@ public class ModelTest
         var timelabel = DateTimeOffset.FromUnixTimeSeconds(123456789).LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss");
         Assert.Equal(timelabel, snapshot2.TimeLabel);
     }
+    [Fact]
+    public void TestMap()
+    {
+        var map = new Map()
+        {
+
+        };
+        Assert.Equal(MapEncoding.Default, map.Encoding);
+        map = Map.Empty("name", "desc");
+        Assert.Equal("name", map.Info.Name);
+        Assert.Equal("desc", map.Info.Desc);
+    }
+    [Fact]
+    public void TestMapInfo()
+    {
+        var mapInfo = new MapInfo()
+        {
+            UpdatedTime = -1,
+        };
+        Assert.False(mapInfo.Validated());
+        mapInfo = new MapInfo()
+        {
+            Name = "name",
+            UpdatedTime = 0,
+            Desc = "desc"
+        };
+        Assert.True(mapInfo.Validated());
+        Assert.Equal("name", mapInfo.Name);
+        Assert.Equal(0, mapInfo.UpdatedTime);
+        Assert.Equal("desc", mapInfo.Desc);
+        Assert.Equal("name", mapInfo.NameLabel);
+        Assert.Equal("desc", mapInfo.DescLabel);
+        mapInfo = MapInfo.Empty("name", "desc");
+        Assert.Equal("name", mapInfo.Name);
+        Assert.True(mapInfo.UpdatedTime > 0);
+        Assert.Equal("desc", mapInfo.Desc);
+        Assert.Equal("name", mapInfo.NameLabel);
+        Assert.Equal("desc", mapInfo.DescLabel);
+        mapInfo = MapInfo.Empty("", "");
+        Assert.Equal("", mapInfo.Name);
+        Assert.True(mapInfo.UpdatedTime > 0);
+        Assert.Equal("", mapInfo.Desc);
+        Assert.Equal("<未命名>", mapInfo.NameLabel);
+        Assert.Equal("<无描述>", mapInfo.DescLabel);
+        mapInfo=MapInfo.Empty("name", "Desc");
+        MapInfo mapInfo2;
+        mapInfo2 = mapInfo.Clone();
+        Assert.True(mapInfo.Equal(mapInfo2));
+        Assert.True(mapInfo2.Validated());
+        mapInfo2 = mapInfo.Clone();
+        mapInfo2.Name = "";
+        Assert.False(mapInfo.Equal(mapInfo2));
+        Assert.True(mapInfo2.Validated());
+        mapInfo2 = mapInfo.Clone();
+        mapInfo2.UpdatedTime = -1;
+        Assert.False(mapInfo.Equal(mapInfo2));
+        Assert.False(mapInfo2.Validated()); 
+        mapInfo2 = mapInfo.Clone();
+        mapInfo2.Desc = "";
+        Assert.False(mapInfo.Equal(mapInfo2));
+        Assert.True(mapInfo2.Validated());
+    }
 }

@@ -57,7 +57,6 @@ public partial class AppState()
                 Modified = false,
                 Path = file,
             };
-            Current.RebuldCache();
             AddRecent(Current.ToRecentFile());
             RaiseMapFileUpdatedEvent(this);
         }
