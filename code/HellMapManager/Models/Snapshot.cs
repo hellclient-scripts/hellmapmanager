@@ -84,4 +84,8 @@ public partial class Snapshot
     public void Arrange()
     {
     }
+    public static void Sort(List<Snapshot> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : (x.Timestamp != y.Timestamp ? x.Timestamp.CompareTo(y.Timestamp) : (x.Type != y.Type ? x.Type.CompareTo(y.Type) : x.Value.CompareTo(y.Value)))));
+    }
 }

@@ -2,6 +2,8 @@
 
 
 
+using System.Collections.Generic;
+
 namespace HellMapManager.Models;
 
 public partial class Marker
@@ -52,6 +54,10 @@ public partial class Marker
         result.Desc = HMMFormatter.UnescapeAt(list, 3);
         result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
+    }
+    public static void Sort(List<Marker> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
     }
 }
 public partial class Marker

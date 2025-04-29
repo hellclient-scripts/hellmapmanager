@@ -64,6 +64,11 @@ public partial class Room
              ])
         );
     }
+    public static void Sort(List<Room> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+
+    }
     public static Room Decode(string val)
     {
         var result = new Room();

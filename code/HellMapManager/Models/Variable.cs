@@ -1,4 +1,5 @@
 namespace HellMapManager.Models;
+using System.Collections.Generic;
 
 
 public class Variable
@@ -76,4 +77,8 @@ public class Variable
     }
     public void Arrange()
     { }
+    public static void Sort(List<Variable> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+    }
 }

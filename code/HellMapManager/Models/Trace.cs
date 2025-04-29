@@ -1,8 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using HellMapManager.Views.Mapfile.Rooms;
-
-
 
 namespace HellMapManager.Models;
 
@@ -56,7 +52,10 @@ public partial class Trace
         result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
-
+    public static void Sort(List<Trace> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+    }
 }
 
 public partial class Trace

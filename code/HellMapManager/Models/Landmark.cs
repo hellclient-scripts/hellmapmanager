@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 
 
 using HellMapManager.Utils;
@@ -56,6 +57,10 @@ public partial class Landmark
             Group = Group,
             Desc = Desc,
         };
+    }
+    public static void Sort(List<Landmark> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : x.Type.CompareTo(y.Type)));
     }
 }
 

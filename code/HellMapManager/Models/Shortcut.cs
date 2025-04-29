@@ -112,4 +112,8 @@ public partial class Shortcut : Exit
             }
         }));
     }
+    public static void Sort(List<Shortcut> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+    }
 }

@@ -108,15 +108,15 @@ public partial class Map
 
     public void Arrange()
     {
-        Rooms.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Markers.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Routes.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Traces.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Regions.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Landmarks.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : x.Type.CompareTo(y.Type)));
-        Shortcuts.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Variables.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
-        Snapshots.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : (x.Timestamp != y.Timestamp ? x.Timestamp.CompareTo(y.Timestamp) : (x.Type != y.Type ? x.Type.CompareTo(y.Type) : x.Value.CompareTo(y.Value)))));
+        Room.Sort(Rooms);
+        Marker.Sort(Markers);
+        Route.Sort(Routes);
+        Trace.Sort(Traces);
+        Region.Sort(Regions);
+        Landmark.Sort(Landmarks);
+        Shortcut.Sort(Shortcuts);
+        Variable.Sort(Variables);
+        Snapshot.Sort(Snapshots);
     }
     public static Map Empty(string name, string desc)
     {

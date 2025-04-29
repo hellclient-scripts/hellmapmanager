@@ -99,7 +99,10 @@ public partial class Region
     {
 
     }
-
+    public static void Sort(List<Region> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+    }
 }
 
 public partial class Region

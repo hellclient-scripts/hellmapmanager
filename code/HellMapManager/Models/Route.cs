@@ -57,6 +57,10 @@ public partial class Route
     {
 
     }
+    public static void Sort(List<Route> list)
+    {
+        list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : x.Key.CompareTo(y.Key));
+    }
 }
 
 public partial class Route
