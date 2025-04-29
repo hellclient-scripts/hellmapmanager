@@ -48,10 +48,6 @@ public class Variable
     }
     public bool Filter(string filter)
     {
-        if (filter == "")
-        {
-            return true;
-        }
         if (Key.Contains(filter))
         {
             return true;
@@ -70,4 +66,14 @@ public class Variable
         }
         return false;
     }
+    public bool Equal(Variable model)
+    {
+        if (Key == model.Key && Value == model.Value && Group == model.Group && Desc == model.Desc)
+        {
+            return true;
+        }
+        return false;
+    }
+    public void Arrange()
+    { }
 }

@@ -599,6 +599,98 @@ public class ModelTest
         sc2.RoomConditions.Add(new("con5", true));
         Assert.False(sc.Equal(sc2));
         Assert.True(sc2.Validated());
+    }
+    [Fact]
+    public void TestVariable()
+    {
+        var var1 = new Variable()
+        {
+            Key = "key1",
+            Value = "value1",
+            Group = "group1",
+            Desc = "desc1"
+        };
+        Assert.True(var1.Filter("key"));
+        Assert.True(var1.Filter("value"));
+        Assert.True(var1.Filter("group"));
+        Assert.True(var1.Filter("desc"));
+        Assert.False(var1.Filter("NotFound"));
 
+        Variable var2;
+        var2 = var1.Clone();
+        Assert.True(var1.Equal(var2));
+        Assert.True(var2.Validated());
+        var2.Key = "";
+        Assert.False(var1.Equal(var2));
+        Assert.False(var2.Validated());
+        var2 = var1.Clone();
+        var2.Value = "";
+        Assert.False(var1.Equal(var2));
+        Assert.True(var2.Validated());
+        var2 = var1.Clone();
+        var2.Group = "";
+        Assert.False(var1.Equal(var2));
+        Assert.True(var2.Validated());
+        var2 = var1.Clone();
+        var2.Desc = "";
+        Assert.False(var1.Equal(var2));
+        Assert.True(var2.Validated());
+    }
+    [Fact]
+    public void TestSnapshot()
+    {
+        var snapshot = new Snapshot()
+        {
+            Key = "key1",
+            Type = "type1",
+            Value = "value1",
+            Group = "group1",
+            Timestamp = 1234567890
+        };
+        Assert.True(snapshot.Filter("key"));
+        Assert.True(snapshot.Filter("type"));
+        Assert.True(snapshot.Filter("value"));
+        Assert.True(snapshot.Filter("group"));
+        Assert.False(snapshot.Filter("NotFound"));
+        Assert.True(snapshot.Validated());
+
+        Snapshot snapshot2;
+        snapshot2 = snapshot.Clone();
+        Assert.True(snapshot.Equal(snapshot2));
+        Assert.True(snapshot2.Validated());
+        snapshot2.Key = "";
+        Assert.False(snapshot.Equal(snapshot2));
+        Assert.False(snapshot2.Validated());
+        snapshot2 = snapshot.Clone();
+        snapshot2.Type = "";
+        Assert.False(snapshot.Equal(snapshot2));
+        Assert.True(snapshot2.Validated());
+        snapshot2 = snapshot.Clone();
+        snapshot2.Value = "";
+        Assert.False(snapshot.Equal(snapshot2));
+        Assert.True(snapshot2.Validated());
+        snapshot2 = snapshot.Clone();
+        snapshot2.Group = "";
+        Assert.False(snapshot.Equal(snapshot2));
+        Assert.True(snapshot2.Validated());
+        snapshot2 = snapshot.Clone();
+        snapshot2.Timestamp = -1;
+        Assert.False(snapshot.Equal(snapshot2));
+        Assert.False(snapshot2.Validated());
+
+        snapshot2 = Snapshot.Create("key1", "type1", "value1", "group1");
+        Assert.True(snapshot2.Validated());
+        Assert.Equal("key1", snapshot2.Key);
+        Assert.Equal("type1", snapshot2.Type);
+        Assert.Equal("value1", snapshot2.Value);
+        Assert.Equal("group1", snapshot2.Group);
+        Assert.True(snapshot2.Timestamp > 0);
+
+        snapshot2 = new Snapshot()
+        {
+            Timestamp = 123456789,
+        };
+        var timelabel = DateTimeOffset.FromUnixTimeSeconds(123456789).LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+        Assert.Equal(timelabel, snapshot2.TimeLabel);
     }
 }

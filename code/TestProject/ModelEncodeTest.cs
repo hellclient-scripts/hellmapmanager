@@ -305,4 +305,53 @@ public class ModelEncodeTest
         shortcut = SuffShortcut("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
         Assert.True(shortcut.Equal(Shortcut.Decode(shortcut.Encode())));
     }
+    private static Variable SuffVariable(string suff)
+    {
+        return new Variable()
+        {
+            Key = $"key{suff}",
+            Value = $"value{suff}",
+            Group = $"group{suff}",
+            Desc = $"desc{suff}"
+        };
+    }
+    [Fact]
+    public void TestVariable()
+    {
+        var variable = SuffVariable("");
+        var variable2 = variable.Clone();
+        variable2.Arrange();
+        Assert.True(variable.Equal(variable2));
+        variable = SuffVariable("");
+        Assert.True(variable.Equal(Variable.Decode(variable.Encode())));
+        variable = SuffVariable(">:=@!;\\,&!\n");
+        Assert.True(variable.Equal(Variable.Decode(variable.Encode())));
+        variable = SuffVariable("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(variable.Equal(Variable.Decode(variable.Encode())));
+    }
+    private static Snapshot SuffSnapshot(string suff)
+    {
+        return new Snapshot()
+        {
+            Key = $"key{suff}",
+            Type = $"type{suff}",
+            Value = $"value{suff}",
+            Group = $"group{suff}",
+            Timestamp = 1234567890
+        };
+    }
+    [Fact]
+    public void TestSnapshot()
+    {
+        var snapshot = SuffSnapshot("");
+        var snapshot2 = snapshot.Clone();
+        snapshot2.Arrange();
+        Assert.True(snapshot.Equal(snapshot2));
+        snapshot = SuffSnapshot("");
+        Assert.True(snapshot.Equal(Snapshot.Decode(snapshot.Encode())));
+        snapshot = SuffSnapshot(">:=@!;\\,&!\n");
+        Assert.True(snapshot.Equal(Snapshot.Decode(snapshot.Encode())));
+        snapshot = SuffSnapshot("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(snapshot.Equal(Snapshot.Decode(snapshot.Encode())));
+    }
 }

@@ -73,4 +73,15 @@ public partial class Snapshot
         }
         return false;
     }
+    public bool Equal(Snapshot model)
+    {
+        if (Key == model.Key && Type == model.Type && Value == model.Value && Group == model.Group && Timestamp == model.Timestamp)
+        {
+            return true;
+        }
+        return false;
+    }
+    public void Arrange()
+    {
+    }
 }
