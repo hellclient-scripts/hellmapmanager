@@ -486,4 +486,119 @@ public class ModelTest
         Assert.Equal("-", ri2.ExcludeLabel);
         Assert.Equal("排除区域 room1", ri2.Label);
     }
+    [Fact]
+    public void TestLandmark()
+    {
+        var lm = new Landmark()
+        {
+            Key = "key1",
+            Type = "type1",
+            Value = "value1",
+            Group = "group1",
+            Desc = "desc1"
+        };
+        Assert.True(lm.Filter("key"));
+        Assert.True(lm.Filter("type"));
+        Assert.True(lm.Filter("value"));
+        Assert.True(lm.Filter("group"));
+        Assert.True(lm.Filter("desc"));
+        Assert.False(lm.Filter("NotFound"));
+
+        Landmark lm2;
+        lm2 = lm.Clone();
+        Assert.True(lm.Equal(lm2));
+        Assert.True(lm2.Validated());
+        Assert.Equal(lm.UniqueKey, lm2.UniqueKey);
+        lm2.Key = "";
+        Assert.False(lm.Equal(lm2));
+        Assert.False(lm2.Validated());
+        Assert.NotEqual(lm.UniqueKey, lm2.UniqueKey);
+        lm2 = lm.Clone();
+        lm2.Type = "";
+        Assert.False(lm.Equal(lm2));
+        Assert.True(lm2.Validated());
+        Assert.NotEqual(lm.UniqueKey, lm2.UniqueKey);
+        lm2 = lm.Clone();
+        lm2.Value = "";
+        Assert.False(lm.Equal(lm2));
+        Assert.True(lm2.Validated());
+        Assert.Equal(lm.UniqueKey, lm2.UniqueKey);
+        lm2 = lm.Clone();
+        lm2.Group = "";
+        Assert.False(lm.Equal(lm2));
+        Assert.True(lm2.Validated());
+        Assert.Equal(lm.UniqueKey, lm2.UniqueKey);
+        lm2 = lm.Clone();
+        lm2.Desc = "";
+        Assert.False(lm.Equal(lm2));
+        Assert.True(lm2.Validated());
+        Assert.Equal(lm.UniqueKey, lm2.UniqueKey);
+    }
+    [Fact]
+    public void TestShortcut()
+    {
+        var sc = new Shortcut()
+        {
+            Key = "key1",
+            Group = "group1",
+            Desc = "desc1",
+            Command = "command1",
+            To = "to1",
+            Cost = 2,
+            RoomConditions = [new Condition("con1", false), new Condition("con2", true)],
+            Conditions = [new Condition("con3", false), new Condition("con4", true)]
+        };
+        Assert.True(sc.Filter("key"));
+        Assert.True(sc.Filter("command"));
+        Assert.True(sc.Filter("to"));
+        Assert.True(sc.Filter("group"));
+        Assert.True(sc.Filter("desc"));
+        Assert.False(sc.Filter("con"));
+        Assert.False(sc.Filter("NotFound"));
+        Shortcut sc2;
+        sc2 = sc.Clone();
+        Assert.True(sc.Equal(sc2));
+        Assert.True(sc2.Validated());
+
+        sc2.Key = "";
+        Assert.False(sc.Equal(sc2));
+        Assert.False(sc2.Validated());
+
+        sc2 = sc.Clone();
+        sc2.Command = "";
+        Assert.False(sc.Equal(sc2));
+        Assert.False(sc2.Validated());
+        sc2 = sc.Clone();
+        sc2.To = "";
+        Assert.False(sc.Equal(sc2));
+        Assert.True(sc2.Validated());
+        sc2 = sc.Clone();
+        sc2.Cost = -1;
+        Assert.False(sc.Equal(sc2));
+        Assert.True(sc2.Validated());
+        sc2 = sc.Clone();
+        sc2.Conditions[0].Key = "wrongkey";
+        Assert.False(sc.Equal(sc2));
+        Assert.True(sc2.Validated());
+        sc2 = sc.Clone();
+        sc2.Conditions.Add(new("con5", true));
+        Assert.False(sc.Equal(sc2));
+        Assert.True(sc2.Validated());
+        sc2 = sc.Clone();
+        Assert.True(sc2.HasCondition);
+        Assert.Equal("con3,! con4", sc2.AllConditions);
+        sc2 = sc.Clone();
+        sc2.Conditions = [];
+        Assert.False(sc2.HasCondition);
+        Assert.Equal("", sc2.AllConditions);
+        sc2 = sc.Clone();
+        sc2.RoomConditions[0].Key = "wrongkey";
+        Assert.False(sc.Equal(sc2));
+        Assert.True(sc2.Validated());
+        sc2 = sc.Clone();
+        sc2.RoomConditions.Add(new("con5", true));
+        Assert.False(sc.Equal(sc2));
+        Assert.True(sc2.Validated());
+
+    }
 }

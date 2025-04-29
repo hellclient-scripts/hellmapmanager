@@ -116,4 +116,18 @@ public class Exit
         }
         return true;
     }
+    public void Arrange()
+    {
+        Conditions.Sort(((x, y) =>
+        {
+            if (x.Not == y.Not)
+            {
+                return x.Key.CompareTo(y.Key);
+            }
+            else
+            {
+                return x.Not.CompareTo(y.Not);
+            }
+        }));
+    }
 }

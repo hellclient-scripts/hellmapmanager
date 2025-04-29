@@ -22,8 +22,8 @@ public partial class Shortcut : Exit
             Key = Key,
             Command = Command,
             To = To,
-            RoomConditions = new(RoomConditions),
-            Conditions = new(Conditions),
+            RoomConditions = RoomConditions.ConvertAll(d => d.Clone()),
+            Conditions = Conditions.ConvertAll(d => d.Clone()),
             Cost = Cost,
             Group = Group,
             Desc = Desc,
@@ -66,5 +66,50 @@ public partial class Shortcut : Exit
             return true;
         }
         return false;
+    }
+    public bool Equal(Shortcut model)
+    {
+        if (Key != model.Key || Command != model.Command || To != model.To || Group != model.Group || Desc != model.Desc || Cost != model.Cost)
+        {
+            return false;
+        }
+        if (RoomConditions.Count != model.RoomConditions.Count)
+        {
+            return false;
+        }
+        for (int i = 0; i < RoomConditions.Count; i++)
+        {
+            if (!RoomConditions[i].Equal(model.RoomConditions[i]))
+            {
+                return false;
+            }
+        }
+        if (Conditions.Count != model.Conditions.Count)
+        {
+            return false;
+        }
+        for (int i = 0; i < Conditions.Count; i++)
+        {
+            if (!Conditions[i].Equal(model.Conditions[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public new void Arrange()
+    {
+        base.Arrange();
+        RoomConditions.Sort(((x, y) =>
+        {
+            if (x.Not == y.Not)
+            {
+                return x.Key.CompareTo(y.Key);
+            }
+            else
+            {
+                return x.Not.CompareTo(y.Not);
+            }
+        }));
     }
 }

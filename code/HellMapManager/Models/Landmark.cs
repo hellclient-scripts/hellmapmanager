@@ -39,8 +39,12 @@ public partial class Landmark
         result.Type = HMMFormatter.UnescapeAt(list, 1);
         result.Value = HMMFormatter.UnescapeAt(list, 2);
         result.Group = HMMFormatter.UnescapeAt(list, 3);
-        result.Desc = HMMFormatter.UnescapeAt(list, 3);
+        result.Desc = HMMFormatter.UnescapeAt(list, 4);
         return result;
+    }
+    public void Arrange()
+    {
+
     }
     public Landmark Clone()
     {
@@ -60,6 +64,14 @@ public partial class Landmark
     public bool Filter(string filter)
     {
         if (Key.Contains(filter) || Type.Contains(filter) || Value.Contains(filter) || Group.Contains(filter) || Desc.Contains(filter))
+        {
+            return true;
+        }
+        return false;
+    }
+    public bool Equal(Landmark model)
+    {
+        if (Key == model.Key && Type == model.Type && Value == model.Value && Group == model.Group && Desc == model.Desc)
         {
             return true;
         }

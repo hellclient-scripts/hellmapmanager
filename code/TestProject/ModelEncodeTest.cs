@@ -4,6 +4,27 @@ namespace TestProject;
 
 public class ModelEncodeTest
 {
+    [Fact]
+    public void TestExit()
+    {
+        var exit = new Exit();
+        exit.Conditions = [new Condition("con1", true), new Condition("con2", false)];
+        exit.Arrange();
+        Assert.True(exit.Conditions[0].Equal(new Condition("con2", false)));
+        Assert.True(exit.Conditions[1].Equal(new Condition("con1", true)));
+        exit.Conditions = [new Condition("con1", false), new Condition("con2", false)];
+        exit.Arrange();
+        Assert.True(exit.Conditions[0].Equal(new Condition("con1", false)));
+        Assert.True(exit.Conditions[1].Equal(new Condition("con2", false)));
+        exit.Conditions = [new Condition("con1", false), new Condition("con2", true)];
+        exit.Arrange();
+        Assert.True(exit.Conditions[0].Equal(new Condition("con1", false)));
+        Assert.True(exit.Conditions[1].Equal(new Condition("con2", true)));
+        exit.Conditions = [new Condition("con1", true), new Condition("con2", true)];
+        exit.Arrange();
+        Assert.True(exit.Conditions[0].Equal(new Condition("con1", true)));
+        Assert.True(exit.Conditions[1].Equal(new Condition("con2", true)));
+    }
     private static Room SuffRoom(string suff)
     {
         return new Room()
@@ -193,5 +214,95 @@ public class ModelEncodeTest
         Assert.True(region.Equal(Region.Decode(region.Encode())));
         region = SuffRegion("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
         Assert.True(region.Equal(Region.Decode(region.Encode())));
+    }
+    public Landmark SuffLandmark(string suff)
+    {
+        return new Landmark()
+        {
+            Key = $"key{suff}",
+            Type = $"type{suff}",
+            Value = $"value{suff}",
+            Group = $"group{suff}",
+            Desc = $"desc{suff}"
+        };
+    }
+    [Fact]
+    public void TestLandmark()
+    {
+        var landmark = SuffLandmark("");
+        var landmark2 = landmark.Clone();
+        landmark2.Arrange();
+        Assert.True(landmark.Equal(landmark2));
+        landmark = SuffLandmark("");
+        Assert.True(landmark.Equal(Landmark.Decode(landmark.Encode())));
+        landmark = SuffLandmark(">:=@!;\\,&!\n");
+        Assert.True(landmark.Equal(Landmark.Decode(landmark.Encode())));
+        landmark = SuffLandmark("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(landmark.Equal(Landmark.Decode(landmark.Encode())));
+    }
+    private static Shortcut SuffShortcut(string suff)
+    {
+        return new Shortcut()
+        {
+            Key = $"key{suff}",
+            Group = $"group{suff}",
+            Desc = $"desc{suff}",
+            RoomConditions = [new Condition($"con1{suff}", false), new Condition($"con2{suff}", true)],
+            Command = $"cmd{suff}",
+            To = $"to{suff}",
+            Conditions = [new Condition($"con3{suff}", false), new Condition($"con4{suff}", true)],
+            Cost = 1
+        };
+    }
+    [Fact]
+    public void TestShortcut(){
+        var shortcut = SuffShortcut("");
+        shortcut.Arrange();
+        Shortcut shortcut2;
+        shortcut2 = new Shortcut();
+        shortcut2.Conditions = [new Condition("con1", true), new Condition("con2", false)];
+        shortcut2.Arrange();
+        Assert.True(shortcut2.Conditions[0].Equal(new Condition("con2", false)));
+        Assert.True(shortcut2.Conditions[1].Equal(new Condition("con1", true)));
+        shortcut2.Conditions = [new Condition("con1", false), new Condition("con2", false)];
+        shortcut2.Arrange();
+        Assert.True(shortcut2.Conditions[0].Equal(new Condition("con1", false)));
+        Assert.True(shortcut2.Conditions[1].Equal(new Condition("con2", false)));
+        shortcut2.Conditions = [new Condition("con1", false), new Condition("con2", true)];
+        shortcut2.Arrange();
+        Assert.True(shortcut2.Conditions[0].Equal(new Condition("con1", false)));
+        Assert.True(shortcut2.Conditions[1].Equal(new Condition("con2", true)));
+        shortcut2.Conditions = [new Condition("con1", true), new Condition("con2", true)];
+        shortcut2.Arrange();
+        Assert.True(shortcut2.Conditions[0].Equal(new Condition("con1", true)));
+        Assert.True(shortcut2.Conditions[1].Equal(new Condition("con2", true)));
+
+        shortcut2 = new Shortcut();
+        shortcut2.RoomConditions = [new Condition("con1", true), new Condition("con2", false)];
+        shortcut2.Arrange();
+        Assert.True(shortcut2.RoomConditions[0].Equal(new Condition("con2", false)));
+        Assert.True(shortcut2.RoomConditions[1].Equal(new Condition("con1", true)));
+        shortcut2.RoomConditions = [new Condition("con1", false), new Condition("con2", false)];
+        shortcut2.Arrange();
+        Assert.True(shortcut2.RoomConditions[0].Equal(new Condition("con1", false)));
+        Assert.True(shortcut2.RoomConditions[1].Equal(new Condition("con2", false)));
+        shortcut2.RoomConditions = [new Condition("con1", false), new Condition("con2", true)];
+        shortcut2.Arrange();
+        Assert.True(shortcut2.RoomConditions[0].Equal(new Condition("con1", false)));
+        Assert.True(shortcut2.RoomConditions[1].Equal(new Condition("con2", true)));
+        shortcut2.RoomConditions = [new Condition("con1", true), new Condition("con2", true)];
+        shortcut2.Arrange();
+        Assert.True(shortcut2.RoomConditions[0].Equal(new Condition("con1", true)));
+        Assert.True(shortcut2.RoomConditions[1].Equal(new Condition("con2", true)));
+
+        shortcut2 = shortcut.Clone();
+        shortcut2.Arrange();
+        Assert.True(shortcut.Equal(shortcut2));
+        shortcut = SuffShortcut("");
+        Assert.True(shortcut.Equal(Shortcut.Decode(shortcut.Encode())));
+        shortcut = SuffShortcut(">:=@!;\\,&!\n");
+        Assert.True(shortcut.Equal(Shortcut.Decode(shortcut.Encode())));
+        shortcut = SuffShortcut("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(shortcut.Equal(Shortcut.Decode(shortcut.Encode())));
     }
 }
