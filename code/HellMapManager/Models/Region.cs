@@ -35,6 +35,13 @@ public class RegionItem(RegionItemType type, string value, bool not)
     {
         return new RegionItem(Type, Value, Not);
     }
+    public bool Equal(RegionItem model)
+    {
+        if (Type != model.Type) return false;
+        if (Value != model.Value) return false;
+        if (Not != model.Not) return false;
+        return true;
+    }
 }
 
 public partial class Region
@@ -58,7 +65,7 @@ public partial class Region
             Key = Key,
             Group = Group,
             Desc = Desc,
-            Items = Items.ConvertAll(d => d),
+            Items = Items.ConvertAll(d => d.Clone()),
             Message = Message,
         };
     }
@@ -88,6 +95,10 @@ public partial class Region
         result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
+    public void Arrange()
+    {
+
+    }
 
 }
 
@@ -110,6 +121,20 @@ public partial class Region
             }
         }
         return false;
+    }
+    public bool Equal(Region model)
+    {
+        if (Key != model.Key) return false;
+        if (Group != model.Group) return false;
+        if (Desc != model.Desc) return false;
+        if (Message != model.Message) return false;
+        if (Items.Count != model.Items.Count) return false;
+        for (int i = 0; i < Items.Count; i++)
+        {
+            if (!Items[i].Equal(model.Items[i])) return false;
+        }
+        return true;
+
     }
     public int ItemsCount
     {

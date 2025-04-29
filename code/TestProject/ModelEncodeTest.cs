@@ -166,5 +166,32 @@ public class ModelEncodeTest
         trace = SuffTrace("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
         Assert.True(trace.Equal(Trace.Decode(trace.Encode())));
     }
-
+    private static Region SuffRegion(string suff)
+    {
+        return new Region()
+        {
+            Key = $"key{suff}",
+            Group = $"group{suff}",
+            Desc = $"desc{suff}",
+            Items = [
+                new RegionItem(RegionItemType.Room, $"val1{suff}",false),
+                new RegionItem(RegionItemType.Zone, $"val2{suff}",true),
+            ],
+            Message = $"message{suff}"
+        };
+    }
+    [Fact]
+    public void TestRegion()
+    {
+        var region = SuffRegion("");
+        var region2 = region.Clone();
+        region2.Arrange();
+        Assert.True(region.Equal(region2));
+        region = SuffRegion("");
+        Assert.True(region.Equal(Region.Decode(region.Encode())));
+        region = SuffRegion(">:=@!;\\,&!\n");
+        Assert.True(region.Equal(Region.Decode(region.Encode())));
+        region = SuffRegion("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(region.Equal(Region.Decode(region.Encode())));
+    }
 }

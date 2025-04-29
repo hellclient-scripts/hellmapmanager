@@ -401,4 +401,89 @@ public class ModelTest
         Assert.False(trace.Equal(trace2));
         Assert.True(trace2.Validated());
     }
+    [Fact]
+    public void TestRegion()
+    {
+        var region = new Region()
+        {
+            Key = "key1",
+            Group = "group1",
+            Desc = "desc1",
+            Message = "message1",
+            Items = [new RegionItem(RegionItemType.Room, "room1", false), new RegionItem(RegionItemType.Zone, "zone1", true)]
+        };
+        Assert.True(region.Filter("key"));
+        Assert.True(region.Filter("room"));
+        Assert.True(region.Filter("zone"));
+        Assert.True(region.Filter("desc"));
+        Assert.True(region.Filter("group"));
+        Assert.True(region.Filter("message"));
+        Assert.False(region.Filter("NotFound"));
+
+        Assert.Equal(2, region.ItemsCount);
+        Region region2;
+        region2 = region.Clone();
+        Assert.True(region.Equal(region2));
+        Assert.True(region2.Validated());
+        region2.Key = "";
+        Assert.False(region.Equal(region2));
+        Assert.False(region2.Validated());
+        region2 = region.Clone();
+        region2.Items[0].Value = "room0";
+        Assert.False(region.Equal(region2));
+        Assert.True(region2.Validated());
+        region2 = region.Clone();
+        region2.Items.Add(new RegionItem(RegionItemType.Room, "room3", false));
+        Assert.False(region.Equal(region2));
+        Assert.True(region2.Validated());
+        region2 = region.Clone();
+        region2.Group = "";
+        Assert.False(region.Equal(region2));
+        Assert.True(region2.Validated());
+        region2 = region.Clone();
+        region2.Desc = "";
+        Assert.False(region.Equal(region2));
+        Assert.True(region2.Validated());
+        region2 = region.Clone();
+        region2.Message = "";
+        Assert.False(region.Equal(region2));
+        Assert.True(region2.Validated());
+    }
+    [Fact]
+    public void TestRegionItem()
+    {
+        var ri = new RegionItem(RegionItemType.Room, "room1", false);
+        RegionItem ri2;
+        Assert.True(ri.Validated());
+        Assert.True(ri.IsRoom);
+        Assert.Equal("+", ri.ExcludeLabel);
+        Assert.Equal("加入房间 room1", ri.Label);
+        ri2 = ri.Clone();
+        Assert.True(ri.Equal(ri2));
+        Assert.True(ri2.Validated());
+        ri2 = ri.Clone();
+        ri2.Value = "";
+        Assert.False(ri.Equal(ri2));
+        Assert.False(ri2.Validated());
+        ri2 = ri.Clone();
+        ri2.Type = RegionItemType.Zone;
+        Assert.False(ri.Equal(ri2));
+        Assert.True(ri2.Validated());
+        Assert.False(ri2.IsRoom);
+        Assert.Equal("+", ri2.ExcludeLabel);
+        Assert.Equal("加入区域 room1", ri2.Label);
+        ri2 = ri.Clone();
+        ri2.Not = true;
+        Assert.False(ri.Equal(ri2));
+        Assert.True(ri2.Validated());
+        Assert.Equal("-", ri2.ExcludeLabel);
+        Assert.Equal("排除房间 room1", ri2.Label);
+        ri2 = ri.Clone();
+        ri2.Not = true;
+        ri2.Type = RegionItemType.Zone;
+        Assert.False(ri.Equal(ri2));
+        Assert.True(ri2.Validated());
+        Assert.Equal("-", ri2.ExcludeLabel);
+        Assert.Equal("排除区域 room1", ri2.Label);
+    }
 }
