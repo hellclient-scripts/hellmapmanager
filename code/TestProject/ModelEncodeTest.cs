@@ -97,4 +97,74 @@ public class ModelEncodeTest
         Assert.True(marker.Equal(Marker.Decode(marker.Encode())));
 
     }
+    private static Route SuffRoute(string suff)
+    {
+        return new Route()
+        {
+            Key = $"key{suff}",
+            Rooms = [$"rid{suff}", $"rid{suff}"],
+            Group = $"group{suff}",
+            Desc = $"desc{suff}",
+            Message = $"message{suff}"
+        };
+    }
+    [Fact]
+    public void TestRoute()
+    {
+        var route = SuffRoute("");
+        var route2 = route.Clone();
+        route2.Arrange();
+        Assert.True(route.Equal(route2));
+        route = SuffRoute("");
+        Assert.True(route.Equal(Route.Decode(route.Encode())));
+        route = SuffRoute(">:=@!;\\,&!\n");
+        Assert.True(route.Equal(Route.Decode(route.Encode())));
+        route = SuffRoute("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(route.Equal(Route.Decode(route.Encode())));
+    }
+    private static Trace SuffTrace(string suff)
+    {
+        return new Trace()
+        {
+            Key = $"key{suff}",
+            Locations = [$"rid{suff}", $"rid{suff}"],
+            Group = $"group{suff}",
+            Desc = $"desc{suff}",
+            Message = $"message{suff}"
+        };
+    }
+    [Fact]
+    public void TestTrace()
+    {
+        var trace = SuffTrace("");
+        Trace trace2;
+        trace2 = new Trace();
+        trace2.Locations = ["2", "1"];
+        trace2.Arrange();
+        Assert.Equal(2, trace2.Locations.Count);
+        Assert.Equal("1", trace2.Locations[0]);
+        Assert.Equal("2", trace2.Locations[1]);
+        trace2 = new Trace();
+        trace2.Locations = ["1", "2"];
+        trace2.RemoveLocations(["2", "3"]);
+        Assert.Single(trace2.Locations);
+        Assert.Equal("1", trace2.Locations[0]);
+        trace2 = new Trace();
+        trace2.Locations = ["2", "3"];
+        trace2.AddLocations(["1", "3", "4"]);
+        Assert.Equal(4, trace2.Locations.Count);
+        Assert.Equal("1", trace2.Locations[0]);
+        Assert.Equal("2", trace2.Locations[1]);
+        Assert.Equal("3", trace2.Locations[2]);
+        Assert.Equal("4", trace2.Locations[3]);
+        trace2 = trace.Clone();
+        Assert.True(trace.Equal(trace2));
+        trace = SuffTrace("");
+        Assert.True(trace.Equal(Trace.Decode(trace.Encode())));
+        trace = SuffTrace(">:=@!;\\,&!\n");
+        Assert.True(trace.Equal(Trace.Decode(trace.Encode())));
+        trace = SuffTrace("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(trace.Equal(Trace.Decode(trace.Encode())));
+    }
+
 }

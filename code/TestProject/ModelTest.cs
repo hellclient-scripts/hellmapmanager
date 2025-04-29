@@ -1,3 +1,4 @@
+using Avalonia.Remote.Protocol;
 using HellMapManager.Models;
 
 namespace TestProject;
@@ -297,5 +298,107 @@ public class ModelTest
         Assert.True(marker2.Validated());
         Assert.False(marker.Equal(marker2));
 
+    }
+    [Fact]
+    public void TestRoute()
+    {
+        var route = new Route()
+        {
+            Key = "key1",
+            Rooms = ["rid1a", "rid1b"],
+            Desc = "desc1",
+            Group = "group1",
+            Message = "message1",
+        };
+        Assert.True(route.Filter("key"));
+        Assert.True(route.Filter("rid1"));
+        Assert.True(route.Filter("desc"));
+        Assert.True(route.Filter("group"));
+        Assert.True(route.Filter("message"));
+        Assert.False(route.Filter("NotFound"));
+
+        Assert.Equal("rid1a;rid1b", route.AllRooms);
+        Assert.Equal(2, route.RoomsCount);
+        Route route2;
+        route2 = route.Clone();
+        Assert.True(route2.Validated());
+        Assert.True(route.Equal(route2));
+        route2.Key = "";
+        Assert.False(route2.Validated());
+        Assert.False(route.Equal(route2));
+        route2 = route.Clone();
+        route2.Rooms[0] = "rid0";
+        Assert.True(route2.Validated());
+        Assert.False(route.Equal(route2));
+        route2 = route.Clone();
+        route2.Rooms.Add("rid3");
+        Assert.True(route2.Validated());
+        Assert.False(route.Equal(route2));
+        route2 = route.Clone();
+        route2.Group = "";
+        Assert.True(route2.Validated());
+        Assert.False(route.Equal(route2));
+        route2 = route.Clone();
+        route2.Desc = "";
+        Assert.True(route2.Validated());
+        Assert.False(route.Equal(route2));
+        route2 = route.Clone();
+        route2.Message = "";
+        Assert.True(route2.Validated());
+        Assert.False(route.Equal(route2));
+    }
+    [Fact]
+    public void TestTrace()
+    {
+        var trace = new Trace()
+        {
+            Key = "key1",
+            Locations = ["rid1", "rid2"],
+            Group = "group1",
+            Desc = "desc1",
+            Message = "message1",
+        };
+        Assert.True(trace.Filter("key"));
+        Assert.True(trace.Filter("rid"));
+        Assert.True(trace.Filter("desc"));
+        Assert.True(trace.Filter("group"));
+        Assert.True(trace.Filter("message"));
+        Assert.False(trace.Filter("NotFound"));
+
+        Assert.Equal(2, trace.LocationsCount);
+
+        Trace trace2;
+        trace2 = trace.Clone();
+        Assert.True(trace.Equal(trace2));
+        Assert.True(trace2.Validated());
+
+        trace2.Key = "";
+        Assert.False(trace.Equal(trace2));
+        Assert.False(trace2.Validated());
+
+        trace2 = trace.Clone();
+        trace2.Locations[0] = "rid0";
+        Assert.False(trace.Equal(trace2));
+        Assert.True(trace2.Validated());
+
+        trace2 = trace.Clone();
+        trace2.Locations.Add("rid3");
+        Assert.False(trace.Equal(trace2));
+        Assert.True(trace2.Validated());
+
+        trace2 = trace.Clone();
+        trace2.Group = "";
+        Assert.False(trace.Equal(trace2));
+        Assert.True(trace2.Validated());
+
+        trace2 = trace.Clone();
+        trace2.Desc = "";
+        Assert.False(trace.Equal(trace2));
+        Assert.True(trace2.Validated());
+
+        trace2 = trace.Clone();
+        trace2.Message = "";
+        Assert.False(trace.Equal(trace2));
+        Assert.True(trace2.Validated());
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 
 namespace HellMapManager.Models;
@@ -41,7 +42,21 @@ public partial class Route
         result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }
+    public Route Clone()
+    {
+        return new Route()
+        {
+            Key = Key,
+            Rooms = [.. Rooms],
+            Group = Group,
+            Desc = Desc,
+            Message = Message,
+        };
+    }
+    public void Arrange()
+    {
 
+    }
 }
 
 public partial class Route
@@ -75,5 +90,23 @@ public partial class Route
         }
         return false;
     }
-
+    public bool Equal(Route model)
+    {
+        if (Key != model.Key || Desc != model.Desc || Group != model.Group || Message != model.Message)
+        {
+            return false;
+        }
+        if (Rooms.Count != model.Rooms.Count)
+        {
+            return false;
+        }
+        for (var i = 0; i < Rooms.Count; i++)
+        {
+            if (Rooms[i] != model.Rooms[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using HellMapManager.Views.Mapfile.Rooms;
 
 
 
@@ -18,7 +19,8 @@ public partial class Trace
         return new Trace()
         {
             Key = Key,
-            Locations = Locations.GetRange(0, Locations.Count),
+            Locations = [.. Locations],
+            Desc = Desc,
             Group = Group,
             Message = Message,
         };
@@ -69,7 +71,6 @@ public partial class Trace
         {
             Locations.Remove(l);
         }
-        Arrange();
     }
     public void AddLocations(List<string> loctions)
     {
@@ -97,6 +98,28 @@ public partial class Trace
             }
         }
         return false;
+    }
+    public bool Equal(Trace model)
+    {
+        if (Key != model.Key ||
+        Desc != model.Desc ||
+        Group != model.Group ||
+        Message != model.Message)
+        {
+            return false;
+        }
+        if (Locations.Count != model.Locations.Count)
+        {
+            return false;
+        }
+        for (var i = 0; i < Locations.Count; i++)
+        {
+            if (Locations[i] != model.Locations[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
     public int LocationsCount
     {

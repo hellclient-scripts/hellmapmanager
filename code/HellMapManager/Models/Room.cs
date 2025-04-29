@@ -34,7 +34,7 @@ public partial class Room
             Name = Name,
             Group = Group,
             Desc = Desc,
-            Tags = Tags.GetRange(0, Tags.Count),
+            Tags = [.. Tags],
             Exits = Exits.ConvertAll(e => e.Clone()),
             Data = Data.ConvertAll(d => d.Clone()),
         };
