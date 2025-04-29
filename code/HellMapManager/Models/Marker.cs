@@ -69,5 +69,10 @@ public partial class Marker
         }
         return false;
     }
-
+    public void Arrange()
+    { }
+    public bool Equal(Marker model)
+    {
+        return Key == model.Key && Value == model.Value && Desc == model.Desc && Group == model.Group && Message == model.Message;
+    }
 }

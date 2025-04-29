@@ -198,52 +198,104 @@ public class ModelTest
         Assert.True(room.HasExitTo("to2"));
 
         room2 = room.Clone();
+        Assert.True(room.Equal(room2));
         Assert.True(room2.Validated());
+
+        room2 = room.Clone();
         room2.Key = "";
         Assert.False(room2.Validated());
-
-        room2 = room.Clone();
-        Assert.True(room.Equal(room2));
-
-        room2 = room.Clone();
-        room2.Key = "";
         Assert.False(room.Equal(room2));
 
         room2 = room.Clone();
         room2.Desc = "";
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
 
         room2 = room.Clone();
         room2.Group = "";
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
 
         room2 = room.Clone();
         room2.Desc = "";
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
 
         room2 = room.Clone();
         room2.Tags[1] = "";
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
 
         room2 = room.Clone();
         room2.Tags.Add("");
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
 
         room2 = room.Clone();
         room2.Exits[0].To = "";
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
 
         room2 = room.Clone();
         room2.Exits.Add(new Exit());
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
 
         room2 = room.Clone();
         room2.Data[0].Value = "";
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
 
         room2 = room.Clone();
         room2.Data.Add(new Data("", ""));
         Assert.False(room.Equal(room2));
+        Assert.True(room2.Validated());
+    }
+    [Fact]
+    public void TestMarker()
+    {
+        var marker = new Marker()
+        {
+            Key = "key1",
+            Value = "value1",
+            Group = "group1",
+            Desc = "desc1",
+            Message = "message1",
+
+        };
+
+        Assert.True(marker.Filter("key"));
+        Assert.True(marker.Filter("value"));
+        Assert.True(marker.Filter("group"));
+        Assert.True(marker.Filter("desc"));
+        Assert.True(marker.Filter("message"));
+        Assert.False(marker.Filter("notfound"));
+        Marker marker2;
+        marker2 = marker.Clone();
+        Assert.True(marker2.Validated());
+        marker2.Key = "";
+        Assert.False(marker2.Validated());
+        Assert.False(marker.Equal(marker2));
+        marker2 = marker.Clone();
+        marker2.Value = "";
+        Assert.False(marker2.Validated());
+        Assert.False(marker.Equal(marker2));
+        marker2 = marker.Clone();
+        Assert.True(marker.Equal(marker2));
+        marker2 = marker.Clone();
+        marker2.Group = "";
+        Assert.True(marker2.Validated());
+        Assert.False(marker.Equal(marker2));
+
+        marker2 = marker.Clone();
+        marker2.Desc = "";
+        Assert.True(marker2.Validated());
+        Assert.False(marker.Equal(marker2));
+
+        marker2 = marker.Clone();
+        marker2.Message = "";
+        Assert.True(marker2.Validated());
+        Assert.False(marker.Equal(marker2));
 
     }
 }

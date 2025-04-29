@@ -4,7 +4,7 @@ namespace TestProject;
 
 public class ModelEncodeTest
 {
-    private Room SuffRoom(string suff)
+    private static Room SuffRoom(string suff)
     {
         return new Room()
         {
@@ -71,5 +71,30 @@ public class ModelEncodeTest
         Assert.True(room.Equal(Room.Decode(room.Encode())));
 
     }
+    private static Marker SuffMarker(string suff)
+    {
+        return new Marker()
+        {
+            Key = $"key{suff}",
+            Value = $"value{suff}",
+            Group = $"group{suff}",
+            Desc = $"desc{suff}",
+            Message = $"message{suff}"
+        };
+    }
+    [Fact]
+    public void TestMarker()
+    {
+        var marker = SuffMarker("");
+        var marker2 = marker.Clone();
+        marker2.Arrange();
+        Assert.True(marker.Equal(marker2));
+        marker = SuffMarker("");
+        Assert.True(marker.Equal(Marker.Decode(marker.Encode())));
+        marker = SuffMarker(">:=@!;\\,&!\n");
+        Assert.True(marker.Equal(Marker.Decode(marker.Encode())));
+        marker = SuffMarker("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
+        Assert.True(marker.Equal(Marker.Decode(marker.Encode())));
 
+    }
 }
