@@ -40,7 +40,7 @@ public partial class Landmarks : UserControl
             var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertLandmark(result);
+                AppState.Main.APIInsertLandmark(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
@@ -58,7 +58,7 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateLandmark(marker.Key, marker.Type, result);
+                    AppState.Main.APIUpdateLandmark(marker.Key, marker.Type, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -78,7 +78,7 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateLandmark(marker.Key, marker.Type, result);
+                    AppState.Main.APIUpdateLandmark(marker.Key, marker.Type, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -89,7 +89,7 @@ public partial class Landmarks : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Landmark model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该定位吗？") == false) return;
-            AppState.Main.RemoveLandmark(model.Key, model.Type);
+            AppState.Main.APIRemoveLandmark(model.Key, model.Type);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

@@ -40,31 +40,11 @@ public partial class Snapshots : UserControl
             var result = await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertSnapshot(result);
+                AppState.Main.APIInsertSnapshot(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
-    // public async void OnEdit(object? sender, RoutedEventArgs args)
-    // {
-    //     if (sender is not null && sender is Button bn && bn.DataContext is Snapshot model)
-    //     {
-    //         if (Parent is not null && Parent.DataContext is MainWindowViewModel vm)
-    //         {
-    //             var window = new EditSnapshotWindow()
-    //             {
-    //                 DataContext = new EditSnapshotWindowViewModel(model, false)
-    //             };
-    //             var result = await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
-    //             if (result is not null)
-    //             {
-    //                 AppState.Main.UpdateSnapshot(model, result);
-    //                 AppState.Main.RaiseMapFileUpdatedEvent(this);
-
-    //             }
-    //         }
-    //     }
-    // }
     public async void OnView(object? sender, RoutedEventArgs args)
     {
         if (sender is not null && sender is Button bn && bn.DataContext is Snapshot model)
@@ -89,7 +69,7 @@ public partial class Snapshots : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Snapshot model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该快照吗？") == false) return;
-            AppState.Main.RemoveSnapshot(model.Key,model.Type,model.Value);
+            AppState.Main.APIRemoveSnapshot(model.Key,model.Type,model.Value);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

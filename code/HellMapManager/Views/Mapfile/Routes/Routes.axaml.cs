@@ -41,7 +41,7 @@ public partial class Routes : UserControl
             var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertRoute(result);
+                AppState.Main.APIInsertRoute(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
@@ -59,7 +59,7 @@ public partial class Routes : UserControl
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoute(model.Key, result);
+                    AppState.Main.APIUpdateRoute(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Routes : UserControl
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoute(model.Key, result);
+                    AppState.Main.APIUpdateRoute(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -90,7 +90,7 @@ public partial class Routes : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Route model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该路线吗？") == false) return;
-            AppState.Main.RemoveRoute(model.Key);
+            AppState.Main.APIRemoveRoute(model.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

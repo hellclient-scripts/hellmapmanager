@@ -41,7 +41,7 @@ public partial class Regions : UserControl
             var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertRegion(result);
+                AppState.Main.APIInsertRegion(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
@@ -59,7 +59,7 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRegion(model.Key, result);
+                    AppState.Main.APIUpdateRegion(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRegion(model.Key, result);
+                    AppState.Main.APIUpdateRegion(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -90,7 +90,7 @@ public partial class Regions : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Region model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该地区吗？") == false) return;
-            AppState.Main.RemoveRegion(model.Key);
+            AppState.Main.APIRemoveRegion(model.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

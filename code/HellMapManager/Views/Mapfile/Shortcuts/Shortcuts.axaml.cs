@@ -41,7 +41,7 @@ public partial class Shortcuts : UserControl
             var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertShortcut(result);
+                AppState.Main.APIInsertShortcut(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
@@ -59,7 +59,7 @@ public partial class Shortcuts : UserControl
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateShortcut(model.Key, result);
+                    AppState.Main.APIUpdateShortcut(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Shortcuts : UserControl
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateShortcut(model.Key, result);
+                    AppState.Main.APIUpdateShortcut(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -90,7 +90,7 @@ public partial class Shortcuts : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Shortcut model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该捷径吗？") == false) return;
-            AppState.Main.RemoveShortcut(model.Key);
+            AppState.Main.APIRemoveShortcut(model.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

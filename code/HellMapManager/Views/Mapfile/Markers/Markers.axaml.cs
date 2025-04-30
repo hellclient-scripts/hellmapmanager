@@ -41,7 +41,7 @@ public partial class Markers : UserControl
             var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertMarker(result);
+                AppState.Main.APIInsertMarker(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
@@ -59,7 +59,7 @@ public partial class Markers : UserControl
                 var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateMarker(marker.Key, result);
+                    AppState.Main.APIUpdateMarker(marker.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Markers : UserControl
                 var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateMarker(marker.Key, result);
+                    AppState.Main.APIUpdateMarker(marker.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -90,7 +90,7 @@ public partial class Markers : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Marker marker)
         {
             if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.RemoveMarker(marker.Key);
+            AppState.Main.APIRemoveMarker(marker.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

@@ -5,7 +5,7 @@ namespace HellMapManager.States;
 
 public partial class AppState
 {
-    public void InsertLandmark(Landmark landmark)
+    public void APIInsertLandmark(Landmark landmark)
     {
         if (Current != null)
         {
@@ -16,7 +16,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveLandmark(string key, string type)
+    public void APIRemoveLandmark(string key, string type)
     {
         if (Current != null)
         {
@@ -26,7 +26,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateLandmark(string key, string type, Landmark current)
+    public void APIUpdateLandmark(string key, string type, Landmark current)
     {
         if (Current != null)
         {
@@ -41,7 +41,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void InsertMarker(Marker marker)
+    public void APIInsertMarker(Marker marker)
     {
         if (Current != null)
         {
@@ -52,7 +52,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveMarker(string key)
+    public void APIRemoveMarker(string key)
     {
         if (Current != null)
         {
@@ -62,7 +62,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateMarker(string key, Marker current)
+    public void APIUpdateMarker(string key, Marker current)
     {
         if (Current != null)
         {
@@ -77,7 +77,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void InsertRegion(Region region)
+    public void APIInsertRegion(Region region)
     {
         if (Current != null)
         {
@@ -88,7 +88,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveRegion(string key)
+    public void APIRemoveRegion(string key)
     {
         if (Current != null)
         {
@@ -98,7 +98,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateRegion(string key, Region current)
+    public void APIUpdateRegion(string key, Region current)
     {
         if (Current != null)
         {
@@ -113,7 +113,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void ImportRoomsHFile(string file)
+    public void APIImportRoomsHFile(string file)
     {
         if (Current != null)
         {
@@ -127,7 +127,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void InsertRoom(Room room)
+    public void APIInsertRoom(Room room)
     {
         if (Current != null)
         {
@@ -138,7 +138,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveRoom(string key)
+    public void APIRemoveRoom(string key)
     {
         if (Current != null)
         {
@@ -148,7 +148,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateRoom(string key, Room current)
+    public void APIUpdateRoom(string key, Room current)
     {
         if (Current != null)
         {
@@ -163,7 +163,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void InsertRoute(Route route)
+    public void APIInsertRoute(Route route)
     {
         if (Current != null)
         {
@@ -174,7 +174,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveRoute(string key)
+    public void APIRemoveRoute(string key)
     {
         if (Current != null)
         {
@@ -184,7 +184,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateRoute(string key, Route current)
+    public void APIUpdateRoute(string key, Route current)
     {
         if (Current != null)
         {
@@ -199,7 +199,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void InsertShortcut(Shortcut model)
+    public void APIInsertShortcut(Shortcut model)
     {
         if (Current != null)
         {
@@ -210,7 +210,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveShortcut(string key)
+    public void APIRemoveShortcut(string key)
     {
         if (Current != null)
         {
@@ -220,7 +220,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateShortcut(string key, Shortcut current)
+    public void APIUpdateShortcut(string key, Shortcut current)
     {
         if (Current != null)
         {
@@ -235,7 +235,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void InsertSnapshot(Snapshot model)
+    public void APIInsertSnapshot(Snapshot model)
     {
         if (Current != null)
         {
@@ -246,7 +246,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveSnapshot(string key, string type, string value)
+    public void APIRemoveSnapshot(string key, string type, string value)
     {
         if (Current != null)
         {
@@ -257,7 +257,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void InsertTrace(Trace trace)
+    public void APIInsertTrace(Trace trace)
     {
         if (Current != null)
         {
@@ -268,7 +268,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveTrace(string key)
+    public void APIRemoveTrace(string key)
     {
         if (Current != null)
         {
@@ -278,7 +278,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateTrace(string key, Trace current)
+    public void APIUpdateTrace(string key, Trace current)
     {
         if (Current != null)
         {
@@ -293,7 +293,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void InsertVariable(Variable model)
+    public void APIInsertVariable(Variable model)
     {
         if (Current != null)
         {
@@ -304,7 +304,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveVariable(string key)
+    public void APIRemoveVariable(string key)
     {
         if (Current != null)
         {
@@ -314,7 +314,7 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void UpdateVariable(string key, Variable current)
+    public void APIUpdateVariable(string key, Variable current)
     {
         if (Current != null)
         {

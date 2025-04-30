@@ -40,7 +40,7 @@ public partial class Variables : UserControl
             var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertVariable(result);
+                AppState.Main.APIInsertVariable(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
@@ -58,7 +58,7 @@ public partial class Variables : UserControl
                 var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateVariable(model.Key, result);
+                    AppState.Main.APIUpdateVariable(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -78,7 +78,7 @@ public partial class Variables : UserControl
                 var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateVariable(model.Key, result);
+                    AppState.Main.APIUpdateVariable(model.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -89,7 +89,7 @@ public partial class Variables : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Variable model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该变量吗？") == false) return;
-            AppState.Main.RemoveVariable(model.Key);
+            AppState.Main.APIRemoveVariable(model.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

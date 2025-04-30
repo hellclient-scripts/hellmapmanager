@@ -41,7 +41,7 @@ public partial class Rooms : UserControl
             var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.InsertRoom(result);
+                AppState.Main.APIInsertRoom(result);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
@@ -59,7 +59,7 @@ public partial class Rooms : UserControl
                 var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoom(room.Key, result);
+                    AppState.Main.APIUpdateRoom(room.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -79,7 +79,7 @@ public partial class Rooms : UserControl
                 var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.UpdateRoom(room.Key, result);
+                    AppState.Main.APIUpdateRoom(room.Key, result);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
@@ -104,7 +104,7 @@ public partial class Rooms : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Room room)
         {
             if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.RemoveRoom(room.Key);
+            AppState.Main.APIRemoveRoom(room.Key);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }
