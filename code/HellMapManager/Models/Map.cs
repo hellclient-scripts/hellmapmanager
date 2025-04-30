@@ -198,8 +198,8 @@ public class MapFile
     }
     public void RemoveTrace(string key)
     {
-        Map.Regions.RemoveAll(r => r.Key == key);
-        Cache.Regions.Remove(key);
+        Map.Traces.RemoveAll(r => r.Key == key);
+        Cache.Traces.Remove(key);
     }
     public void InsertRegion(Region region)
     {

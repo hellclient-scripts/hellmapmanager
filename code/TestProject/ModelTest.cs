@@ -737,7 +737,7 @@ public class ModelTest
         Assert.Equal("", mapInfo.Desc);
         Assert.Equal("<未命名>", mapInfo.NameLabel);
         Assert.Equal("<无描述>", mapInfo.DescLabel);
-        mapInfo=MapInfo.Create("name", "Desc");
+        mapInfo = MapInfo.Create("name", "Desc");
         MapInfo mapInfo2;
         mapInfo2 = mapInfo.Clone();
         Assert.True(mapInfo.Equal(mapInfo2));
@@ -749,10 +749,311 @@ public class ModelTest
         mapInfo2 = mapInfo.Clone();
         mapInfo2.UpdatedTime = -1;
         Assert.False(mapInfo.Equal(mapInfo2));
-        Assert.False(mapInfo2.Validated()); 
+        Assert.False(mapInfo2.Validated());
         mapInfo2 = mapInfo.Clone();
         mapInfo2.Desc = "";
         Assert.False(mapInfo.Equal(mapInfo2));
         Assert.True(mapInfo2.Validated());
     }
+    [Fact]
+    public void TestMapFile()
+    {
+        var mf = new MapFile();
+        MapSettings settings;
+        Assert.True(mf.Modified);
+        Assert.Equal("", mf.Path);
+        Assert.Equal(MapEncoding.Default, mf.Map.Encoding);
+        Assert.Equal("", mf.Map.Info.Name);
+        Assert.Equal("", mf.Map.Info.Desc);
+        settings = mf.ToSettings();
+        Assert.Equal(MapEncoding.Default, settings.Encoding);
+        Assert.Equal("", settings.Name);
+        Assert.Equal("", settings.Desc);
+        mf = MapFile.Create("name", "desc");
+        Assert.True(mf.Modified);
+        Assert.Equal("", mf.Path);
+        Assert.Equal("name", mf.Map.Info.Name);
+        Assert.Equal("desc", mf.Map.Info.Desc);
+        settings = mf.ToSettings();
+        Assert.Equal(MapEncoding.Default, settings.Encoding);
+        Assert.Equal("name", settings.Name);
+        Assert.Equal("desc", settings.Desc);
+        mf.Map.Encoding = MapEncoding.GB18030;
+        settings = mf.ToSettings();
+        Assert.Equal(MapEncoding.GB18030, settings.Encoding);
+        Assert.Equal("name", settings.Name);
+        Assert.Equal("desc", settings.Desc);
+        Assert.Empty(mf.Map.Rooms);
+        Assert.Empty(mf.Map.Markers);
+        Assert.Empty(mf.Map.Routes);
+        Assert.Empty(mf.Map.Traces);
+        Assert.Empty(mf.Map.Regions);
+        Assert.Empty(mf.Map.Landmarks);
+        Assert.Empty(mf.Map.Shortcuts);
+        Assert.Empty(mf.Map.Variables);
+        Assert.Empty(mf.Map.Snapshots);
+
+        mf.RemoveRoom("notfound");
+        Assert.Empty(mf.Map.Rooms);
+        var room = new Room()
+        {
+            Key = "key1",
+        };
+        mf.InsertRoom(room);
+        Assert.Single(mf.Map.Rooms);
+        Assert.Equal(room, mf.Map.Rooms[0]);
+        var room2 = new Room()
+        {
+            Key = "key1",
+        };
+        mf.InsertRoom(room2);
+        Assert.Single(mf.Map.Rooms);
+        Assert.Equal(room2, mf.Map.Rooms[0]);
+        var room3 = new Room()
+        {
+            Key = "key2",
+        };
+        mf.InsertRoom(room3);
+        Assert.Equal(2, mf.Map.Rooms.Count);
+        Assert.Equal(room2, mf.Map.Rooms[0]);
+        Assert.Equal(room3, mf.Map.Rooms[1]);
+        mf.RemoveRoom("key1");
+        Assert.Single(mf.Map.Rooms);
+        Assert.Equal(room3, mf.Map.Rooms[0]);
+
+        mf.RemoveMarker("notfound");
+        Assert.Empty(mf.Map.Markers);
+        var marker = new Marker()
+        {
+            Key = "key1",
+        };
+        mf.InsertMarker(marker);
+        Assert.Single(mf.Map.Markers);
+        Assert.Equal(marker, mf.Map.Markers[0]);
+        var marker2 = new Marker()
+        {
+            Key = "key1",
+        };
+        mf.InsertMarker(marker2);
+        Assert.Single(mf.Map.Markers);
+        Assert.Equal(marker2, mf.Map.Markers[0]);
+        var marker3 = new Marker()
+        {
+            Key = "key2",
+        };
+        mf.InsertMarker(marker3);
+        Assert.Equal(2, mf.Map.Markers.Count);
+        Assert.Equal(marker2, mf.Map.Markers[0]);
+        Assert.Equal(marker3, mf.Map.Markers[1]);
+        mf.RemoveMarker("key1");
+        Assert.Single(mf.Map.Markers);
+        Assert.Equal(marker3, mf.Map.Markers[0]);
+        mf.RemoveRoute("notfound");
+        Assert.Empty(mf.Map.Routes);
+        var route = new Route()
+        {
+            Key = "key1",
+        };
+        mf.InsertRoute(route);
+        Assert.Single(mf.Map.Routes);
+        Assert.Equal(route, mf.Map.Routes[0]);
+        var route2 = new Route()
+        {
+            Key = "key1",
+        };
+        mf.InsertRoute(route2);
+        Assert.Single(mf.Map.Routes);
+        Assert.Equal(route2, mf.Map.Routes[0]);
+        var route3 = new Route()
+        {
+            Key = "key2",
+        };
+        mf.InsertRoute(route3);
+        Assert.Equal(2, mf.Map.Routes.Count);
+        Assert.Equal(route2, mf.Map.Routes[0]);
+        Assert.Equal(route3, mf.Map.Routes[1]);
+        mf.RemoveRoute("key1");
+        Assert.Single(mf.Map.Routes);
+        Assert.Equal(route3, mf.Map.Routes[0]);
+
+        mf.RemoveTrace("notfound");
+        Assert.Empty(mf.Map.Traces);
+        var trace = new Trace()
+        {
+            Key = "key1",
+        };
+        mf.InsertTrace(trace);
+        Assert.Single(mf.Map.Traces);
+        Assert.Equal(trace, mf.Map.Traces[0]);
+        var trace2 = new Trace()
+        {
+            Key = "key1",
+        };
+        mf.InsertTrace(trace2);
+        Assert.Single(mf.Map.Traces);
+        Assert.Equal(trace2, mf.Map.Traces[0]);
+        var trace3 = new Trace()
+        {
+            Key = "key2",
+        };
+        mf.InsertTrace(trace3);
+        Assert.Equal(2, mf.Map.Traces.Count);
+        Assert.Equal(trace2, mf.Map.Traces[0]);
+        Assert.Equal(trace3, mf.Map.Traces[1]);
+        mf.RemoveTrace("key1");
+        Assert.Single(mf.Map.Traces);
+        Assert.Equal(trace3, mf.Map.Traces[0]);
+        mf.RemoveRegion("notfound");
+        Assert.Empty(mf.Map.Regions);
+        var region = new Region()
+        {
+            Key = "key1",
+        };
+        mf.InsertRegion(region);
+        Assert.Single(mf.Map.Regions);
+        Assert.Equal(region, mf.Map.Regions[0]);
+        var region2 = new Region()
+        {
+            Key = "key1",
+        };
+        mf.InsertRegion(region2);
+        Assert.Single(mf.Map.Regions);
+        Assert.Equal(region2, mf.Map.Regions[0]);
+        var region3 = new Region()
+        {
+            Key = "key2",
+        };
+        mf.InsertRegion(region3);
+        Assert.Equal(2, mf.Map.Regions.Count);
+        Assert.Equal(region2, mf.Map.Regions[0]);
+        Assert.Equal(region3, mf.Map.Regions[1]);
+        mf.RemoveRegion("key1");
+        Assert.Single(mf.Map.Regions);
+        Assert.Equal(region3, mf.Map.Regions[0]);
+        mf.RemoveLandmark("notfound", "");
+        Assert.Empty(mf.Map.Landmarks);
+        var landmark = new Landmark()
+        {
+            Key = "key1",
+        };
+        mf.InsertLandmark(landmark);
+        Assert.Single(mf.Map.Landmarks);
+        Assert.Equal(landmark, mf.Map.Landmarks[0]);
+        var landmark2 = new Landmark()
+        {
+            Key = "key1",
+        };
+        mf.InsertLandmark(landmark2);
+        Assert.Single(mf.Map.Landmarks);
+        Assert.Equal(landmark2, mf.Map.Landmarks[0]);
+        var landmark3 = new Landmark()
+        {
+            Key = "key2",
+        };
+        mf.InsertLandmark(landmark3);
+        Assert.Equal(2, mf.Map.Landmarks.Count);
+        Assert.Equal(landmark2, mf.Map.Landmarks[0]);
+        Assert.Equal(landmark3, mf.Map.Landmarks[1]);
+        mf.RemoveLandmark("key1", "");
+        Assert.Single(mf.Map.Landmarks);
+        Assert.Equal(landmark3, mf.Map.Landmarks[0]);
+        mf.RemoveShortcut("notfound");
+        Assert.Empty(mf.Map.Shortcuts);
+        var shortcut = new Shortcut()
+        {
+            Key = "key1",
+        };
+        mf.InsertShortcut(shortcut);
+        Assert.Single(mf.Map.Shortcuts);
+        Assert.Equal(shortcut, mf.Map.Shortcuts[0]);
+        var shortcut2 = new Shortcut()
+        {
+            Key = "key1",
+        };
+        mf.InsertShortcut(shortcut2);
+        Assert.Single(mf.Map.Shortcuts);
+        Assert.Equal(shortcut2, mf.Map.Shortcuts[0]);
+        var shortcut3 = new Shortcut()
+        {
+            Key = "key2",
+        };
+        mf.InsertShortcut(shortcut3);
+        Assert.Equal(2, mf.Map.Shortcuts.Count);
+        Assert.Equal(shortcut2, mf.Map.Shortcuts[0]);
+        Assert.Equal(shortcut3, mf.Map.Shortcuts[1]);
+        mf.RemoveShortcut("key1");
+        Assert.Single(mf.Map.Shortcuts);
+        Assert.Equal(shortcut3, mf.Map.Shortcuts[0]);
+        mf.RemoveVariable("notfound");
+        Assert.Empty(mf.Map.Variables);
+        var variable = new Variable()
+        {
+            Key = "key1",
+        };
+        mf.InsertVariable(variable);
+        Assert.Single(mf.Map.Variables);
+        Assert.Equal(variable, mf.Map.Variables[0]);
+        var variable2 = new Variable()
+        {
+            Key = "key1",
+        };
+        mf.InsertVariable(variable2);
+        Assert.Single(mf.Map.Variables);
+        Assert.Equal(variable2, mf.Map.Variables[0]);
+        var variable3 = new Variable()
+        {
+            Key = "key2",
+        };
+        mf.InsertVariable(variable3);
+        Assert.Equal(2, mf.Map.Variables.Count);
+        Assert.Equal(variable2, mf.Map.Variables[0]);
+        Assert.Equal(variable3, mf.Map.Variables[1]);
+        mf.RemoveVariable("key1");
+        Assert.Single(mf.Map.Variables);
+        Assert.Equal(variable3, mf.Map.Variables[0]);
+        mf.RemoveSnapshot("notfound", "", "");
+        Assert.Empty(mf.Map.Snapshots);
+        var snapshot = new Snapshot()
+        {
+            Key = "key1",
+        };
+        mf.InsertSnapshot(snapshot);
+        Assert.Single(mf.Map.Snapshots);
+        Assert.Equal(snapshot, mf.Map.Snapshots[0]);
+        var snapshot2 = new Snapshot()
+        {
+            Key = "key1",
+        };
+        mf.InsertSnapshot(snapshot2);
+        Assert.Single(mf.Map.Snapshots);
+        Assert.Equal(snapshot2, mf.Map.Snapshots[0]);
+        var snapshot3 = new Snapshot()
+        {
+            Key = "key2",
+        };
+        mf.InsertSnapshot(snapshot3);
+        Assert.Equal(2, mf.Map.Snapshots.Count);
+        Assert.Equal(snapshot2, mf.Map.Snapshots[0]);
+        Assert.Equal(snapshot3, mf.Map.Snapshots[1]);
+        mf.RemoveSnapshot("key1", "", "");
+        Assert.Single(mf.Map.Snapshots);
+        Assert.Equal(snapshot3, mf.Map.Snapshots[0]);
+        mf = new MapFile();
+        mf.Modified = false;
+        Assert.False(mf.Modified);
+        Assert.Equal(0, mf.Map.Info.UpdatedTime);
+        mf.MarkAsModified();
+        Assert.True(mf.Modified);
+        Assert.NotEqual(0, mf.Map.Info.UpdatedTime);
+        mf = new MapFile();
+        var rf = mf.ToRecentFile();
+        Assert.Equal("", rf.Path);
+        Assert.Equal("", rf.Name);
+        mf.Path = "/mypath";
+        mf.Map.Info.Name = "myname";
+        rf = mf.ToRecentFile();
+        Assert.Equal("/mypath", rf.Path);
+        Assert.Equal("myname", rf.Name);
+    }
+
 }

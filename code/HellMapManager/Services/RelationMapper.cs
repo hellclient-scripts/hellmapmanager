@@ -31,27 +31,6 @@ public class RelationMapItem(Room room, int depth)
         }
         return false;
     }
-    public List<string> Dump()
-    {
-        List<string> result = [];
-        result.Add(new string(' ', Depth * 4) + "key:" + this.Room.Key + "(" + this.Room.Name + ")");
-        foreach (var r in Relations)
-        {
-            string mode;
-            switch (r.Type)
-            {
-                case RelationType.OneSideTo:
-                    mode = "to";
-                    break;
-                default:
-                    mode = "twoway";
-                    break;
-            }
-            result.Add(new string(' ', r.Target.Depth * 4) + mode);
-            result.AddRange(r.Target.Dump());
-        }
-        return result;
-    }
 }
 
 
