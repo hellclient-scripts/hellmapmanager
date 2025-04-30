@@ -2,7 +2,7 @@ using HellMapManager.Models;
 
 namespace TestProject;
 
-public class ModelEncodeTest
+public class BussinessTest
 {
     [Fact]
     public void TestExit()
