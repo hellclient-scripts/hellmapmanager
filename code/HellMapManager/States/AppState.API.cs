@@ -7,9 +7,8 @@ public partial class AppState
 {
     public void APIInsertLandmark(Landmark landmark)
     {
-        if (Current != null)
+        if (Current != null&&landmark.Validated())
         {
-
             Current.InsertLandmark(landmark);
             Landmark.Sort(Current.Map.Landmarks);
             Current.MarkAsModified();
@@ -28,7 +27,7 @@ public partial class AppState
     }
     public void APIUpdateLandmark(string key, string type, Landmark current)
     {
-        if (Current != null)
+        if (Current != null&&current.Validated())
         {
 
             if (key != current.Key || type != current.Type)
@@ -43,7 +42,7 @@ public partial class AppState
     }
     public void APIInsertMarker(Marker marker)
     {
-        if (Current != null)
+        if (Current != null&&marker.Validated())
         {
 
             Current.InsertMarker(marker);
@@ -64,7 +63,7 @@ public partial class AppState
     }
     public void APIUpdateMarker(string key, Marker current)
     {
-        if (Current != null)
+        if (Current != null&&current.Validated())
         {
 
             if (key != current.Key)
@@ -79,7 +78,7 @@ public partial class AppState
     }
     public void APIInsertRegion(Region region)
     {
-        if (Current != null)
+        if (Current != null&&region.Validated())
         {
 
             Current.InsertRegion(region);
@@ -100,7 +99,7 @@ public partial class AppState
     }
     public void APIUpdateRegion(string key, Region current)
     {
-        if (Current != null)
+        if (Current != null&&current.Validated())
         {
 
             if (key != current.Key)
@@ -129,7 +128,7 @@ public partial class AppState
     }
     public void APIInsertRoom(Room room)
     {
-        if (Current != null)
+        if (Current != null&&room.Validated())
         {
 
             Current.InsertRoom(room);
@@ -150,7 +149,7 @@ public partial class AppState
     }
     public void APIUpdateRoom(string key, Room current)
     {
-        if (Current != null)
+        if (Current != null&&current.Validated())
         {
 
             if (key != current.Key)
@@ -165,7 +164,7 @@ public partial class AppState
     }
     public void APIInsertRoute(Route route)
     {
-        if (Current != null)
+        if (Current != null&&route.Validated())
         {
 
             Current.InsertRoute(route);
@@ -186,7 +185,7 @@ public partial class AppState
     }
     public void APIUpdateRoute(string key, Route current)
     {
-        if (Current != null)
+        if (Current != null&&current.Validated())
         {
 
             if (key != current.Key)
@@ -201,7 +200,7 @@ public partial class AppState
     }
     public void APIInsertShortcut(Shortcut model)
     {
-        if (Current != null)
+        if (Current != null&&model.Validated())
         {
 
             Current.InsertShortcut(model);
@@ -222,7 +221,7 @@ public partial class AppState
     }
     public void APIUpdateShortcut(string key, Shortcut current)
     {
-        if (Current != null)
+        if (Current != null&&current.Validated())
         {
 
             if (key != current.Key)
@@ -237,7 +236,7 @@ public partial class AppState
     }
     public void APIInsertSnapshot(Snapshot model)
     {
-        if (Current != null)
+        if (Current != null&&model.Validated())
         {
 
             Current.InsertSnapshot(model);
@@ -259,7 +258,7 @@ public partial class AppState
     }
     public void APIInsertTrace(Trace trace)
     {
-        if (Current != null)
+        if (Current != null&&trace.Validated())
         {
 
             Current.InsertTrace(trace);
@@ -280,7 +279,7 @@ public partial class AppState
     }
     public void APIUpdateTrace(string key, Trace current)
     {
-        if (Current != null)
+        if (Current != null&&current.Validated())
         {
 
             if (key != current.Key)
@@ -295,7 +294,7 @@ public partial class AppState
     }
     public void APIInsertVariable(Variable model)
     {
-        if (Current != null)
+        if (Current != null&&model.Validated())
         {
 
             Current.InsertVariable(model);
@@ -316,7 +315,7 @@ public partial class AppState
     }
     public void APIUpdateVariable(string key, Variable current)
     {
-        if (Current != null)
+        if (Current != null&&current.Validated())
         {
 
             if (key != current.Key)
