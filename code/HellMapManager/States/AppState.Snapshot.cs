@@ -9,17 +9,18 @@ public partial class AppState
         {
 
             Current.InsertSnapshot(model);
-            Current.Map.Arrange();
+            Snapshot.Sort(Current.Map.Snapshots);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void RemoveSnapshot(string key,string type,string value)
+    public void RemoveSnapshot(string key, string type, string value)
     {
         if (Current != null)
         {
 
             Current.RemoveSnapshot(key, type, value);
+            Snapshot.Sort(Current.Map.Snapshots);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

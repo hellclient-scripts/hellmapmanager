@@ -9,7 +9,7 @@ public partial class AppState
         {
 
             Current.InsertTrace(trace);
-            Current.Map.Arrange();
+            Trace.Sort(Current.Map.Traces);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -34,7 +34,7 @@ public partial class AppState
                 Current.RemoveTrace(key);
             }
             Current.InsertTrace(current);
-            Current.Map.Arrange();
+            Trace.Sort(Current.Map.Traces);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

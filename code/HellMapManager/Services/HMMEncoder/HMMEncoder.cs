@@ -103,7 +103,7 @@ public class HMMEncoder
 
         using (var ms = new MemoryStream(body))
         {
-            var mf = MapFile.Empty("", "");
+            var mf = MapFile.Create("", "");
             using (var sr = new StreamReader(ms, encoding))
             {
                 string? data;

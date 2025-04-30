@@ -9,7 +9,7 @@ public partial class AppState
         {
 
             Current.InsertLandmark(landmark);
-            Current.Map.Arrange();
+            Landmark.Sort(Current.Map.Landmarks);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -34,7 +34,7 @@ public partial class AppState
                 Current.RemoveLandmark(key, type);
             }
             Current.InsertLandmark(current);
-            Current.Map.Arrange();
+            Landmark.Sort(Current.Map.Landmarks);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

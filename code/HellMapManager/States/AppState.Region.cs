@@ -9,7 +9,7 @@ public partial class AppState
         {
 
             Current.InsertRegion(region);
-            Current.Map.Arrange();
+            Region.Sort(Current.Map.Regions);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -34,7 +34,7 @@ public partial class AppState
                 Current.RemoveRegion(key);
             }
             Current.InsertRegion(current);
-            Current.Map.Arrange();
+            Region.Sort(Current.Map.Regions);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

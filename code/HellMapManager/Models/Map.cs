@@ -25,7 +25,7 @@ public partial class MapInfo
     public string Desc { get; set; } = "";
     public string DescLabel { get => Desc == "" ? "<无描述>" : Desc; }
     public long UpdatedTime { get; set; } = 0;
-    public static MapInfo Empty(string name, string desc)
+    public static MapInfo Create(string name, string desc)
     {
         var info = new MapInfo
         {
@@ -118,11 +118,11 @@ public partial class Map
         Variable.Sort(Variables);
         Snapshot.Sort(Snapshots);
     }
-    public static Map Empty(string name, string desc)
+    public static Map Create(string name, string desc)
     {
         return new Map
         {
-            Info = MapInfo.Empty(name, desc),
+            Info = MapInfo.Create(name, desc),
         };
     }
 }
@@ -139,11 +139,11 @@ public class MapFile
     public string Path = "";
     public bool Modified = true;
     public Cache Cache = new();
-    public static MapFile Empty(string name, string desc)
+    public static MapFile Create(string name, string desc)
     {
         return new MapFile
         {
-            Map = Map.Empty(name, desc),
+            Map = Map.Create(name, desc),
         };
     }
     public void MarkAsModified()
@@ -166,21 +166,7 @@ public class MapFile
         Map.Rooms.RemoveAll(r => r.Key == key);
         Cache.Rooms.Remove(key);
     }
-    public void ImportRooms(List<Room> rooms)
-    {
-        foreach (var room in rooms)
-        {
-            InsertRoom(room);
-        }
-    }
 
-    public void ImportMarkers(List<Marker> markers)
-    {
-        foreach (var marker in markers)
-        {
-            InsertMarker(marker);
-        }
-    }
     public void InsertMarker(Marker marker)
     {
         Map.Markers.RemoveAll(r => r.Key == marker.Key);
@@ -191,13 +177,6 @@ public class MapFile
     {
         Map.Markers.RemoveAll(r => r.Key == key);
         Cache.Markers.Remove(key);
-    }
-    public void ImportRoutes(List<Route> routes)
-    {
-        foreach (var route in routes)
-        {
-            InsertRoute(route);
-        }
     }
     public void InsertRoute(Route route)
     {
@@ -211,13 +190,6 @@ public class MapFile
         Cache.Routes.Remove(key);
     }
 
-    public void ImportTraces(List<Trace> traces)
-    {
-        foreach (var trace in traces)
-        {
-            InsertTrace(trace);
-        }
-    }
     public void InsertTrace(Trace trace)
     {
         Map.Traces.RemoveAll(r => r.Key == trace.Key);
@@ -228,13 +200,6 @@ public class MapFile
     {
         Map.Regions.RemoveAll(r => r.Key == key);
         Cache.Regions.Remove(key);
-    }
-    public void ImportRegions(List<Region> regions)
-    {
-        foreach (var region in regions)
-        {
-            InsertRegion(region);
-        }
     }
     public void InsertRegion(Region region)
     {
@@ -248,13 +213,6 @@ public class MapFile
         Cache.Regions.Remove(key);
     }
 
-    public void ImportLandmarks(List<Landmark> models)
-    {
-        foreach (var model in models)
-        {
-            InsertLandmark(model);
-        }
-    }
     public void InsertLandmark(Landmark landmark)
     {
         Map.Landmarks.RemoveAll(r => r.Key == landmark.Key && r.Type == landmark.Type);
@@ -267,13 +225,6 @@ public class MapFile
         Cache.Landmarks.Remove(key);
     }
 
-    public void ImportShortcuts(List<Shortcut> models)
-    {
-        foreach (var model in models)
-        {
-            InsertShortcut(model);
-        }
-    }
     public void InsertShortcut(Shortcut model)
     {
         Map.Shortcuts.RemoveAll(r => r.Key == model.Key);
@@ -284,13 +235,6 @@ public class MapFile
     {
         Map.Shortcuts.RemoveAll(r => r.Key == key);
         Cache.Shortcuts.Remove(key);
-    }
-    public void ImportVariables(List<Variable> models)
-    {
-        foreach (var model in models)
-        {
-            InsertVariable(model);
-        }
     }
     public void InsertVariable(Variable model)
     {

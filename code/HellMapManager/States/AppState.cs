@@ -80,7 +80,7 @@ public partial class AppState()
 
     public void NewMap()
     {
-        var mapfile = MapFile.Empty("", "");
+        var mapfile = MapFile.Create("", "");
         SetCurrent(mapfile);
     }
     public void SetCurrent(MapFile mapfile)

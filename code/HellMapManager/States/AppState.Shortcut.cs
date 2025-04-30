@@ -9,7 +9,7 @@ public partial class AppState
         {
 
             Current.InsertShortcut(model);
-            Current.Map.Arrange();
+            Shortcut.Sort(Current.Map.Shortcuts);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -34,7 +34,7 @@ public partial class AppState
                 Current.RemoveShortcut(key);
             }
             Current.InsertShortcut(current);
-            Current.Map.Arrange();
+            Shortcut.Sort(Current.Map.Shortcuts);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

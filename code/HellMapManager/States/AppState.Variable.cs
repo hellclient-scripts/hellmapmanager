@@ -9,7 +9,7 @@ public partial class AppState
         {
 
             Current.InsertVariable(model);
-            Current.Map.Arrange();
+            Variable.Sort(Current.Map.Variables);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -34,7 +34,7 @@ public partial class AppState
                 Current.RemoveVariable(key);
             }
             Current.InsertVariable(current);
-            Current.Map.Arrange();
+            Variable.Sort(Current.Map.Variables);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

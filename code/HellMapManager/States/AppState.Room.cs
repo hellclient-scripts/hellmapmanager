@@ -9,7 +9,12 @@ public partial class AppState
     {
         if (Current != null)
         {
-            Current.ImportRooms(RoomsH.Open(file));
+            var rooms= RoomsH.Open(file);
+            foreach (var room in rooms)
+            {
+             Current.InsertRoom(room);
+            }
+            Room.Sort(Current.Map.Rooms);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -20,7 +25,7 @@ public partial class AppState
         {
 
             Current.InsertRoom(room);
-            Current.Map.Arrange();
+            Room.Sort(Current.Map.Rooms);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -45,7 +50,7 @@ public partial class AppState
                 Current.RemoveRoom(key);
             }
             Current.InsertRoom(current);
-            Current.Map.Arrange();
+            Room.Sort(Current.Map.Rooms);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

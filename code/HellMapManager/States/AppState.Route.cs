@@ -9,7 +9,7 @@ public partial class AppState
         {
 
             Current.InsertRoute(route);
-            Current.Map.Arrange();
+            Route.Sort(Current.Map.Routes);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -34,7 +34,7 @@ public partial class AppState
                 Current.RemoveRoute(key);
             }
             Current.InsertRoute(current);
-            Current.Map.Arrange();
+            Route.Sort(Current.Map.Routes);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

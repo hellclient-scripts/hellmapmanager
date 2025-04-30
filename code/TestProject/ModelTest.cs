@@ -701,7 +701,7 @@ public class ModelTest
 
         };
         Assert.Equal(MapEncoding.Default, map.Encoding);
-        map = Map.Empty("name", "desc");
+        map = Map.Create("name", "desc");
         Assert.Equal("name", map.Info.Name);
         Assert.Equal("desc", map.Info.Desc);
     }
@@ -725,19 +725,19 @@ public class ModelTest
         Assert.Equal("desc", mapInfo.Desc);
         Assert.Equal("name", mapInfo.NameLabel);
         Assert.Equal("desc", mapInfo.DescLabel);
-        mapInfo = MapInfo.Empty("name", "desc");
+        mapInfo = MapInfo.Create("name", "desc");
         Assert.Equal("name", mapInfo.Name);
         Assert.True(mapInfo.UpdatedTime > 0);
         Assert.Equal("desc", mapInfo.Desc);
         Assert.Equal("name", mapInfo.NameLabel);
         Assert.Equal("desc", mapInfo.DescLabel);
-        mapInfo = MapInfo.Empty("", "");
+        mapInfo = MapInfo.Create("", "");
         Assert.Equal("", mapInfo.Name);
         Assert.True(mapInfo.UpdatedTime > 0);
         Assert.Equal("", mapInfo.Desc);
         Assert.Equal("<未命名>", mapInfo.NameLabel);
         Assert.Equal("<无描述>", mapInfo.DescLabel);
-        mapInfo=MapInfo.Empty("name", "Desc");
+        mapInfo=MapInfo.Create("name", "Desc");
         MapInfo mapInfo2;
         mapInfo2 = mapInfo.Clone();
         Assert.True(mapInfo.Equal(mapInfo2));

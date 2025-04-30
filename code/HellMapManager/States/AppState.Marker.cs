@@ -9,7 +9,7 @@ public partial class AppState
         {
 
             Current.InsertMarker(marker);
-            Current.Map.Arrange();
+            Marker.Sort(Current.Map.Markers);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -34,7 +34,7 @@ public partial class AppState
                 Current.RemoveMarker(key);
             }
             Current.InsertMarker(current);
-            Current.Map.Arrange();
+            Marker.Sort(Current.Map.Markers);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
