@@ -78,105 +78,97 @@ public class HMMEncoder
     public static MapFile? Decode(byte[] body)
     {
         Encoding encoding;
-        using (var ms = new MemoryStream(body))
+        using var ms = new MemoryStream(body);
+        using var sr = new StreamReader(ms);
+        var line = sr.ReadLine();
+        if (line is not null)
         {
-            using (var sr = new StreamReader(ms))
+            line = HMMFormatter.Escaper.Unpack(line);
+            var head = MapHeadData.Decode(line);
+            if (head.Validated())
             {
-                var line = sr.ReadLine();
-                if (line is not null)
-                {
-                    line = HMMFormatter.Escaper.Unpack(line);
-                    var head = MapHeadData.Decode(line);
-                    if (head.Validated())
-                    {
-                        encoding = GetEncoding(head.Encoding);
-                        return DecodeWithEncoding(body, encoding);
-                    }
-                }
+                encoding = GetEncoding(head.Encoding);
+                return DecodeWithEncoding(body, head.Encoding, encoding);
             }
-
         }
         return null;
     }
-    private static MapFile? DecodeWithEncoding(byte[] body, Encoding encoding)
+    private static MapFile? DecodeWithEncoding(byte[] body, MapEncoding mapEncoding, Encoding encoding)
     {
 
-        using (var ms = new MemoryStream(body))
+        using var ms = new MemoryStream(body);
+        var mf = MapFile.Create("", "");
+        mf.Map.Encoding = mapEncoding;
+        using var sr = new StreamReader(ms, encoding);
+        string? data;
+        while ((data = sr.ReadLine()) != null)
         {
-            var mf = MapFile.Create("", "");
-            using (var sr = new StreamReader(ms, encoding))
+            data = HMMFormatter.Escaper.Unpack(data);
+            var key = HMMFormatter.DecodeKeyValue1(data);
+            switch (key.Key)
             {
-                string? data;
-                while ((data = sr.ReadLine()) != null)
-                {
-                    data = HMMFormatter.Escaper.Unpack(data);
-                    var key = HMMFormatter.DecodeKeyValue1(data);
-                    switch (key.Key)
+                case MapInfo.EncodeKey:
                     {
-                        case MapInfo.EncodeKey:
-                            {
-                                var model = MapInfo.Decode(data);
-                                if (model.Validated()) { mf.Map.Info = model; }
-                            }
-                            break;
-                        case Room.EncodeKey:
-                            {
-                                var model = Room.Decode(data);
-                                if (model.Validated()) { mf.Map.Rooms.Add(model); }
-                            }
-                            break;
-                        case Marker.EncodeKey:
-                            {
-                                var model = Marker.Decode(data);
-                                if (model.Validated()) { mf.Map.Markers.Add(model); }
-                            }
-                            break;
-                        case Landmark.EncodeKey:
-                            {
-                                var model = Landmark.Decode(data);
-                                if (model.Validated()) { mf.Map.Landmarks.Add(model); }
-                            }
-                            break;
-                        case Variable.EncodeKey:
-                            {
-                                var model = Variable.Decode(data);
-                                if (model.Validated()) { mf.Map.Variables.Add(model); }
-                            }
-                            break;
-                        case Route.EncodeKey:
-                            {
-                                var model = Route.Decode(data);
-                                if (model.Validated()) { mf.Map.Routes.Add(model); }
-                            }
-                            break;
-                        case Region.EncodeKey:
-                            {
-                                var model = Region.Decode(data);
-                                if (model.Validated()) { mf.Map.Regions.Add(model); }
-                            }
-                            break;
-                        case Trace.EncodeKey:
-                            {
-                                var model = Trace.Decode(data);
-                                if (model.Validated()) { mf.Map.Traces.Add(model); }
-                            }
-                            break;
-                        case Shortcut.EncodeKey:
-                            {
-                                var model = Shortcut.Decode(data);
-                                if (model.Validated()) { mf.Map.Shortcuts.Add(model); }
-                            }
-                            break;
-                        case Snapshot.EncodeKey:
-                            {
-                                var model = Snapshot.Decode(data);
-                                if (model.Validated()) { mf.Map.Snapshots.Add(model); }
-                            }
-                            break;
+                        var model = MapInfo.Decode(data);
+                        if (model.Validated()) { mf.Map.Info = model; }
                     }
-                }
-                return mf;
+                    break;
+                case Room.EncodeKey:
+                    {
+                        var model = Room.Decode(data);
+                        if (model.Validated()) { mf.Map.Rooms.Add(model); }
+                    }
+                    break;
+                case Marker.EncodeKey:
+                    {
+                        var model = Marker.Decode(data);
+                        if (model.Validated()) { mf.Map.Markers.Add(model); }
+                    }
+                    break;
+                case Landmark.EncodeKey:
+                    {
+                        var model = Landmark.Decode(data);
+                        if (model.Validated()) { mf.Map.Landmarks.Add(model); }
+                    }
+                    break;
+                case Variable.EncodeKey:
+                    {
+                        var model = Variable.Decode(data);
+                        if (model.Validated()) { mf.Map.Variables.Add(model); }
+                    }
+                    break;
+                case Route.EncodeKey:
+                    {
+                        var model = Route.Decode(data);
+                        if (model.Validated()) { mf.Map.Routes.Add(model); }
+                    }
+                    break;
+                case Region.EncodeKey:
+                    {
+                        var model = Region.Decode(data);
+                        if (model.Validated()) { mf.Map.Regions.Add(model); }
+                    }
+                    break;
+                case Trace.EncodeKey:
+                    {
+                        var model = Trace.Decode(data);
+                        if (model.Validated()) { mf.Map.Traces.Add(model); }
+                    }
+                    break;
+                case Shortcut.EncodeKey:
+                    {
+                        var model = Shortcut.Decode(data);
+                        if (model.Validated()) { mf.Map.Shortcuts.Add(model); }
+                    }
+                    break;
+                case Snapshot.EncodeKey:
+                    {
+                        var model = Snapshot.Decode(data);
+                        if (model.Validated()) { mf.Map.Snapshots.Add(model); }
+                    }
+                    break;
             }
         }
+        return mf;
     }
 }
