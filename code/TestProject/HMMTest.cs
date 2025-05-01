@@ -1,5 +1,3 @@
-
-using System.Text;
 using HellMapManager.Models;
 using HellMapManager.Services.HMMEncoder;
 

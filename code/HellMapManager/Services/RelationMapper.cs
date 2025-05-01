@@ -18,7 +18,7 @@ public class Relation(RelationMapItem target, RelationType type)
 public class RelationMapItem(Room room, int depth)
 {
     public int Depth = depth;
-    public Room Room { get; set; } = room;
+    public Room Room { get; } = room;
     public List<Relation> Relations = [];
     public bool HasRelation(string target)
     {

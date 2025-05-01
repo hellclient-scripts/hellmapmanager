@@ -12,7 +12,7 @@ namespace HellMapManager.Services;
 
 [JsonSerializable(typeof(Settings))]
 [JsonSerializable(typeof(bool))]
-[JsonSerializable(typeof(int))]
+// [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
 [JsonSerializable(typeof(List<RecentFile>))]
 public partial class SettingsContext : JsonSerializerContext
