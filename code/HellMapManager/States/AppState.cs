@@ -32,7 +32,7 @@ public partial class AppState()
             LoadFile(Current.Path);
         }
     }
-    private void AddRecent(RecentFile recent)
+    public void AddRecent(RecentFile recent)
     {
         if (Settings.Recents.Count > 0 && Settings.Recents[0].Path == recent.Path && Settings.Recents[0].Name == recent.Name)
         {
