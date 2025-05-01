@@ -1,7 +1,6 @@
 ﻿using System;
 using HellMapManager.States;
 using HellMapManager.Models;
-using System.Collections.ObjectModel;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase

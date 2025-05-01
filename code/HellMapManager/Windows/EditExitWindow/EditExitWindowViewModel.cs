@@ -1,6 +1,4 @@
-﻿using System;
-using HellMapManager.Models;
-using HellMapManager.States;
+﻿using HellMapManager.Models;
 using HellMapManager.Windows.NewConditionWindow;
 
 using CommunityToolkit.Mvvm.ComponentModel;

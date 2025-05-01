@@ -1,12 +1,7 @@
-﻿using System;
-using HellMapManager.Models;
+﻿using HellMapManager.Models;
 using HellMapManager.States;
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using HellMapManager.Windows.EditDataWindow;
-using System.Linq;
-using HellMapManager.Windows.NewTagWindow;
-using HellMapManager.Windows.EditExitWindow;
 
 namespace HellMapManager.Windows.EditTraceWindow;
 

@@ -7,7 +7,6 @@ using MsBox.Avalonia.Models;
 using Avalonia.Controls.ApplicationLifetimes;
 using HellMapManager.States;
 using System;
-using Avalonia.Rendering.Composition;
 
 namespace HellMapManager.Services;
 

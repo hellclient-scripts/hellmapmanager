@@ -1,8 +1,4 @@
-﻿using System;
-using HellMapManager.Models;
-using HellMapManager.States;
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace HellMapManager.Windows.NewTagWindow;
 

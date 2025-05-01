@@ -1,8 +1,4 @@
-using System;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using HellMapManager.ViewModels;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditVariableWindow;

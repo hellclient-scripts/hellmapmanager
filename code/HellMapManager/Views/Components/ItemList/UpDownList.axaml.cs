@@ -1,11 +1,8 @@
-using System;
 using System.Collections;
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
-using HellMapManager.Services;
 namespace HellMapManager.Views.Components.UpDownList;
 
 public partial class UpDownList : UserControl

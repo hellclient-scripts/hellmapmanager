@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
 using HellMapManager.Services;
 namespace HellMapManager.Windows.NewConditionWindow;

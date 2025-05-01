@@ -9,7 +9,6 @@ using HellMapManager.States;
 using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Services;
 using System.IO;
-using Avalonia.Remote.Protocol.Viewport;
 namespace HellMapManager;
 
 public partial class App : Application

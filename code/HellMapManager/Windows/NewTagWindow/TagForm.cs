@@ -1,10 +1,4 @@
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections.Generic;
-
 using CommunityToolkit.Mvvm.ComponentModel;
-using HellMapManager.Models;
-using Microsoft.VisualBasic;
 namespace HellMapManager.Windows.NewTagWindow;
 
 public delegate string ExternalValidator(TagForm form);

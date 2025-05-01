@@ -1,7 +1,6 @@
 
 using HellMapManager.States;
 using HellMapManager.Models;
-using HellMapManager;
 namespace TestProject;
 
 public class AppStateTest

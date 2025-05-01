@@ -1,15 +1,10 @@
-using System;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using HellMapManager.ViewModels;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditTraceWindow;
 using Avalonia.Interactivity;
 using HellMapManager.States;
 using HellMapManager.Services;
-using HellMapManager.Windows.RelationMapWindow;
 
 
 namespace HellMapManager.Views.Mapfile.Traces;

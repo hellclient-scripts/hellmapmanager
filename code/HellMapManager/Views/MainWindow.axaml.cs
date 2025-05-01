@@ -1,9 +1,7 @@
 using Avalonia.Controls;
 using HellMapManager.Services;
 using HellMapManager.Models;
-using HellMapManager.States;
 using Avalonia.Interactivity;
-using System.Threading.Tasks;
 namespace HellMapManager.Views;
 
 public partial class MainWindow : Window

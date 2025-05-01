@@ -1,11 +1,7 @@
 namespace HellMapManager.Windows.EditMarkerWindow;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections.Generic;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Models;
-using Microsoft.VisualBasic;
 
 public delegate string ExternalValidator(MarkerForm room);
 public partial class MarkerForm : ObservableObject

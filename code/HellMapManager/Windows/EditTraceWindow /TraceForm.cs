@@ -1,7 +1,6 @@
 namespace HellMapManager.Windows.EditTraceWindow;
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Models;

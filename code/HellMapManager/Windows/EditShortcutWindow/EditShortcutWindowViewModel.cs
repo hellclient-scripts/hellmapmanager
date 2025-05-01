@@ -1,5 +1,4 @@
-﻿using System;
-using HellMapManager.Models;
+﻿using HellMapManager.Models;
 using HellMapManager.States;
 using HellMapManager.Windows.NewConditionWindow;
 
