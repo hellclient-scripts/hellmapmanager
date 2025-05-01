@@ -46,6 +46,6 @@ public class HMMFile
             body = File.ReadAllBytes(name);
         }
 
-        return HMMEncoder.HMMEncoder.Decode(body)!.Map;
+        return HMMEncoder.HMMEncoder.Decode(body)?.Map;
     }
 }
