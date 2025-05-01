@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using HellMapManager.Models;
 using HellMapManager.Services;
 
@@ -9,6 +10,30 @@ public class APIListOption
 }
 public partial class AppState
 {
+    public List<Landmark> APIListLandmarks(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Landmarks;
+            }
+            var list = new List<Landmark>() { };
+            Current.Map.Landmarks.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
+    }
     public void APIInsertLandmark(Landmark landmark)
     {
         if (Current != null && landmark.Validated())
@@ -43,6 +68,30 @@ public partial class AppState
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
+    }
+    public List<Marker> APIListMarkers(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Markers;
+            }
+            var list = new List<Marker>() { };
+            Current.Map.Markers.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
     }
     public void APIInsertMarker(Marker marker)
     {
@@ -79,6 +128,30 @@ public partial class AppState
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
+    }
+    public List<Region> APIListRegions(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Regions;
+            }
+            var list = new List<Region>() { };
+            Current.Map.Regions.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
     }
     public void APIInsertRegion(Region region)
     {
@@ -130,6 +203,30 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
+    public List<Room> APIListRooms(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Rooms;
+            }
+            var list = new List<Room>() { };
+            Current.Map.Rooms.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
+    }
     public void APIInsertRoom(Room room)
     {
         if (Current != null && room.Validated())
@@ -177,6 +274,30 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
+    public List<Route> APIListRoutes(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Routes;
+            }
+            var list = new List<Route>() { };
+            Current.Map.Routes.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
+    }
     public void APIRemoveRoute(string key)
     {
         if (Current != null)
@@ -212,6 +333,30 @@ public partial class AppState
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
+    }
+    public List<Shortcut> APIListShortcuts(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Shortcuts;
+            }
+            var list = new List<Shortcut>() { };
+            Current.Map.Shortcuts.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
     }
     public void APIRemoveShortcut(string key)
     {
@@ -249,6 +394,30 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
+    public List<Snapshot> APIListSnapshots(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Snapshots;
+            }
+            var list = new List<Snapshot>() { };
+            Current.Map.Snapshots.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
+    }
     public void APIRemoveSnapshot(string key, string type, string value)
     {
         if (Current != null)
@@ -281,6 +450,30 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
+    public List<Trace> APIListTraces(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Traces;
+            }
+            var list = new List<Trace>() { };
+            Current.Map.Traces.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
+    }
     public void APIUpdateTrace(string key, Trace current)
     {
         if (Current != null && current.Validated())
@@ -306,6 +499,30 @@ public partial class AppState
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
+    }
+    public List<Variable> APIListVariables(APIListOption option)
+    {
+        if (Current != null)
+        {
+            if (option.Key is null && option.Group is null)
+            {
+                return Current.Map.Variables;
+            }
+            var list = new List<Variable>() { };
+            Current.Map.Variables.ForEach((model) =>
+            {
+                if (option.Key is not null && model.Key != option.Key)
+                {
+                    return;
+                }
+                if (option.Group is not null && model.Group != option.Key)
+                {
+                    return;
+                }
+            });
+            return list;
+        }
+        return [];
     }
     public void APIRemoveVariable(string key)
     {
