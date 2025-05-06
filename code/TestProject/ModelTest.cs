@@ -507,7 +507,7 @@ public class ModelTest
         lm2 = lm.Clone();
         Assert.True(lm.Equal(lm2));
         Assert.True(lm2.Validated());
-        Assert.Equal(lm.UniqueKey.ToString(), lm2.UniqueKey.ToString());
+        Assert.Equal(lm.UniqueKey().ToString(), lm2.UniqueKey().ToString());
         lm2.Key = "";
         Assert.False(lm.Equal(lm2));
         Assert.False(lm2.Validated());
@@ -521,17 +521,17 @@ public class ModelTest
         lm2.Value = "";
         Assert.False(lm.Equal(lm2));
         Assert.True(lm2.Validated());
-        Assert.Equal(lm.UniqueKey.ToString(), lm2.UniqueKey.ToString());
+        Assert.Equal(lm.UniqueKey().ToString(), lm2.UniqueKey().ToString());
         lm2 = lm.Clone();
         lm2.Group = "";
         Assert.False(lm.Equal(lm2));
         Assert.True(lm2.Validated());
-        Assert.Equal(lm.UniqueKey.ToString(), lm2.UniqueKey.ToString());
+        Assert.Equal(lm.UniqueKey().ToString(), lm2.UniqueKey().ToString());
         lm2 = lm.Clone();
         lm2.Desc = "";
         Assert.False(lm.Equal(lm2));
         Assert.True(lm2.Validated());
-        Assert.Equal(lm.UniqueKey.ToString(), lm2.UniqueKey.ToString());
+        Assert.Equal(lm.UniqueKey().ToString(), lm2.UniqueKey().ToString());
     }
     [Fact]
     public void TestShortcut()

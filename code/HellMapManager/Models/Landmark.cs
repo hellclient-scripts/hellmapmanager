@@ -96,8 +96,8 @@ public partial class Landmark
         }
         return false;
     }
-    public LandmarkKey UniqueKey
+    public LandmarkKey UniqueKey()
     {
-        get => new(Key, Type);
+        return new(Key, Type);
     }
 }

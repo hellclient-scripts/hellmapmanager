@@ -68,7 +68,7 @@ public partial class AppState
         if (Current != null && current.Validated())
         {
 
-            if (!key.Equal(current.UniqueKey))
+            if (!key.Equal(current.UniqueKey()))
             {
                 Current.RemoveLandmark(key);
             }

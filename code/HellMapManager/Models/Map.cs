@@ -216,11 +216,11 @@ public class MapFile
     {
         Map.Landmarks.RemoveAll(r => r.Key == landmark.Key && r.Type == landmark.Type);
         Map.Landmarks.Add(landmark);
-        Cache.Landmarks[landmark.UniqueKey.ToString()] = landmark;
+        Cache.Landmarks[landmark.UniqueKey().ToString()] = landmark;
     }
     public void RemoveLandmark(LandmarkKey key)
     {
-        Map.Landmarks.RemoveAll(r => r.UniqueKey.Equal(key));
+        Map.Landmarks.RemoveAll(r => r.UniqueKey().Equal(key));
         Cache.Landmarks.Remove(key.ToString());
     }
 
@@ -248,12 +248,12 @@ public class MapFile
     }
     public void InsertSnapshot(Snapshot model)
     {
-        RemoveSnapshot(model.UniqueKey);
+        RemoveSnapshot(model.UniqueKey());
         Map.Snapshots.Add(model);
     }
     public void RemoveSnapshot(SnapshotKey key)
     {
-        Map.Snapshots.RemoveAll(r => r.UniqueKey.Equal(key));
+        Map.Snapshots.RemoveAll(r => r.UniqueKey().Equal(key));
     }
     public MapSettings ToSettings()
     {
