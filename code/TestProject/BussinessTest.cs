@@ -240,6 +240,26 @@ public class BussinessTest
         landmark = SuffLandmark("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
         Assert.True(landmark.Equal(Landmark.Decode(landmark.Encode())));
     }
+    [Fact]
+    public void TestLandmarkKey()
+    {
+        var landmark = new Landmark()
+        {
+            Key = "key",
+            Type = "type",
+        };
+        var landmark2 = new Landmark()
+        {
+            Key = "key",
+            Type = "Type2",
+        };
+        var key = new LandmarkKey("key", "type");
+        var key2 = landmark2.UniqueKey();
+        Assert.True(key.Equal(landmark.UniqueKey()));
+        Assert.Equal(key.ToString(), landmark.UniqueKey().ToString());
+        Assert.False(key.Equal(key2));
+        Assert.NotEqual(key.ToString(), key2.ToString());
+    }
     private static Shortcut SuffShortcut(string suff)
     {
         return new Shortcut()
@@ -355,6 +375,29 @@ public class BussinessTest
         snapshot = SuffSnapshot("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
         Assert.True(snapshot.Equal(Snapshot.Decode(snapshot.Encode())));
     }
+    [Fact]
+    public void TestSnapshotKey()
+    {
+        var snapshot = new Snapshot()
+        {
+            Key = "key",
+            Type = "type",
+            Value = "value",
+        };
+        var snapshot2 = new Snapshot()
+        {
+            Key = "key",
+            Type = "Type",
+            Value = "value2",
+        };
+        var key = new SnapshotKey("key", "type", "value");
+        var key2 = snapshot2.UniqueKey();
+        Assert.True(key.Equal(snapshot.UniqueKey()));
+        Assert.Equal(key.ToString(), snapshot.UniqueKey().ToString());
+        Assert.False(key.Equal(key2));
+        Assert.NotEqual(key.ToString(), key2.ToString());
+    }
+
     [Fact]
     public void TestMap()
     {
