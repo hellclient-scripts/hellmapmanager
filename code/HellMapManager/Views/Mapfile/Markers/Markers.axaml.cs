@@ -54,7 +54,8 @@ public partial class Markers : UserControl
                 var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateMarker(marker.Key, result);
+                    AppState.Main.APIRemoveMarkers([marker.Key]);
+                    AppState.Main.APIInsertMarkers([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -74,7 +75,8 @@ public partial class Markers : UserControl
                 var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateMarker(marker.Key, result);
+                    AppState.Main.APIRemoveMarkers([marker.Key]);
+                    AppState.Main.APIInsertMarkers([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

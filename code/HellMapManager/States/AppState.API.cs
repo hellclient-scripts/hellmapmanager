@@ -63,21 +63,6 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIUpdateLandmark(LandmarkKey key, Landmark current)
-    {
-        if (Current != null && current.Validated())
-        {
-
-            if (!key.Equal(current.UniqueKey()))
-            {
-                Current.RemoveLandmark(key);
-            }
-            Current.InsertLandmark(current);
-            Landmark.Sort(Current.Map.Landmarks);
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
     public List<Marker> APIListMarkers(APIListOption option)
     {
         if (Current != null)
@@ -131,21 +116,6 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIUpdateMarker(string key, Marker current)
-    {
-        if (Current != null && current.Validated())
-        {
-
-            if (key != current.Key)
-            {
-                Current.RemoveMarker(key);
-            }
-            Current.InsertMarker(current);
-            Marker.Sort(Current.Map.Markers);
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
     public List<Region> APIListRegions(APIListOption option)
     {
         if (Current != null)
@@ -195,21 +165,6 @@ public partial class AppState
             {
                 Current.RemoveRegion(key);
             }
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
-    public void APIUpdateRegion(string key, Region current)
-    {
-        if (Current != null && current.Validated())
-        {
-
-            if (key != current.Key)
-            {
-                Current.RemoveRegion(key);
-            }
-            Current.InsertRegion(current);
-            Region.Sort(Current.Map.Regions);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -281,21 +236,6 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIUpdateRoom(string key, Room current)
-    {
-        if (Current != null && current.Validated())
-        {
-
-            if (key != current.Key)
-            {
-                Current.RemoveRoom(key);
-            }
-            Current.InsertRoom(current);
-            Room.Sort(Current.Map.Rooms);
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
     public void APIInsertRoutes(List<Route> models)
     {
         if (Current != null && models.Count > 0)
@@ -349,21 +289,6 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIUpdateRoute(string key, Route current)
-    {
-        if (Current != null && current.Validated())
-        {
-
-            if (key != current.Key)
-            {
-                Current.RemoveRoute(key);
-            }
-            Current.InsertRoute(current);
-            Route.Sort(Current.Map.Routes);
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
     public void APIInsertShortcuts(List<Shortcut> models)
     {
         if (Current != null && models.Count > 0)
@@ -413,21 +338,6 @@ public partial class AppState
             {
                 Current.RemoveShortcut(key);
             }
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
-    public void APIUpdateShortcut(string key, Shortcut current)
-    {
-        if (Current != null && current.Validated())
-        {
-
-            if (key != current.Key)
-            {
-                Current.RemoveShortcut(key);
-            }
-            Current.InsertShortcut(current);
-            Shortcut.Sort(Current.Map.Shortcuts);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -540,21 +450,6 @@ public partial class AppState
         }
         return [];
     }
-    public void APIUpdateTrace(string key, Trace current)
-    {
-        if (Current != null && current.Validated())
-        {
-
-            if (key != current.Key)
-            {
-                Current.RemoveTrace(key);
-            }
-            Current.InsertTrace(current);
-            Trace.Sort(Current.Map.Traces);
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
     public void APIInsertVariables(List<Variable> models)
     {
         if (Current != null && models.Count > 0)
@@ -604,21 +499,6 @@ public partial class AppState
             {
                 Current.RemoveVariable(key);
             }
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
-    public void APIUpdateVariable(string key, Variable current)
-    {
-        if (Current != null && current.Validated())
-        {
-
-            if (key != current.Key)
-            {
-                Current.RemoveVariable(key);
-            }
-            Current.InsertVariable(current);
-            Variable.Sort(Current.Map.Variables);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

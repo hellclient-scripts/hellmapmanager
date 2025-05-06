@@ -54,7 +54,8 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateLandmark(marker.UniqueKey(), result);
+                    AppState.Main.APIRemoveLandmarks([marker.UniqueKey()]);
+                    AppState.Main.APIInsertLandmarks([marker]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -74,7 +75,8 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateLandmark(marker.UniqueKey(), result);
+                    AppState.Main.APIRemoveLandmarks([marker.UniqueKey()]);
+                    AppState.Main.APIInsertLandmarks([marker]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

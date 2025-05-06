@@ -54,7 +54,8 @@ public partial class Shortcuts : UserControl
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateShortcut(model.Key, result);
+                    AppState.Main.APIRemoveShortcuts([model.Key]);
+                    AppState.Main.APIInsertShortcuts([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -74,7 +75,8 @@ public partial class Shortcuts : UserControl
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateShortcut(model.Key, result);
+                    AppState.Main.APIRemoveShortcuts([model.Key]);
+                    AppState.Main.APIInsertShortcuts([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

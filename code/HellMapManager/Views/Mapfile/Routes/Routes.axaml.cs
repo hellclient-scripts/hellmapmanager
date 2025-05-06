@@ -54,7 +54,8 @@ public partial class Routes : UserControl
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateRoute(model.Key, result);
+                    AppState.Main.APIRemoveRoutes([model.Key]);
+                    AppState.Main.APIInsertRoutes([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -74,7 +75,8 @@ public partial class Routes : UserControl
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateRoute(model.Key, result);
+                    AppState.Main.APIRemoveRoutes([model.Key]);
+                    AppState.Main.APIInsertRoutes([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

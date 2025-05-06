@@ -54,7 +54,8 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateRegion(model.Key, result);
+                    AppState.Main.APIRemoveRegions([model.Key]);
+                    AppState.Main.APIInsertRegions([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -74,7 +75,8 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateRegion(model.Key, result);
+                    AppState.Main.APIRemoveRegions([model.Key]);
+                    AppState.Main.APIInsertRegions([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

@@ -54,7 +54,8 @@ public partial class Traces : UserControl
                 var result = await window.ShowDialog<Trace?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateTrace(model.Key, result);
+                    AppState.Main.APIRemoveTraces([model.Key]);
+                    AppState.Main.APIInsertTraces([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -74,7 +75,8 @@ public partial class Traces : UserControl
                 var result = await window.ShowDialog<Trace?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIUpdateTrace(model.Key, result);
+                    AppState.Main.APIRemoveTraces([model.Key]);
+                    AppState.Main.APIInsertTraces([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }
