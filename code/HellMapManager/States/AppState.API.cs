@@ -37,7 +37,7 @@ public partial class AppState
     }
     public void APIInsertLandmarks(List<Landmark> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -53,7 +53,7 @@ public partial class AppState
     }
     public void APIRemoveLandmarks(List<LandmarkKey> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var key in keys)
             {
@@ -105,7 +105,7 @@ public partial class AppState
     }
     public void APIInsertMarkers(List<Marker> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -121,7 +121,7 @@ public partial class AppState
     }
     public void APIRemoveMarkers(List<string> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var key in keys)
             {
@@ -173,7 +173,7 @@ public partial class AppState
     }
     public void APIInsertRegions(List<Region> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -189,7 +189,7 @@ public partial class AppState
     }
     public void APIRemoveRegions(List<string> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var key in keys)
             {
@@ -255,7 +255,7 @@ public partial class AppState
     }
     public void APIInsertRooms(List<Room> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -271,7 +271,7 @@ public partial class AppState
     }
     public void APIRemoveRooms(List<string> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var key in keys)
             {
@@ -298,7 +298,7 @@ public partial class AppState
     }
     public void APIInsertRoutes(List<Route> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -339,7 +339,7 @@ public partial class AppState
     }
     public void APIRemoveRoutes(List<string> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var key in keys)
             {
@@ -366,7 +366,7 @@ public partial class AppState
     }
     public void APIInsertShortcuts(List<Shortcut> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -407,7 +407,7 @@ public partial class AppState
     }
     public void APIRemoveShortcuts(List<string> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var key in keys)
             {
@@ -434,7 +434,7 @@ public partial class AppState
     }
     public void APIInsertSnapshots(List<Snapshot> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -475,7 +475,7 @@ public partial class AppState
     }
     public void APIRemoveSnapshots(List<SnapshotKey> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var k in keys)
             {
@@ -488,7 +488,7 @@ public partial class AppState
     }
     public void APIInsertTraces(List<Trace> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -505,7 +505,7 @@ public partial class AppState
 
     public void APIRemoveTraces(List<string> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var key in keys)
             {
@@ -557,7 +557,7 @@ public partial class AppState
     }
     public void APIInsertVariables(List<Variable> models)
     {
-        if (Current != null)
+        if (Current != null && models.Count > 0)
         {
             foreach (var model in models)
             {
@@ -598,7 +598,7 @@ public partial class AppState
     }
     public void APIRemoveVariables(List<string> keys)
     {
-        if (Current != null)
+        if (Current != null && keys.Count > 0)
         {
             foreach (var key in keys)
             {
