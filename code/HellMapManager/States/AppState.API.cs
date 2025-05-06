@@ -4,8 +4,64 @@ using HellMapManager.Models;
 namespace HellMapManager.States;
 public class APIListOption
 {
-    public string? Key { get; set; } = null;
-    public string? Group { get; set; } = null;
+    private readonly Dictionary<string, bool> AllKeys = new();
+    private readonly Dictionary<string, bool> AllGroups = new();
+    public APIListOption Clear()
+    {
+        AllKeys.Clear();
+        AllGroups.Clear();
+        return this;
+    }
+    public APIListOption WithKeys(List<string> keys)
+    {
+        foreach (var key in keys)
+        {
+            AllKeys[key] = true;
+        }
+        return this;
+    }
+    public APIListOption WithGroups(List<string> groups)
+    {
+        foreach (var group in groups)
+        {
+            AllGroups[group] = true;
+        }
+        return this;
+    }
+    public List<string> Keys()
+    {
+        var result = new List<string>();
+        foreach (var key in AllKeys.Keys)
+        {
+            result.Add(key);
+        }
+        return result;
+    }
+    public List<string> Groups()
+    {
+        var result = new List<string>();
+        foreach (var group in AllGroups.Keys)
+        {
+            result.Add(group);
+        }
+        return result;
+    }
+    public bool Validate(string key, string group)
+    {
+        if (AllKeys.Count > 0 && !AllKeys.ContainsKey(key))
+        {
+            return false;
+        }
+        if (AllGroups.Count > 0 && !AllGroups.ContainsKey(group))
+        {
+            return false;
+        }
+        return true;
+    }
+    public bool IsEmpty()
+    {
+        return AllKeys.Count == 0 && AllGroups.Count == 0;
+    }
 }
 public partial class AppState
 {
@@ -13,22 +69,18 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+
+            if (option.IsEmpty())
             {
                 return Current.Map.Landmarks;
             }
             var list = new List<Landmark>() { };
             Current.Map.Landmarks.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }
@@ -66,22 +118,17 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+            if (option.IsEmpty())
             {
                 return Current.Map.Markers;
             }
             var list = new List<Marker>() { };
             Current.Map.Markers.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }
@@ -119,22 +166,17 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+            if (option.IsEmpty())
             {
                 return Current.Map.Regions;
             }
             var list = new List<Region>() { };
             Current.Map.Regions.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }
@@ -172,22 +214,17 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+            if (option.IsEmpty())
             {
                 return Current.Map.Rooms;
             }
             var list = new List<Room>() { };
             Current.Map.Rooms.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }
@@ -241,22 +278,17 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+            if (option.IsEmpty())
             {
                 return Current.Map.Routes;
             }
             var list = new List<Route>() { };
             Current.Map.Routes.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }
@@ -294,22 +326,17 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+            if (option.IsEmpty())
             {
                 return Current.Map.Shortcuts;
             }
             var list = new List<Shortcut>() { };
             Current.Map.Shortcuts.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }
@@ -347,22 +374,17 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+            if (option.IsEmpty())
             {
                 return Current.Map.Snapshots;
             }
             var list = new List<Snapshot>() { };
             Current.Map.Snapshots.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }
@@ -414,22 +436,17 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+            if (option.IsEmpty())
             {
                 return Current.Map.Traces;
             }
             var list = new List<Trace>() { };
             Current.Map.Traces.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }
@@ -455,22 +472,17 @@ public partial class AppState
     {
         if (Current != null)
         {
-            if (option.Key is null && option.Group is null)
+            if (option.IsEmpty())
             {
                 return Current.Map.Variables;
             }
             var list = new List<Variable>() { };
             Current.Map.Variables.ForEach((model) =>
             {
-                if (option.Key is not null && model.Key != option.Key)
+                if (option.Validate(model.Key, model.Group))
                 {
-                    return;
+                    list.Add(model);
                 }
-                if (option.Group is not null && model.Group != option.Group)
-                {
-                    return;
-                }
-                list.Add(model);
             });
             return list;
         }

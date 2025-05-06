@@ -20,13 +20,6 @@ public class EditExitWindowViewModel : ObservableObject
     }
     public string ConditionValidator(ConditionForm form)
     {
-        foreach (var data in Item.Conditions)
-        {
-            if (data.Key == form.Key)
-            {
-                return "条件主键已存在";
-            }
-        }
         return "";
     }
 }

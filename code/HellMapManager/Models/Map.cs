@@ -157,6 +157,7 @@ public class MapFile
     public void InsertRoom(Room room)
     {
         Map.Rooms.RemoveAll(r => r.Key == room.Key);
+        room.Arrange();
         Map.Rooms.Add(room);
         Cache.Rooms[room.Key] = room;
     }
@@ -169,6 +170,7 @@ public class MapFile
     public void InsertMarker(Marker marker)
     {
         Map.Markers.RemoveAll(r => r.Key == marker.Key);
+        marker.Arrange();
         Map.Markers.Add(marker);
         Cache.Markers[marker.Key] = marker;
     }
@@ -180,6 +182,7 @@ public class MapFile
     public void InsertRoute(Route route)
     {
         Map.Routes.RemoveAll(r => r.Key == route.Key);
+        route.Arrange();
         Map.Routes.Add(route);
         Cache.Routes[route.Key] = route;
     }
@@ -192,6 +195,7 @@ public class MapFile
     public void InsertTrace(Trace trace)
     {
         Map.Traces.RemoveAll(r => r.Key == trace.Key);
+        trace.Arrange();
         Map.Traces.Add(trace);
         Cache.Traces[trace.Key] = trace;
     }
@@ -203,6 +207,7 @@ public class MapFile
     public void InsertRegion(Region region)
     {
         Map.Regions.RemoveAll(r => r.Key == region.Key);
+        region.Arrange();
         Map.Regions.Add(region);
         Cache.Regions[region.Key] = region;
     }
@@ -215,6 +220,7 @@ public class MapFile
     public void InsertLandmark(Landmark landmark)
     {
         Map.Landmarks.RemoveAll(r => r.Key == landmark.Key && r.Type == landmark.Type);
+        landmark.Arrange();
         Map.Landmarks.Add(landmark);
         Cache.Landmarks[landmark.UniqueKey().ToString()] = landmark;
     }
@@ -227,6 +233,7 @@ public class MapFile
     public void InsertShortcut(Shortcut model)
     {
         Map.Shortcuts.RemoveAll(r => r.Key == model.Key);
+        model.Arrange();
         Map.Shortcuts.Add(model);
         Cache.Shortcuts[model.Key] = model;
     }
@@ -238,6 +245,7 @@ public class MapFile
     public void InsertVariable(Variable model)
     {
         Map.Variables.RemoveAll(r => r.Key == model.Key);
+        model.Arrange();
         Map.Variables.Add(model);
         Cache.Variables[model.Key] = model;
     }
@@ -249,6 +257,7 @@ public class MapFile
     public void InsertSnapshot(Snapshot model)
     {
         RemoveSnapshot(model.UniqueKey());
+        model.Arrange();
         Map.Snapshots.Add(model);
     }
     public void RemoveSnapshot(SnapshotKey key)

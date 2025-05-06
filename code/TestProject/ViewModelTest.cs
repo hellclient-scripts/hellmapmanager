@@ -1,6 +1,8 @@
-using HellMapManager;
 using HellMapManager.Models;
 using HellMapManager.States;
+using HellMapManager.Windows.EditDataWindow;
+using HellMapManager.Windows.EditExitWindow;
+using HellMapManager.Windows.NewConditionWindow;
 using HellMapManager.ViewModels;
 namespace TestProject;
 
@@ -178,6 +180,74 @@ public class ViewModelTest
         vm.SnapshotsFilter = "snapshot1";
         Assert.Single(vm.FilteredSnapshots);
 
+    }
+    [Fact]
+    public void TestEditDataWindowViewModel()
+    {
+        var vm = new EditDataWindowViewModel(null, (DataForm form) => "");
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Null(vm.Item.Raw);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Value);
+        Assert.Equal("新建数据", vm.Title);
+
+        Assert.Equal("主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key";
+        Assert.Equal("值不能为空", vm.Item.Validate());
+        vm.Item.Value = "value";
+        Assert.Equal("", vm.Item.Validate());
+        var vm2 = new EditDataWindowViewModel(null, (DataForm form) => "test error");
+        Assert.Equal("test error", vm2.Item.Validate());
+        var model = vm.Item.ToData();
+        Assert.Equal("key", model.Key);
+        Assert.Equal("value", model.Value);
+        vm = new EditDataWindowViewModel(model, (DataForm form) => "");
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("编辑数据 key", vm.Title);
+    }
+    [Fact]
+    public void TestExitDataWindowViewModel()
+    {
+        var vm = new EditExitWindowViewModel(null, (ExitForm form) => "");
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Null(vm.Item.Raw);
+        Assert.Equal("", vm.Item.Command);
+        Assert.Equal("", vm.Item.To);
+        Assert.Equal(1, vm.Item.Cost);
+        Assert.Equal("新建出口", vm.Title);
+
+        Assert.Equal("指令不能为空", vm.Item.Validate());
+        vm.Item.Command = "cmd1";
+        vm.Item.To = "to1";
+        vm.Item.Cost = 2;
+        vm.Item.Conditions.Add(new Condition("key1", true));
+        Assert.Equal("", vm.Item.Validate());
+        var vm2 = new EditExitWindowViewModel(null, (ExitForm form) => "test error");
+        Assert.Equal("test error", vm2.Item.Validate());
+        var model = vm.Item.ToExit();
+        Assert.Equal(vm.Item.Command, model.Command);
+        Assert.Equal(vm.Item.To, model.To);
+        Assert.Single(model.Conditions);
+        Assert.True(model.Conditions[0].Equal(vm.Item.Conditions[0]));
+        Assert.Equal(vm.Item.Cost, model.Cost);
+        vm = new EditExitWindowViewModel(model, (ExitForm form) => "");
+        Assert.Equal(vm.Item.Command, model.Command);
+        Assert.Equal(vm.Item.To, model.To);
+        Assert.Single(model.Conditions);
+        Assert.True(model.Conditions[0].Equal(vm.Item.Conditions[0]));
+        Assert.Equal(vm.Item.Cost, model.Cost);
+        Assert.Equal("编辑出口", vm.Title);
+
+        vm.Item.Conditions.Add(new Condition("key2", false));
+        vm.Item.Arrange();
+        Assert.Equal(2, vm.Item.Conditions.Count);
+        Assert.Equal("key2", vm.Item.Conditions[0].Key);
+        Assert.Equal("key1", vm.Item.Conditions[1].Key);
+
+        Assert.Equal("", vm.ConditionValidator(new ConditionForm(vm.ConditionValidator)));
     }
 }
 
