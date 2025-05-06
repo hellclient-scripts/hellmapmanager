@@ -796,7 +796,8 @@ public class APITest
         Assert.Equal(shortcut3, shortcuts[0]);
     }
     [Fact]
-    public void TestVariableAPI(){
+    public void TestVariableAPI()
+    {
         bool updated = false;
         var appState = new AppState();
         appState.MapFileUpdatedEvent += (sender, e) =>
@@ -844,7 +845,7 @@ public class APITest
             Key = "",
             Group = "",
             Desc = "",
-            Value="",
+            Value = "",
         };
         var opt = new APIListOption();
         Assert.Null(opt.Key);
@@ -927,5 +928,150 @@ public class APITest
         variables = appState.APIListVariables(opt);
         Assert.Single(variables);
         Assert.Equal(variable3, variables[0]);
+    }
+    [Fact]
+    public void TestLandmarkAPI()
+    {
+        bool updated = false;
+        var appState = new AppState();
+        appState.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        List<Landmark> landmarks = new List<Landmark>();
+        var landmark1 = new Landmark()
+        {
+            Key = "key1",
+            Type = "type1",
+            Group = "group1",
+            Desc = "desc1",
+        };
+        var landmark1t2 = new Landmark()
+        {
+            Key = "key1",
+            Type = "type2",
+            Group = "group1",
+            Desc = "desc1",
+        };
+        var landmark2 = new Landmark()
+        {
+            Key = "key2",
+            Type = "type2",
+            Group = "",
+            Desc = "desc2",
+        };
+        var newlandmark2 = new Landmark()
+        {
+            Key = "key2",
+            Type = "type2",
+            Group = "group2",
+            Desc = "desc2",
+        };
+        var landmark3 = new Landmark()
+        {
+            Key = "key3",
+            Type = "type1",
+            Group = "group1",
+            Desc = "desc3",
+        };
+        var landmark4 = new Landmark()
+        {
+            Key = "key4",
+            Type = "type1",
+            Group = "group2",
+            Desc = "desc4",
+        };
+        var badlandmark1 = new Landmark()
+        {
+            Key = "",
+            Group = "",
+            Desc = "",
+        };
+        var opt = new APIListOption();
+        Assert.Null(opt.Key);
+        Assert.Null(opt.Group);
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Empty(landmarks);
+        appState.APIInsertLandmarks([landmark1, landmark2, landmark3]);
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Empty(landmarks);
+        Assert.False(updated);
+        appState.APIRemoveLandmarks([landmark1.UniqueKey()]);
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Empty(landmarks);
+        Assert.False(updated);
+        appState.NewMap();
+        appState.APIInsertLandmarks([landmark1, landmark1t2, landmark2, landmark3]);
+        Assert.True(updated);
+        updated = false;
+        opt = new APIListOption();
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Equal(4, landmarks.Count);
+        Assert.Equal(landmark2, landmarks[0]);
+        Assert.Equal(landmark1, landmarks[1]);
+        Assert.Equal(landmark1t2, landmarks[2]);
+        Assert.Equal(landmark3, landmarks[3]);
+        opt.Group = "";
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Single(landmarks);
+        Assert.Equal(landmark2, landmarks[0]);
+        opt.Group = "group1";
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Equal(3, landmarks.Count);
+        Assert.Equal(landmark1, landmarks[0]);
+        Assert.Equal(landmark1t2, landmarks[1]);
+        Assert.Equal(landmark3, landmarks[2]);
+        opt.Group = "notfound";
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Empty(landmarks);
+        opt.Group = null;
+        opt.Key = "key2";
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Single(landmarks);
+        Assert.Equal(landmark2, landmarks[0]);
+        opt.Group = "group1";
+        opt.Key = "key2";
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Empty(landmarks);
+        opt.Key = "key1";
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Equal(2, landmarks.Count);
+        Assert.Equal(landmark1, landmarks[0]);
+        Assert.Equal(landmark1t2, landmarks[1]);
+        updated = false;
+        opt = new APIListOption();
+        appState.APIInsertLandmarks([]);
+        Assert.False(updated);
+        appState.APIInsertLandmarks([newlandmark2, landmark4]);
+        Assert.True(updated);
+        updated = false;
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Equal(5, landmarks.Count);
+        Assert.Equal(landmark1, landmarks[0]);
+        Assert.Equal(landmark1t2, landmarks[1]);
+        Assert.Equal(landmark3, landmarks[2]);
+        Assert.Equal(newlandmark2, landmarks[3]);
+        Assert.Equal(landmark4, landmarks[4]);
+        Assert.False(badlandmark1.Validated());
+        appState.APIInsertLandmarks([badlandmark1]);
+        Assert.True(updated);
+        updated = false;
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Equal(5, landmarks.Count);
+        appState.APIRemoveLandmarks([]);
+        Assert.False(updated);
+        appState.APIRemoveLandmarks([landmark1.UniqueKey()]);
+        Assert.True(updated);
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Equal(4, landmarks.Count);
+        Assert.Equal(landmark1t2, landmarks[0]);
+        Assert.Equal(landmark3, landmarks[1]);
+        Assert.Equal(newlandmark2, landmarks[2]);
+        Assert.Equal(landmark4, landmarks[3]);
+        appState.APIRemoveLandmarks([landmark1.UniqueKey(), landmark1t2.UniqueKey(), landmark2.UniqueKey(), landmark4.UniqueKey()]);
+        Assert.True(updated);
+        landmarks = appState.APIListLandmarks(opt);
+        Assert.Single(landmarks);
+        Assert.Equal(landmark3, landmarks[0]);
     }
 }
