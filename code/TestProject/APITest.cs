@@ -5,6 +5,42 @@ namespace TestProject;
 public class APITest
 {
     [Fact]
+    public void TestAPIListOption()
+    {
+        var opt = new APIListOption();
+        var keys = opt.Keys();
+        var groups = opt.Groups();
+        Assert.True(opt.IsEmpty());
+        Assert.Empty(keys);
+        Assert.Empty(groups);
+        Assert.True(opt.Validate("key", "group"));
+        opt.WithKeys(["key1", "key2"]);
+        keys = opt.Keys();
+        keys.Sort();
+        Assert.Equal("key1 key2", string.Join(' ', keys));
+        Assert.False(opt.Validate("key", "group"));
+        Assert.False(opt.IsEmpty());
+        opt.WithKeys(["key"]);
+        keys = opt.Keys();
+        keys.Sort();
+        Assert.Equal("key key1 key2", string.Join(' ', keys));
+        Assert.True(opt.Validate("key", "group"));
+        Assert.False(opt.IsEmpty());
+
+        opt.WithGroups(["group1", "group2"]);
+        groups = opt.Groups();
+        groups.Sort();
+        Assert.Equal("group1 group2", string.Join(' ', groups));
+        Assert.False(opt.Validate("key", "group"));
+        Assert.False(opt.IsEmpty());
+        opt.WithGroups(["group"]);
+        groups = opt.Groups();
+        groups.Sort();
+        Assert.Equal("group group1 group2", string.Join(' ', groups));
+        Assert.True(opt.Validate("key", "group"));
+        Assert.False(opt.IsEmpty());
+    }
+    [Fact]
     public void TestRoomAPI()
     {
         bool updated = false;
@@ -77,7 +113,7 @@ public class APITest
         opt.Clear().WithGroups(["notfound"]);
         rooms = appState.APIListRooms(opt);
         Assert.Empty(rooms);
-       opt.Clear().WithKeys(["key2"]);
+        opt.Clear().WithKeys(["key2"]);
         rooms = appState.APIListRooms(opt);
         Assert.Single(rooms);
         Assert.Equal(room2, rooms[0]);
@@ -598,7 +634,7 @@ public class APITest
         opt.Clear().WithGroups(["notfound"]);
         regions = appState.APIListRegions(opt);
         Assert.Empty(regions);
-       opt.Clear().WithKeys(["key2"]);
+        opt.Clear().WithKeys(["key2"]);
         regions = appState.APIListRegions(opt);
         Assert.Single(regions);
         Assert.Equal(region2, regions[0]);
@@ -727,7 +763,7 @@ public class APITest
         opt.Clear().WithGroups(["notfound"]);
         shortcuts = appState.APIListShortcuts(opt);
         Assert.Empty(shortcuts);
-       opt.Clear().WithKeys(["key2"]);
+        opt.Clear().WithKeys(["key2"]);
         shortcuts = appState.APIListShortcuts(opt);
         Assert.Single(shortcuts);
         Assert.Equal(shortcut2, shortcuts[0]);
@@ -857,7 +893,7 @@ public class APITest
         opt.Clear().WithGroups(["notfound"]);
         variables = appState.APIListVariables(opt);
         Assert.Empty(variables);
-       opt.Clear().WithKeys(["key2"]);
+        opt.Clear().WithKeys(["key2"]);
         variables = appState.APIListVariables(opt);
         Assert.Single(variables);
         Assert.Equal(variable2, variables[0]);
@@ -995,7 +1031,7 @@ public class APITest
         opt.Clear().WithGroups(["notfound"]);
         landmarks = appState.APIListLandmarks(opt);
         Assert.Empty(landmarks);
-       opt.Clear().WithKeys(["key2"]);
+        opt.Clear().WithKeys(["key2"]);
         landmarks = appState.APIListLandmarks(opt);
         Assert.Single(landmarks);
         Assert.Equal(landmark2, landmarks[0]);
@@ -1141,7 +1177,7 @@ public class APITest
         opt.Clear().WithGroups(["notfound"]);
         snapshots = appState.APIListSnapshots(opt);
         Assert.Empty(snapshots);
-       opt.Clear().WithKeys(["key2"]);
+        opt.Clear().WithKeys(["key2"]);
         snapshots = appState.APIListSnapshots(opt);
         Assert.Single(snapshots);
         Assert.Equal(snapshot2, snapshots[0]);
