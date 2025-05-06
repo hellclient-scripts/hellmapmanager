@@ -13,7 +13,14 @@ public class SnapshotKey(string key, string type, string value)
     {
         return UniqueKeyUtil.Join([Key, Type, Value]);
     }
-
+    public bool Equal(SnapshotKey model)
+    {
+        if (Key == model.Key && Type == model.Type && Value == model.Value)
+        {
+            return true;
+        }
+        return false;
+    }
 }
 public partial class Snapshot
 {

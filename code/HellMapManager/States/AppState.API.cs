@@ -51,24 +51,24 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIRemoveLandmark(string key, string type)
+    public void APIRemoveLandmark(LandmarkKey key)
     {
         if (Current != null)
         {
 
-            Current.RemoveLandmark(key, type);
+            Current.RemoveLandmark(key);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIUpdateLandmark(string key, string type, Landmark current)
+    public void APIUpdateLandmark(LandmarkKey key, Landmark current)
     {
         if (Current != null && current.Validated())
         {
 
-            if (key != current.Key || type != current.Type)
+            if (!key.Equal(current.UniqueKey))
             {
-                Current.RemoveLandmark(key, type);
+                Current.RemoveLandmark(key);
             }
             Current.InsertLandmark(current);
             Landmark.Sort(Current.Map.Landmarks);
@@ -461,12 +461,12 @@ public partial class AppState
         }
         return [];
     }
-    public void APIRemoveSnapshot(string key, string type, string value)
+    public void APIRemoveSnapshot(SnapshotKey key)
     {
         if (Current != null)
         {
 
-            Current.RemoveSnapshot(key, type, value);
+            Current.RemoveSnapshot(key);
             Snapshot.Sort(Current.Map.Snapshots);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);

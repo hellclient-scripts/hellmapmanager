@@ -929,7 +929,7 @@ public class ModelTest
         mf.RemoveRegion("key1");
         Assert.Single(mf.Map.Regions);
         Assert.Equal(region3, mf.Map.Regions[0]);
-        mf.RemoveLandmark("notfound", "");
+        mf.RemoveLandmark(new LandmarkKey("notfound", ""));
         Assert.Empty(mf.Map.Landmarks);
         var landmark = new Landmark()
         {
@@ -953,7 +953,7 @@ public class ModelTest
         Assert.Equal(2, mf.Map.Landmarks.Count);
         Assert.Equal(landmark2, mf.Map.Landmarks[0]);
         Assert.Equal(landmark3, mf.Map.Landmarks[1]);
-        mf.RemoveLandmark("key1", "");
+        mf.RemoveLandmark(new LandmarkKey("key1", ""));
         Assert.Single(mf.Map.Landmarks);
         Assert.Equal(landmark3, mf.Map.Landmarks[0]);
         mf.RemoveShortcut("notfound");
@@ -1010,7 +1010,7 @@ public class ModelTest
         mf.RemoveVariable("key1");
         Assert.Single(mf.Map.Variables);
         Assert.Equal(variable3, mf.Map.Variables[0]);
-        mf.RemoveSnapshot("notfound", "", "");
+        mf.RemoveSnapshot(new SnapshotKey("notfound", "", ""));
         Assert.Empty(mf.Map.Snapshots);
         var snapshot = new Snapshot()
         {
@@ -1034,7 +1034,7 @@ public class ModelTest
         Assert.Equal(2, mf.Map.Snapshots.Count);
         Assert.Equal(snapshot2, mf.Map.Snapshots[0]);
         Assert.Equal(snapshot3, mf.Map.Snapshots[1]);
-        mf.RemoveSnapshot("key1", "", "");
+        mf.RemoveSnapshot(new SnapshotKey("key1", "", ""));
         Assert.Single(mf.Map.Snapshots);
         Assert.Equal(snapshot3, mf.Map.Snapshots[0]);
         mf = new MapFile();

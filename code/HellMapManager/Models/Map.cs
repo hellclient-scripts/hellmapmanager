@@ -218,10 +218,10 @@ public class MapFile
         Map.Landmarks.Add(landmark);
         Cache.Landmarks[landmark.UniqueKey.ToString()] = landmark;
     }
-    public void RemoveLandmark(string key, string Type)
+    public void RemoveLandmark(LandmarkKey key)
     {
-        Map.Landmarks.RemoveAll(r => r.Key == key && r.Type == Type);
-        Cache.Landmarks.Remove(key);
+        Map.Landmarks.RemoveAll(r => r.UniqueKey.Equal(key));
+        Cache.Landmarks.Remove(key.ToString());
     }
 
     public void InsertShortcut(Shortcut model)
@@ -248,12 +248,12 @@ public class MapFile
     }
     public void InsertSnapshot(Snapshot model)
     {
-        RemoveSnapshot(model.Key, model.Type, model.Value);
+        RemoveSnapshot(model.UniqueKey);
         Map.Snapshots.Add(model);
     }
-    public void RemoveSnapshot(string key, string type, string value)
+    public void RemoveSnapshot(SnapshotKey key)
     {
-        Map.Snapshots.RemoveAll(r => r.Key == key && r.Type == type && r.Value == value);
+        Map.Snapshots.RemoveAll(r => r.UniqueKey.Equal(key));
     }
     public MapSettings ToSettings()
     {

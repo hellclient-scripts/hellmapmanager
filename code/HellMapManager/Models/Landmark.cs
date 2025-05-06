@@ -15,6 +15,10 @@ public class LandmarkKey(string key, string type)
     {
         return UniqueKeyUtil.Join([Key, Type]);
     }
+    public bool Equal(LandmarkKey obj)
+    {
+        return Key == obj.Key && Type == obj.Type;
+    }
 }
 public partial class Landmark
 {
@@ -94,6 +98,6 @@ public partial class Landmark
     }
     public LandmarkKey UniqueKey
     {
-        get => new (Key, Type);
+        get => new(Key, Type);
     }
 }
