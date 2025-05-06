@@ -169,20 +169,6 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIImportRoomsHFile(string file)
-    {
-        if (Current != null)
-        {
-            var rooms = RoomsH.Open(file);
-            foreach (var room in rooms)
-            {
-                Current.InsertRoom(room);
-            }
-            Room.Sort(Current.Map.Rooms);
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
-        }
-    }
     public List<Room> APIListRooms(APIListOption option)
     {
         if (Current != null)

@@ -189,7 +189,7 @@ public class AppUI(AppState appState)
         {
             try
             {
-                AppState.APIImportRoomsHFile(file);
+                AppState.ImportRoomsHFile(file);
             }
             catch (Exception ex)
             {

@@ -100,6 +100,19 @@ public class APITest
         Assert.Equal(room3, rooms[1]);
         Assert.Equal(newroom2, rooms[2]);
         Assert.Equal(room4, rooms[3]);
-
+        appState.APIRemoveRooms([]);
+        Assert.False(updated);
+        appState.APIRemoveRooms(["key1"]);
+        Assert.True(updated);
+        rooms = appState.APIListRooms(opt);
+        Assert.Equal(3, rooms.Count);
+        Assert.Equal(room3, rooms[0]);
+        Assert.Equal(newroom2, rooms[1]);
+        Assert.Equal(room4, rooms[2]);
+        appState.APIRemoveRooms(["key1", "key2", "key4"]);
+        Assert.True(updated);
+        rooms = appState.APIListRooms(opt);
+        Assert.Single(rooms);
+        Assert.Equal(room3, rooms[0]);
     }
 }

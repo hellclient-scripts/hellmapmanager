@@ -103,5 +103,16 @@ public partial class AppState()
             RaiseMapFileUpdatedEvent(this);
         }
     }
+    public void ImportRoomsHFile(string file)
+    {
+        if (Current != null)
+        {
+            var rooms = RoomsH.Open(file);
+            if (rooms != null)
+            {
+                APIInsertRooms(rooms);
+            }
+        }
+    }
 
 }
