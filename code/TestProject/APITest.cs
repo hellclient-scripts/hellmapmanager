@@ -1074,4 +1074,154 @@ public class APITest
         Assert.Single(landmarks);
         Assert.Equal(landmark3, landmarks[0]);
     }
+    [Fact]
+    public void TestSnapshotAPI()
+    {
+        bool updated = false;
+        var appState = new AppState();
+        appState.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        List<Snapshot> snapshots = new List<Snapshot>();
+        var snapshot1 = new Snapshot()
+        {
+            Key = "key1",
+            Value = "Value1",
+            Type = "type1",
+            Group = "group1",
+            Timestamp = 1234567890,
+        };
+        var snapshot1t2 = new Snapshot()
+        {
+            Key = "key1",
+            Value = "Value1",
+            Type = "type2",
+            Group = "group1",
+            Timestamp = 1234567890,
+        };
+        var snapshot2 = new Snapshot()
+        {
+            Key = "key2",
+            Value = "Value2",
+            Type = "type2",
+            Group = "",
+            Timestamp = 1234567890,
+        };
+        var newsnapshot2 = new Snapshot()
+        {
+            Key = "key2",
+            Value = "Value2",
+            Type = "type2",
+            Group = "group2",
+            Timestamp = 1234567890,
+        };
+        var snapshot3 = new Snapshot()
+        {
+            Key = "key3",
+            Value = "Value3",
+            Type = "type1",
+            Group = "group1",
+            Timestamp = 1234567890,
+        };
+        var snapshot4 = new Snapshot()
+        {
+            Key = "key4",
+            Value = "Value4",
+            Type = "type1",
+            Group = "group2",
+            Timestamp = 1234567890,
+        };
+        var badsnapshot1 = new Snapshot()
+        {
+            Key = "",
+            Group = "",
+        };
+        var opt = new APIListOption();
+        Assert.Null(opt.Key);
+        Assert.Null(opt.Group);
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Empty(snapshots);
+        appState.APIInsertSnapshots([snapshot1, snapshot2, snapshot3]);
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Empty(snapshots);
+        Assert.False(updated);
+        appState.APIRemoveSnapshots([snapshot1.UniqueKey()]);
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Empty(snapshots);
+        Assert.False(updated);
+        appState.NewMap();
+        appState.APIInsertSnapshots([snapshot1, snapshot1t2, snapshot2, snapshot3]);
+        Assert.True(updated);
+        updated = false;
+        opt = new APIListOption();
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Equal(4, snapshots.Count);
+        Assert.Equal(snapshot2, snapshots[0]);
+        Assert.Equal(snapshot1, snapshots[1]);
+        Assert.Equal(snapshot1t2, snapshots[2]);
+        Assert.Equal(snapshot3, snapshots[3]);
+        opt.Group = "";
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Single(snapshots);
+        Assert.Equal(snapshot2, snapshots[0]);
+        opt.Group = "group1";
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Equal(3, snapshots.Count);
+        Assert.Equal(snapshot1, snapshots[0]);
+        Assert.Equal(snapshot1t2, snapshots[1]);
+        Assert.Equal(snapshot3, snapshots[2]);
+        opt.Group = "notfound";
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Empty(snapshots);
+        opt.Group = null;
+        opt.Key = "key2";
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Single(snapshots);
+        Assert.Equal(snapshot2, snapshots[0]);
+        opt.Group = "group1";
+        opt.Key = "key2";
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Empty(snapshots);
+        opt.Key = "key1";
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Equal(2, snapshots.Count);
+        Assert.Equal(snapshot1, snapshots[0]);
+        Assert.Equal(snapshot1t2, snapshots[1]);
+        updated = false;
+        opt = new APIListOption();
+        appState.APIInsertSnapshots([]);
+        Assert.False(updated);
+        appState.APIInsertSnapshots([newsnapshot2, snapshot4]);
+        Assert.True(updated);
+        updated = false;
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Equal(5, snapshots.Count);
+        Assert.Equal(snapshot1, snapshots[0]);
+        Assert.Equal(snapshot1t2, snapshots[1]);
+        Assert.Equal(snapshot3, snapshots[2]);
+        Assert.Equal(newsnapshot2, snapshots[3]);
+        Assert.Equal(snapshot4, snapshots[4]);
+        Assert.False(badsnapshot1.Validated());
+        appState.APIInsertSnapshots([badsnapshot1]);
+        Assert.True(updated);
+        updated = false;
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Equal(5, snapshots.Count);
+        appState.APIRemoveSnapshots([]);
+        Assert.False(updated);
+        appState.APIRemoveSnapshots([snapshot1.UniqueKey()]);
+        Assert.True(updated);
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Equal(4, snapshots.Count);
+        Assert.Equal(snapshot1t2, snapshots[0]);
+        Assert.Equal(snapshot3, snapshots[1]);
+        Assert.Equal(newsnapshot2, snapshots[2]);
+        Assert.Equal(snapshot4, snapshots[3]);
+        appState.APIRemoveSnapshots([snapshot1.UniqueKey(), snapshot1t2.UniqueKey(), snapshot2.UniqueKey(), snapshot4.UniqueKey()]);
+        Assert.True(updated);
+        snapshots = appState.APIListSnapshots(opt);
+        Assert.Single(snapshots);
+        Assert.Equal(snapshot3, snapshots[0]);
+    }
 }
