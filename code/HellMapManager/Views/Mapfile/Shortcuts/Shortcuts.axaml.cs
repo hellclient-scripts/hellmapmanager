@@ -85,7 +85,7 @@ public partial class Shortcuts : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Shortcut model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该捷径吗？") == false) return;
-            AppState.Main.APIRemoveShortcut(model.Key);
+            AppState.Main.APIRemoveShortcuts([model.Key]);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

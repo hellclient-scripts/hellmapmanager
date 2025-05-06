@@ -85,7 +85,7 @@ public partial class Routes : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Route model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该路线吗？") == false) return;
-            AppState.Main.APIRemoveRoute(model.Key);
+            AppState.Main.APIRemoveRoutes([model.Key]);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

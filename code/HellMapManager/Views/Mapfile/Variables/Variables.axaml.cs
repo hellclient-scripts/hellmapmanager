@@ -85,7 +85,7 @@ public partial class Variables : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Variable model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该变量吗？") == false) return;
-            AppState.Main.APIRemoveVariable(model.Key);
+            AppState.Main.APIRemoveVariables([model.Key]);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

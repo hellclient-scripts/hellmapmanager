@@ -100,7 +100,7 @@ public partial class Rooms : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Room room)
         {
             if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.APIRemoveRoom(room.Key);
+            AppState.Main.APIRemoveRooms([room.Key]);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

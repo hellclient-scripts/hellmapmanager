@@ -85,7 +85,7 @@ public partial class Traces : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Trace model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该足迹吗？") == false) return;
-            AppState.Main.APIRemoveTrace(model.Key);
+            AppState.Main.APIRemoveTraces([model.Key]);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }

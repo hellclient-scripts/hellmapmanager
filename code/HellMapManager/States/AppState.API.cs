@@ -51,12 +51,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIRemoveLandmark(LandmarkKey key)
+    public void APIRemoveLandmarks(List<LandmarkKey> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveLandmark(key);
+            foreach (var key in keys)
+            {
+                Current.RemoveLandmark(key);
+            }
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -117,12 +119,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIRemoveMarker(string key)
+    public void APIRemoveMarkers(List<string> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveMarker(key);
+            foreach (var key in keys)
+            {
+                Current.RemoveMarker(key);
+            }
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -183,12 +187,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIRemoveRegion(string key)
+    public void APIRemoveRegions(List<string> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveRegion(key);
+            foreach (var key in keys)
+            {
+                Current.RemoveRegion(key);
+            }
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -263,12 +269,14 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIRemoveRoom(string key)
+    public void APIRemoveRooms(List<string> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveRoom(key);
+            foreach (var key in keys)
+            {
+                Current.RemoveRoom(key);
+            }
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -329,12 +337,14 @@ public partial class AppState
         }
         return [];
     }
-    public void APIRemoveRoute(string key)
+    public void APIRemoveRoutes(List<string> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveRoute(key);
+            foreach (var key in keys)
+            {
+                Current.RemoveRoute(key);
+            }
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -395,12 +405,14 @@ public partial class AppState
         }
         return [];
     }
-    public void APIRemoveShortcut(string key)
+    public void APIRemoveShortcuts(List<string> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveShortcut(key);
+            foreach (var key in keys)
+            {
+                Current.RemoveShortcut(key);
+            }
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -461,12 +473,14 @@ public partial class AppState
         }
         return [];
     }
-    public void APIRemoveSnapshot(SnapshotKey key)
+    public void APIRemoveSnapshots(List<SnapshotKey> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveSnapshot(key);
+            foreach (var k in keys)
+            {
+                Current.RemoveSnapshot(k);
+            }
             Snapshot.Sort(Current.Map.Snapshots);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -489,12 +503,14 @@ public partial class AppState
         }
     }
 
-    public void APIRemoveTrace(string key)
+    public void APIRemoveTraces(List<string> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveTrace(key);
+            foreach (var key in keys)
+            {
+                Current.RemoveTrace(key);
+            }
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
@@ -580,12 +596,14 @@ public partial class AppState
         }
         return [];
     }
-    public void APIRemoveVariable(string key)
+    public void APIRemoveVariables(List<string> keys)
     {
         if (Current != null)
         {
-
-            Current.RemoveVariable(key);
+            foreach (var key in keys)
+            {
+                Current.RemoveVariable(key);
+            }
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

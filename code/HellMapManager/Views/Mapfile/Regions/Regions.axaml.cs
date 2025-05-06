@@ -85,7 +85,7 @@ public partial class Regions : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Region model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该地区吗？") == false) return;
-            AppState.Main.APIRemoveRegion(model.Key);
+            AppState.Main.APIRemoveRegions([model.Key]);
             AppState.Main.RaiseMapFileUpdatedEvent(this);
         }
     }
