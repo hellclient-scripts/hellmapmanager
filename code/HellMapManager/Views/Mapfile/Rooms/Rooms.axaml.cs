@@ -37,7 +37,7 @@ public partial class Rooms : UserControl
             var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertRoom(result);
+                AppState.Main.APIInsertRooms([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }

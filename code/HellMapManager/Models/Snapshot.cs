@@ -1,7 +1,20 @@
 
 using System;
 using System.Collections.Generic;
+using HellMapManager.Utils;
 namespace HellMapManager.Models;
+
+public class SnapshotKey(string key, string type, string value)
+{
+    public string Key { get; set; } = key;
+    public string Type { get; set; } = type;
+    public string Value { get; set; } = value;
+    public override string ToString()
+    {
+        return UniqueKeyUtil.Join([Key, Type, Value]);
+    }
+
+}
 public partial class Snapshot
 {
     public static Snapshot Create(string key, string type, string value, string group)
@@ -86,5 +99,12 @@ public partial class Snapshot
     public static void Sort(List<Snapshot> list)
     {
         list.Sort((x, y) => x.Group != y.Group ? x.Group.CompareTo(y.Group) : (x.Key != y.Key ? x.Key.CompareTo(y.Key) : (x.Timestamp != y.Timestamp ? x.Timestamp.CompareTo(y.Timestamp) : (x.Type != y.Type ? x.Type.CompareTo(y.Type) : x.Value.CompareTo(y.Value)))));
+    }
+    public SnapshotKey UniqueKey
+    {
+        get
+        {
+            return new SnapshotKey(Key, Type, Value);
+        }
     }
 }

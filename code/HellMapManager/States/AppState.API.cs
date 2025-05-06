@@ -29,16 +29,23 @@ public partial class AppState
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }
         return [];
     }
-    public void APIInsertLandmark(Landmark landmark)
+    public void APIInsertLandmarks(List<Landmark> models)
     {
-        if (Current != null && landmark.Validated())
+        if (Current != null)
         {
-            Current.InsertLandmark(landmark);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertLandmark(model);
+                }
+            }
             Landmark.Sort(Current.Map.Landmarks);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -88,17 +95,23 @@ public partial class AppState
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }
         return [];
     }
-    public void APIInsertMarker(Marker marker)
+    public void APIInsertMarkers(List<Marker> models)
     {
-        if (Current != null && marker.Validated())
+        if (Current != null)
         {
-
-            Current.InsertMarker(marker);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertMarker(model);
+                }
+            }
             Marker.Sort(Current.Map.Markers);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -148,17 +161,23 @@ public partial class AppState
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }
         return [];
     }
-    public void APIInsertRegion(Region region)
+    public void APIInsertRegions(List<Region> models)
     {
-        if (Current != null && region.Validated())
+        if (Current != null)
         {
-
-            Current.InsertRegion(region);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertRegion(model);
+                }
+            }
             Region.Sort(Current.Map.Regions);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -218,21 +237,27 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }
         return [];
     }
-    public void APIInsertRoom(Room room)
+    public void APIInsertRooms(List<Room> models)
     {
-        if (Current != null && room.Validated())
+        if (Current != null)
         {
-
-            Current.InsertRoom(room);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertRoom(model);
+                }
+            }
             Room.Sort(Current.Map.Rooms);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -263,12 +288,17 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIInsertRoute(Route route)
+    public void APIInsertRoutes(List<Route> models)
     {
-        if (Current != null && route.Validated())
+        if (Current != null)
         {
-
-            Current.InsertRoute(route);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertRoute(model);
+                }
+            }
             Route.Sort(Current.Map.Routes);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -289,10 +319,11 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }
@@ -323,12 +354,17 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIInsertShortcut(Shortcut model)
+    public void APIInsertShortcuts(List<Shortcut> models)
     {
-        if (Current != null && model.Validated())
+        if (Current != null)
         {
-
-            Current.InsertShortcut(model);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertShortcut(model);
+                }
+            }
             Shortcut.Sort(Current.Map.Shortcuts);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -349,10 +385,11 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }
@@ -383,12 +420,17 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIInsertSnapshot(Snapshot model)
+    public void APIInsertSnapshots(List<Snapshot> models)
     {
-        if (Current != null && model.Validated())
+        if (Current != null)
         {
-
-            Current.InsertSnapshot(model);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertSnapshot(model);
+                }
+            }
             Snapshot.Sort(Current.Map.Snapshots);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -409,10 +451,11 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }
@@ -429,17 +472,23 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIInsertTrace(Trace trace)
+    public void APIInsertTraces(List<Trace> models)
     {
-        if (Current != null && trace.Validated())
+        if (Current != null)
         {
-
-            Current.InsertTrace(trace);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertTrace(model);
+                }
+            }
             Trace.Sort(Current.Map.Traces);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
+
     public void APIRemoveTrace(string key)
     {
         if (Current != null)
@@ -465,10 +514,11 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }
@@ -489,12 +539,17 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APIInsertVariable(Variable model)
+    public void APIInsertVariables(List<Variable> models)
     {
-        if (Current != null && model.Validated())
+        if (Current != null)
         {
-
-            Current.InsertVariable(model);
+            foreach (var model in models)
+            {
+                if (model.Validated())
+                {
+                    Current.InsertVariable(model);
+                }
+            }
             Variable.Sort(Current.Map.Variables);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
@@ -515,10 +570,11 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
+                list.Add(model);
             });
             return list;
         }

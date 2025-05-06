@@ -36,7 +36,7 @@ public partial class Shortcuts : UserControl
             var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertShortcut(result);
+                AppState.Main.APIInsertShortcuts([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }

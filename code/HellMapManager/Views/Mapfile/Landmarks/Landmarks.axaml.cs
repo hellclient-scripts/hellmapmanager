@@ -36,7 +36,7 @@ public partial class Landmarks : UserControl
             var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertLandmark(result);
+                AppState.Main.APIInsertLandmarks([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }

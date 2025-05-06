@@ -36,7 +36,7 @@ public partial class Variables : UserControl
             var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertVariable(result);
+                AppState.Main.APIInsertVariables([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }

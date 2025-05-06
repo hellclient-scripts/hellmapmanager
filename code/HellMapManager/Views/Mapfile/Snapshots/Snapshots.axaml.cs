@@ -36,7 +36,7 @@ public partial class Snapshots : UserControl
             var result = await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertSnapshot(result);
+                AppState.Main.APIInsertSnapshots([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }

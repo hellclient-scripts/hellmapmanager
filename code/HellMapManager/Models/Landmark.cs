@@ -6,6 +6,16 @@ using HellMapManager.Utils;
 
 namespace HellMapManager.Models;
 
+public class LandmarkKey(string key, string type)
+{
+    public string Key { get; set; } = key;
+    public string Type { get; set; } = type;
+
+    public override string ToString()
+    {
+        return UniqueKeyUtil.Join([Key, Type]);
+    }
+}
 public partial class Landmark
 {
     public Landmark() { }
@@ -82,9 +92,8 @@ public partial class Landmark
         }
         return false;
     }
-    public string UniqueKey
-
+    public LandmarkKey UniqueKey
     {
-        get => UniqueKeyUtil.Join([Key, Type]);
+        get => new (Key, Type);
     }
 }

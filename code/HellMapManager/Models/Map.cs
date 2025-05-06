@@ -216,7 +216,7 @@ public class MapFile
     {
         Map.Landmarks.RemoveAll(r => r.Key == landmark.Key && r.Type == landmark.Type);
         Map.Landmarks.Add(landmark);
-        Cache.Landmarks[landmark.UniqueKey] = landmark;
+        Cache.Landmarks[landmark.UniqueKey.ToString()] = landmark;
     }
     public void RemoveLandmark(string key, string Type)
     {

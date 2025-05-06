@@ -36,7 +36,7 @@ public partial class Markers : UserControl
             var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertMarker(result);
+                AppState.Main.APIInsertMarkers([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }

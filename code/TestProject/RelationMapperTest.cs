@@ -31,11 +31,7 @@ public class RelationMapperTest
         var room4 = new Room() { Key = "key4", Exits = [new Exit() { Command = "cmd", To = "key3" }, new Exit() { Command = "cmd2", To = "key2" }] };
         var room5 = new Room() { Key = "key5" };
 
-        state.APIInsertRoom(room1);
-        state.APIInsertRoom(room2);
-        state.APIInsertRoom(room3);
-        state.APIInsertRoom(room4);
-        state.APIInsertRoom(room5);
+        state.APIInsertRooms([room1, room2, room3, room4, room5]);
 
         rm = RelationMapper.RelationMap(mf, "notfound", 1);
         Assert.Null(rm);

@@ -36,7 +36,7 @@ public partial class Regions : UserControl
             var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertRegion(result);
+                AppState.Main.APIInsertRegions([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }

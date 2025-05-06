@@ -36,7 +36,7 @@ public partial class Traces : UserControl
             var result = await window.ShowDialog<Trace?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertTrace(result);
+                AppState.Main.APIInsertTraces([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }

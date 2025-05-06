@@ -36,7 +36,7 @@ public partial class Routes : UserControl
             var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertRoute(result);
+                AppState.Main.APIInsertRoutes([result]);
                 AppState.Main.RaiseMapFileUpdatedEvent(this);
             }
         }
