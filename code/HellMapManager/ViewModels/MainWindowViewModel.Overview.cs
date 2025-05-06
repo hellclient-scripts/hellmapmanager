@@ -76,10 +76,6 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Info.NameLabel) : "";
     }
-    public string GetMapNamePath
-    {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Path) : "";
-    }
 
     public string GetMapEncodingLabel
     {
