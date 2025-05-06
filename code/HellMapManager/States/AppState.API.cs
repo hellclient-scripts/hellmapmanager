@@ -25,7 +25,7 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
@@ -78,7 +78,7 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
@@ -131,7 +131,7 @@ public partial class AppState
                 {
                     return;
                 }
-                if (option.Group is not null && model.Group != option.Key)
+                if (option.Group is not null && model.Group != option.Group)
                 {
                     return;
                 }
