@@ -1225,4 +1225,67 @@ public class APITest
         Assert.Single(snapshots);
         Assert.Equal(snapshot3, snapshots[0]);
     }
+    [Fact]
+    public void TestArrange()
+    {
+        var appState = new AppState();
+        appState.NewMap();
+        var room = new Room()
+        {
+            Key = "room1",
+            Group = "group1",
+            Desc = "desc1",
+            Data = [new Data("key2", "value2"), new Data("key1", "value1")],
+            Tags = ["tag1", "tag2"],
+            Exits = [new Exit(){
+                Command="cmd1",
+                To="to1",
+                Cost=1,
+                Conditions=[new Condition("key1", true),new Condition("key2", true)],
+            }],
+        };
+        appState.APIInsertRooms([room]);
+        var rooms = appState.APIListRooms(new APIListOption());
+        Assert.Single(rooms);
+        Assert.Equal(2, rooms[0].Data.Count);
+        Assert.Equal("key1", rooms[0].Data[0].Key);
+        Assert.Equal("key2", rooms[0].Data[1].Key);
+        Assert.Equal(2, rooms[0].Tags.Count);
+        Assert.Equal("tag1", rooms[0].Tags[0]);
+        Assert.Equal("tag2", rooms[0].Tags[1]);
+        Assert.Single(rooms[0].Exits);
+        Assert.Equal(2, rooms[0].Exits[0].Conditions.Count);
+        Assert.Equal("key1", rooms[0].Exits[0].Conditions[0].Key);
+        Assert.Equal("key2", rooms[0].Exits[0].Conditions[1].Key);
+
+        var trace = new Trace()
+        {
+            Key = "trace1",
+            Group = "group1",
+            Desc = "desc1",
+            Locations = ["2", "1"],
+            Message = "message1",
+        };
+        appState.APIInsertTraces([trace]);
+        var traces = appState.APIListTraces(new APIListOption());
+        Assert.Single(traces);
+        Assert.Equal(2, traces[0].Locations.Count);
+        Assert.Equal("1", traces[0].Locations[0]);
+        Assert.Equal("2", traces[0].Locations[1]);
+
+        var shortcut = new Shortcut()
+        {
+            Key = "shortcut1",
+            Command = "cmd1",
+            Group = "group1",
+            Desc = "desc1",
+            Conditions = [new Condition("key2", true), new Condition("key1", true)],
+        };
+        appState.APIInsertShortcuts([shortcut]);
+        var shortcuts = appState.APIListShortcuts(new APIListOption());
+        Assert.Single(shortcuts);
+        Assert.Equal(2, shortcuts[0].Conditions.Count);
+        Assert.Equal("key1", shortcuts[0].Conditions[0].Key);
+        Assert.Equal("key2", shortcuts[0].Conditions[1].Key);
+    }
 }

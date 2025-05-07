@@ -584,4 +584,5 @@ public class BussinessTest
         mapInfo = SuffMapInfo("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n");
         Assert.True(mapInfo.Equal(MapInfo.Decode(mapInfo.Encode())));
     }
+
 }

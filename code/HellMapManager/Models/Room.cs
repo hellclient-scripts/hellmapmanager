@@ -143,6 +143,7 @@ public partial class Room
     {
         Data.Sort((x, y) => x.Key.CompareTo(y.Key));
         Tags.Sort((x, y) => x.CompareTo(y));
+        Exits.ForEach(e => e.Arrange());
     }
     public bool Filter(string val)
     {
