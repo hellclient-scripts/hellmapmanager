@@ -13,7 +13,7 @@ public class NewConditionWindowViewModel : ObservableObject
     }
     public Condition? Raw { get; set; }
     public ConditionForm Item { get; set; }
-    public static string Title
+    public string Title
     {
         get => "新建条件";
     }

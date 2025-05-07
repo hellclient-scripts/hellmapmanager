@@ -12,6 +12,7 @@ using HellMapManager.Windows.EditSnapshotWindow;
 using HellMapManager.Windows.EditShortcutWindow;
 using HellMapManager.Windows.EditRoomWindow;
 using HellMapManager.Windows.NewConditionWindow;
+using HellMapManager.Windows.NewTagWindow;
 using HellMapManager.ViewModels;
 using HellMapManager;
 namespace TestProject;
@@ -955,6 +956,45 @@ public class ViewModelTest
         Assert.Equal("值不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         vm.Item.Value = "value3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestNewConditionWindow()
+    {
+        var vm = new NewConditionWindowViewModel(null, (ConditionForm form) => "");
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.False(vm.Item.Not);
+        Assert.Equal("新建条件", vm.Title);
+        var model = new Condition("key", true);
+        vm = new NewConditionWindowViewModel(model, (ConditionForm form) => form.Key == "error" ? "key error" : "");
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.Not);
+        Assert.True(vm.Item.ToCondition().Equal(model));
+        vm.Item.Key = "";
+        Assert.Equal("标签不能为空", vm.Item.Validate());
+        vm.Item.Key = "error";
+        Assert.Equal("key error", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestNewTagWindow()
+    {
+        var vm = new NewTagWindowViewModel(null, (TagForm form) => "");
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        var model = "key";
+        vm = new NewTagWindowViewModel(model, (TagForm form) => form.Key == "error" ? "key error" : "");
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("key", vm.Item.ToTag());
+        vm.Item.Key = "";
+        Assert.Equal("标签不能为空", vm.Item.Validate());
+        vm.Item.Key = "error";
+        Assert.Equal("key error", vm.Item.Validate());
+        vm.Item.Key = "key2";
         Assert.Equal("", vm.Item.Validate());
     }
 }
