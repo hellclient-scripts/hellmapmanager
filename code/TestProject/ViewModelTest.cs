@@ -15,6 +15,7 @@ using HellMapManager.Windows.NewConditionWindow;
 using HellMapManager.Windows.NewTagWindow;
 using HellMapManager.Windows.PickRoomWindow;
 using HellMapManager.Windows.UpdateMapWindow;
+using HellMapManager.Windows.EditRegionItemWindow;
 using HellMapManager.ViewModels;
 using HellMapManager;
 namespace TestProject;
@@ -1039,6 +1040,38 @@ public class ViewModelTest
         var vm = new UpdateMapWindowViewModel(model);
         Assert.Equal(model, vm.Settings);
 
+    }
+    [Fact]
+    public void TestEditRegionItemWindow()
+    {
+        var vm = new EditRegionItemWindowViewModel(null, (RegionItemForm form) => "");
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Value);
+        Assert.Equal(RegionItemType.Room, vm.Item.Type);
+        Assert.False(vm.Item.Not);
+        Assert.Equal("新元素", vm.Title);
+
+        var model = new RegionItem(RegionItemType.Zone, "value", true);
+        vm = new EditRegionItemWindowViewModel(model, (RegionItemForm form) => form.Value == "error" ? "value error" : "");
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal(RegionItemType.Zone, vm.Item.Type);
+        Assert.True(vm.Item.Not);
+        Assert.True(vm.Item.ToRegionItem().Equal(model));
+        vm.Item.Value = "";
+        Assert.Equal("值不能为空", vm.Item.Validate());
+        vm.Item.Value = "error";
+        Assert.Equal("value error", vm.Item.Validate());
+        vm.Item.Value = "value2";
+        Assert.Equal("", vm.Item.Validate());
+        Assert.Equal("编辑元素", vm.Title);
+
+        var ris = EditRegionItemWindowViewModel.Items;
+        Assert.Equal(2, ris.Count);
+        Assert.Equal(RegionItemType.Room, ris[0].Type);
+        Assert.Equal("房间", ris[0].Label);
+        Assert.Equal(RegionItemType.Zone, ris[1].Type);
+        Assert.Equal("房间分组", ris[1].Label);
     }
 }
 

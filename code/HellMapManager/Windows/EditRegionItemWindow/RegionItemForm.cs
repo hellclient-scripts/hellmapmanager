@@ -14,6 +14,7 @@ public partial class RegionItemForm : ObservableObject
         Raw = model;
         Type = model.Type;
         Value = model.Value;
+        Not = model.Not;
         ExternalValidator = checker;
     }
     public RegionItem ToRegionItem()
