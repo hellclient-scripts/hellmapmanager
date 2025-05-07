@@ -7,6 +7,7 @@ using HellMapManager.Models;
 using HellMapManager.States;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia.Input;
 namespace HellMapManager.Windows.RelationMapWindow;
 public class ViewItem
 {
@@ -110,39 +111,48 @@ public class RelationMapWindowViewModel : ObservableObject
             var graph = new Graph();
             var ViewItems = new Dictionary<string, ViewItem>();
             List<RelationMapItem> items = [Item];
-            while (items.Count > 0)
+            if (Item.Relations.Count > 0)
             {
-                var walking = items;
-                items = [];
-                foreach (var w in walking)
+                while (items.Count > 0)
                 {
-                    foreach (var t in w.Relations)
+                    var walking = items;
+                    items = [];
+                    foreach (var w in walking)
                     {
-                        ViewItem from;
-                        if (ViewItems.ContainsKey(w.Room.Key))
+                        foreach (var t in w.Relations)
                         {
-                            from = ViewItems[w.Room.Key];
+                            ViewItem from;
+                            if (ViewItems.ContainsKey(w.Room.Key))
+                            {
+                                from = ViewItems[w.Room.Key];
+                            }
+                            else
+                            {
+                                from = new ViewItem(w);
+                                ViewItems[w.Room.Key] = from;
+                            }
+                            ViewItem to;
+                            if (ViewItems.ContainsKey(t.Target.Room.Key))
+                            {
+                                to = ViewItems[t.Target.Room.Key];
+                            }
+                            else
+                            {
+                                to = new ViewItem(t.Target);
+                                ViewItems[t.Target.Room.Key] = to;
+                            }
+                            var edge = new Edge(from, to, tailSymbol: t.Type == RelationType.OneSideTo ? Edge.Symbol.None : Edge.Symbol.Arrow, headSymbol: Edge.Symbol.Arrow);
+                            graph.Edges.Add(edge);
+                            items.Add(t.Target);
                         }
-                        else
-                        {
-                            from = new ViewItem(w);
-                            ViewItems[w.Room.Key] = from;
-                        }
-                        ViewItem to;
-                        if (ViewItems.ContainsKey(t.Target.Room.Key))
-                        {
-                            to = ViewItems[t.Target.Room.Key];
-                        }
-                        else
-                        {
-                            to = new ViewItem(t.Target);
-                            ViewItems[t.Target.Room.Key] = to;
-                        }
-                        var edge = new Edge(from, to, tailSymbol: t.Type == RelationType.OneSideTo ? Edge.Symbol.None : Edge.Symbol.Arrow, headSymbol: Edge.Symbol.Arrow);
-                        graph.Edges.Add(edge);
-                        items.Add(t.Target);
                     }
                 }
+            }
+            else
+            {
+                var vi = new ViewItem(Item);
+                var edge = new LonelyEdge(vi);
+                graph.Edges.Add(edge);
             }
             return graph;
         }
@@ -183,7 +193,7 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     private void DoEnterRoomKey(string key, bool modfiyHistory)
     {
-        if (key != "" && AppState.Main.Current is not null)
+        if (key != "" && key != Item.Room.Key && AppState.Main.Current is not null)
         {
             var item = RelationMapper.RelationMap(AppState.Main.Current, key, AppPreset.RelationMaxDepth);
             if (item is not null)
@@ -207,4 +217,8 @@ public class RelationMapWindowViewModel : ObservableObject
         HistoryBack();
     }
     public event EventHandler? RefreshEvent;
+}
+
+public class LonelyEdge(ViewItem from) : Edge(from, from)
+{
 }
