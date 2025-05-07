@@ -13,6 +13,8 @@ using HellMapManager.Windows.EditShortcutWindow;
 using HellMapManager.Windows.EditRoomWindow;
 using HellMapManager.Windows.NewConditionWindow;
 using HellMapManager.Windows.NewTagWindow;
+using HellMapManager.Windows.PickRoomWindow;
+using HellMapManager.Windows.UpdateMapWindow;
 using HellMapManager.ViewModels;
 using HellMapManager;
 namespace TestProject;
@@ -996,6 +998,47 @@ public class ViewModelTest
         Assert.Equal("key error", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestPickRoomWindowViewModel()
+    {
+        var vm = new PickRoomWindowViewModel();
+        AppState.Main.CloseCurrent();
+        Assert.Empty(vm.FilteredRooms);
+        Assert.Equal(0, vm.GetMapRoomsCount);
+        AppState.Main.NewMap();
+        Assert.Empty(vm.FilteredRooms);
+        Assert.Equal(0, vm.GetMapRoomsCount);
+        AppState.Main.APIInsertRooms([
+            new Room(){Key="room1"},
+            new Room(){Key="room2"},
+        ]);
+        Assert.Equal(2, vm.FilteredRooms.Count);
+        Assert.Equal(2, vm.GetMapRoomsCount);
+        vm.RoomsFilter = "room1";
+        vm.FilterRooms();
+        Assert.Single(vm.FilteredRooms);
+        Assert.Equal("room1", vm.FilteredRooms[0].Key);
+        Assert.Equal(2, vm.GetMapRoomsCount);
+    }
+    [Fact]
+    public void TestUpdateMapWindowViewModel()
+    {
+        var items = UpdateMapWindowViewModel.Items;
+        Assert.Equal(2, items.Count);
+        Assert.Equal(MapEncoding.Default, items[0].Key);
+        Assert.Equal("UTF-8", items[0].Label);
+        Assert.Equal(MapEncoding.GB18030, items[1].Key);
+        Assert.Equal("GB18030", items[1].Label);
+        var model = new MapSettings()
+        {
+            Name = "name",
+            Desc = "desc",
+            Encoding = MapEncoding.GB18030,
+        };
+        var vm = new UpdateMapWindowViewModel(model);
+        Assert.Equal(model, vm.Settings);
+
     }
 }
 

@@ -7,7 +7,7 @@ namespace HellMapManager.Windows.PickRoomWindow;
 
 public class PickRoomWindowViewModel:ObservableObject
 {
-    public static int GetMapRoomsCount
+    public int GetMapRoomsCount
     {
         get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Rooms.Count) : 0;
     }
