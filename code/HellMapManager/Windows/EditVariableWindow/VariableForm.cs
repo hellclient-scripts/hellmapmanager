@@ -20,6 +20,7 @@ public partial class VariableForm : ObservableObject
     }
     public Variable ToVariable()
     {
+        Arrange();
         return new Variable()
         {
             Key = Key,
@@ -34,7 +35,6 @@ public partial class VariableForm : ObservableObject
     public ExternalValidator ExternalValidator;
     public string Key { get; set; } = "";
     public string Value { get; set; } = "";
-    public string Type { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
     public string Validate()
@@ -48,16 +48,6 @@ public partial class VariableForm : ObservableObject
         {
             return "变量主键不能为空";
         }
-        if (Value == "")
-        {
-            return "值不能为空";
-        }
-
         return "";
-    }
-    public string UniqueKey
-
-    {
-        get => UniqueKeyUtil.Join([Key, Type]);
     }
 }

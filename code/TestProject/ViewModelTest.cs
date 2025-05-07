@@ -6,7 +6,8 @@ using HellMapManager.Windows.EditLandmarkWindow;
 using HellMapManager.Windows.EditMarkerWindow;
 using HellMapManager.Windows.EditRegionWindow;
 using HellMapManager.Windows.EditRouteWindow;
-
+using HellMapManager.Windows.EditTraceWindow;
+using HellMapManager.Windows.EditVariableWindow;
 using HellMapManager.Windows.NewConditionWindow;
 using HellMapManager.ViewModels;
 using HellMapManager;
@@ -570,6 +571,148 @@ public class ViewModelTest
         Assert.Equal("路线主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
         Assert.Equal("路线主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestEditTraceViewModel()
+    {
+        var vm = new EditTraceWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Group);
+        Assert.Equal("", vm.Item.Desc);
+        Assert.Equal("", vm.Item.Message);
+        Assert.Equal("新建足迹", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+        var model = new Trace()
+        {
+            Key = "key",
+            Group = "group",
+            Desc = "desc",
+            Message = "message",
+            Locations = ["room1"]
+        };
+        var model2 = new Trace()
+        {
+            Key = "key2",
+            Group = "group2",
+            Desc = "desc2",
+            Message = "message2",
+            Locations = ["room2"]
+        };
+        vm = new EditTraceWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("message", vm.Item.Message);
+        Assert.True(vm.Item.Rooms == string.Join("\n", model.Locations));
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看足迹 key", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑足迹 key", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.ToTrace().Equal(model));
+        vm = new EditTraceWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("message", vm.Item.Message);
+        Assert.True(vm.Item.Rooms == string.Join("\n", model.Locations));
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertTraces([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("足迹主键已存在", vm.Item.Validate());
+        vm.Item.Key = "";
+        Assert.Equal("足迹主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestVariableWindowViewModel()
+    {
+        var vm = new EditVariableWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Value);
+        Assert.Equal("", vm.Item.Desc);
+        Assert.Equal("", vm.Item.Group);
+        Assert.Equal("新建变量", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+        var model = new Variable()
+        {
+            Key = "key",
+            Value = "value",
+            Desc = "desc",
+            Group = "group",
+        };
+        var model2 = new Variable()
+        {
+            Key = "key2",
+            Value = "value2",
+            Desc = "desc2",
+            Group = "group2",
+        };
+        vm = new EditVariableWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看变量 key", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑变量 key", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.ToVariable().Equal(model));
+        vm = new EditVariableWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertVariables([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("变量主键已存在", vm.Item.Validate());
+        vm.Item.Key = "";
+        Assert.Equal("变量主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
     }

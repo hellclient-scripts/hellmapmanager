@@ -23,6 +23,7 @@ public partial class TraceForm : ObservableObject
     }
     public Trace ToTrace()
     {
+        Arrange();
         return new Trace()
         {
             Key = Key,
@@ -61,7 +62,7 @@ public partial class TraceForm : ObservableObject
         }
         if (Key == "")
         {
-            return "区域主键不能为空";
+            return "足迹主键不能为空";
         }
 
         return "";

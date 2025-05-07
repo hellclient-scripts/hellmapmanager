@@ -26,6 +26,7 @@ public partial class ShortcutForm : ObservableObject
     }
     public Shortcut ToShortcut()
     {
+        Arrange();
         return new Shortcut()
         {
             Key = Key,
