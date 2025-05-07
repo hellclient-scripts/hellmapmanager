@@ -28,6 +28,7 @@ public partial class RoomForm : ObservableObject
     }
     public Room ToRoom()
     {
+        Arrange();
         return new Room()
         {
             Key = Key,

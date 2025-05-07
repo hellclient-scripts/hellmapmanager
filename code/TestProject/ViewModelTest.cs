@@ -10,6 +10,7 @@ using HellMapManager.Windows.EditTraceWindow;
 using HellMapManager.Windows.EditVariableWindow;
 using HellMapManager.Windows.EditSnapshotWindow;
 using HellMapManager.Windows.EditShortcutWindow;
+using HellMapManager.Windows.EditRoomWindow;
 using HellMapManager.Windows.NewConditionWindow;
 using HellMapManager.ViewModels;
 using HellMapManager;
@@ -790,6 +791,171 @@ public class ViewModelTest
         vm.Item.Command = "cmd3";
         Assert.Equal("", vm.Item.Validate());
     }
-}
+    [Fact]
+    public void TestEditRoomWindowViewModel()
+    {
+        var vm = new EditRoomWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Desc);
+        Assert.Equal("", vm.Item.Group);
+        Assert.Equal("新建房间", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
 
+        var model = new Room()
+        {
+            Key = "key",
+            Desc = "desc",
+            Group = "group",
+            Tags = ["tag1"],
+            Data = [new Data("key1", "value1")],
+            Exits = [new Exit(){
+                Command="command1",
+                To="to1",
+                Cost=1,
+                Conditions=[new Condition("key1",true)]
+            }],
+
+        };
+        var model2 = new Room()
+        {
+            Key = "key2",
+            Desc = "desc2",
+            Group = "group2",
+            Tags = ["tag1"],
+            Data = [new Data("key1", "value1")],
+            Exits = [new Exit(){
+                Command="command1",
+                To="to1",
+                Cost=1,
+                Conditions=[new Condition("key1",true)]
+            }],
+        };
+        vm = new EditRoomWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Single(vm.Item.Tags);
+        Assert.Equal("tag1", vm.Item.Tags[0]);
+        Assert.Single(vm.Item.Data);
+        Assert.True(model.Data[0].Equal(vm.Item.Data[0]));
+        Assert.Single(vm.Item.Exits);
+        Assert.True(model.Exits[0].Equal(vm.Item.Exits[0]));
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看房间 (key)", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑房间 (key)", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.ToRoom().Equal(model));
+        vm = new EditRoomWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Single(vm.Item.Tags);
+        Assert.Equal("tag1", vm.Item.Tags[0]);
+        Assert.Single(vm.Item.Data);
+        Assert.True(model.Data[0].Equal(vm.Item.Data[0]));
+        Assert.Single(vm.Item.Exits);
+        Assert.True(model.Exits[0].Equal(vm.Item.Exits[0]));
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertRooms([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("房间主键已存在", vm.Item.Validate());
+        vm.Item.Key = "";
+        Assert.Equal("房间主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestEditSnapshotWindowViewModel()
+    {
+        var vm = new EditSnapshotWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("新建快照", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+        var model = new Snapshot()
+        {
+            Key = "key",
+            Type = "type",
+            Value = "value",
+            Group = "group",
+            Timestamp = 1234567890,
+        };
+        var model2 = new Snapshot()
+        {
+            Key = "key2",
+            Type = "type2",
+            Value = "value2",
+            Group = "group2",
+            Timestamp = 1234567890,
+
+        };
+        vm = new EditSnapshotWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("type", vm.Item.Type);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("group", vm.Item.Group);
+
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看快照 key", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑快照 key", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal(model.UniqueKey().ToString(), vm.Item.UniqueKey);
+        Assert.Equal(model.UniqueKey().ToString(), vm.Item.ToSnapshot().UniqueKey().ToString());
+        vm = new EditSnapshotWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("type", vm.Item.Type);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertSnapshots([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "";
+        Assert.Equal("快照主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        vm.Item.Value = "";
+        Assert.Equal("值不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        vm.Item.Value = "value3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+}
 
