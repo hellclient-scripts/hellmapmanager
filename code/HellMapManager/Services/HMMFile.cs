@@ -25,7 +25,7 @@ public class HMMFile
             fileStream.Write(result);
         }
     }
-    public static Map? Open(string name)
+    public static MapFile? Open(string name)
     {
         byte[] body;
         if (name.EndsWith(".hmz"))
@@ -46,6 +46,6 @@ public class HMMFile
             body = File.ReadAllBytes(name);
         }
 
-        return HMMEncoder.HMMEncoder.Decode(body)?.Map;
+        return HMMEncoder.HMMEncoder.Decode(body);
     }
 }

@@ -116,55 +116,55 @@ public class HMMEncoder
                 case Room.EncodeKey:
                     {
                         var model = Room.Decode(data);
-                        if (model.Validated()) { mf.Map.Rooms.Add(model); }
+                        if (model.Validated()) { mf.InsertRoom(model); }
                     }
                     break;
                 case Marker.EncodeKey:
                     {
                         var model = Marker.Decode(data);
-                        if (model.Validated()) { mf.Map.Markers.Add(model); }
+                        if (model.Validated()) { mf.InsertMarker(model); }
                     }
                     break;
                 case Landmark.EncodeKey:
                     {
                         var model = Landmark.Decode(data);
-                        if (model.Validated()) { mf.Map.Landmarks.Add(model); }
+                        if (model.Validated()) { mf.InsertLandmark(model); }
                     }
                     break;
                 case Variable.EncodeKey:
                     {
                         var model = Variable.Decode(data);
-                        if (model.Validated()) { mf.Map.Variables.Add(model); }
+                        if (model.Validated()) { mf.InsertVariable(model); }
                     }
                     break;
                 case Route.EncodeKey:
                     {
                         var model = Route.Decode(data);
-                        if (model.Validated()) { mf.Map.Routes.Add(model); }
+                        if (model.Validated()) { mf.InsertRoute(model); }
                     }
                     break;
                 case Region.EncodeKey:
                     {
                         var model = Region.Decode(data);
-                        if (model.Validated()) { mf.Map.Regions.Add(model); }
+                        if (model.Validated()) { mf.InsertRegion(model); }
                     }
                     break;
                 case Trace.EncodeKey:
                     {
                         var model = Trace.Decode(data);
-                        if (model.Validated()) { mf.Map.Traces.Add(model); }
+                        if (model.Validated()) { mf.InsertTrace(model); }
                     }
                     break;
                 case Shortcut.EncodeKey:
                     {
                         var model = Shortcut.Decode(data);
-                        if (model.Validated()) { mf.Map.Shortcuts.Add(model); }
+                        if (model.Validated()) { mf.InsertShortcut(model); }
                     }
                     break;
                 case Snapshot.EncodeKey:
                     {
                         var model = Snapshot.Decode(data);
-                        if (model.Validated()) { mf.Map.Snapshots.Add(model); }
+                        if (model.Validated()) { mf.InsertSnapshot(model); }
                     }
                     break;
             }
