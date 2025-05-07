@@ -18,10 +18,11 @@ public partial class RegionForm : ObservableObject
         Desc = region.Desc;
         Items = [.. region.Items];
         ExternalValidator = checker;
-        Message=region.Message;
+        Message = region.Message;
     }
     public Region ToRegion()
     {
+        Arrange();
         return new Region()
         {
             Key = Key,
@@ -38,7 +39,7 @@ public partial class RegionForm : ObservableObject
     public string Key { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
-    public string Message{ get; set; } = "";
+    public string Message { get; set; } = "";
     public ObservableCollection<RegionItem> Items { get; set; } = [];
 
     public string Validate()
@@ -50,7 +51,7 @@ public partial class RegionForm : ObservableObject
         }
         if (Key == "")
         {
-            return "区域主键不能为空";
+            return "地区主键不能为空";
         }
 
         return "";

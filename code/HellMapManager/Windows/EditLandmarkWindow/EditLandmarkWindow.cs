@@ -25,7 +25,7 @@ public class EditLandmarkWindowViewModel : ObservableObject
         get =>
             Raw is null
                 ? "新建定位"
-                : ViewMode ? $"查看定位 {Raw.Key})" : $"编辑定位 {Raw.Key}";
+                : ViewMode ? $"查看定位 {Raw.Key}" : $"编辑定位 {Raw.Key}";
     }
     public bool Editable { get => (Raw is not null) && ViewMode; }
     public bool Editing { get; set; } = false;

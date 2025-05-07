@@ -2,8 +2,13 @@ using HellMapManager.Models;
 using HellMapManager.States;
 using HellMapManager.Windows.EditDataWindow;
 using HellMapManager.Windows.EditExitWindow;
+using HellMapManager.Windows.EditLandmarkWindow;
+using HellMapManager.Windows.EditMarkerWindow;
+using HellMapManager.Windows.EditRegionWindow;
+
 using HellMapManager.Windows.NewConditionWindow;
 using HellMapManager.ViewModels;
+using HellMapManager;
 namespace TestProject;
 
 public class ViewModelTest
@@ -11,6 +16,7 @@ public class ViewModelTest
     [Fact]
     public void TestMainWindowViewModel()
     {
+        AppState.Main.CloseCurrent();
         var vm = new MainWindowViewModel();
         string? lastchanged;
         vm.PropertyChanged += (sender, args) =>
@@ -249,5 +255,250 @@ public class ViewModelTest
 
         Assert.Equal("", vm.ConditionValidator(new ConditionForm(vm.ConditionValidator)));
     }
+    [Fact]
+    public void TestEditLandmarkWindowViewModel()
+    {
+        var vm = new EditLandmarkWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Value);
+        Assert.Equal("", vm.Item.Type);
+        Assert.Equal("", vm.Item.Group);
+        Assert.Equal("", vm.Item.Desc);
+        Assert.Equal("新建定位", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+        vm.EnterEdit();
+        Assert.False(vm.Editing);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("", vm.Item.Key);
+
+        var model = new Landmark()
+        {
+            Key = "key",
+            Value = "value",
+            Type = "type",
+            Group = "group",
+            Desc = "desc",
+        };
+        var model2 = new Landmark()
+        {
+            Key = "key2",
+            Value = "value",
+            Type = "type",
+            Group = "group",
+            Desc = "desc",
+        };
+        vm = new EditLandmarkWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("type", vm.Item.Type);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看定位 key", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑定位 key", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.ToLandmark().Equal(model));
+        vm = new EditLandmarkWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("type", vm.Item.Type);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertLandmarks([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("定位主键已存在", vm.Item.Validate());
+        vm.Item.Key = "";
+        vm.Item.Value = "";
+        Assert.Equal("定位主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("值不能为空", vm.Item.Validate());
+        vm.Item.Value = "value3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestEditMarkerWindowViewModel()
+    {
+        var vm = new EditMarkerWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Value);
+        Assert.Equal("", vm.Item.Desc);
+        Assert.Equal("", vm.Item.Group);
+        Assert.Equal("", vm.Item.Message);
+        Assert.Equal("新建标记", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+        var model = new Marker()
+        {
+            Key = "key",
+            Value = "value",
+            Desc = "desc",
+            Group = "group",
+            Message = "message",
+        };
+        var model2 = new Marker()
+        {
+            Key = "key2",
+            Value = "value2",
+            Desc = "desc2",
+            Group = "group2",
+            Message = "message2",
+        };
+        vm = new EditMarkerWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看标记 key", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑标记 key", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.ToMarker().Equal(model));
+        vm = new EditMarkerWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("value", vm.Item.Value);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("message", vm.Item.Message);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertMarkers([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("标记主键已存在", vm.Item.Validate());
+        vm.Item.Key = "";
+        vm.Item.Value = "";
+        Assert.Equal("标记主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("房间值不能为空", vm.Item.Validate());
+        vm.Item.Value = "value3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestEditRegionWindowViewModel()
+    {
+        var vm = new EditRegionWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Group);
+        Assert.Equal("", vm.Item.Desc);
+        Assert.Equal("", vm.Item.Message);
+        Assert.Equal("新建地区", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+        var model = new Region()
+        {
+            Key = "key",
+            Group = "group",
+            Desc = "desc",
+            Message = "message",
+            Items = new List<RegionItem>()
+            {
+                new RegionItem(RegionItemType.Room,"item1",true),
+            }
+        };
+        var model2 = new Region()
+        {
+            Key = "key2",
+            Group = "group2",
+            Desc = "desc2",
+            Message = "message2",
+            Items = new List<RegionItem>()
+            {
+                new RegionItem(RegionItemType.Room,"item2",true),
+            }
+        };
+        vm = new EditRegionWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("message", vm.Item.Message);
+        Assert.Single(vm.Item.Items);
+        Assert.True(vm.Item.Items[0].Equal(model.Items[0]));
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看地区 key", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑地区 key", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.ToRegion().Equal(model));
+        vm = new EditRegionWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("message", vm.Item.Message);
+        Assert.Single(vm.Item.Items);
+        Assert.True(vm.Item.Items[0].Equal(model.Items[0]));
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertRegions([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("地区主键已存在", vm.Item.Validate());
+        vm.Item.Key = "";
+        vm.Item.Group = "";
+        Assert.Equal("地区主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+    }
 }
+
 

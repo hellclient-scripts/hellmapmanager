@@ -25,7 +25,7 @@ public class EditMarkerWindowViewModel : ObservableObject
         get =>
             Raw is null
                 ? "新建标记"
-                : ViewMode ? $"查看标记 {Raw.Key})" : $"编辑标记 {Raw.Key}";
+                : ViewMode ? $"查看标记 {Raw.Key}" : $"编辑标记 {Raw.Key}";
     }
     public bool Editable { get => (Raw is not null) && ViewMode; }
     public bool Editing { get; set; } = false;

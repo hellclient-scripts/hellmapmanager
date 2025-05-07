@@ -21,6 +21,7 @@ public partial class MarkerForm : ObservableObject
     }
     public Marker ToMarker()
     {
+        Arrange();
         return new Marker()
         {
             Key = Key,

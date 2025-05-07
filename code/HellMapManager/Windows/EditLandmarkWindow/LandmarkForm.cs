@@ -21,6 +21,7 @@ public partial class LandmarkForm : ObservableObject
     }
     public Landmark ToLandmark()
     {
+        Arrange();
         return new Landmark()
         {
             Key = Key,
