@@ -24,7 +24,7 @@ public class EditSnapshotWindowViewModel : ObservableObject
         get =>
             Raw is null
                 ? "新建快照"
-                : ViewMode ? $"查看快照 {Raw.Key})" : $"编辑快照 {Raw.Key}";
+                : ViewMode ? $"查看快照 {Raw.Key}" : $"编辑快照 {Raw.Key}";
     }
     public bool Editable { get => (Raw is not null) && ViewMode; }
     public bool Editing { get; set; } = false;

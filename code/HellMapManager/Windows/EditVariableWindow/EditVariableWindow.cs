@@ -25,7 +25,7 @@ public class EditVariableWindowViewModel : ObservableObject
         get =>
             Raw is null
                 ? "新建变量"
-                : ViewMode ? $"查看变量 {Raw.Key})" : $"编辑变量 {Raw.Key}";
+                : ViewMode ? $"查看变量 {Raw.Key}" : $"编辑变量 {Raw.Key}";
     }
     public bool Editable { get => (Raw is not null) && ViewMode; }
     public bool Editing { get; set; } = false;

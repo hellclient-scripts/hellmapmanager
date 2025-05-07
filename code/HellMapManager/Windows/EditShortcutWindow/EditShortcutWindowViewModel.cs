@@ -26,7 +26,7 @@ public class EditShortcutWindowViewModel : ObservableObject
         get =>
             Raw is null
                 ? "新建捷径"
-                : ViewMode ? $"查看捷径 {Raw.Key})" : $"编辑捷径 {Raw.Key}";
+                : ViewMode ? $"查看捷径 {Raw.Key}" : $"编辑捷径 {Raw.Key}";
     }
     public bool Editable { get => (Raw is not null) && ViewMode; }
     public bool Editing { get; set; } = false;

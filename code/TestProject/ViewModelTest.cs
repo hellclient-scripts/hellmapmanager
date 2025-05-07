@@ -5,6 +5,7 @@ using HellMapManager.Windows.EditExitWindow;
 using HellMapManager.Windows.EditLandmarkWindow;
 using HellMapManager.Windows.EditMarkerWindow;
 using HellMapManager.Windows.EditRegionWindow;
+using HellMapManager.Windows.EditRouteWindow;
 
 using HellMapManager.Windows.NewConditionWindow;
 using HellMapManager.ViewModels;
@@ -496,6 +497,79 @@ public class ViewModelTest
         vm.Item.Key = "";
         vm.Item.Group = "";
         Assert.Equal("地区主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestEditRouteWindowViewModel()
+    {
+        var vm = new EditRouteWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Group);
+        Assert.Equal("", vm.Item.Desc);
+        Assert.Equal("", vm.Item.Message);
+        Assert.Equal("新建路线", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+        var model = new Route()
+        {
+            Key = "key",
+            Group = "group",
+            Desc = "desc",
+            Message = "message",
+            Rooms = ["room1"]
+        };
+        var model2 = new Route()
+        {
+            Key = "key2",
+            Group = "group2",
+            Desc = "desc2",
+            Message = "message2",
+            Rooms = ["room2"]
+        };
+        vm = new EditRouteWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("message", vm.Item.Message);
+        Assert.True(vm.Item.Rooms == string.Join("\n", model.Rooms));
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看路线 key", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑路线 key", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.ToRoute().Equal(model));
+        vm = new EditRouteWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("message", vm.Item.Message);
+        Assert.True(vm.Item.Rooms == string.Join("\n", model.Rooms));
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertRoutes([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("路线主键已存在", vm.Item.Validate());
+        vm.Item.Key = "";
+        Assert.Equal("路线主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
     }

@@ -25,7 +25,7 @@ public class EditTraceWindowViewModel : ObservableObject
         get =>
             Raw is null
                 ? "新建足迹"
-                : ViewMode ? $"查看足迹 {Raw.Key})" : $"编辑足迹 {Raw.Key}";
+                : ViewMode ? $"查看足迹 {Raw.Key}" : $"编辑足迹 {Raw.Key}";
     }
     public bool Editable { get => (Raw is not null) && ViewMode; }
     public bool Editing { get; set; } = false;
