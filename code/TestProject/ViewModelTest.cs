@@ -8,6 +8,8 @@ using HellMapManager.Windows.EditRegionWindow;
 using HellMapManager.Windows.EditRouteWindow;
 using HellMapManager.Windows.EditTraceWindow;
 using HellMapManager.Windows.EditVariableWindow;
+using HellMapManager.Windows.EditSnapshotWindow;
+using HellMapManager.Windows.EditShortcutWindow;
 using HellMapManager.Windows.NewConditionWindow;
 using HellMapManager.ViewModels;
 using HellMapManager;
@@ -714,6 +716,78 @@ public class ViewModelTest
         vm.Item.Key = "";
         Assert.Equal("变量主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+    }
+    [Fact]
+    public void TestEditShortcutWindowViewModel()
+    {
+        var vm = new EditShortcutWindowViewModel(null, false);
+        Assert.Null(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("", vm.Item.Key);
+        Assert.Equal("", vm.Item.Command);
+        Assert.Equal("", vm.Item.Desc);
+        Assert.Equal("", vm.Item.Group);
+        Assert.Equal("新建捷径", vm.Title);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+
+        var model = new Shortcut()
+        {
+            Key = "key",
+            Command = "command",
+            Desc = "desc",
+            Group = "group",
+        };
+        var model2 = new Shortcut()
+        {
+            Key = "key2",
+            Command = "command2",
+            Desc = "desc2",
+            Group = "group2",
+        };
+        vm = new EditShortcutWindowViewModel(model, true);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("command", vm.Item.Command);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.True(vm.ViewMode);
+        Assert.True(vm.Editable);
+        Assert.False(vm.Editing);
+        Assert.Equal("查看捷径 key", vm.Title);
+        vm.EnterEdit();
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.True(vm.Editing);
+        Assert.Equal("编辑捷径 key", vm.Title);
+        vm.Item.Key = "key2";
+        vm.CancelEdit();
+        Assert.Equal("key", vm.Item.Key);
+        Assert.True(vm.Item.ToShortcut().Equal(model));
+        vm = new EditShortcutWindowViewModel(model, false);
+        Assert.NotNull(vm.Raw);
+        Assert.NotNull(vm.Item);
+        Assert.Equal("key", vm.Item.Key);
+        Assert.Equal("command", vm.Item.Command);
+        Assert.Equal("desc", vm.Item.Desc);
+        Assert.Equal("group", vm.Item.Group);
+        Assert.False(vm.ViewMode);
+        Assert.False(vm.Editable);
+        Assert.False(vm.Editing);
+        AppState.Main.NewMap();
+        AppState.Main.APIInsertShortcuts([model, model2]);
+        Assert.Equal("", vm.Item.Validate());
+        vm.Item.Key = "key2";
+        Assert.Equal("捷径主键已存在", vm.Item.Validate());
+        vm.Item.Key = "";
+        Assert.Equal("捷径主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        vm.Item.Command = "";
+        Assert.Equal("指令不能为空", vm.Item.Validate());
+        vm.Item.Command = "cmd3";
         Assert.Equal("", vm.Item.Validate());
     }
 }

@@ -20,6 +20,7 @@ public partial class SnapshotForm : ObservableObject
     }
     public Snapshot ToSnapshot()
     {
+        Arrange();
         return Snapshot.Create(Key, Type, Value, Group); ;
     }
     public void Arrange()
