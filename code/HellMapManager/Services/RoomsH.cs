@@ -13,8 +13,8 @@ namespace HellMapManager.Services;
 
 public class ExportOption()
 {
-    public bool DisableRoomDef = false;
-    public bool DisableCost = false;
+    public bool DisableRoomDef { get; set; } = false;
+    public bool DisableCost { get; set; } = false;
 }
 public class RoomFormatter
 {
