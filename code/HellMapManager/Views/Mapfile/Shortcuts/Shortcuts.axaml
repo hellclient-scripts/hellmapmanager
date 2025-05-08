@@ -55,14 +55,16 @@
                Text="{Binding ShortcutsFilter}"
                TextChanged="OnFilter"
                Watermark="过滤" />
-         </DockPanel>
-         <Panel DockPanel.Dock="Bottom">
-            <WrapPanel HorizontalAlignment="Right">
+            <WrapPanel
+               Margin="0,0,10,0"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"
+               DockPanel.Dock="Right">
                <TextBlock Text="{Binding FilteredShortcuts.Count}" />
                <TextBlock Text="/" />
                <TextBlock Text="{Binding GetMapShortcutsCount}" />
             </WrapPanel>
-         </Panel>
+         </DockPanel>
          <DataGrid
             x:Name="AllShortcuts"
             Margin="5"

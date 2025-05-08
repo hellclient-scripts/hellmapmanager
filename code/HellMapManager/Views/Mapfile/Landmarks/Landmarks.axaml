@@ -56,14 +56,16 @@
                Text="{Binding LandmarksFilter}"
                TextChanged="OnFilter"
                Watermark="过滤" />
-         </DockPanel>
-         <Panel DockPanel.Dock="Bottom">
-            <WrapPanel HorizontalAlignment="Right">
+            <WrapPanel
+               Margin="0,0,10,0"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"
+               DockPanel.Dock="Right">
                <TextBlock Text="{Binding FilteredLandmarks.Count}" />
                <TextBlock Text="/" />
                <TextBlock Text="{Binding GetMapLandmarksCount}" />
             </WrapPanel>
-         </Panel>
+         </DockPanel>
          <DataGrid
             x:Name="AllLandmarks"
             Margin="5"

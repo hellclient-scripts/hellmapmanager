@@ -33,8 +33,7 @@
             <TextBlock Classes="Desc">
                快照是记录特定房间在某个时间点的特定状态。<LineBreak />
                一般情况下，快照只有创建，删除的操作。<LineBreak />
-               创建快照时如果同主键，类型，值的快照存在，那么就是快照做一次刷新，只变动更新时间。
-               </TextBlock>
+               创建快照时如果同主键，类型，值的快照存在，那么就是快照做一次刷新，只变动更新时间。</TextBlock>
          </StackPanel>
       </ScrollViewer>
       <DockPanel>
@@ -57,14 +56,16 @@
                Text="{Binding SnapshotsFilter}"
                TextChanged="OnFilter"
                Watermark="过滤" />
-         </DockPanel>
-         <Panel DockPanel.Dock="Bottom">
-            <WrapPanel HorizontalAlignment="Right">
+            <WrapPanel
+               Margin="0,0,10,0"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"
+               DockPanel.Dock="Right">
                <TextBlock Text="{Binding FilteredSnapshots.Count}" />
                <TextBlock Text="/" />
                <TextBlock Text="{Binding GetMapSnapshotsCount}" />
             </WrapPanel>
-         </Panel>
+         </DockPanel>
          <DataGrid
             x:Name="AllSnapshots"
             Margin="5"

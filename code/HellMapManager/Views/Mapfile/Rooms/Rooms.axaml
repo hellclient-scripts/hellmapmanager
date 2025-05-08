@@ -56,14 +56,16 @@
                Text="{Binding RoomsFilter}"
                TextChanged="OnFilter"
                Watermark="过滤" />
-         </DockPanel>
-         <Panel DockPanel.Dock="Bottom">
-            <WrapPanel HorizontalAlignment="Right">
+            <WrapPanel
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"
+               Margin="0 0 10 0"
+               DockPanel.Dock="Right">
                <TextBlock Text="{Binding FilteredRooms.Count}" />
                <TextBlock Text="/" />
                <TextBlock Text="{Binding GetMapRoomsCount}" />
             </WrapPanel>
-         </Panel>
+         </DockPanel>
          <DataGrid
             x:Name="AllRooms"
             Margin="5"
@@ -75,21 +77,33 @@
             IsReadOnly="True"
             ItemsSource="{Binding FilteredRooms}">
             <DataGrid.Columns>
-               <DataGridTemplateColumn Width="160" Header="房间主键" CanUserSort="true" SortMemberPath="Key">
+               <DataGridTemplateColumn
+                  Width="160"
+                  CanUserSort="true"
+                  Header="房间主键"
+                  SortMemberPath="Key">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
                         <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Key}" />
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-               <DataGridTemplateColumn Width="160" Header="房间名" CanUserSort="true" SortMemberPath="Name">
+               <DataGridTemplateColumn
+                  Width="160"
+                  CanUserSort="true"
+                  Header="房间名"
+                  SortMemberPath="Name">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
                         <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-               <DataGridTemplateColumn Width="160" Header="分组"  CanUserSort="true" SortMemberPath="Group">
+               <DataGridTemplateColumn
+                  Width="160"
+                  CanUserSort="true"
+                  Header="分组"
+                  SortMemberPath="Group">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
                         <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Group}" />
@@ -111,7 +125,7 @@
                <DataGridTemplateColumn Header="操作">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
-                        <WrapPanel Margin="10 0 20 0">
+                        <WrapPanel Margin="10,0,20,0">
                            <Button Margin="2" Click="OnView">
                               <ToolTip.Tip>
                                  <TextBlock>查看房间</TextBlock>

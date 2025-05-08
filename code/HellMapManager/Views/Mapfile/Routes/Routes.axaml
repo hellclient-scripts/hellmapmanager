@@ -56,14 +56,16 @@
                Text="{Binding RoutesFilter}"
                TextChanged="OnFilter"
                Watermark="过滤" />
-         </DockPanel>
-         <Panel DockPanel.Dock="Bottom">
-            <WrapPanel HorizontalAlignment="Right">
+            <WrapPanel
+               Margin="0,0,10,0"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"
+               DockPanel.Dock="Right">
                <TextBlock Text="{Binding FilteredRoutes.Count}" />
                <TextBlock Text="/" />
                <TextBlock Text="{Binding GetMapRoutesCount}" />
             </WrapPanel>
-         </Panel>
+         </DockPanel>
          <DataGrid
             x:Name="AllRoutes"
             Margin="5"

@@ -57,14 +57,16 @@
                Text="{Binding RegionsFilter}"
                TextChanged="OnFilter"
                Watermark="过滤" />
-         </DockPanel>
-         <Panel DockPanel.Dock="Bottom">
-            <WrapPanel HorizontalAlignment="Right">
+            <WrapPanel
+               Margin="0,0,10,0"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center"
+               DockPanel.Dock="Right">
                <TextBlock Text="{Binding FilteredRegions.Count}" />
                <TextBlock Text="/" />
                <TextBlock Text="{Binding GetMapRegionsCount}" />
             </WrapPanel>
-         </Panel>
+         </DockPanel>
          <DataGrid
             x:Name="AllRegions"
             Margin="5"
@@ -114,7 +116,8 @@
                         <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Message}" />
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
-               </DataGridTemplateColumn>               <DataGridTemplateColumn Width="160" Header="操作">
+               </DataGridTemplateColumn>               
+               <DataGridTemplateColumn Width="160" Header="操作">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
                         <WrapPanel Margin="10,0,20,0">
