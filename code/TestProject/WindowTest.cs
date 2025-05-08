@@ -40,6 +40,7 @@ using HellMapManager.Services;
 using HellMapManager.Models;
 namespace TestProject;
 
+[Collection("MainState")]
 public class WindowTest()
 {
     [Fact]

@@ -50,8 +50,8 @@ public partial class AppState()
         var mf = HMMFile.Open(file);
         if (mf != null)
         {
-            Current=mf;
-            Current.Modified=false;
+            Current = mf;
+            Current.Modified = false;
             Current.Path = file;
             AddRecent(Current.ToRecentFile());
             RaiseMapFileUpdatedEvent(this);

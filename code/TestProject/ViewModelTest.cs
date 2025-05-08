@@ -20,6 +20,7 @@ using HellMapManager.ViewModels;
 using HellMapManager;
 namespace TestProject;
 
+[Collection("MainState")]
 public class ViewModelTest
 {
     [Fact]

@@ -38,10 +38,6 @@ public class ViewItem
     {
         get => string.Join(",", Item.Room.Tags);
     }
-    public bool IsDescEmpty
-    {
-        get => Item.Room.Desc == "";
-    }
     public bool IsDataEmpty
     {
         get => Item.Room.Data.Count == 0;
@@ -49,6 +45,11 @@ public class ViewItem
     public bool HasData
     {
         get => Item.Room.Data.Count > 0;
+    }
+
+    public bool IsDescEmpty
+    {
+        get => Item.Room.Desc == "";
     }
     public string DescInfo
     {
@@ -68,7 +69,7 @@ public class ViewItem
     }
     public string GroupInfo
     {
-        get => Item.Room.Group == "" ? "<无区域>" : Item.Room.Group;
+        get => Item.Room.Group == "" ? "<无分组>" : Item.Room.Group;
     }
     public bool IsTagsEmpty
     {
@@ -131,16 +132,10 @@ public class RelationMapWindowViewModel : ObservableObject
                                 from = new ViewItem(w);
                                 ViewItems[w.Room.Key] = from;
                             }
+                            //relationmap的设定，不可能有回头路，不需要判断
                             ViewItem to;
-                            if (ViewItems.ContainsKey(t.Target.Room.Key))
-                            {
-                                to = ViewItems[t.Target.Room.Key];
-                            }
-                            else
-                            {
-                                to = new ViewItem(t.Target);
-                                ViewItems[t.Target.Room.Key] = to;
-                            }
+                            to = new ViewItem(t.Target);
+                            ViewItems[t.Target.Room.Key] = to;
                             var edge = new Edge(from, to, tailSymbol: t.Type == RelationType.OneSideTo ? Edge.Symbol.None : Edge.Symbol.Arrow, headSymbol: Edge.Symbol.Arrow);
                             graph.Edges.Add(edge);
                             items.Add(t.Target);
@@ -163,7 +158,6 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     private void AddHistory(string key)
     {
-        Histories.Remove(key);
         Histories.Add(key);
         if (Histories.Count > AppPreset.RelationMaxHistoriesCount)
         {

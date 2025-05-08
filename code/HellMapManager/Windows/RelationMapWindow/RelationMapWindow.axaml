@@ -179,14 +179,6 @@
                   Classes.Level2="{Binding IsLevel2}"
                   Classes.LevelOther="{Binding IsLevelOther}"
                   DoubleTapped="OnDoubleTapped">
-                  <Border.ContextMenu>
-                    <ContextMenu>
-                      <MenuItem
-                        Command="{Binding #ZoomBorder.((vm:RelationMapWindowViewModel)DataContext).EnterViewItem}"
-                        CommandParameter="{Binding .}"
-                        Header="进入" />
-                    </ContextMenu>
-                  </Border.ContextMenu>
                   <StackPanel>
                     <SelectableTextBlock Text="{Binding LabelWithKey}" />
                     <TextBlock Text="{Binding Tags}" />
