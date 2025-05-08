@@ -442,4 +442,33 @@ public class RoomsHTest
         opt.DisableRoomDef = true;
         Assert.Equal("rid2=rname2|rcmd:rto2", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room2, opt)));
     }
+    [Fact]
+    public void TestExport()
+    {
+        List<Room> rooms = new List<Room>(){
+        new ()
+            {
+                Key = "room1",
+            },
+        new ()
+            {
+                Key = "0",
+            },
+        new ()
+            {
+                Key = "1",
+            },
+        new ()
+            {
+                Key = "-1",
+            },
+        };
+        var result = RoomsH.Export(rooms, new ExportOption());
+        Assert.Equal(4, result.Count);
+        Assert.Equal("-1=|", result[0]);
+        Assert.Equal("room1=|", result[1]);
+        Assert.Equal("0=|", result[2]);
+        Assert.Equal("1=|", result[3]);
+    }
 }
+

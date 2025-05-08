@@ -6,6 +6,7 @@ using System.IO;
 using HellMapManager.Models;
 using System;
 using HellMapManager.Utils.ControlCode;
+using HellMapManager.Views.Mapfile.Rooms;
 
 
 namespace HellMapManager.Services;
@@ -210,6 +211,24 @@ public class RoomsH
             {
                 result.Add(room);
             }
+        }
+        return result;
+    }
+    public static void Save(string file, List<Room> rooms, ExportOption opt)
+    {
+        using var fileStream = new FileStream(file, FileMode.Create);
+        using var sw = new StreamWriter(fileStream, Encoding.UTF8);
+        var lines = Export(rooms, opt);
+        sw.Write(string.Join("\n", lines));
+    }
+    public static List<string> Export(List<Room> rooms, ExportOption opt)
+    {
+        List<string> result = [];
+        var newrooms = new List<Room>([.. rooms]);
+        newrooms.Sort((x, y) => x.NumberID == y.NumberID ? x.Key.CompareTo(y.Key) : x.NumberID.CompareTo(y.NumberID));
+        foreach (var room in newrooms)
+        {
+            result.Add(RoomFormatter.EncodeRoom(room, opt));
         }
         return result;
     }

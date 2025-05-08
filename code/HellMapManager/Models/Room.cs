@@ -233,7 +233,7 @@ public partial class Room
             {
                 return result;
             }
-            return 0;
+            return -1;
         }
     }
 }
