@@ -12,16 +12,16 @@ public partial class ShortcutForm : ObservableObject
     {
         ExternalValidator = checker;
     }
-    public ShortcutForm(Shortcut landmark, ExternalValidator checker)
+    public ShortcutForm(Shortcut model, ExternalValidator checker)
     {
-        Key = landmark.Key;
-        Command = landmark.Command;
-        To = landmark.To;
-        RoomConditions = [.. landmark.RoomConditions];
-        Conditions = [.. landmark.Conditions];
-        Cost = landmark.Cost;
-        Group = landmark.Group;
-        Desc = landmark.Desc;
+        Key = model.Key;
+        Command = model.Command;
+        To = model.To;
+        RoomConditions = [.. model.RoomConditions];
+        Conditions = [.. model.Conditions];
+        Cost = model.Cost;
+        Group = model.Group;
+        Desc = model.Desc;
         ExternalValidator = checker;
     }
     public Shortcut ToShortcut()

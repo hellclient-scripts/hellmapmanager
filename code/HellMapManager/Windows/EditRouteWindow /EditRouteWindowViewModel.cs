@@ -45,13 +45,16 @@ public class EditRouteWindowViewModel : ObservableObject
     }
     public void CancelEdit()
     {
-        Item = (Raw is not null) ? new RouteForm(Raw, Checker) : new RouteForm(Checker);
-        Editing = false;
-        OnPropertyChanged(nameof(Item));
-        OnPropertyChanged(nameof(Editable));
-        OnPropertyChanged(nameof(ViewMode));
-        OnPropertyChanged(nameof(Editing));
-        OnPropertyChanged(nameof(Title));
+        if (Raw is not null)
+        {
+            Item = new RouteForm(Raw.Clone(), Checker);
+            Editing = false;
+            OnPropertyChanged(nameof(Item));
+            OnPropertyChanged(nameof(Editable));
+            OnPropertyChanged(nameof(ViewMode));
+            OnPropertyChanged(nameof(Editing));
+            OnPropertyChanged(nameof(Title));
+        }
     }
     public string Checker(RouteForm form)
     {

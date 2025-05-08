@@ -223,7 +223,7 @@ public class ViewModelTest
         Assert.Equal("编辑数据 key", vm.Title);
     }
     [Fact]
-    public void TestExitDataWindowViewModel()
+    public void TestEditExitWindowViewModel()
     {
         var vm = new EditExitWindowViewModel(null, (ExitForm form) => "");
         Assert.Null(vm.Raw);
@@ -263,6 +263,25 @@ public class ViewModelTest
         Assert.Equal("key1", vm.Item.Conditions[1].Key);
 
         Assert.Equal("", vm.ConditionValidator(new ConditionForm(vm.ConditionValidator)));
+        vm= new EditExitWindowViewModel(null, (ExitForm form) => "");
+        model = new Exit()
+        {
+            Command = "cmd1",
+            To = "to1",
+            Cost = 2,
+            Conditions = new List<Condition>()
+            {
+                new Condition("key1", true),
+                new Condition("key2", false),
+                new Condition("key3", true),
+            }
+        };
+        vm = new EditExitWindowViewModel(model, (ExitForm form) => "");
+        vm.Item.Arrange();
+        Assert.Equal(3, vm.Item.Conditions.Count);
+        Assert.Equal("key2", vm.Item.Conditions[0].Key);
+        Assert.Equal("key1", vm.Item.Conditions[1].Key);
+        Assert.Equal("key3", vm.Item.Conditions[2].Key);
     }
     [Fact]
     public void TestEditLandmarkWindowViewModel()
@@ -282,8 +301,6 @@ public class ViewModelTest
         vm.EnterEdit();
         Assert.False(vm.Editing);
         vm.Item.Key = "key2";
-        vm.CancelEdit();
-        Assert.Equal("", vm.Item.Key);
 
         var model = new Landmark()
         {
@@ -345,6 +362,13 @@ public class ViewModelTest
         vm.Item.Key = "key3";
         Assert.Equal("值不能为空", vm.Item.Validate());
         vm.Item.Value = "value3";
+        Assert.Equal("", vm.Item.Validate());
+        vm= new EditLandmarkWindowViewModel(null, false);
+        vm.Item.Key = "key";
+        vm.Item.Type = "type";
+        vm.Item.Value = "value";
+        Assert.Equal("定位主键已存在", vm.Item.Validate());
+        vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
     }
     [Fact]
@@ -423,6 +447,12 @@ public class ViewModelTest
         Assert.Equal("标记主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("房间值不能为空", vm.Item.Validate());
+        vm.Item.Value = "value3";
+        Assert.Equal("", vm.Item.Validate());
+        vm= new EditMarkerWindowViewModel(null, false);
+        vm.Item.Key = "key";
+        Assert.Equal("标记主键已存在", vm.Item.Validate());
+        vm.Item.Key = "key3";
         vm.Item.Value = "value3";
         Assert.Equal("", vm.Item.Validate());
     }
@@ -507,6 +537,13 @@ public class ViewModelTest
         Assert.Equal("地区主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
+        vm= new EditRegionWindowViewModel(null, false);
+        vm.Item.Key = "key";
+        Assert.Equal("地区主键已存在", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+
+        Assert.Equal("", vm.RegionItemValidator(new RegionItemForm(vm.RegionItemValidator)));
     }
     [Fact]
     public void TestEditRouteWindowViewModel()
@@ -580,6 +617,15 @@ public class ViewModelTest
         Assert.Equal("路线主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
+        vm= new EditRouteWindowViewModel(null, false);
+        vm.Item.Key = "key";
+        Assert.Equal("路线主键已存在", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+
+        var form = new RouteForm((e) => "");
+        form.Rooms = "a\n\nb\nc";
+        Assert.Equal("a\nb\nc", form.Rooms);
     }
     [Fact]
     public void TestEditTraceViewModel()
@@ -653,6 +699,15 @@ public class ViewModelTest
         Assert.Equal("足迹主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
+        vm = new EditTraceWindowViewModel(null, false);
+        vm.Item.Key = "key";
+        Assert.Equal("足迹主键已存在", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+
+        var form = new TraceForm((e) => "");
+        form.Rooms = "a\n\nb\nc";
+        Assert.Equal("a\nb\nc", form.Rooms);
     }
     [Fact]
     public void TestVariableWindowViewModel()
@@ -720,6 +775,11 @@ public class ViewModelTest
         Assert.Equal("变量主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
         Assert.Equal("变量主键不能为空", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        Assert.Equal("", vm.Item.Validate());
+        vm= new EditVariableWindowViewModel(null, false);
+        vm.Item.Key = "key";
+        Assert.Equal("变量主键已存在", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
     }
@@ -794,6 +854,50 @@ public class ViewModelTest
         Assert.Equal("指令不能为空", vm.Item.Validate());
         vm.Item.Command = "cmd3";
         Assert.Equal("", vm.Item.Validate());
+        vm = new EditShortcutWindowViewModel(null, false);
+        vm.Item.Key = "key";
+        Assert.Equal("捷径主键已存在", vm.Item.Validate());
+        vm.Item.Key = "key3";
+        vm.Item.Command = "";
+        var model3 = new Shortcut()
+        {
+            Key = "key3",
+            Command = "command3",
+            Desc = "desc3",
+            Group = "group3",
+            RoomConditions = new List<Condition>()
+            {
+                new Condition("rkey1", true),
+                new Condition("rkey2", false),
+                new Condition("rkey3", true),
+            },
+            Conditions = new List<Condition>()
+            {
+                new Condition("key1", true),
+                new Condition("key2", false),
+                new Condition("key3", true),
+            }
+        };
+        var form = new ShortcutForm(model3, (e) => "");
+        form.Arrange();
+        Assert.Equal(3, form.Conditions.Count);
+        Assert.Equal("key2", form.Conditions[0].Key);
+        Assert.Equal("key1", form.Conditions[1].Key);
+        Assert.Equal("key3", form.Conditions[2].Key);
+        Assert.Equal(3, form.RoomConditions.Count);
+        Assert.Equal("rkey2", form.RoomConditions[0].Key);
+        Assert.Equal("rkey1", form.RoomConditions[1].Key);
+        Assert.Equal("rkey3", form.RoomConditions[2].Key);
+        vm = new EditShortcutWindowViewModel(model3, false);
+        var cform = new ConditionForm((e) => "");
+        cform.Key = "key1";
+        Assert.Equal("条件已存在", vm.ConditionValidator(cform));
+        cform.Key = "key4";
+        Assert.Equal("", vm.ConditionValidator(cform));
+        cform.Key = "rkey1";
+        Assert.Equal("房间条件已存在", vm.RoomConditionValidator(cform));
+        cform.Key = "rkey4";
+        Assert.Equal("", vm.RoomConditionValidator(cform));
     }
     [Fact]
     public void TestEditRoomWindowViewModel()
@@ -887,6 +991,51 @@ public class ViewModelTest
         Assert.Equal("房间主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
+        vm = new EditRoomWindowViewModel(null, false);
+        vm.Item.Key = "key";
+        Assert.Equal("房间主键已存在", vm.Item.Validate());
+        var model3 = new Room()
+        {
+            Key = "key3",
+            Desc = "desc3",
+            Group = "group3",
+            Tags = ["tag2", "tag1"],
+            Data = [new Data("key2", "value2"), new Data("key1", "value1")],
+            Exits = [new Exit(){
+                Command="command2",
+                To="to2",
+                Cost=1,
+                Conditions=[new Condition("key1",true),new Condition("key2",false)]
+            }],
+        };
+        vm = new EditRoomWindowViewModel(model3, false);
+        vm.Item.Arrange();
+        Assert.Equal(2, vm.Item.Data.Count);
+        Assert.Equal("key1", vm.Item.Data[0].Key);
+        Assert.Equal("key2", vm.Item.Data[1].Key);
+        Assert.Equal(2, vm.Item.Tags.Count);
+        Assert.Equal("tag1", vm.Item.Tags[0]);
+        Assert.Equal("tag2", vm.Item.Tags[1]);
+        Assert.Single(vm.Item.Exits);
+        Assert.Equal(2, vm.Item.Exits[0].Conditions.Count);
+        Assert.Equal("key2", vm.Item.Exits[0].Conditions[0].Key);
+        Assert.Equal("key1", vm.Item.Exits[0].Conditions[1].Key);
+        var data = new Data("key1", "value1");
+        var dataform = new DataForm(data, (form) => "");
+        Assert.Equal("", vm.DataValidator(dataform));
+        dataform.Key = "key2";
+        Assert.Equal("数据主键已存在", vm.DataValidator(dataform));
+        dataform = new DataForm((form) => "");
+        dataform.Key = "key2";
+        Assert.Equal("数据主键已存在", vm.DataValidator(dataform));
+        dataform.Key = "key3";
+        Assert.Equal("", vm.DataValidator(dataform));
+        var tagform = new TagForm("tag1", (form) => "");
+        Assert.Equal("标签已存在", vm.TagValidator(tagform));
+        tagform.Key = "tag3";
+        Assert.Equal("", vm.TagValidator(tagform));
+        var exitform = new ExitForm(new Exit(), (form) => "");
+        Assert.Equal("", vm.ExitValidator(exitform));
     }
     [Fact]
     public void TestEditSnapshotWindowViewModel()
@@ -960,6 +1109,11 @@ public class ViewModelTest
         vm.Item.Key = "key3";
         vm.Item.Value = "value3";
         Assert.Equal("", vm.Item.Validate());
+        var form = new SnapshotForm(model, (e) => e.Key == "error" ? "error key" : "");
+        form.Key = "error";
+        Assert.Equal("error key", form.Validate());
+        form.Key = "key3";
+        Assert.Equal("", form.Validate());
     }
     [Fact]
     public void TestNewConditionWindow()
@@ -1065,13 +1219,12 @@ public class ViewModelTest
         vm.Item.Value = "value2";
         Assert.Equal("", vm.Item.Validate());
         Assert.Equal("编辑元素", vm.Title);
-
         var ris = EditRegionItemWindowViewModel.Items;
         Assert.Equal(2, ris.Count);
         Assert.Equal(RegionItemType.Room, ris[0].Type);
-        Assert.Equal("房间", ris[0].Label);
+        Assert.Equal("房间", ris[0].Value);
         Assert.Equal(RegionItemType.Zone, ris[1].Type);
-        Assert.Equal("房间分组", ris[1].Label);
+        Assert.Equal("房间分组", ris[1].Value);
     }
 }
 

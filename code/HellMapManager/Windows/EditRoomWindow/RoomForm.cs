@@ -44,6 +44,10 @@ public partial class RoomForm : ObservableObject
     {
         Data = new ObservableCollection<Data>(this.Data.OrderBy(x => x.Key));
         Tags = new ObservableCollection<string>(this.Tags.OrderBy(x => x));
+        foreach (var exit in Exits)
+        {
+            exit.Arrange();
+        }
         OnPropertyChanged(nameof(Data));
         OnPropertyChanged(nameof(Tags));
     }

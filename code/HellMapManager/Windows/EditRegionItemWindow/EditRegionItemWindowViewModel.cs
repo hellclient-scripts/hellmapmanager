@@ -7,13 +7,10 @@ namespace HellMapManager.Windows.EditRegionItemWindow;
 
 public class RIItem(RegionItemType type, string value)
 {
-    public RegionItemType Type { get; set; } = type;
-    public string Value { get; set; } = value;
+    public RegionItemType Type { get; } = type;
+    public string Value { get; } = value;
 
-    public string Label
-    {
-        get => Type == RegionItemType.Room ? "房间" : "房间分组";
-    }
+
 }
 public class EditRegionItemWindowViewModel : ObservableObject
 {

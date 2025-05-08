@@ -55,7 +55,7 @@ public partial class Landmarks : UserControl
                 if (result is not null)
                 {
                     AppState.Main.APIRemoveLandmarks([marker.UniqueKey()]);
-                    AppState.Main.APIInsertLandmarks([marker]);
+                    AppState.Main.APIInsertLandmarks([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
 
                 }
@@ -76,7 +76,7 @@ public partial class Landmarks : UserControl
                 if (result is not null)
                 {
                     AppState.Main.APIRemoveLandmarks([marker.UniqueKey()]);
-                    AppState.Main.APIInsertLandmarks([marker]);
+                    AppState.Main.APIInsertLandmarks([result]);
                     AppState.Main.RaiseMapFileUpdatedEvent(this);
                 }
             }

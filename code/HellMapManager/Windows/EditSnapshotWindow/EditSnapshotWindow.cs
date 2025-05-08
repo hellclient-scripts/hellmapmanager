@@ -44,13 +44,16 @@ public class EditSnapshotWindowViewModel : ObservableObject
     }
     public void CancelEdit()
     {
-        Item = (Raw is not null) ? new SnapshotForm(Raw.Clone(), Checker) : new SnapshotForm(Checker);
-        Editing = false;
-        OnPropertyChanged(nameof(Item));
-        OnPropertyChanged(nameof(Editable));
-        OnPropertyChanged(nameof(ViewMode));
-        OnPropertyChanged(nameof(Editing));
-        OnPropertyChanged(nameof(Title));
+        if (Raw is not null)
+        {
+            Item = new SnapshotForm(Raw.Clone(), Checker);
+            Editing = false;
+            OnPropertyChanged(nameof(Item));
+            OnPropertyChanged(nameof(Editable));
+            OnPropertyChanged(nameof(ViewMode));
+            OnPropertyChanged(nameof(Editing));
+            OnPropertyChanged(nameof(Title));
+        }
     }
     public string Checker(SnapshotForm model)
     {

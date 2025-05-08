@@ -12,7 +12,7 @@ public class EncodingItem(MapEncoding key, string label) : ObservableObject
 public class UpdateMapWindowViewModel(MapSettings settings) : ObservableObject
 {
 
-    public MapSettings Settings { get; set; } = settings;
+    public MapSettings Settings { get; } = settings;
     public static ObservableCollection<EncodingItem> Items
     {
         get => new([new(MapEncoding.Default, "UTF-8"), new(MapEncoding.GB18030, "GB18030")]);

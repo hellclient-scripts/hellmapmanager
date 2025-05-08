@@ -64,7 +64,7 @@
             SelectedValueBinding="{Binding Type}">
             <ComboBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock x:DataType="vm:RIItem" Text="{Binding Label}" />
+                <TextBlock x:DataType="vm:RIItem" Text="{Binding Value}" />
               </DataTemplate>
             </ComboBox.ItemTemplate>
           </ComboBox>

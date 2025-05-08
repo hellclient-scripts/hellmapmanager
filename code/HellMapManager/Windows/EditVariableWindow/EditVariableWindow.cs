@@ -45,13 +45,16 @@ public class EditVariableWindowViewModel : ObservableObject
     }
     public void CancelEdit()
     {
-        Item = (Raw is not null) ? new VariableForm(Raw.Clone(), Checker) : new VariableForm(Checker);
-        Editing = false;
-        OnPropertyChanged(nameof(Item));
-        OnPropertyChanged(nameof(Editable));
-        OnPropertyChanged(nameof(ViewMode));
-        OnPropertyChanged(nameof(Editing));
-        OnPropertyChanged(nameof(Title));
+        if (Raw is not null)
+        {
+            Item = new VariableForm(Raw.Clone(), Checker);
+            Editing = false;
+            OnPropertyChanged(nameof(Item));
+            OnPropertyChanged(nameof(Editable));
+            OnPropertyChanged(nameof(ViewMode));
+            OnPropertyChanged(nameof(Editing));
+            OnPropertyChanged(nameof(Title));
+        }
     }
     public string Checker(VariableForm model)
     {
