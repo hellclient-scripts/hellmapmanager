@@ -6,12 +6,12 @@ using System.IO;
 using HellMapManager.Models;
 using System;
 using HellMapManager.Utils.ControlCode;
-using HellMapManager.Views.Mapfile.Rooms;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 
 namespace HellMapManager.Services;
 
-public class ExportOption()
+public class RoomsHExportOption : ObservableObject
 {
     public bool DisableRoomDef { get; set; } = false;
     public bool DisableCost { get; set; } = false;
@@ -40,7 +40,7 @@ public class RoomFormatter
     {
         return Escaper.Decode(val);
     }
-    public static string EncodeRoom(Room room, ExportOption opt)
+    public static string EncodeRoom(Room room, RoomsHExportOption opt)
     {
         List<StringBuilder> Exits = [];
         foreach (Exit exit in room.Exits)
@@ -214,14 +214,14 @@ public class RoomsH
         }
         return result;
     }
-    public static void Save(string file, List<Room> rooms, ExportOption opt)
+    public static void Save(string file, List<Room> rooms, RoomsHExportOption opt)
     {
         using var fileStream = new FileStream(file, FileMode.Create);
         using var sw = new StreamWriter(fileStream, Encoding.UTF8);
         var lines = Export(rooms, opt);
         sw.Write(string.Join("\n", lines));
     }
-    public static List<string> Export(List<Room> rooms, ExportOption opt)
+    public static List<string> Export(List<Room> rooms, RoomsHExportOption opt)
     {
         List<string> result = [];
         var newrooms = new List<Room>([.. rooms]);

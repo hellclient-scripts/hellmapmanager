@@ -62,7 +62,10 @@
       </MenuItem>
       <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}" />
 
-      <MenuItem Header="导出(_X)" IsEnabled="{Binding IsFileOpend}" />
+      <MenuItem Header="导出(_X)" IsEnabled="{Binding IsFileOpend}">
+        <MenuItem Click="OnExportRoomsH" Header="导出UTF8编码的RoomsH文件" />
+      </MenuItem>
+
       <MenuItem Header="导入(_I)" IsEnabled="{Binding IsFileOpend}">
         <MenuItem Command="{Binding OnImportRoomsH}" Header="导入UTF8编码的RoomsH文件" />
       </MenuItem>
@@ -71,7 +74,11 @@
         <MenuItem Header="关于(_A)" />
       </MenuItem>
     </Menu>
-    <Border BorderBrush="#FFeeeeee" BorderThickness="0 1 0 0" Height="20" DockPanel.Dock="Bottom" />
+    <Border
+      Height="20"
+      BorderBrush="#FFeeeeee"
+      BorderThickness="0,1,0,0"
+      DockPanel.Dock="Bottom" />
     <Panel>
       <welcome:Welcome IsVisible="{Binding CanShowWelcome}" />
       <mapfile:MapFile

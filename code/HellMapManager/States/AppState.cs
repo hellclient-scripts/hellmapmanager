@@ -111,5 +111,13 @@ public partial class AppState()
             }
         }
     }
+    public void ExportRoomsH(string path, RoomsHExportOption opt)
+    {
+        if (Current != null)
+        {
+            RoomsH.Save(path, Current.Map.Rooms, opt);
+        }
+
+    }
 
 }

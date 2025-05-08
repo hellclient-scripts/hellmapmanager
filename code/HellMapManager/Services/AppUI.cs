@@ -117,7 +117,17 @@ public class AppUI(AppState appState)
         });
         return file == null ? "" : file.Path.AbsolutePath;
     }
+    public async Task<string> AskExportRoomsH()
+    {
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
 
+        var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "导出RoomsH文件",
+            ShowOverwritePrompt = true,
+        });
+        return file == null ? "" : file.Path.AbsolutePath;
+    }
     public async Task<bool> ConfirmModified()
     {
         if (AppState.Current == null || !AppState.Current.Modified)

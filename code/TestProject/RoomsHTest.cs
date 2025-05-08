@@ -328,7 +328,7 @@ public class RoomsHTest
     public void TestEncode()
     {
         var room = new Room();
-        var opt = new ExportOption();
+        var opt = new RoomsHExportOption();
         room.Key = "=@+|><,%:\\";
         Assert.Equal("\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\=|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Key = "rid";
@@ -463,7 +463,7 @@ public class RoomsHTest
                 Key = "-1",
             },
         };
-        var result = RoomsH.Export(rooms, new ExportOption());
+        var result = RoomsH.Export(rooms, new RoomsHExportOption());
         Assert.Equal(4, result.Count);
         Assert.Equal("-1=|", result[0]);
         Assert.Equal("room1=|", result[1]);
