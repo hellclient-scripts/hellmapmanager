@@ -32,7 +32,7 @@
             <TextBlock Classes="Title">定位列表</TextBlock>
             <TextBlock Classes="Desc">
                定位是记录一系列MUD中的特征对应的房间主键<LineBreak />
-               不同的类型对应了不同的定位值的使用方式，比如开头，完全匹配，正则等<LineBreak />
+               不同的类型对应了不同的定位值的使用方式，比如开头，完全匹配，正则等。<LineBreak />
                主键可以重复，但是主键和类型的组合是唯一的，就是每一种匹配类型下，匹配到同一个房间的内容不能重复。</TextBlock>
          </StackPanel>
       </ScrollViewer>

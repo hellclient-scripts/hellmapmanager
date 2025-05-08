@@ -31,8 +31,8 @@
             </StackPanel.Styles>
             <TextBlock Classes="Title">变量列表</TextBlock>
             <TextBlock Classes="Desc">
-               变量用于储存和地图相关的数据信息<LineBreak />
-               可以将脚本中与房间，区域有关的信息放在变量内</TextBlock>
+               变量用于储存和地图相关的数据信息。<LineBreak />
+               可以将脚本中与房间，区域有关的信息放在变量内。</TextBlock>
          </StackPanel>
       </ScrollViewer>
       <DockPanel>

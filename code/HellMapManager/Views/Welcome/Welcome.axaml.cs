@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using HellMapManager.Models;
 using HellMapManager.Services;
 using HellMapManager.ViewModels;
+using System;
 namespace HellMapManager.Views.Welcome;
 
 public partial class Welcome : UserControl
@@ -41,6 +42,11 @@ public partial class Welcome : UserControl
         {
             if (border.DataContext is ExternalLink link)
             {
+                if (link.Link != null && link.Link != "")
+                {
+                    var launcher = TopLevel.GetTopLevel(this)!.Launcher;
+                    launcher.LaunchUriAsync(new Uri(link.Link));
+                }
             }
         }
     }
