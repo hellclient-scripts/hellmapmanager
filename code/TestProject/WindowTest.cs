@@ -35,6 +35,7 @@ using HellMapManager.Windows.NewTagWindow;
 using HellMapManager.Windows.PickRoomWindow;
 using HellMapManager.Windows.RelationMapWindow;
 using HellMapManager.Windows.UpdateMapWindow;
+using HellMapManager.Windows.RoomsHExportWindow;
 using HellMapManager.ViewModels;
 using HellMapManager.Services;
 using HellMapManager.Models;
@@ -88,5 +89,6 @@ public class WindowTest()
         new PickRoomWindow() { DataContext = new PickRoomWindowViewModel() };
         new RelationMapWindow(new RelationMapWindowViewModel(new RelationMapItem(new Room(), 0)));
         new UpdateMapWindow() { DataContext = new UpdateMapWindowViewModel(new MapSettings()) };
+        new RoomsHExportWindow() { DataContext = new RoomsHExportOption() };
     }
 }
