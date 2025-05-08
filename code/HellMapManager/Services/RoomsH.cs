@@ -9,6 +9,12 @@ using HellMapManager.Utils.ControlCode;
 
 
 namespace HellMapManager.Services;
+
+public class ExportOption()
+{
+    public bool DisableRoomDef = false;
+    public bool DisableCost = false;
+}
 public class RoomFormatter
 {
     public static readonly ControlCode Escaper = (new ControlCode())
@@ -33,13 +39,17 @@ public class RoomFormatter
     {
         return Escaper.Decode(val);
     }
-    public static string EncodeRoom(Room room)
+    public static string EncodeRoom(Room room, ExportOption opt)
     {
         List<StringBuilder> Exits = [];
         foreach (Exit exit in room.Exits)
         {
             var ToRoom = exit.To;
-            var Cost = exit.Cost == 1 ? "" : exit.Cost.ToString();
+            string Cost = "";
+            if (!opt.DisableCost)
+            {
+                Cost = exit.Cost == 1 ? "" : exit.Cost.ToString();
+            }
             var ExitDef = new StringBuilder(":").Append(Escape(ToRoom)).Append(Cost == "" ? "" : ("%" + Escape(Cost)));
             var CondExit = new StringBuilder(Escape(exit.Command));
             var Extags = new StringBuilder();
@@ -70,9 +80,12 @@ public class RoomFormatter
             RoomDef.Append('+').Append(Escape(tag));
         }
         var RoomDesc = new StringBuilder(Escape(room.Name));
-        if (room.Group != "" || room.Tags.Count > 0)
+        if (!opt.DisableRoomDef)
         {
-            RoomDesc.Append(RoomDef);
+            if (room.Group != "" || room.Tags.Count > 0)
+            {
+                RoomDesc.Append(RoomDef);
+            }
         }
         var RoomInfo = new StringBuilder(Escape(room.Key)).Append('=').Append(RoomDesc);
         var Line = RoomInfo.Append('|').Append(AllExits).ToString();

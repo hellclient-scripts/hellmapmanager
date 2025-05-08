@@ -224,5 +224,17 @@ public partial class Room
         }
         return true;
     }
+
+    public int NumberID
+    {
+        get
+        {
+            if (int.TryParse(Key.Trim(), out int result))
+            {
+                return result;
+            }
+            return 0;
+        }
+    }
 }
 

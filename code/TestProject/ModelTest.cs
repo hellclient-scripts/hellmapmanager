@@ -250,6 +250,17 @@ public class ModelTest
         room2.Data.Add(new Data("", ""));
         Assert.False(room.Equal(room2));
         Assert.True(room2.Validated());
+
+        var room3 = new Room();
+        Assert.Equal(0, room3.NumberID);
+        room3.Key = "1";
+        Assert.Equal(1, room3.NumberID);
+        room3.Key = " 2";
+        Assert.Equal(2, room3.NumberID);
+        room3.Key = "-1";
+        Assert.Equal(-1, room3.NumberID);
+        room3.Key = "abc";
+        Assert.Equal(0, room3.NumberID);
     }
     [Fact]
     public void TestMarker()

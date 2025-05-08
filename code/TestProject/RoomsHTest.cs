@@ -328,24 +328,25 @@ public class RoomsHTest
     public void TestEncode()
     {
         var room = new Room();
+        var opt = new ExportOption();
         room.Key = "=@+|><,%:\\";
-        Assert.Equal("\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\=|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\=|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Key = "rid";
-        Assert.Equal("rid=|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Name = "=@+|><,%:\\";
-        Assert.Equal("rid=\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Name = "rname";
-        Assert.Equal("rid=rname|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Group = "=@+|><,%:\\";
-        Assert.Equal("rid=rname@\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Group = "rzone";
-        Assert.Equal("rid=rname@rzone|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Tags = ["=@+|><,%:\\", "=@+|><,%:\\2"];
-        Assert.Equal("rid=rname@rzone+\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\+\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\2|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\+\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\2|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Tags = ["tag", "tag2"];
-        Assert.Equal("rid=rname@rzone+tag+tag2|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+tag+tag2|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Group = "";
-        Assert.Equal("rid=rname@+tag+tag2|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@+tag+tag2|", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Group = "rzone";
         room.Exits = [
             new Exit(){
@@ -354,7 +355,7 @@ public class RoomsHTest
                 Conditions=[new Condition("rcon=@+|><,%:\\",false),new Condition("rcon2=@+|><,%:\\",true)]
             }
         ];
-        Assert.Equal("rid=rname@rzone+tag+tag2|rcon\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\>rcon2\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\<rcmd\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\:rto\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+tag+tag2|rcon\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\>rcon2\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\<rcmd\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\:rto\\=\\@\\+\\|\\>\\<\\,\\%\\:\\\\", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Exits = [
             new Exit(){
                 Command="rcmd",
@@ -365,7 +366,7 @@ public class RoomsHTest
 
             }
         ];
-        Assert.Equal("rid=rname@rzone+tag+tag2|rcon>rcon2<rcmd:rto", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+tag+tag2|rcon>rcon2<rcmd:rto", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Exits.Add(
         new Exit()
         {
@@ -374,7 +375,7 @@ public class RoomsHTest
             Cost = -5,
         }
         );
-        Assert.Equal("rid=rname@rzone+tag+tag2|rcon>rcon2<rcmd:rto,rcmd2:rto2%-5", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+tag+tag2|rcon>rcon2<rcmd:rto,rcmd2:rto2%-5", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Exits = [
             new Exit(){
                 Command="rcmd",
@@ -382,7 +383,7 @@ public class RoomsHTest
                 Cost=0,
             }
         ];
-        Assert.Equal("rid=rname@rzone+tag+tag2|rcmd:rto%0", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+tag+tag2|rcmd:rto%0", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Exits = [
             new Exit(){
                 Command="rcmd",
@@ -390,7 +391,7 @@ public class RoomsHTest
                 Cost=2,
             }
         ];
-        Assert.Equal("rid=rname@rzone+tag+tag2|rcmd:rto%2", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+tag+tag2|rcmd:rto%2", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Exits = [
             new Exit(){
                 Command="rcmd",
@@ -398,7 +399,7 @@ public class RoomsHTest
                 Conditions=[new Condition("rcon2",true)]
             }
         ];
-        Assert.Equal("rid=rname@rzone+tag+tag2|rcon2<rcmd:rto", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+tag+tag2|rcon2<rcmd:rto", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Exits = [
             new Exit(){
                 Command="rcmd",
@@ -406,7 +407,7 @@ public class RoomsHTest
                 Conditions=[new Condition("rcon",false)]
             }
         ];
-        Assert.Equal("rid=rname@rzone+tag+tag2|rcon>rcmd:rto", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
+        Assert.Equal("rid=rname@rzone+tag+tag2|rcon>rcmd:rto", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
         room.Exits = [
             new Exit(){
                 Command="rcmd",
@@ -414,7 +415,31 @@ public class RoomsHTest
                 Conditions=[new Condition("rcon2",true),new Condition("rcon",false)]
             },
         ];
-        Assert.Equal("rid=rname@rzone+tag+tag2|rcon>rcon2<rcmd:rto", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room)));
-    }
+        Assert.Equal("rid=rname@rzone+tag+tag2|rcon>rcon2<rcmd:rto", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room, opt)));
 
+        var room2 = new Room()
+        {
+            Key = "rid2",
+            Desc = "desc2",
+            Name = "rname2",
+            Group = "rzone2",
+            Tags = ["tag1", "tag2"],
+            Exits = [
+                new Exit(){
+                    Command="rcmd",
+                    To="rto2",
+                    Cost=3
+                },
+            ],
+        };
+        Assert.Equal("rid2=rname2@rzone2+tag1+tag2|rcmd:rto2%3", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room2, opt)));
+        opt.DisableCost = true;
+        Assert.Equal("rid2=rname2@rzone2+tag1+tag2|rcmd:rto2", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room2, opt)));
+        opt.DisableCost = false;
+        opt.DisableRoomDef = true;
+        Assert.Equal("rid2=rname2|rcmd:rto2%3", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room2, opt)));
+        opt.DisableCost = true;
+        opt.DisableRoomDef = true;
+        Assert.Equal("rid2=rname2|rcmd:rto2", RoomFormatter.Escaper.Pack(RoomFormatter.EncodeRoom(room2, opt)));
+    }
 }
