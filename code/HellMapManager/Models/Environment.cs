@@ -39,9 +39,20 @@ public class Context
     public List<Exit> Shortcuts = [];
 
     public int MaxExitCost = 0;
-    public bool ValidateExit(Exit exit)
+    public bool ValidateExit(Exit exit, MapFile mf)
     {
         //Todo
         return true;
     }
+    public bool ValidateRoom(Room room, MapFile mf)
+    {
+        //Todo
+        return true;
+    }
+    public bool ValidatePath(Path path, MapFile mf)
+    {
+        //Todo
+        return true;
+    }
+
 }

@@ -535,7 +535,7 @@ public partial class MapDatabase
             {
                 foreach (var exit in room.Exits)
                 {
-                    if (exit.Command == command && context.ValidateExit(exit))
+                    if (exit.Command == command && context.ValidateExit(exit,Current))
                     {
                         return exit.To;
                     }
@@ -586,7 +586,6 @@ public partial class MapDatabase
             });
             return result;
         }
-        //Todo
         return [];
     }
 
@@ -607,7 +606,6 @@ public partial class MapDatabase
             });
             return result;
         }
-        //Todo
         return [];
     }
     public void APITakeSnapshot(string key, string type, string value, string group)
