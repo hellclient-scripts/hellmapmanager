@@ -3,7 +3,7 @@ using HellMapManager.ViewModels;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditLandmarkWindow;
 using Avalonia.Interactivity;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Services;
 
 
@@ -36,8 +36,8 @@ public partial class Landmarks : UserControl
             var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertLandmarks([result]);
-                AppState.Main.RaiseMapFileUpdatedEvent(this);
+                AppKernel.Instance.MapDatabase.APIInsertLandmarks([result]);
+                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIRemoveLandmarks([marker.UniqueKey()]);
-                    AppState.Main.APIInsertLandmarks([result]);
-                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.Instance.MapDatabase.APIRemoveLandmarks([marker.UniqueKey()]);
+                    AppKernel.Instance.MapDatabase.APIInsertLandmarks([result]);
+                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIRemoveLandmarks([marker.UniqueKey()]);
-                    AppState.Main.APIInsertLandmarks([result]);
-                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.Instance.MapDatabase.APIRemoveLandmarks([marker.UniqueKey()]);
+                    AppKernel.Instance.MapDatabase.APIInsertLandmarks([result]);
+                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Landmarks : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Landmark model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该定位吗？") == false) return;
-            AppState.Main.APIRemoveLandmarks([model.UniqueKey()]);
-            AppState.Main.RaiseMapFileUpdatedEvent(this);
+            AppKernel.Instance.MapDatabase.APIRemoveLandmarks([model.UniqueKey()]);
+            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using System.Collections.ObjectModel;
 using HellMapManager.Models;
 using HellMapManager.Services;
@@ -10,7 +10,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(Recents));
             OnPropertyChanged(nameof(IsFileModified));
@@ -53,7 +53,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (await AppUI.Main.ConfirmModified())
         {
-            AppState.Main.NewMap();
+            AppKernel.Instance.MapDatabase.NewMap();
         }
 
     }
@@ -66,16 +66,16 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public void OnExit()
     {
-        AppState.Main.Exit();
+        AppKernel.Instance.MapDatabase.Exit();
     }
-    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppState.Main.Settings.Recents.ToArray()); }
+    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppKernel.Instance.MapDatabase.Settings.Recents.ToArray()); }
     public async void OnOpenRecent(String file)
     {
         await AppUI.Main.OnOpenRecent(file);
     }
     public bool IsFileModified
     {
-        get => AppState.Main.Current != null && AppState.Main.Current.Modified;
+        get => AppKernel.Instance.MapDatabase.Current != null && AppKernel.Instance.MapDatabase.Current.Modified;
     }
     public async void OnSave()
     {
@@ -89,7 +89,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (await AppUI.Main.ConfirmModified())
         {
-            AppState.Main.CloseCurrent();
+            AppKernel.Instance.MapDatabase.CloseCurrent();
         }
     }
     public void OnRevert()
@@ -98,14 +98,14 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public string TitleInfo
     {
-        get => (AppState.Main.Current == null ? "" : (AppState.Main.Current.Modified ? "* " : "") + (AppState.Main.Current.Path != "" ? AppState.Main.Current.Path : "<未保存>") + " ") + "Hell Map Manager";
+        get => (AppKernel.Instance.MapDatabase.Current == null ? "" : (AppKernel.Instance.MapDatabase.Current.Modified ? "* " : "") + (AppKernel.Instance.MapDatabase.Current.Path != "" ? AppKernel.Instance.MapDatabase.Current.Path : "<未保存>") + " ") + "Hell Map Manager";
     }
     public bool CanShowWelcome
     {
-        get => AppState.Main.Current == null;
+        get => AppKernel.Instance.MapDatabase.Current == null;
     }
     public bool IsFileOpend
     {
-        get => AppState.Main.Current != null;
+        get => AppKernel.Instance.MapDatabase.Current != null;
     }
 }

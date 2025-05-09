@@ -1,4 +1,4 @@
-namespace HellMapManager.States;
+namespace HellMapManager.Cores;
 
 public class AppPreset
 {

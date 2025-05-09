@@ -1,5 +1,5 @@
 ﻿using System;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using System.Collections.ObjectModel;
 using HellMapManager.Models;
 namespace HellMapManager.ViewModels;
@@ -8,7 +8,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitMarkers()
     {
-        AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(FilteredMarkers));
         };
@@ -22,9 +22,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (AppState.Main.Current != null)
+            if (AppKernel.Instance.MapDatabase.Current != null)
             {
-                var markers = AppState.Main.Current.Map.Markers;
+                var markers = AppKernel.Instance.MapDatabase.Current.Map.Markers;
                 if (string.IsNullOrEmpty(MarkersFilter))
                 {
                     return new ObservableCollection<Marker>(markers);

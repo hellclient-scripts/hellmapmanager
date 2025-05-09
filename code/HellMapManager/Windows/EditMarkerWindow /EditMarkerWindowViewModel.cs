@@ -1,5 +1,5 @@
 ﻿using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -58,7 +58,7 @@ public class EditMarkerWindowViewModel : ObservableObject
     }
     public string Checker(MarkerForm model)
     {
-        if (AppState.Main.Current!.Cache.Markers.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
+        if (AppKernel.Instance.MapDatabase.Current!.Cache.Markers.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
         {
             return "标记主键已存在";
         }

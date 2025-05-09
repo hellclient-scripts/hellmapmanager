@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.ViewModels;
 using HellMapManager.Windows.UpdateMapWindow;
 
@@ -59,9 +59,9 @@ public partial class Overview : UserControl
     }
     public async void OnUpdateButtonClicked(object? sender, RoutedEventArgs args)
     {
-        if (DataContext is MainWindowViewModel vm && AppState.Main.Current is not null)
+        if (DataContext is MainWindowViewModel vm && AppKernel.Instance.MapDatabase.Current is not null)
         {
-            var settings = AppState.Main.Current.ToSettings();
+            var settings = AppKernel.Instance.MapDatabase.Current.ToSettings();
             var nwm = new UpdateMapWindowViewModel(settings);
             var nw = new UpdateMapWindow
             {
@@ -70,7 +70,7 @@ public partial class Overview : UserControl
             var result = await nw.ShowDialog<MapSettings>((TopLevel.GetTopLevel(this) as Window)!);
             if (result != null)
             {
-                AppState.Main.UpdateMapSettings(result);
+                AppKernel.Instance.MapDatabase.UpdateMapSettings(result);
             }
         }
     }

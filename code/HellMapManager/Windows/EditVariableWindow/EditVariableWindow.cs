@@ -1,5 +1,5 @@
 ﻿using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -58,7 +58,7 @@ public class EditVariableWindowViewModel : ObservableObject
     }
     public string Checker(VariableForm model)
     {
-        if (AppState.Main.Current!.Cache.Variables.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
+        if (AppKernel.Instance.MapDatabase.Current!.Cache.Variables.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
         {
             return "变量主键已存在";
         }

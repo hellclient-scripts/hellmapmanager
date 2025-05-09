@@ -1,5 +1,5 @@
 using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Windows.EditDataWindow;
 using HellMapManager.Windows.EditExitWindow;
 using HellMapManager.Windows.EditLandmarkWindow;
@@ -26,7 +26,7 @@ public class ViewModelTest
     [Fact]
     public void TestMainWindowViewModel()
     {
-        AppState.Main.CloseCurrent();
+        AppKernel.Instance.MapDatabase.CloseCurrent();
         var vm = new MainWindowViewModel();
         string? lastchanged;
         vm.PropertyChanged += (sender, args) =>
@@ -93,7 +93,7 @@ public class ViewModelTest
         vm.FilterSnapshots();
         Assert.Equal(nameof(vm.FilteredSnapshots), lastchanged);
 
-        AppState.Main.NewMap();
+        AppKernel.Instance.MapDatabase.NewMap();
         Assert.Equal("<未保存>", vm.GetMapPathLabel);
         Assert.Equal("<未命名>", vm.GetMapNameLabel);
         Assert.Equal("UTF8", vm.GetMapEncodingLabel);
@@ -104,51 +104,51 @@ public class ViewModelTest
         Assert.True(vm.IsMapDescEmpty);
 
         Assert.Equal("* <未保存> Hell Map Manager", vm.TitleInfo);
-        AppState.Main.Current!.Path = "/path";
+        AppKernel.Instance.MapDatabase.Current!.Path = "/path";
         Assert.Equal("* /path Hell Map Manager", vm.TitleInfo);
-        AppState.Main.Current.Modified = false;
+        AppKernel.Instance.MapDatabase.Current.Modified = false;
         Assert.Equal("/path Hell Map Manager", vm.TitleInfo);
         Assert.False(vm.CanShowWelcome);
         Assert.True(vm.IsFileOpend);
         Assert.Empty(vm.Recents);
-        AppState.Main.AddRecent(new RecentFile("name", "path"));
+        AppKernel.Instance.MapDatabase.AddRecent(new RecentFile("name", "path"));
         Assert.Single(vm.Recents);
         Assert.Equal("name", vm.Recents[0].Name);
         Assert.Equal("path", vm.Recents[0].Path);
 
         Assert.Equal("/path", vm.GetMapPathLabel);
-        AppState.Main.Current.Map.Info.Name = "name";
+        AppKernel.Instance.MapDatabase.Current.Map.Info.Name = "name";
         Assert.Equal("name", vm.GetMapNameLabel);
-        AppState.Main.Current.Map.Encoding = MapEncoding.GB18030;
+        AppKernel.Instance.MapDatabase.Current.Map.Encoding = MapEncoding.GB18030;
         Assert.Equal("GB18030", vm.GetMapEncodingLabel);
-        AppState.Main.Current.Map.Info.Desc = "desc";
+        AppKernel.Instance.MapDatabase.Current.Map.Info.Desc = "desc";
         Assert.Equal("desc", vm.GetMapDescLabel);
         Assert.False(vm.IsMapNameEmpty);
         Assert.False(vm.IsMapPathEmpty);
         Assert.False(vm.IsMapDescEmpty);
 
-        AppState.Main.APIInsertRooms([
+        AppKernel.Instance.MapDatabase.APIInsertRooms([
             new Room(){Key="room1"},
             new Room(){Key="room2"},
         ]);
         Assert.Equal(2, vm.FilteredRooms.Count);
         vm.RoomsFilter = "room1";
         Assert.Single(vm.FilteredRooms);
-        AppState.Main.APIInsertMarkers([
+        AppKernel.Instance.MapDatabase.APIInsertMarkers([
             new Marker(){Key="marker1",Value="room1"},
             new Marker(){Key="marker2",Value="room2"},
         ]);
         Assert.Equal(2, vm.FilteredMarkers.Count);
         vm.MarkersFilter = "marker1";
         Assert.Single(vm.FilteredMarkers);
-        AppState.Main.APIInsertRoutes([
+        AppKernel.Instance.MapDatabase.APIInsertRoutes([
             new Route(){Key="route1"},
             new Route(){Key="route2"},
         ]);
         Assert.Equal(2, vm.FilteredRoutes.Count);
         vm.RoutesFilter = "route1";
         Assert.Single(vm.FilteredRoutes);
-        AppState.Main.APIInsertTraces([
+        AppKernel.Instance.MapDatabase.APIInsertTraces([
             new Trace(){Key="trace1"},
             new Trace(){Key="trace2"},
         ]);
@@ -156,7 +156,7 @@ public class ViewModelTest
         vm.TracesFilter = "trace1";
         Assert.Single(vm.FilteredTraces);
 
-        AppState.Main.APIInsertRegions([
+        AppKernel.Instance.MapDatabase.APIInsertRegions([
             new Region(){Key="region1"},
             new Region(){Key="region2"},
         ]);
@@ -164,7 +164,7 @@ public class ViewModelTest
         vm.RegionsFilter = "region1";
         Assert.Single(vm.FilteredRegions);
 
-        AppState.Main.APIInsertLandmarks([
+        AppKernel.Instance.MapDatabase.APIInsertLandmarks([
             new Landmark(){Key="landmark1"},
             new Landmark(){Key="landmark2"},
         ]);
@@ -172,7 +172,7 @@ public class ViewModelTest
         vm.LandmarksFilter = "landmark1";
         Assert.Single(vm.FilteredLandmarks);
 
-        AppState.Main.APIInsertShortcuts([
+        AppKernel.Instance.MapDatabase.APIInsertShortcuts([
             new Shortcut(){Key="shortcut1",Command="cmd1"},
             new Shortcut(){Key="shortcut2",Command="cmd2"},
         ]);
@@ -180,7 +180,7 @@ public class ViewModelTest
         vm.ShortcutsFilter = "shortcut1";
         Assert.Single(vm.FilteredShortcuts);
 
-        AppState.Main.APIInsertVariables([
+        AppKernel.Instance.MapDatabase.APIInsertVariables([
             new Variable(){Key="variable1"},
             new Variable(){Key="variable2"},
         ]);
@@ -188,7 +188,7 @@ public class ViewModelTest
         vm.VariablesFilter = "variable1";
         Assert.Single(vm.FilteredVariables);
 
-        AppState.Main.APIInsertSnapshots([
+        AppKernel.Instance.MapDatabase.APIInsertSnapshots([
             new Snapshot(){Key="snapshot1",Timestamp=1234567890},
             new Snapshot(){Key="snapshot2",Timestamp=1234567890},
         ]);
@@ -352,8 +352,8 @@ public class ViewModelTest
         Assert.False(vm.Editable);
         Assert.False(vm.Editing);
 
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertLandmarks([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertLandmarks([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("定位主键已存在", vm.Item.Validate());
@@ -440,8 +440,8 @@ public class ViewModelTest
         Assert.False(vm.Editing);
 
 
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertMarkers([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertMarkers([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("标记主键已存在", vm.Item.Validate());
@@ -532,8 +532,8 @@ public class ViewModelTest
         Assert.False(vm.ViewMode);
         Assert.False(vm.Editable);
         Assert.False(vm.Editing);
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertRegions([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertRegions([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("地区主键已存在", vm.Item.Validate());
@@ -615,8 +615,8 @@ public class ViewModelTest
         Assert.False(vm.ViewMode);
         Assert.False(vm.Editable);
         Assert.False(vm.Editing);
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertRoutes([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertRoutes([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("路线主键已存在", vm.Item.Validate());
@@ -699,8 +699,8 @@ public class ViewModelTest
         Assert.False(vm.ViewMode);
         Assert.False(vm.Editable);
         Assert.False(vm.Editing);
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertTraces([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertTraces([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("足迹主键已存在", vm.Item.Validate());
@@ -779,8 +779,8 @@ public class ViewModelTest
         Assert.False(vm.ViewMode);
         Assert.False(vm.Editable);
         Assert.False(vm.Editing);
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertVariables([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertVariables([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("变量主键已存在", vm.Item.Validate());
@@ -855,8 +855,8 @@ public class ViewModelTest
         Assert.False(vm.ViewMode);
         Assert.False(vm.Editable);
         Assert.False(vm.Editing);
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertShortcuts([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertShortcuts([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("捷径主键已存在", vm.Item.Validate());
@@ -997,8 +997,8 @@ public class ViewModelTest
         Assert.False(vm.ViewMode);
         Assert.False(vm.Editable);
         Assert.False(vm.Editing);
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertRooms([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertRooms([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "key2";
         Assert.Equal("房间主键已存在", vm.Item.Validate());
@@ -1115,8 +1115,8 @@ public class ViewModelTest
         Assert.False(vm.ViewMode);
         Assert.False(vm.Editable);
         Assert.False(vm.Editing);
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertSnapshots([model, model2]);
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertSnapshots([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "";
         Assert.Equal("主键无效", vm.Item.Validate());
@@ -1177,13 +1177,13 @@ public class ViewModelTest
     public void TestPickRoomWindowViewModel()
     {
         var vm = new PickRoomWindowViewModel();
-        AppState.Main.CloseCurrent();
+        AppKernel.Instance.MapDatabase.CloseCurrent();
         Assert.Empty(vm.FilteredRooms);
         Assert.Equal(0, vm.GetMapRoomsCount);
-        AppState.Main.NewMap();
+        AppKernel.Instance.MapDatabase.NewMap();
         Assert.Empty(vm.FilteredRooms);
         Assert.Equal(0, vm.GetMapRoomsCount);
-        AppState.Main.APIInsertRooms([
+        AppKernel.Instance.MapDatabase.APIInsertRooms([
             new Room(){Key="room1"},
             new Room(){Key="room2"},
         ]);

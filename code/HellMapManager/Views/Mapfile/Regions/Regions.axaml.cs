@@ -3,7 +3,7 @@ using HellMapManager.ViewModels;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditRegionWindow;
 using Avalonia.Interactivity;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Services;
 
 
@@ -36,8 +36,8 @@ public partial class Regions : UserControl
             var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertRegions([result]);
-                AppState.Main.RaiseMapFileUpdatedEvent(this);
+                AppKernel.Instance.MapDatabase.APIInsertRegions([result]);
+                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIRemoveRegions([model.Key]);
-                    AppState.Main.APIInsertRegions([result]);
-                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.Instance.MapDatabase.APIRemoveRegions([model.Key]);
+                    AppKernel.Instance.MapDatabase.APIInsertRegions([result]);
+                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIRemoveRegions([model.Key]);
-                    AppState.Main.APIInsertRegions([result]);
-                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.Instance.MapDatabase.APIRemoveRegions([model.Key]);
+                    AppKernel.Instance.MapDatabase.APIInsertRegions([result]);
+                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Regions : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Region model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该地区吗？") == false) return;
-            AppState.Main.APIRemoveRegions([model.Key]);
-            AppState.Main.RaiseMapFileUpdatedEvent(this);
+            AppKernel.Instance.MapDatabase.APIRemoveRegions([model.Key]);
+            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

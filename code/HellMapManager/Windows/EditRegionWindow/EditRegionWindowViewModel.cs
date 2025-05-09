@@ -1,5 +1,5 @@
 ﻿using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Windows.EditRegionItemWindow;
@@ -59,7 +59,7 @@ public class EditRegionWindowViewModel : ObservableObject
     }
     public string Checker(RegionForm form)
     {
-        if (AppState.Main.Current!.Cache.Regions.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
+        if (AppKernel.Instance.MapDatabase.Current!.Cache.Regions.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
         {
             return "地区主键已存在";
         }

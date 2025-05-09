@@ -4,7 +4,7 @@ using AvaloniaGraphControl;
 using HellMapManager.Helpers;
 using System.Collections.Generic;
 using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Input;
@@ -175,7 +175,7 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     public void EnterViewItem(object obj)
     {
-        if (obj is ViewItem item && AppState.Main.Current is not null)
+        if (obj is ViewItem item && AppKernel.Instance.MapDatabase.Current is not null)
         {
             var vi = item;
             EnterRoomKey(vi.Item.Room.Key);
@@ -187,9 +187,9 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     private void DoEnterRoomKey(string key, bool modfiyHistory)
     {
-        if (key != "" && key != Item.Room.Key && AppState.Main.Current is not null)
+        if (key != "" && key != Item.Room.Key && AppKernel.Instance.MapDatabase.Current is not null)
         {
-            var item = RelationMapper.RelationMap(AppState.Main.Current, key, AppPreset.RelationMaxDepth);
+            var item = RelationMapper.RelationMap(AppKernel.Instance.MapDatabase.Current, key, AppPreset.RelationMaxDepth);
             if (item is not null)
             {
                 if (modfiyHistory)

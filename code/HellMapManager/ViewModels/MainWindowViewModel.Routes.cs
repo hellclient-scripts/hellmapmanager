@@ -1,5 +1,5 @@
 ﻿using System;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using System.Collections.ObjectModel;
 using HellMapManager.Models;
 namespace HellMapManager.ViewModels;
@@ -8,7 +8,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitRoutes()
     {
-        AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(FilteredRoutes));
         };
@@ -22,9 +22,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (AppState.Main.Current != null)
+            if (AppKernel.Instance.MapDatabase.Current != null)
             {
-                var routes = AppState.Main.Current.Map.Routes;
+                var routes = AppKernel.Instance.MapDatabase.Current.Map.Routes;
                 if (string.IsNullOrEmpty(RoutesFilter))
                 {
                     return new ObservableCollection<Route>(routes);

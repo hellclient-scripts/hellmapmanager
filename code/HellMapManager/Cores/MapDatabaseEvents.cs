@@ -1,9 +1,9 @@
 using System;
 
-namespace HellMapManager.States;
+namespace HellMapManager.Cores;
 
 
-public partial class AppState
+public partial class MapDatabase
 {
     public event EventHandler? MapFileUpdatedEvent;
     public void RaiseMapFileUpdatedEvent(object? sender)

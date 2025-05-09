@@ -5,15 +5,17 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Models;
 using Avalonia.Controls.ApplicationLifetimes;
-using HellMapManager.States;
+using HellMapManager.Cores;
+using HellMapManager.Cores;
+
 using System;
 
 namespace HellMapManager.Services;
 
-public class AppUI(AppState appState)
+public class AppUI(MapDatabase mapDatabase)
 {
-    public static readonly AppUI Main = new(new AppState());
-    public AppState AppState = appState;
+    public static readonly AppUI Main = new(new MapDatabase());
+    public MapDatabase MapDatabase = mapDatabase;
     public IClassicDesktopStyleApplicationLifetime Desktop = new ClassicDesktopStyleApplicationLifetime();
     public static async Task<bool> Confirm(string title, string body)
     {
@@ -130,7 +132,7 @@ public class AppUI(AppState appState)
     }
     public async Task<bool> ConfirmModified()
     {
-        if (AppState.Current == null || !AppState.Current.Modified)
+        if (MapDatabase.Current == null || !MapDatabase.Current.Modified)
         {
             return true;
         }
@@ -150,7 +152,7 @@ public class AppUI(AppState appState)
     }
     public async Task<bool> ConfirmImport()
     {
-        if (AppState.Current == null || !AppState.Current.Modified)
+        if (MapDatabase.Current == null || !MapDatabase.Current.Modified)
         {
             return true;
         }
@@ -171,7 +173,7 @@ public class AppUI(AppState appState)
     public bool ConfirmedExit = false;
     public async Task<bool> ConfirmExit()
     {
-        if (AppState.Current == null || !AppState.Current.Modified)
+        if (MapDatabase.Current == null || !MapDatabase.Current.Modified)
         {
             ConfirmedExit = true;
             return true;
@@ -199,7 +201,7 @@ public class AppUI(AppState appState)
         {
             try
             {
-                AppState.ImportRoomsHFile(file);
+                MapDatabase.ImportRoomsHFile(file);
             }
             catch (Exception ex)
             {
@@ -214,7 +216,7 @@ public class AppUI(AppState appState)
         {
             try
             {
-                AppState.LoadFile(file);
+                MapDatabase.LoadFile(file);
             }
             catch (Exception ex)
             {
@@ -231,7 +233,7 @@ public class AppUI(AppState appState)
         {
             try
             {
-                AppState.LoadFile(file);
+                MapDatabase.LoadFile(file);
             }
             catch (Exception ex)
             {
@@ -246,7 +248,7 @@ public class AppUI(AppState appState)
         {
             try
             {
-                AppState.Revert();
+                MapDatabase.Revert();
             }
             catch (Exception ex)
             {
@@ -258,14 +260,14 @@ public class AppUI(AppState appState)
 
     public async Task SaveAs()
     {
-        if (AppState.Current != null)
+        if (MapDatabase.Current != null)
         {
             var file = await AskSaveAs();
             if (file != "")
             {
                 try
                 {
-                    AppState.SaveFile(file);
+                    MapDatabase.SaveFile(file);
                 }
                 catch (Exception ex)
                 {
@@ -276,14 +278,14 @@ public class AppUI(AppState appState)
     }
     public async Task Save()
     {
-        if (AppState.Main.Current is not null)
+        if (AppKernel.Instance.MapDatabase.Current is not null)
         {
-            if (AppState.Main.Current.Path != "")
+            if (AppKernel.Instance.MapDatabase.Current.Path != "")
             {
                 try
                 {
 
-                    AppState.Main.Save();
+                    AppKernel.Instance.MapDatabase.Save();
                 }
                 catch (Exception ex)
                 {
@@ -304,7 +306,7 @@ public class AppUI(AppState appState)
             try
             {
 
-                AppState.Main.OpenRecent(file);
+                AppKernel.Instance.MapDatabase.OpenRecent(file);
             }
             catch (Exception ex)
             {

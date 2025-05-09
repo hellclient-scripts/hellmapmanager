@@ -3,7 +3,7 @@ using HellMapManager.ViewModels;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditSnapshotWindow;
 using Avalonia.Interactivity;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Services;
 
 
@@ -36,8 +36,8 @@ public partial class Snapshots : UserControl
             var result = await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertSnapshots([result]);
-                AppState.Main.RaiseMapFileUpdatedEvent(this);
+                AppKernel.Instance.MapDatabase.APIInsertSnapshots([result]);
+                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,8 +54,8 @@ public partial class Snapshots : UserControl
                 await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
                 // if (result is not null)
                 // {
-                //     AppState.Main.UpdateSnapshot(model, result);
-                //     AppState.Main.RaiseMapFileUpdatedEvent(this);
+                //     AppKernel.Instance.MapDatabase.UpdateSnapshot(model, result);
+                //     AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 // }
             }
         }
@@ -65,8 +65,8 @@ public partial class Snapshots : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Snapshot model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该快照吗？") == false) return;
-            AppState.Main.APIRemoveSnapshots([model.UniqueKey()]);
-            AppState.Main.RaiseMapFileUpdatedEvent(this);
+            AppKernel.Instance.MapDatabase.APIRemoveSnapshots([model.UniqueKey()]);
+            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

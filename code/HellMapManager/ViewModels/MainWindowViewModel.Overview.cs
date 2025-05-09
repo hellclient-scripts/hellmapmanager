@@ -1,5 +1,5 @@
 ﻿using System;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Models;
 namespace HellMapManager.ViewModels;
 
@@ -7,7 +7,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitOverview()
     {
-        AppState.Main.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(GetMapRoomsCount));
             OnPropertyChanged(nameof(GetMapMarkersCount));
@@ -31,59 +31,59 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public int GetMapRoomsCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Rooms.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Rooms.Count) : 0;
     }
 
     public int GetMapMarkersCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Markers.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Markers.Count) : 0;
     }
     public int GetMapRoutesCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Routes.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Routes.Count) : 0;
     }
     public int GetMapTracesCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Traces.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Traces.Count) : 0;
     }
     public int GetMapRegionsCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Regions.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Regions.Count) : 0;
     }
 
     public int GetMapLandmarksCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Landmarks.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Landmarks.Count) : 0;
     }
     public int GetMapShortcutsCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Shortcuts.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Shortcuts.Count) : 0;
     }
     public int GetMapVariablesCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Variables.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Variables.Count) : 0;
     }
     public int GetMapSnapshotsCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Snapshots.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Snapshots.Count) : 0;
     }
     public string GetMapPathLabel
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Path != "" ? AppState.Main.Current.Path : "<未保存>") : "";
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Path != "" ? AppKernel.Instance.MapDatabase.Current.Path : "<未保存>") : "";
     }
 
     public string GetMapNameLabel
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Info.NameLabel) : "";
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Info.NameLabel) : "";
     }
 
     public string GetMapEncodingLabel
     {
         get
         {
-            if (AppState.Main.Current is not null)
+            if (AppKernel.Instance.MapDatabase.Current is not null)
             {
-                switch (AppState.Main.Current.Map.Encoding)
+                switch (AppKernel.Instance.MapDatabase.Current.Map.Encoding)
                 {
                     case MapEncoding.GB18030:
                         return "GB18030";
@@ -97,22 +97,22 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public string LastModifiedLabel
     {
-        get => AppState.Main.Current != null ? (DateTimeOffset.FromUnixTimeSeconds(AppState.Main.Current.Map.Info.UpdatedTime).LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss")) : "";
+        get => AppKernel.Instance.MapDatabase.Current != null ? (DateTimeOffset.FromUnixTimeSeconds(AppKernel.Instance.MapDatabase.Current.Map.Info.UpdatedTime).LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss")) : "";
     }
     public string GetMapDescLabel
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Info.DescLabel) : "";
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Info.DescLabel) : "";
     }
     public bool IsMapPathEmpty
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Path == "") : true;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Path == "") : true;
     }
     public bool IsMapNameEmpty
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Info.Name == "") : true;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Info.Name == "") : true;
     }
     public bool IsMapDescEmpty
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Info.Name == "") : true;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Info.Name == "") : true;
     }
 }

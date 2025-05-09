@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using HellMapManager.Models;
 
-namespace HellMapManager.States;
+namespace HellMapManager.Cores;
 public class APIListOption
 {
     private readonly Dictionary<string, bool> AllKeys = new();
@@ -63,7 +63,7 @@ public class APIListOption
         return AllKeys.Count == 0 && AllGroups.Count == 0;
     }
 }
-public partial class AppState
+public partial class MapDatabase
 {
     public List<Landmark> APIListLandmarks(APIListOption option)
     {

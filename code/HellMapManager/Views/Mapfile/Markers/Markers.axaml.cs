@@ -3,7 +3,7 @@ using HellMapManager.ViewModels;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditMarkerWindow;
 using Avalonia.Interactivity;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Services;
 
 
@@ -36,8 +36,8 @@ public partial class Markers : UserControl
             var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertMarkers([result]);
-                AppState.Main.RaiseMapFileUpdatedEvent(this);
+                AppKernel.Instance.MapDatabase.APIInsertMarkers([result]);
+                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Markers : UserControl
                 var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIRemoveMarkers([marker.Key]);
-                    AppState.Main.APIInsertMarkers([result]);
-                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.Instance.MapDatabase.APIRemoveMarkers([marker.Key]);
+                    AppKernel.Instance.MapDatabase.APIInsertMarkers([result]);
+                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Markers : UserControl
                 var result = await window.ShowDialog<Marker?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIRemoveMarkers([marker.Key]);
-                    AppState.Main.APIInsertMarkers([result]);
-                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.Instance.MapDatabase.APIRemoveMarkers([marker.Key]);
+                    AppKernel.Instance.MapDatabase.APIInsertMarkers([result]);
+                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Markers : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Marker marker)
         {
             if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.APIRemoveMarkers([marker.Key]);
-            AppState.Main.RaiseMapFileUpdatedEvent(this);
+            AppKernel.Instance.MapDatabase.APIRemoveMarkers([marker.Key]);
+            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -58,7 +58,7 @@ public class EditRouteWindowViewModel : ObservableObject
     }
     public string Checker(RouteForm form)
     {
-        if (AppState.Main.Current!.Cache.Routes.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
+        if (AppKernel.Instance.MapDatabase.Current!.Cache.Routes.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
         {
             return "路线主键已存在";
         }

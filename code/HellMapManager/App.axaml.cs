@@ -5,9 +5,10 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using HellMapManager.ViewModels;
 using HellMapManager.Views;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Services;
+
 using HellMapManager.Helpers;
 using System.IO;
 namespace HellMapManager;
@@ -31,13 +32,13 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            AppUI.Main.AppState = AppState.Main;
+            AppUI.Main.MapDatabase = AppKernel.Instance.MapDatabase;
             AppUI.Main.Desktop = desktop;
-            AppState.Main.SettingsUpdatedEvent += (sender, args) => { settingsHelper.Save(AppState.Main.Settings); };
-            AppState.Main.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
+            AppKernel.Instance.MapDatabase.SettingsUpdatedEvent += (sender, args) => { settingsHelper.Save(AppKernel.Instance.MapDatabase.Settings); };
+            AppKernel.Instance.MapDatabase.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
             if (settings is not null)
             {
-                AppState.Main.Settings = settings;
+                AppKernel.Instance.MapDatabase.Settings = settings;
             }
             var mw = new MainWindow()
             {

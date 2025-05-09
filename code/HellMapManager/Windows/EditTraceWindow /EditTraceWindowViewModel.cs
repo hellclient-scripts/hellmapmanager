@@ -1,5 +1,5 @@
 ﻿using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -58,7 +58,7 @@ public class EditTraceWindowViewModel : ObservableObject
     }
     public string Checker(TraceForm form)
     {
-        if (AppState.Main.Current!.Cache.Traces.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
+        if (AppKernel.Instance.MapDatabase.Current!.Cache.Traces.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
         {
             return "足迹主键已存在";
         }

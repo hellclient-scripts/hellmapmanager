@@ -1,5 +1,5 @@
 ﻿using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Windows.EditDataWindow;
@@ -61,7 +61,7 @@ public class EditRoomWindowViewModel : ObservableObject
     }
     public string Checker(RoomForm room)
     {
-        if (AppState.Main.Current!.Cache.Rooms.ContainsKey(room.Key) && (Raw is null || room.Key != Raw.Key))
+        if (AppKernel.Instance.MapDatabase.Current!.Cache.Rooms.ContainsKey(room.Key) && (Raw is null || room.Key != Raw.Key))
         {
             return "房间主键已存在";
         }

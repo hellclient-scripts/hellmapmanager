@@ -1,11 +1,10 @@
 using HellMapManager.Models;
 using HellMapManager.Helpers;
-namespace HellMapManager.States;
+namespace HellMapManager.Cores;
 
 
-public partial class AppState()
+public partial class MapDatabase()
 {
-    public static readonly AppState Main = new();
     public MapFile? Current;
     public Settings Settings = new();
 

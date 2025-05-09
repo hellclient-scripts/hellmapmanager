@@ -1,9 +1,8 @@
 namespace TestProject;
 using HellMapManager.Helpers;
 using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Windows.RelationMapWindow;
-
 
 [Collection("MainState")]
 public class RelationMapperTest
@@ -14,7 +13,7 @@ public class RelationMapperTest
         RelationMapItem? rm;
         RelationMapItem? rm1;
         Relation relation;
-        var state = new AppState();
+        var state = new MapDatabase();
         var mf = MapFile.Create("testname", "testdesc");
         state.Current = mf;
         var room1 = new Room() { Key = "key1" };
@@ -102,9 +101,9 @@ public class RelationMapperTest
     [Fact]
     public void TestViewModel()
     {
-        AppState.Main.CloseCurrent();
-        AppState.Main.NewMap();
-        AppState.Main.APIInsertRooms([
+        AppKernel.Instance.MapDatabase.CloseCurrent();
+        AppKernel.Instance.MapDatabase.NewMap();
+        AppKernel.Instance.MapDatabase.APIInsertRooms([
             new Room() {
                 Key = "key1",
                  Exits = [
@@ -153,7 +152,7 @@ public class RelationMapperTest
 
             },
         ]);
-        var vi = RelationMapper.RelationMap(AppState.Main.Current!, "key1", 9);
+        var vi = RelationMapper.RelationMap(AppKernel.Instance.MapDatabase.Current!, "key1", 9);
         Assert.NotNull(vi);
         var vm = new RelationMapWindowViewModel(vi);
         Assert.Equal("房间   (key1)   关系地图", vm.Title);

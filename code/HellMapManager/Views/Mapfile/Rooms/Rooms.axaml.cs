@@ -3,7 +3,7 @@ using HellMapManager.ViewModels;
 using HellMapManager.Models;
 using HellMapManager.Windows.EditRoomWindow;
 using Avalonia.Interactivity;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Services;
 using HellMapManager.Helpers;
 using HellMapManager.Windows.RelationMapWindow;
@@ -38,8 +38,8 @@ public partial class Rooms : UserControl
             var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppState.Main.APIInsertRooms([result]);
-                AppState.Main.RaiseMapFileUpdatedEvent(this);
+                AppKernel.Instance.MapDatabase.APIInsertRooms([result]);
+                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -56,9 +56,9 @@ public partial class Rooms : UserControl
                 var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIRemoveRooms([room.Key]);
-                    AppState.Main.APIInsertRooms([result]);
-                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.Instance.MapDatabase.APIRemoveRooms([room.Key]);
+                    AppKernel.Instance.MapDatabase.APIInsertRooms([result]);
+                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -76,9 +76,9 @@ public partial class Rooms : UserControl
                 var result = await editRoomWindow.ShowDialog<Room?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppState.Main.APIRemoveRooms([room.Key]);
-                    AppState.Main.APIInsertRooms([result]);
-                    AppState.Main.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.Instance.MapDatabase.APIRemoveRooms([room.Key]);
+                    AppKernel.Instance.MapDatabase.APIInsertRooms([result]);
+                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,7 +87,7 @@ public partial class Rooms : UserControl
     {
         if (sender is not null && sender is Button bn && bn.DataContext is Room room)
         {
-            var rm = RelationMapper.RelationMap(AppState.Main.Current!, room.Key, AppPreset.RelationMaxDepth);
+            var rm = RelationMapper.RelationMap(AppKernel.Instance.MapDatabase.Current!, room.Key, AppPreset.RelationMaxDepth);
             if (rm is not null)
             {
                 var vm = new RelationMapWindowViewModel(rm);
@@ -102,8 +102,8 @@ public partial class Rooms : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Room room)
         {
             if (await AppUI.Confirm("删除", "确定要删除该房间吗？") == false) return;
-            AppState.Main.APIRemoveRooms([room.Key]);
-            AppState.Main.RaiseMapFileUpdatedEvent(this);
+            AppKernel.Instance.MapDatabase.APIRemoveRooms([room.Key]);
+            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

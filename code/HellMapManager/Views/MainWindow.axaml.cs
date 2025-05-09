@@ -5,7 +5,7 @@ using HellMapManager.Models;
 using HellMapManager.Windows.RoomsHExportWindow;
 using Avalonia.Interactivity;
 using System;
-using HellMapManager.States;
+using HellMapManager.Cores;
 namespace HellMapManager.Views;
 
 public partial class MainWindow : Window
@@ -23,7 +23,7 @@ public partial class MainWindow : Window
     }
     public async void OnExportRoomsH(object? sender, RoutedEventArgs args)
     {
-        if (AppState.Main.Current == null)
+        if (AppKernel.Instance.MapDatabase.Current == null)
         {
             return;
         }
@@ -37,7 +37,7 @@ public partial class MainWindow : Window
             {
                 try
                 {
-                    AppState.Main.ExportRoomsH(path, option);
+                    AppKernel.Instance.MapDatabase.ExportRoomsH(path, option);
                 }
                 catch (Exception ex)
                 {

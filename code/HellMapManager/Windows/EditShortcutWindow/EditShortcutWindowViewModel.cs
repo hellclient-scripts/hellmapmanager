@@ -1,5 +1,5 @@
 ﻿using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using HellMapManager.Windows.NewConditionWindow;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -59,7 +59,7 @@ public class EditShortcutWindowViewModel : ObservableObject
     }
     public string Checker(ShortcutForm model)
     {
-        if (AppState.Main.Current!.Cache.Shortcuts.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
+        if (AppKernel.Instance.MapDatabase.Current!.Cache.Shortcuts.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
         {
             return "捷径主键已存在";
         }

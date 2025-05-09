@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using HellMapManager.Models;
-using HellMapManager.States;
+using HellMapManager.Cores;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace HellMapManager.Windows.PickRoomWindow;
@@ -9,7 +9,7 @@ public class PickRoomWindowViewModel:ObservableObject
 {
     public int GetMapRoomsCount
     {
-        get => AppState.Main.Current != null ? (AppState.Main.Current.Map.Rooms.Count) : 0;
+        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Rooms.Count) : 0;
     }
     public string RoomsFilter { get; set; } = "";
     public void FilterRooms()
@@ -20,9 +20,9 @@ public class PickRoomWindowViewModel:ObservableObject
     {
         get
         {
-            if (AppState.Main.Current != null)
+            if (AppKernel.Instance.MapDatabase.Current != null)
             {
-                var rooms = AppState.Main.Current.Map.Rooms;
+                var rooms = AppKernel.Instance.MapDatabase.Current.Map.Rooms;
                 if (string.IsNullOrEmpty(RoomsFilter))
                 {
                     return new ObservableCollection<Room>(rooms);
