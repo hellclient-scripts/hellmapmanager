@@ -8,6 +8,8 @@
   Title="导出选项"
   d:DesignHeight="450"
   d:DesignWidth="800"
+  Width="400"
+  Height="300"
   x:DataType="vm:RoomsHExportOption"
   mc:Ignorable="d">
   <Window.Styles>
@@ -43,7 +45,7 @@
             Classes="accent"
             Click="OnSave"
             IsDefault="True">
-            保存
+            导出
           </Button>
           <Button Click="OnClose" IsCancel="True">
             取消
