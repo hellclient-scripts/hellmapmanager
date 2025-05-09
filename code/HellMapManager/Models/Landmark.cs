@@ -30,7 +30,7 @@ public partial class Landmark
     public string Desc { get; set; } = "";
     public bool Validated()
     {
-        return Key != "";
+        return ItemKey.Validate(Key);
     }
     public const string EncodeKey = "Landmark";
     public string Encode()

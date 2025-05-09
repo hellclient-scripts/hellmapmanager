@@ -24,7 +24,7 @@ public partial class Room
     public List<Data> Data { get; set; } = [];
     public bool Validated()
     {
-        return Key != "";
+        return ItemKey.Validate(Key);
     }
     public Room Clone()
     {

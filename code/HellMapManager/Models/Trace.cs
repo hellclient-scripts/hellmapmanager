@@ -24,7 +24,7 @@ public partial class Trace
     }
     public bool Validated()
     {
-        return Key != "";
+        return ItemKey.Validate(Key);
     }
     public const string EncodeKey = "Trace";
 

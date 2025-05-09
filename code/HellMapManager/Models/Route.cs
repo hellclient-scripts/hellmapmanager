@@ -13,7 +13,7 @@ public partial class Route
     public List<string> Rooms = [];
     public bool Validated()
     {
-        return Key != "";
+        return ItemKey.Validate(Key);
     }
     public const string EncodeKey = "Route";
 

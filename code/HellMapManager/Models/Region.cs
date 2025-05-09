@@ -56,7 +56,7 @@ public partial class Region
     public List<RegionItem> Items { get; set; } = [];
     public bool Validated()
     {
-        return Key != "";
+        return ItemKey.Validate(Key);
     }
     public Region Clone()
     {

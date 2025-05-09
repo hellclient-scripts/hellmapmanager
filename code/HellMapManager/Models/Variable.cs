@@ -11,7 +11,7 @@ public class Variable
     public string Desc { get; set; } = "";
     public bool Validated()
     {
-        return Key != "";
+        return ItemKey.Validate(Key);
     }
     public const string EncodeKey = "Variable";
 

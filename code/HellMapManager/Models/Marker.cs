@@ -16,7 +16,7 @@ public partial class Marker
     public string Message { get; set; } = "";
     public bool Validated()
     {
-        return Key != "" && Value != "";
+        return ItemKey.Validate(Key) && Value != "";
     }
     public Marker Clone()
     {

@@ -45,7 +45,7 @@ public partial class Snapshot
     public string TimeLabel { get => DateTimeOffset.FromUnixTimeSeconds(Timestamp).LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss"); }
     public bool Validated()
     {
-        return Key != "" && Timestamp > 0;
+        return ItemKey.Validate(Key) && Timestamp > 0;
     }
     public const string EncodeKey = "Snapshot";
 

@@ -11,7 +11,7 @@ public partial class Shortcut : Exit
     public List<Condition> RoomConditions { get; set; } = [];
     public new bool Validated()
     {
-        return Key != "" && base.Validated();
+        return ItemKey.Validate(Key) && base.Validated();
     }
     public const string EncodeKey = "Shortcut";
 

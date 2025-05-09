@@ -1,3 +1,4 @@
+using Avalonia.Input;
 using HellMapManager.Models;
 
 namespace TestProject;
@@ -1065,5 +1066,103 @@ public class ModelTest
         Assert.Equal("/mypath", rf.Path);
         Assert.Equal("myname", rf.Name);
     }
+    [Fact]
+    public void TestItemKey()
+    {
+        Assert.True(ItemKey.Validate("ab"));
+        Assert.False(ItemKey.Validate(""));
+        Assert.False(ItemKey.Validate("a\nb"));
+        var room = new Room()
+        {
+            Key = "ab",
+        };
+        Assert.True(room.Validated());
+        room.Key = "";
+        Assert.False(room.Validated());
+        room.Key = "a\nb";
+        Assert.False(room.Validated());
+        var marker = new Marker()
+        {
+            Key = "ab",
+            Value = "value",
+        };
+        Assert.True(marker.Validated());
+        marker.Key = "";
+        Assert.False(marker.Validated());
+        marker.Key = "a\nb";
+        Assert.False(marker.Validated());
+        var route = new Route()
+        {
+            Key = "ab",
+            Rooms = ["room1", "room2"],
+        };
+        Assert.True(route.Validated());
+        route.Key = "";
+        Assert.False(route.Validated());
+        route.Key = "a\nb";
+        Assert.False(route.Validated());
+        var trace = new Trace()
+        {
+            Key = "ab",
+            Locations = ["room1", "room2"],
+        };
+        Assert.True(trace.Validated());
+        trace.Key = "";
+        Assert.False(trace.Validated());
+        trace.Key = "a\nb";
+        Assert.False(trace.Validated());
+        var region = new Region()
+        {
+            Key = "ab",
+            Items = [new RegionItem(RegionItemType.Room, "room1", false), new RegionItem(RegionItemType.Zone, "zone1", true)]
+        };
+        Assert.True(region.Validated());
+        region.Key = "";
+        Assert.False(region.Validated());
+        region.Key = "a\nb";
+        Assert.False(region.Validated());
+        var landmark = new Landmark()
+        {
+            Key = "ab",
+            Type = "type1",
+            Value = "value1",
+        };
+        Assert.True(landmark.Validated());
+        landmark.Key = "";
+        Assert.False(landmark.Validated());
+        landmark.Key = "a\nb";
+        Assert.False(landmark.Validated());
+        var shortcut = new Shortcut()
+        {
+            Key = "ab",
+            Command = "command1",
+            To = "to1",
+        };
+        Assert.True(shortcut.Validated());
+        shortcut.Key = "";
+        Assert.False(shortcut.Validated());
+        shortcut.Key = "a\nb";
+        Assert.False(shortcut.Validated());
+        var variable = new Variable()
+        {
+            Key = "ab",
+            Value = "value1",
+        };
+        Assert.True(variable.Validated());
+        variable.Key = "";
+        Assert.False(variable.Validated());
+        variable.Key = "a\nb";
+        Assert.False(variable.Validated());
+        var snapshot = new Snapshot()
+        {
+            Key = "ab",
+            Timestamp = 123456,
+        };
+        Assert.True(snapshot.Validated());
+        snapshot.Key = "";
+        Assert.False(snapshot.Validated());
+        snapshot.Key = "a\nb";
+        Assert.False(snapshot.Validated());
 
+    }
 }
