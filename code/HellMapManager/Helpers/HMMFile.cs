@@ -4,7 +4,7 @@ using System.IO.Compression;
 
 using HellMapManager.Models;
 using HellMapManager.States;
-namespace HellMapManager.Services;
+namespace HellMapManager.Helpers;
 
 public class HMMFile
 {

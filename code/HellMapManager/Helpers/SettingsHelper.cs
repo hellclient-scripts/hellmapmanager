@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
 
-namespace HellMapManager.Services;
+namespace HellMapManager.Helpers;
 
 [JsonSerializable(typeof(Settings))]
 [JsonSerializable(typeof(bool))]

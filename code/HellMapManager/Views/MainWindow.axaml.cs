@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using HellMapManager.Services;
+using HellMapManager.Helpers;
 using HellMapManager.Models;
 using HellMapManager.Windows.RoomsHExportWindow;
 using Avalonia.Interactivity;

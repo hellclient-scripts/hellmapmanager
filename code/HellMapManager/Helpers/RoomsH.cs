@@ -9,7 +9,7 @@ using HellMapManager.Utils.ControlCode;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 
-namespace HellMapManager.Services;
+namespace HellMapManager.Helpers;
 
 public class RoomsHExportOption : ObservableObject
 {

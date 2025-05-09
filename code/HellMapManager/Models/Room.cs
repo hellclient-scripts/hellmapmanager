@@ -4,7 +4,14 @@ using System.Collections.Generic;
 namespace HellMapManager.Models;
 
 
-
+public class RoomFilter
+{
+    public bool Validate(Room room)
+    {
+        //TODO
+        return true;
+    }
+}
 
 //房间的数据结构
 public partial class Room

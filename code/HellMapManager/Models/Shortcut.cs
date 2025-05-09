@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 namespace HellMapManager.Models;
 
-public partial class Shortcut : Exit
+public class RoomConditionExit:Exit{
+    public List<Condition> RoomConditions { get; set; } = [];
+
+}
+public partial class Shortcut : RoomConditionExit
 {
     public string Key { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
 
-    public List<Condition> RoomConditions { get; set; } = [];
     public new bool Validated()
     {
         return ItemKey.Validate(Key) && base.Validated();

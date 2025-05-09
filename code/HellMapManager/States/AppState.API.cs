@@ -500,4 +500,227 @@ public partial class AppState
             RaiseMapFileUpdatedEvent(this);
         }
     }
+    public List<Step> APIQueryPathAny(string from, List<string> target, Context context)
+    {
+        // Todo
+        return [];
+    }
+
+    public List<Step> APIQueryPathAll(string start, List<string> target, Context context)
+    {
+        // Todo
+        return [];
+    }
+    public List<Step> APIQueryPathOrdered(string start, List<string> target, Context context)
+    {
+        // Todo
+        return [];
+    }
+    public List<string> APIQueryRegionRooms(string key)
+    {
+        // Todo
+        return [];
+    }
+
+    public List<string> APIDilate(List<string> src, int iterations, Context context)
+    {
+        // Todo
+        return [];
+    }
+    public string APITrackExit(string start, string command, Context context)
+    {
+        if (Current != null)
+        {
+            if (Current.Cache.Rooms.TryGetValue(start, out Room? room))
+            {
+                foreach (var exit in room.Exits)
+                {
+                    if (exit.Command == command && context.ValidateExit(exit))
+                    {
+                        return exit.To;
+                    }
+                }
+            }
+        }
+        return "";
+    }
+    public string GetVariable(string key)
+    {
+        if (Current != null)
+        {
+            if (Current.Cache.Variables.TryGetValue(key, out Variable? variable))
+            {
+                return variable.Value;
+            }
+        }
+        return "";
+    }
+    public void APIExpireSnapshot(SnapshotFilter filter, int ExpiredBeforeTimestamp)
+    {
+        if (Current != null)
+        {
+            Current.Map.Snapshots.RemoveAll((s) =>
+            {
+                if (filter.Validate(s))
+                {
+                    return s.Timestamp < ExpiredBeforeTimestamp;
+                }
+                return false;
+            });
+            Snapshot.Sort(Current.Map.Snapshots);
+            Current.MarkAsModified();
+            RaiseMapFileUpdatedEvent(this);
+        }
+    }
+    public List<Room> APISearchRooms(RoomFilter filter)
+    {
+        if (Current != null)
+        {
+            var result = new List<Room>() { };
+            Current.Map.Rooms.ForEach((model) =>
+            {
+                if (filter.Validate(model))
+                {
+                    result.Add(model);
+                }
+            });
+            return result;
+        }
+        //Todo
+        return [];
+    }
+
+    public List<Room> APIFilterRooms(List<string> src, RoomFilter filter)
+    {
+        if (Current != null)
+        {
+            var result = new List<Room>() { };
+            src.ForEach((key) =>
+            {
+                if (Current.Cache.Rooms.TryGetValue(key, out Room? model))
+                {
+                    if (filter.Validate(model))
+                    {
+                        result.Add(model);
+                    }
+                }
+            });
+            return result;
+        }
+        //Todo
+        return [];
+    }
+    public void APITakeSnapshot(string key, string type, string value, string group)
+    {
+
+        if (Current != null)
+        {
+            var snapshot = Snapshot.Create(key, type, value, group);
+            Current.InsertSnapshot(snapshot);
+            Current.MarkAsModified();
+            RaiseMapFileUpdatedEvent(this);
+        }
+    }
+    public void APISearchSnapshots()
+    {
+        //Todo
+    }
+    public void APITrace(string key, string location)
+    {
+        if (Current != null)
+        {
+            if (Current.Cache.Traces.TryGetValue(key, out Trace? trace))
+            {
+                if (trace.Locations.Contains(location))
+                {
+                    return;
+                }
+                trace.AddLocations(new List<string>() { location });
+                trace.Arrange();
+                Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
+            }
+        }
+    }
+    public void APITagRoom(string key, string tag)
+    {
+        if (Current != null)
+        {
+            if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
+            {
+                if (room.Tags.Contains(tag))
+                {
+                    return;
+                }
+                var prev = room.ToString();
+                room.Tags.Add(tag);
+                room.Arrange();
+                if (room.ToString() != prev)
+                {
+                    Current.MarkAsModified();
+                    RaiseMapFileUpdatedEvent(this);
+                }
+                return;
+            }
+        }
+    }
+    public void APIUntagRoom(string key, string tag)
+    {
+        if (Current != null)
+        {
+            if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
+            {
+                if (!room.Tags.Contains(tag))
+                {
+                    return;
+                }
+                var prev = room.ToString();
+                room.Tags.Remove(tag);
+                room.Arrange();
+                if (room.ToString() != prev)
+                {
+                    Current.MarkAsModified();
+                    RaiseMapFileUpdatedEvent(this);
+                }
+                return;
+            }
+        }
+    }
+    public void APISetRoomData(string roomkey, string datakey, string datavalue)
+    {
+        if (Current != null)
+        {
+            if (Current.Cache.Rooms.TryGetValue(roomkey, out Room? room))
+            {
+                var prev = room.ToString();
+                room.Data.RemoveAll((d) => d.Key == datakey);
+                room.Data.Add(new Data(datakey, datavalue));
+                room.Arrange();
+                if (room.ToString() != prev)
+                {
+                    Current.MarkAsModified();
+                    RaiseMapFileUpdatedEvent(this);
+                }
+                return;
+            }
+        }
+
+    }
+    public void APIGroupRoom(string key, string group)
+    {
+        if (Current != null)
+        {
+            if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
+            {
+                if (room.Group == group)
+                {
+                    return;
+                }
+                room.Group = group;
+                Room.Sort(Current.Map.Rooms);
+                Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
+            }
+        }
+    }
 }

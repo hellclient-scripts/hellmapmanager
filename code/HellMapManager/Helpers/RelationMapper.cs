@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using HellMapManager.Models;
 
-namespace HellMapManager.Services;
+namespace HellMapManager.Helpers;
 
 public enum RelationType
 {

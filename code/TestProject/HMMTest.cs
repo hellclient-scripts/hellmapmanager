@@ -1,5 +1,5 @@
 using HellMapManager.Models;
-using HellMapManager.Services.HMMEncoder;
+using HellMapManager.Helpers.HMMEncoder;
 
 namespace TestProject;
 

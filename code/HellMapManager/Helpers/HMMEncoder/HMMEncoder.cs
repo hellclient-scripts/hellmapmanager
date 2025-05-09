@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using HellMapManager.Models;
 
-namespace HellMapManager.Services.HMMEncoder;
+namespace HellMapManager.Helpers.HMMEncoder;
 public class MapHeadData
 {
     public const string CurrentFormat = "HMM1.0";

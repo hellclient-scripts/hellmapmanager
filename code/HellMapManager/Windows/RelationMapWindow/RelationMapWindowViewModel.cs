@@ -1,7 +1,7 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using AvaloniaGraphControl;
-using HellMapManager.Services;
+using HellMapManager.Helpers;
 using System.Collections.Generic;
 using HellMapManager.Models;
 using HellMapManager.States;
