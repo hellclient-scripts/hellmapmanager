@@ -29,6 +29,8 @@
         <MenuItem
           Command="{Binding OnSave}"
           Header="保存(_S)"
+          InputGesture="Ctrl+S"
+          HotKey="Ctrl+S"
           IsEnabled="{Binding IsFileModified}" />
         <MenuItem
           Command="{Binding OnSaveAs}"
