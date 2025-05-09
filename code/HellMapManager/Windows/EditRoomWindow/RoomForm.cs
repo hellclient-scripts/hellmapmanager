@@ -67,9 +67,9 @@ public partial class RoomForm : ObservableObject
         {
             return err;
         }
-        if (Key == "")
+        if (!ItemKey.Validate(Key))
         {
-            return "房间主键不能为空";
+            return "主键无效";
         }
         return "";
     }

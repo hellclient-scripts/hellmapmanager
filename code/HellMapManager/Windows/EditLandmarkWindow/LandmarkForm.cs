@@ -47,9 +47,9 @@ public partial class LandmarkForm : ObservableObject
         {
             return err;
         }
-        if (Key == "")
+        if (!ItemKey.Validate(Key))
         {
-            return "定位主键不能为空";
+            return "主键无效";
         }
         if (Value == "")
         {

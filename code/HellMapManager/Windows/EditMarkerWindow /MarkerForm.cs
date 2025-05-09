@@ -47,9 +47,9 @@ public partial class MarkerForm : ObservableObject
         {
             return err;
         }
-        if (Key == "")
+        if (!ItemKey.Validate(Key))
         {
-            return "标记主键不能为空";
+            return "主键无效";
         }
         if (Value == "")
         {

@@ -88,9 +88,9 @@ public partial class ShortcutForm : ObservableObject
         {
             return err;
         }
-        if (Key == "")
+        if (!ItemKey.Validate(Key))
         {
-            return "捷径主键不能为空";
+            return "主键无效";
         }
         if (Command == "")
         {

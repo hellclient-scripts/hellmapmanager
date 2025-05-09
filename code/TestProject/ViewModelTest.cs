@@ -264,7 +264,7 @@ public class ViewModelTest
         Assert.Equal("key1", vm.Item.Conditions[1].Key);
 
         Assert.Equal("", vm.ConditionValidator(new ConditionForm(vm.ConditionValidator)));
-        vm= new EditExitWindowViewModel(null, (ExitForm form) => "");
+        vm = new EditExitWindowViewModel(null, (ExitForm form) => "");
         model = new Exit()
         {
             Command = "cmd1",
@@ -358,13 +358,15 @@ public class ViewModelTest
         vm.Item.Key = "key2";
         Assert.Equal("定位主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Value = "";
-        Assert.Equal("定位主键不能为空", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("值不能为空", vm.Item.Validate());
         vm.Item.Value = "value3";
         Assert.Equal("", vm.Item.Validate());
-        vm= new EditLandmarkWindowViewModel(null, false);
+        vm = new EditLandmarkWindowViewModel(null, false);
         vm.Item.Key = "key";
         vm.Item.Type = "type";
         vm.Item.Value = "value";
@@ -445,12 +447,14 @@ public class ViewModelTest
         Assert.Equal("标记主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
         vm.Item.Value = "";
-        Assert.Equal("标记主键不能为空", vm.Item.Validate());
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("房间值不能为空", vm.Item.Validate());
         vm.Item.Value = "value3";
         Assert.Equal("", vm.Item.Validate());
-        vm= new EditMarkerWindowViewModel(null, false);
+        vm = new EditMarkerWindowViewModel(null, false);
         vm.Item.Key = "key";
         Assert.Equal("标记主键已存在", vm.Item.Validate());
         vm.Item.Key = "key3";
@@ -535,10 +539,12 @@ public class ViewModelTest
         Assert.Equal("地区主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
         vm.Item.Group = "";
-        Assert.Equal("地区主键不能为空", vm.Item.Validate());
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
-        vm= new EditRegionWindowViewModel(null, false);
+        vm = new EditRegionWindowViewModel(null, false);
         vm.Item.Key = "key";
         Assert.Equal("地区主键已存在", vm.Item.Validate());
         vm.Item.Key = "key3";
@@ -615,10 +621,12 @@ public class ViewModelTest
         vm.Item.Key = "key2";
         Assert.Equal("路线主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
-        Assert.Equal("路线主键不能为空", vm.Item.Validate());
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
-        vm= new EditRouteWindowViewModel(null, false);
+        vm = new EditRouteWindowViewModel(null, false);
         vm.Item.Key = "key";
         Assert.Equal("路线主键已存在", vm.Item.Validate());
         vm.Item.Key = "key3";
@@ -697,7 +705,9 @@ public class ViewModelTest
         vm.Item.Key = "key2";
         Assert.Equal("足迹主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
-        Assert.Equal("足迹主键不能为空", vm.Item.Validate());
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
         vm = new EditTraceWindowViewModel(null, false);
@@ -775,10 +785,12 @@ public class ViewModelTest
         vm.Item.Key = "key2";
         Assert.Equal("变量主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
-        Assert.Equal("变量主键不能为空", vm.Item.Validate());
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
-        vm= new EditVariableWindowViewModel(null, false);
+        vm = new EditVariableWindowViewModel(null, false);
         vm.Item.Key = "key";
         Assert.Equal("变量主键已存在", vm.Item.Validate());
         vm.Item.Key = "key3";
@@ -849,7 +861,9 @@ public class ViewModelTest
         vm.Item.Key = "key2";
         Assert.Equal("捷径主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
-        Assert.Equal("捷径主键不能为空", vm.Item.Validate());
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Key = "key3";
         vm.Item.Command = "";
         Assert.Equal("指令不能为空", vm.Item.Validate());
@@ -989,7 +1003,9 @@ public class ViewModelTest
         vm.Item.Key = "key2";
         Assert.Equal("房间主键已存在", vm.Item.Validate());
         vm.Item.Key = "";
-        Assert.Equal("房间主键不能为空", vm.Item.Validate());
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Key = "key3";
         Assert.Equal("", vm.Item.Validate());
         vm = new EditRoomWindowViewModel(null, false);
@@ -1103,7 +1119,9 @@ public class ViewModelTest
         AppState.Main.APIInsertSnapshots([model, model2]);
         Assert.Equal("", vm.Item.Validate());
         vm.Item.Key = "";
-        Assert.Equal("快照主键不能为空", vm.Item.Validate());
+        Assert.Equal("主键无效", vm.Item.Validate());
+        vm.Item.Key = "a\nb";
+        Assert.Equal("主键无效", vm.Item.Validate());
         vm.Item.Key = "key3";
         vm.Item.Value = "";
         Assert.Equal("值不能为空", vm.Item.Validate());

@@ -44,9 +44,9 @@ public partial class VariableForm : ObservableObject
         {
             return err;
         }
-        if (Key == "")
+        if (!ItemKey.Validate(Key))
         {
-            return "变量主键不能为空";
+            return "主键无效";
         }
         return "";
     }

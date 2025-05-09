@@ -49,11 +49,10 @@ public partial class RegionForm : ObservableObject
         {
             return err;
         }
-        if (Key == "")
+        if (!ItemKey.Validate(Key))
         {
-            return "地区主键不能为空";
+            return "主键无效";
         }
-
         return "";
     }
 }
