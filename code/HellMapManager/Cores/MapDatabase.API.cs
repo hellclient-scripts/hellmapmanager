@@ -535,7 +535,7 @@ public partial class MapDatabase
             {
                 foreach (var exit in room.Exits)
                 {
-                    if (exit.Command == command && context.ValidateExit(exit,Current))
+                    if (exit.Command == command && context.ValidateExit(exit, Current))
                     {
                         return exit.To;
                     }
@@ -555,18 +555,11 @@ public partial class MapDatabase
         }
         return "";
     }
-    public void APIExpireSnapshot(SnapshotFilter filter, int ExpiredBeforeTimestamp)
+    public void APIClearSnapshot(SnapshotFilter filter)
     {
         if (Current != null)
         {
-            Current.Map.Snapshots.RemoveAll((s) =>
-            {
-                if (filter.Validate(s))
-                {
-                    return s.Timestamp < ExpiredBeforeTimestamp;
-                }
-                return false;
-            });
+            Current.Map.Snapshots.RemoveAll((s) => filter.Validate(s));
             Snapshot.Sort(Current.Map.Snapshots);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
