@@ -1,7 +1,6 @@
 namespace HellMapManager.Windows.EditVariableWindow;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HellMapManager.Models;
-using HellMapManager.Utils;
 
 public delegate string ExternalValidator(VariableForm room);
 public partial class VariableForm : ObservableObject

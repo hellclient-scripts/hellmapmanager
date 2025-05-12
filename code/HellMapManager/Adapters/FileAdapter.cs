@@ -1,14 +1,14 @@
 using System.IO;
 
-namespace HellMapManager.Drivers;
+namespace HellMapManager.Adapters;
 
-public interface IFileIODriver
+public interface IFileAdapter
 {
     Stream ReadStream(string file);
     Stream WriteStream(string file);
 }
 
-public class FileIODriver : IFileIODriver
+public class FileAdapter : IFileAdapter
 {
     public Stream ReadStream(string name)
     {

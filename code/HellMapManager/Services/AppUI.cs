@@ -6,7 +6,6 @@ using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Models;
 using Avalonia.Controls.ApplicationLifetimes;
 using HellMapManager.Cores;
-using HellMapManager.Cores;
 
 using System;
 

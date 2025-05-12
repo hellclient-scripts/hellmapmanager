@@ -7,7 +7,6 @@ using HellMapManager.Models;
 using HellMapManager.Cores;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Avalonia.Input;
 namespace HellMapManager.Windows.RelationMapWindow;
 public class ViewItem
 {

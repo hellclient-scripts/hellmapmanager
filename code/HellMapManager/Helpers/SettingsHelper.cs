@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
-using HellMapManager.Drivers;
+using HellMapManager.Adapters;
 using System;
 namespace HellMapManager.Helpers;
 
@@ -30,7 +30,7 @@ public class SettingsHelper(string setingpath)
             {
                 return;
             }
-            using var fileStream = AppDrivers.FileIO.WriteStream(SettingPath);
+            using var fileStream = SystemAdapter.Instance.File.WriteStream(SettingPath);
             using var sw = new StreamWriter(fileStream, Encoding.UTF8);
             sw.Write(ToJSON(settings));
         }
@@ -66,7 +66,7 @@ public class SettingsHelper(string setingpath)
             {
                 return null;
             }
-            using var fileStream = AppDrivers.FileIO.ReadStream(SettingPath);
+            using var fileStream = SystemAdapter.Instance.File.ReadStream(SettingPath);
             using var sr = new StreamReader(fileStream, Encoding.UTF8);
             var body = sr.ReadToEnd();
             return FromJSON(body);

@@ -17,7 +17,6 @@ using HellMapManager.Windows.PickRoomWindow;
 using HellMapManager.Windows.UpdateMapWindow;
 using HellMapManager.Windows.EditRegionItemWindow;
 using HellMapManager.ViewModels;
-using HellMapManager;
 namespace TestProject;
 
 [Collection("MainState")]
