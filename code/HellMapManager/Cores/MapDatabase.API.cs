@@ -535,7 +535,7 @@ public partial class MapDatabase
             {
                 foreach (var exit in room.Exits)
                 {
-                    if (exit.Command == command && context.ValidateExit(exit, Current))
+                    if (exit.Command == command && context.ValidateExit(exit))
                     {
                         return exit.To;
                     }

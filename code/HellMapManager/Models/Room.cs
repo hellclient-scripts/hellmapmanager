@@ -101,6 +101,10 @@ public partial class Room
             d => HMMFormatter.DecodeKeyValue3(d).ToData());
         return result;
     }
+    public bool HasTag(string key)
+    {
+        return Tags.Contains(key);
+    }
 }
 public partial class Room
 {
@@ -231,7 +235,18 @@ public partial class Room
         }
         return true;
     }
+    public bool ValidteConditions(List<Condition> conditions)
+    {
+        foreach (var rcondition in conditions)
+        {
+            if (HasTag(rcondition.Key) != rcondition.Not)
+            {
+                return false;
+            }
+        }
+        return true;
 
+    }
     public int NumberID
     {
         get

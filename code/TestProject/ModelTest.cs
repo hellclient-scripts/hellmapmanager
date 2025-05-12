@@ -179,6 +179,10 @@ public class ModelTest
             }
             ]
         };
+
+        Assert.True(room.HasTag("tag1"));
+        Assert.True(room.HasTag("tag2"));
+        Assert.False(room.HasTag("notexists"));
         Room room2;
 
         Assert.False(room.Filter("unknow"));

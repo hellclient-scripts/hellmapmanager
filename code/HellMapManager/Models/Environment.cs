@@ -33,8 +33,13 @@ public class Environment
 
 public class Context
 {
+    public Context(MapFile mf)
+    {
+        MapFile = mf;
+    }
+    public MapFile MapFile;
     public Dictionary<string, bool> Tags = [];
-    public Dictionary<string, bool> RoomConditions = [];
+    public List<Condition> RoomConditions = [];
     public Dictionary<string, Room> Rooms = [];
     public Dictionary<string, bool> Whitelist = [];
     public Dictionary<string, bool> Blacklist = [];
@@ -64,12 +69,8 @@ public class Context
     }
     public Context WithRoomConditions(List<Condition> conditions)
     {
-        foreach (var condition in conditions)
-        {
-            RoomConditions[condition.Key] = condition.Not;
-        }
+        RoomConditions = (List<Condition>)RoomConditions.Concat(conditions);
         return this;
-
     }
     public Context ClearRooms()
     {
@@ -132,7 +133,7 @@ public class Context
 
             if (Paths.TryGetValue(item.From, out var paths))
             {
-                paths = (List<Path>)paths.Concat(list);
+                Paths[item.From] = (List<Path>)paths.Concat(list);
             }
             else
             {
@@ -168,20 +169,88 @@ public class Context
     {
         return BlockedLinks.ContainsKey(from) && BlockedLinks[from].ContainsKey(to);
     }
-    public bool ValidateExit(Exit exit, MapFile mf)
+    public Room? GetRoom(string key, MapFile mf)
     {
-        //Todo
-        return true;
+        Room? room = null;
+        if (!Rooms.TryGetValue(key, out room))
+        {
+            if (!mf.Cache.Rooms.TryGetValue(key, out room))
+            {
+                return null;
+            }
+        }
+        return room;
     }
-    public bool ValidateRoom(Room room, MapFile mf)
+    public List<Exit> GetRoomExits(Room room)
     {
-        //Todo
-        return true;
+        List<Exit> result = [.. room.Exits];
+        if (Paths.TryGetValue(room.Key, out var list))
+        {
+            result = (List<Exit>)result.Concat(list);
+        }
+        if (!DisableShortcuts)
+        {
+            MapFile.Map.Shortcuts.ForEach(e =>
+            {
+                if (room.ValidteConditions(e.RoomConditions))
+                {
+                    result.Add(e);
+                }
+            });
+            Shortcuts.ForEach(e =>
+            {
+                if (room.ValidteConditions(e.RoomConditions))
+                {
+                    result.Add(e);
+                }
+            });
+        }
+        return result;
     }
-    public bool ValidatePath(Path path, MapFile mf)
+    public bool ValidateExit(Exit exit)
     {
-        //Todo
-        return true;
-    }
 
+        var room = GetRoom(exit.To, MapFile);
+        if (room == null)
+        {
+            return false;
+        }
+
+        if (!ValidateRoom(room))
+        {
+            return false;
+        }
+        foreach (var condition in exit.Conditions)
+        {
+            if (Tags.ContainsKey(condition.Key) != condition.Not)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public bool ValidateRoom(Room room)
+    {
+        if (BlockedLinks.ContainsKey(room.Key))
+        {
+            return false;
+        }
+        if (Whitelist.Count > 0 && !Whitelist.ContainsKey(room.Key))
+        {
+            return false;
+        }
+        if (!room.ValidteConditions(RoomConditions))
+        {
+            return false;
+        }
+        return true;
+    }
+    public bool ValidatePath(string start, Exit exit)
+    {
+        if (IsBlocked(start, exit.To))
+        {
+            return false;
+        }
+        return ValidateExit(exit);
+    }
 }
