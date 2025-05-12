@@ -78,7 +78,7 @@
             ItemsSource="{Binding FilteredSnapshots}">
             <DataGrid.Columns>
                <DataGridTemplateColumn
-                  Width="160"
+                  Width="100"
                   CanUserSort="true"
                   Header="快照主键"
                   SortMemberPath="Key">
@@ -89,7 +89,7 @@
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
                <DataGridTemplateColumn
-                  Width="160"
+                  Width="100"
                   CanUserSort="true"
                   Header="快照类型"
                   SortMemberPath="Type">
@@ -111,7 +111,18 @@
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
                <DataGridTemplateColumn
-                  Width="160"
+                  Width="100"
+                  CanUserSort="true"
+                  Header="重复次数"
+                  SortMemberPath="Count">
+                  <DataGridTemplateColumn.CellTemplate>
+                     <DataTemplate>
+                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Count}" />
+                     </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+               </DataGridTemplateColumn>
+               <DataGridTemplateColumn
+                  Width="100"
                   CanUserSort="true"
                   Header="分组"
                   SortMemberPath="Group">

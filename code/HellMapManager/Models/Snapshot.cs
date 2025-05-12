@@ -62,12 +62,12 @@ public partial class Snapshot
     public int Timestamp = 0;
     public string Group { get; set; } = "";
     public string Type { get; set; } = "";
-
+    public int Count { get; set; } = 1;
     public string Value { get; set; } = "";
     public string TimeLabel { get => DateTimeOffset.FromUnixTimeSeconds(Timestamp).LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss"); }
     public bool Validated()
     {
-        return ItemKey.Validate(Key) && Timestamp > 0;
+        return ItemKey.Validate(Key);
     }
     public const string EncodeKey = "Snapshot";
 
@@ -80,6 +80,7 @@ public partial class Snapshot
                 HMMFormatter.Escape(Value),//2
                 HMMFormatter.Escape(Group),//3
                 HMMFormatter.Escape(Timestamp.ToString()),//4
+                HMMFormatter.Escape(Count.ToString()),//5
             ])
         );
     }
@@ -92,7 +93,8 @@ public partial class Snapshot
         result.Type = HMMFormatter.UnescapeAt(list, 1);
         result.Value = HMMFormatter.UnescapeAt(list, 2);
         result.Group = HMMFormatter.UnescapeAt(list, 3);
-        result.Timestamp = HMMFormatter.UnescapeIntAt(list, 4, -1);
+        result.Timestamp = HMMFormatter.UnescapeIntAt(list, 4, 0);
+        result.Count = HMMFormatter.UnescapeIntAt(list, 5, 1);
         return result;
     }
     public Snapshot Clone()
@@ -104,6 +106,7 @@ public partial class Snapshot
             Group = Group,
             Type = Type,
             Value = Value,
+            Count = Count,
         };
     }
     public bool Filter(string filter)
@@ -116,7 +119,7 @@ public partial class Snapshot
     }
     public bool Equal(Snapshot model)
     {
-        if (Key == model.Key && Type == model.Type && Value == model.Value && Group == model.Group && Timestamp == model.Timestamp)
+        if (Key == model.Key && Type == model.Type && Value == model.Value && Group == model.Group && Timestamp == model.Timestamp && Count == model.Count)
         {
             return true;
         }
@@ -132,5 +135,9 @@ public partial class Snapshot
     public SnapshotKey UniqueKey()
     {
         return new SnapshotKey(Key, Type, Value);
+    }
+    public void Repeat()
+    {
+        Count++;
     }
 }

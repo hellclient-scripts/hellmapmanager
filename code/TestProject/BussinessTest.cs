@@ -358,6 +358,7 @@ public class BussinessTest
             Type = $"type{suff}",
             Value = $"value{suff}",
             Group = $"group{suff}",
+            Count = 1,
             Timestamp = 1234567890
         };
     }

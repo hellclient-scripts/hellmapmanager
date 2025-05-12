@@ -613,8 +613,7 @@ public partial class MapDatabase
 
         if (Current != null)
         {
-            var snapshot = Snapshot.Create(key, type, value, group);
-            Current.InsertSnapshot(snapshot);
+            Current.TakeSnapshot(key, type, value, group);
             Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }

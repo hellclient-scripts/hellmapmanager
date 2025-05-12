@@ -684,11 +684,6 @@ public class ModelTest
         snapshot2.Group = "";
         Assert.False(snapshot.Equal(snapshot2));
         Assert.True(snapshot2.Validated());
-        snapshot2 = snapshot.Clone();
-        snapshot2.Timestamp = -1;
-        Assert.False(snapshot.Equal(snapshot2));
-        Assert.False(snapshot2.Validated());
-
         snapshot2 = Snapshot.Create("key1", "type1", "value1", "group1");
         Assert.True(snapshot2.Validated());
         Assert.Equal("key1", snapshot2.Key);
@@ -703,6 +698,10 @@ public class ModelTest
         };
         var timelabel = DateTimeOffset.FromUnixTimeSeconds(123456789).LocalDateTime.ToString("yyyy-MM-dd HH:mm:ss");
         Assert.Equal(timelabel, snapshot2.TimeLabel);
+
+        Assert.Equal(1, snapshot2.Count);
+        snapshot2.Repeat();
+        Assert.Equal(2, snapshot2.Count);
     }
     [Fact]
     public void TestMap()
@@ -1049,6 +1048,14 @@ public class ModelTest
         mf.RemoveSnapshot(new SnapshotKey("key1", "", ""));
         Assert.Single(mf.Map.Snapshots);
         Assert.Equal(snapshot3, mf.Map.Snapshots[0]);
+        mf = new MapFile();
+        mf.TakeSnapshot("key3", "type3", "value3", "group3");
+        Assert.Single(mf.Map.Snapshots);
+        Assert.Equal(1, mf.Map.Snapshots[0].Count);
+        mf.TakeSnapshot("key3", "type3", "value3", "group2");
+        Assert.Single(mf.Map.Snapshots);
+        Assert.Equal(2, mf.Map.Snapshots[0].Count);
+
         mf = new MapFile();
         mf.Modified = false;
         Assert.False(mf.Modified);

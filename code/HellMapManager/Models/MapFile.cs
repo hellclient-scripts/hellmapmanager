@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 namespace HellMapManager.Models;
 
 public class MapFile
@@ -133,6 +134,21 @@ public class MapFile
         RemoveSnapshot(model.UniqueKey());
         model.Arrange();
         Map.Snapshots.Add(model);
+    }
+    public void TakeSnapshot(string key, string type, string value, string group)
+    {
+        var snapshotKey = new SnapshotKey(key, type, value);
+        var item = Map.Snapshots.FirstOrDefault(r => r.UniqueKey().Equal(snapshotKey));
+        if (item != null)
+        {
+            item.Repeat();
+        }
+        else
+        {
+            var model = Snapshot.Create(key, type, value, group);
+            model.Arrange();
+            Map.Snapshots.Add(model);
+        }
     }
     public void RemoveSnapshot(SnapshotKey key)
     {

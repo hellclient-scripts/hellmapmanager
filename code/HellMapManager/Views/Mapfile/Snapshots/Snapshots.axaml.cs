@@ -36,7 +36,7 @@ public partial class Snapshots : UserControl
             var result = await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppKernel.Instance.MapDatabase.APIInsertSnapshots([result]);
+                AppKernel.Instance.MapDatabase.APITakeSnapshot(result.Key, result.Type, result.Value, result.Group);
                 AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
