@@ -26,9 +26,49 @@ public class SnapshotFilter(string? key, string? type, string? group)
 
 public class SnapshotSearch
 {
+    public string? Type { get; set; }
+    public string? Group { get; set; }
+    public List<string> Keywords { get; set; } = [];
+    public bool PartialMatch = true;
+    public bool Any = false;
+    private bool match(string keyword, Snapshot model)
+    {
+
+        if (PartialMatch)
+        {
+            return model.Value.Contains(keyword);
+        }
+        else
+        {
+            return model.Value == keyword;
+        }
+    }
     public bool Validate(Snapshot model)
     {
-        return true;
+        if (Type != null && model.Type != Type)
+        {
+            return false;
+        }
+        if (Group != null && model.Group != Group)
+        {
+            return false;
+        }
+        if (Keywords.Count == 0)
+        {
+            return true;
+        }
+
+        foreach (var keyword in Keywords)
+        {
+            if (keyword != "")
+            {
+                if (match(keyword, model) == Any)
+                {
+                    return Any;
+                }
+            }
+        }
+        return !Any;
     }
 }
 
