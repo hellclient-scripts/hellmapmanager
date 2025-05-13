@@ -8,7 +8,7 @@ namespace HellMapManager.Helpers;
 
 public class SnapshotHelper
 {
-    public static List<SnapshotSearchResult> Search(SnapshotFilter filter, List<Snapshot> snapshots)
+    public static List<SnapshotSearchResult> Search(SnapshotSearch search, List<Snapshot> snapshots)
     {
         Dictionary<string, SnapshotSearchResult> all = new();
         foreach (var snapshot in snapshots)
@@ -24,7 +24,7 @@ public class SnapshotHelper
                 };
 
             }
-            all[snapshot.Key].Add(snapshot, filter.Validate(snapshot));
+            all[snapshot.Key].Add(snapshot, search.Validate(snapshot));
         }
         var values = all.Values.ToList();
         var results = new List<SnapshotSearchResult>();

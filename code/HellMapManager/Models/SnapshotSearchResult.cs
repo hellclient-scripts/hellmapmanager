@@ -24,6 +24,14 @@ public class SnapshotFilter(string? key, string? type, string? group)
     }
 }
 
+public class SnapshotSearch
+{
+    public bool Validate(Snapshot model)
+    {
+        return true;
+    }
+}
+
 public class SnapshotSearchResult
 {
     public string Key { get; set; } = "";

@@ -677,11 +677,11 @@ public partial class MapDatabase
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public List<SnapshotSearchResult> APISearchSnapshots(SnapshotFilter filter)
+    public List<SnapshotSearchResult> APISearchSnapshots(SnapshotSearch search)
     {
         if (Current != null)
         {
-            return SnapshotHelper.Search(filter, Current.Map.Snapshots);
+            return SnapshotHelper.Search(search, Current.Map.Snapshots);
         }
         return [];
     }
