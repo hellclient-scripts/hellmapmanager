@@ -62,7 +62,7 @@ public class SettingsHelper(string setingpath)
     {
         try
         {
-            if (SettingPath == "" || !File.Exists(this.SettingPath))
+            if (SettingPath == "" || !SystemAdapter.Instance.File.Exists(this.SettingPath))
             {
                 return null;
             }
