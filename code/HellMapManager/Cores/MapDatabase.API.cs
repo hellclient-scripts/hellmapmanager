@@ -1,5 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using Avalonia.OpenGL.Egl;
+using HellMapManager.Helpers;
 using HellMapManager.Models;
+using HellMapManager.Views.Mapfile.Rooms;
 
 namespace HellMapManager.Cores;
 public class APIListOption
@@ -500,42 +504,96 @@ public partial class MapDatabase
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public List<Step> APIQueryPathAny(string from, List<string> target, Context context)
-    {
-        // Todo
-        return [];
-    }
-
-    public List<Step> APIQueryPathAll(string start, List<string> target, Context context)
-    {
-        // Todo
-        return [];
-    }
-    public List<Step> APIQueryPathOrdered(string start, List<string> target, Context context)
-    {
-        // Todo
-        return [];
-    }
-    public List<string> APIQueryRegionRooms(string key)
-    {
-        // Todo
-        return [];
-    }
-
-    public List<string> APIDilate(List<string> src, int iterations, Context context)
-    {
-        // Todo
-        return [];
-    }
-    public string APITrackExit(string start, string command, Context context)
+    public QueryReuslt? APIQueryPathAny(List<string> from, List<string> target, Context context, MapperOptions options)
     {
         if (Current != null)
         {
+            return new Walking(new Mapper(Current, context, options)).QueryPathAny(from, target, 0).SuccessOrNull();
+        }
+        return null;
+    }
+
+    public QueryReuslt? APIQueryPathAll(string start, List<string> target, Context context, MapperOptions options)
+    {
+        if (Current != null)
+        {
+            return new Walking(new Mapper(Current, context, options)).QueryPathAll(start, target).SuccessOrNull();
+        }
+        return null;
+    }
+    public QueryReuslt? APIQueryPathOrdered(string start, List<string> target, Context context, MapperOptions options)
+    {
+        if (Current != null)
+        {
+            return new Walking(new Mapper(Current, context, options)).QueryPathOrdered(start, target).SuccessOrNull();
+        }
+        return null;
+    }
+    //不考虑context
+    public List<string> APIQueryRegionRooms(string key)
+    {
+        if (Current != null)
+        {
+            if (Current.Cache.Regions.TryGetValue(key, out Region? region))
+            {
+                var result = new Dictionary<string, bool>();
+                foreach (var item in region.Items)
+                {
+                    if (item.Type == RegionItemType.Room)
+                    {
+                        if (item.Not)
+                        {
+                            result.Remove(item.Value);
+                        }
+                        else
+                        {
+                            result[item.Value] = true;
+                        }
+                    }
+                    else
+                    {
+                        foreach (var room in Current.Map.Rooms)
+                        {
+                            if (room.Group == item.Value)
+                            {
+                                if (item.Not)
+                                {
+                                    result.Remove(room.Key);
+                                }
+                                else
+                                {
+                                    result[room.Key] = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                var list = result.Keys.ToList();
+                list.Sort();
+                return list;
+            }
+        }
+        return [];
+    }
+
+    public List<string> APIDilate(List<string> src, int iterations, Context context, MapperOptions options)
+    {
+        if (Current != null)
+        {
+            return new Walking(new Mapper(Current, context, options)).Dilate(src, iterations);
+        }
+        return [];
+    }
+    public string APITrackExit(string start, string command, Context context, MapperOptions options)
+    {
+        if (Current != null)
+        {
+            var mapper = new Mapper(Current, context, options);
             if (Current.Cache.Rooms.TryGetValue(start, out Room? room))
             {
                 foreach (var exit in room.Exits)
                 {
-                    if (exit.Command == command && context.ValidateExit(exit))
+                    if (exit.Command == command && mapper.ValidateExit(start, exit, mapper.GetExitCost(exit)))
                     {
                         return exit.To;
                     }
@@ -554,6 +612,14 @@ public partial class MapDatabase
             }
         }
         return "";
+    }
+    public Room? GetRoom(string key, Context context, MapperOptions options)
+    {
+        if (Current != null)
+        {
+            return new Mapper(Current, context, options).GetRoom(key);
+        }
+        return null;
     }
     public void APIClearSnapshot(SnapshotFilter filter)
     {
@@ -611,11 +677,12 @@ public partial class MapDatabase
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void APISearchSnapshots()
+    public List<SnapshotSearchResult> APISearchSnapshots()
     {
         //Todo
+        return [];
     }
-    public void APITrace(string key, string location)
+    public void APITraceLocation(string key, string location)
     {
         if (Current != null)
         {
@@ -687,7 +754,6 @@ public partial class MapDatabase
                 return;
             }
         }
-
     }
     public void APIGroupRoom(string key, string group)
     {
