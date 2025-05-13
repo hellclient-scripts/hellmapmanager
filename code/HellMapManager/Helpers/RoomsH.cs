@@ -133,7 +133,7 @@ public class RoomFormatter
                     {
                         int.TryParse(tagdata[1].Trim(), out value);
                     }
-                    room.Tags.Add(new ValueTag(tag, value));
+                    room.Tags.Add(new ValueTag(Unescape(tag), value));
                 }
             }
         }
@@ -168,14 +168,14 @@ public class RoomFormatter
                     {
                         int.TryParse(tagdata[1].Trim(), out value);
                     }
-                    exit.Conditions.Add(new ValueCondition(tag, value, false));
+                    exit.Conditions.Add(new ValueCondition(Unescape(tag), value, false));
 
                 }
                 var ExtagsAndCommand = CondCommand.Split("<");
                 var extagscount = ExtagsAndCommand.Length - 1;
                 for (var i = 0; i < extagscount; i++)
                 {
-                    var extagdata = TagsAndCondCommand[i].Split("^", 2);
+                    var extagdata = ExtagsAndCommand[i].Split("^", 2);
                     var extag = extagdata[0].Trim();
                     if (extag == "")
                     {
@@ -186,7 +186,7 @@ public class RoomFormatter
                     {
                         int.TryParse(extagdata[1].Trim(), out value);
                     }
-                    exit.Conditions.Add(new ValueCondition(extag, value, false));
+                    exit.Conditions.Add(new ValueCondition(Unescape(extag), value, true));
                 }
                 exit.Command = Unescape(ExtagsAndCommand.Last().Trim());
                 if (exit.Command == "")

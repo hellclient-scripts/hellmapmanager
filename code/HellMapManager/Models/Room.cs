@@ -95,7 +95,7 @@ public partial class Room
             {
                 Command = HMMFormatter.UnescapeAt(list, 0),
                 To = HMMFormatter.UnescapeAt(list, 1),
-                Conditions = HMMFormatter.DecodeList(HMMFormatter.Level4, HMMFormatter.At(list, 4)).ConvertAll(e => HMMFormatter.DecodeToggleKeyValue(HMMFormatter.Level5, e).ToValueCondition()),
+                Conditions = HMMFormatter.DecodeList(HMMFormatter.Level4, HMMFormatter.At(list, 2)).ConvertAll(e => HMMFormatter.DecodeToggleKeyValue(HMMFormatter.Level5, e).ToValueCondition()),
                 Cost = HMMFormatter.UnescapeInt(HMMFormatter.At(list, 3), 0),
             };
         });
@@ -124,7 +124,7 @@ public partial class Room
     }
     public string AllTags
     {
-        get => String.Join(",", Tags.ConvertAll(d => d.Key + ":" + d.Value));
+        get => String.Join(",", Tags.ConvertAll(d => d.ToString()));
     }
     public bool HasExitTo(string key)
     {
@@ -226,7 +226,7 @@ public partial class Room
         }
         for (var i = 0; i < Tags.Count; i++)
         {
-            if (Tags[i] != model.Tags[i])
+            if (!Tags[i].Equal(model.Tags[i]))
             {
                 return false;
             }

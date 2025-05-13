@@ -238,7 +238,7 @@ public class ViewModelTest
         vm.Item.Command = "cmd1";
         vm.Item.To = "to1";
         vm.Item.Cost = 2;
-        vm.Item.Conditions.Add(new Condition("key1", true));
+        vm.Item.Conditions.Add(new ValueCondition("key1", 0, true));
         Assert.Equal("", vm.Item.Validate());
         var vm2 = new EditExitWindowViewModel(null, (ExitForm form) => "test error");
         Assert.Equal("test error", vm2.Item.Validate());
@@ -256,7 +256,7 @@ public class ViewModelTest
         Assert.Equal(vm.Item.Cost, model.Cost);
         Assert.Equal("编辑出口", vm.Title);
 
-        vm.Item.Conditions.Add(new Condition("key2", false));
+        vm.Item.Conditions.Add(new ValueCondition("key2", 0, false));
         vm.Item.Arrange();
         Assert.Equal(2, vm.Item.Conditions.Count);
         Assert.Equal("key2", vm.Item.Conditions[0].Key);
@@ -269,11 +269,11 @@ public class ViewModelTest
             Command = "cmd1",
             To = "to1",
             Cost = 2,
-            Conditions = new List<Condition>()
+            Conditions = new List<ValueCondition>()
             {
-                new Condition("key1", true),
-                new Condition("key2", false),
-                new Condition("key3", true),
+                new ValueCondition("key1",0, true),
+                new ValueCondition("key2",0, false),
+                new ValueCondition("key3",0, true),
             }
         };
         vm = new EditExitWindowViewModel(model, (ExitForm form) => "");
@@ -879,17 +879,17 @@ public class ViewModelTest
             Command = "command3",
             Desc = "desc3",
             Group = "group3",
-            RoomConditions = new List<Condition>()
+            RoomConditions = new List<ValueCondition>()
             {
-                new Condition("rkey1", true),
-                new Condition("rkey2", false),
-                new Condition("rkey3", true),
+                new ValueCondition("rkey1",0, true),
+                new ValueCondition("rkey2",0, false),
+                new ValueCondition("rkey3",0, true),
             },
-            Conditions = new List<Condition>()
+            Conditions = new List<ValueCondition>()
             {
-                new Condition("key1", true),
-                new Condition("key2", false),
-                new Condition("key3", true),
+                new ValueCondition("key1",0,true),
+                new ValueCondition("key2",0,false),
+                new ValueCondition("key3",0,true),
             }
         };
         var form = new ShortcutForm(model3, (e) => "");
@@ -932,13 +932,13 @@ public class ViewModelTest
             Key = "key",
             Desc = "desc",
             Group = "group",
-            Tags = ["tag1"],
+            Tags = [new ValueTag("tag1", 0)],
             Data = [new Data("key1", "value1")],
             Exits = [new Exit(){
                 Command="command1",
                 To="to1",
                 Cost=1,
-                Conditions=[new Condition("key1",true)]
+                Conditions=[new ValueCondition("key1",0,true)]
             }],
 
         };
@@ -947,13 +947,13 @@ public class ViewModelTest
             Key = "key2",
             Desc = "desc2",
             Group = "group2",
-            Tags = ["tag1"],
+            Tags = [new ValueTag("tag1", 0)],
             Data = [new Data("key1", "value1")],
             Exits = [new Exit(){
                 Command="command1",
                 To="to1",
                 Cost=1,
-                Conditions=[new Condition("key1",true)]
+                Conditions=[new ValueCondition("key1",0,true)]
             }],
         };
         vm = new EditRoomWindowViewModel(model, true);
@@ -963,7 +963,7 @@ public class ViewModelTest
         Assert.Equal("desc", vm.Item.Desc);
         Assert.Equal("group", vm.Item.Group);
         Assert.Single(vm.Item.Tags);
-        Assert.Equal("tag1", vm.Item.Tags[0]);
+        Assert.Equal("tag1", vm.Item.Tags[0].Key);
         Assert.Single(vm.Item.Data);
         Assert.True(model.Data[0].Equal(vm.Item.Data[0]));
         Assert.Single(vm.Item.Exits);
@@ -988,7 +988,7 @@ public class ViewModelTest
         Assert.Equal("desc", vm.Item.Desc);
         Assert.Equal("group", vm.Item.Group);
         Assert.Single(vm.Item.Tags);
-        Assert.Equal("tag1", vm.Item.Tags[0]);
+        Assert.Equal("tag1", vm.Item.Tags[0].Key);
         Assert.Single(vm.Item.Data);
         Assert.True(model.Data[0].Equal(vm.Item.Data[0]));
         Assert.Single(vm.Item.Exits);
@@ -1015,13 +1015,13 @@ public class ViewModelTest
             Key = "key3",
             Desc = "desc3",
             Group = "group3",
-            Tags = ["tag2", "tag1"],
+            Tags = [new ValueTag("tag2", 0), new ValueTag("tag1", 0)],
             Data = [new Data("key2", "value2"), new Data("key1", "value1")],
             Exits = [new Exit(){
                 Command="command2",
                 To="to2",
                 Cost=1,
-                Conditions=[new Condition("key1",true),new Condition("key2",false)]
+                Conditions=[new ValueCondition("key1",0,true),new ValueCondition("key2",0,false)]
             }],
         };
         vm = new EditRoomWindowViewModel(model3, false);
@@ -1030,8 +1030,8 @@ public class ViewModelTest
         Assert.Equal("key1", vm.Item.Data[0].Key);
         Assert.Equal("key2", vm.Item.Data[1].Key);
         Assert.Equal(2, vm.Item.Tags.Count);
-        Assert.Equal("tag1", vm.Item.Tags[0]);
-        Assert.Equal("tag2", vm.Item.Tags[1]);
+        Assert.Equal("tag1", vm.Item.Tags[0].Key);
+        Assert.Equal("tag2", vm.Item.Tags[1].Key);
         Assert.Single(vm.Item.Exits);
         Assert.Equal(2, vm.Item.Exits[0].Conditions.Count);
         Assert.Equal("key2", vm.Item.Exits[0].Conditions[0].Key);
@@ -1046,7 +1046,7 @@ public class ViewModelTest
         Assert.Equal("数据主键已存在", vm.DataValidator(dataform));
         dataform.Key = "key3";
         Assert.Equal("", vm.DataValidator(dataform));
-        var tagform = new TagForm("tag1", (form) => "");
+        var tagform = new TagForm(new ValueTag("tag1", 0), (form) => "");
         Assert.Equal("标签已存在", vm.TagValidator(tagform));
         tagform.Key = "tag3";
         Assert.Equal("", vm.TagValidator(tagform));
@@ -1142,7 +1142,7 @@ public class ViewModelTest
         Assert.Equal("", vm.Item.Key);
         Assert.False(vm.Item.Not);
         Assert.Equal("新建条件", vm.Title);
-        var model = new Condition("key", true);
+        var model = new ValueCondition("key", 0, true);
         vm = new NewConditionWindowViewModel(model, (ConditionForm form) => form.Key == "error" ? "key error" : "");
         Assert.Equal("key", vm.Item.Key);
         Assert.True(vm.Item.Not);
@@ -1161,10 +1161,10 @@ public class ViewModelTest
         Assert.Null(vm.Raw);
         Assert.NotNull(vm.Item);
         Assert.Equal("", vm.Item.Key);
-        var model = "key";
+        var model = new ValueTag("key", 0);
         vm = new NewTagWindowViewModel(model, (TagForm form) => form.Key == "error" ? "key error" : "");
         Assert.Equal("key", vm.Item.Key);
-        Assert.Equal("key", vm.Item.ToTag());
+        Assert.Equal("key", vm.Item.ToTag().Key);
         vm.Item.Key = "";
         Assert.Equal("标签不能为空", vm.Item.Validate());
         vm.Item.Key = "error";

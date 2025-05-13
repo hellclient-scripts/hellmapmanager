@@ -8,22 +8,22 @@ public class BussinessTest
     public void TestExit()
     {
         var exit = new Exit();
-        exit.Conditions = [new Condition("con1", true), new Condition("con2", false)];
+        exit.Conditions = [new ValueCondition("con1", 0, true), new ValueCondition("con2", 0, false)];
         exit.Arrange();
-        Assert.True(exit.Conditions[0].Equal(new Condition("con2", false)));
-        Assert.True(exit.Conditions[1].Equal(new Condition("con1", true)));
-        exit.Conditions = [new Condition("con1", false), new Condition("con2", false)];
+        Assert.True(exit.Conditions[0].Equal(new ValueCondition("con2", 0, false)));
+        Assert.True(exit.Conditions[1].Equal(new ValueCondition("con1", 0, true)));
+        exit.Conditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, false)];
         exit.Arrange();
-        Assert.True(exit.Conditions[0].Equal(new Condition("con1", false)));
-        Assert.True(exit.Conditions[1].Equal(new Condition("con2", false)));
-        exit.Conditions = [new Condition("con1", false), new Condition("con2", true)];
+        Assert.True(exit.Conditions[0].Equal(new ValueCondition("con1", 0, false)));
+        Assert.True(exit.Conditions[1].Equal(new ValueCondition("con2", 0, false)));
+        exit.Conditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)];
         exit.Arrange();
-        Assert.True(exit.Conditions[0].Equal(new Condition("con1", false)));
-        Assert.True(exit.Conditions[1].Equal(new Condition("con2", true)));
-        exit.Conditions = [new Condition("con1", true), new Condition("con2", true)];
+        Assert.True(exit.Conditions[0].Equal(new ValueCondition("con1", 0, false)));
+        Assert.True(exit.Conditions[1].Equal(new ValueCondition("con2", 0, true)));
+        exit.Conditions = [new ValueCondition("con1", 0, true), new ValueCondition("con2", 0, true)];
         exit.Arrange();
-        Assert.True(exit.Conditions[0].Equal(new Condition("con1", true)));
-        Assert.True(exit.Conditions[1].Equal(new Condition("con2", true)));
+        Assert.True(exit.Conditions[0].Equal(new ValueCondition("con1", 0, true)));
+        Assert.True(exit.Conditions[1].Equal(new ValueCondition("con2", 0, true)));
     }
     private static Room SuffRoom(string suff)
     {
@@ -33,15 +33,15 @@ public class BussinessTest
             Name = $"name{suff}",
             Group = $"group{suff}",
             Desc = $"desc{suff}",
-            Tags = [$"tag1{suff}", $"tag2{suff}"],
+            Tags = [new ValueTag($"tag1{suff}", 0), new ValueTag($"tag2{suff}", 0)],
             Exits = [
                         new Exit(){
                     To=$"to1{suff}",
                     Command=$"cmd1{suff}",
                     Cost=1,
                     Conditions=[
-                        new Condition($"con1{suff}",true),
-                        new Condition($"con2{suff}",false),
+                        new ValueCondition($"con1{suff}",0,true),
+                        new ValueCondition($"con2{suff}",0,false),
                     ]
                 },
                 new Exit(){
@@ -267,10 +267,10 @@ public class BussinessTest
             Key = $"key{suff}",
             Group = $"group{suff}",
             Desc = $"desc{suff}",
-            RoomConditions = [new Condition($"con1{suff}", false), new Condition($"con2{suff}", true)],
+            RoomConditions = [new ValueCondition($"con1{suff}", 0, false), new ValueCondition($"con2{suff}", 0, true)],
             Command = $"cmd{suff}",
             To = $"to{suff}",
-            Conditions = [new Condition($"con3{suff}", false), new Condition($"con4{suff}", true)],
+            Conditions = [new ValueCondition($"con3{suff}", 0, false), new ValueCondition($"con4{suff}", 0, true)],
             Cost = 1
         };
     }
@@ -281,40 +281,40 @@ public class BussinessTest
         shortcut.Arrange();
         Shortcut shortcut2;
         shortcut2 = new Shortcut();
-        shortcut2.Conditions = [new Condition("con1", true), new Condition("con2", false)];
+        shortcut2.Conditions = [new ValueCondition("con1", 0, true), new ValueCondition("con2", 0, false)];
         shortcut2.Arrange();
-        Assert.True(shortcut2.Conditions[0].Equal(new Condition("con2", false)));
-        Assert.True(shortcut2.Conditions[1].Equal(new Condition("con1", true)));
-        shortcut2.Conditions = [new Condition("con1", false), new Condition("con2", false)];
+        Assert.True(shortcut2.Conditions[0].Equal(new ValueCondition("con2", 0, false)));
+        Assert.True(shortcut2.Conditions[1].Equal(new ValueCondition("con1", 0, true)));
+        shortcut2.Conditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, false)];
         shortcut2.Arrange();
-        Assert.True(shortcut2.Conditions[0].Equal(new Condition("con1", false)));
-        Assert.True(shortcut2.Conditions[1].Equal(new Condition("con2", false)));
-        shortcut2.Conditions = [new Condition("con1", false), new Condition("con2", true)];
+        Assert.True(shortcut2.Conditions[0].Equal(new ValueCondition("con1", 0, false)));
+        Assert.True(shortcut2.Conditions[1].Equal(new ValueCondition("con2", 0, false)));
+        shortcut2.Conditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)];
         shortcut2.Arrange();
-        Assert.True(shortcut2.Conditions[0].Equal(new Condition("con1", false)));
-        Assert.True(shortcut2.Conditions[1].Equal(new Condition("con2", true)));
-        shortcut2.Conditions = [new Condition("con1", true), new Condition("con2", true)];
+        Assert.True(shortcut2.Conditions[0].Equal(new ValueCondition("con1", 0, false)));
+        Assert.True(shortcut2.Conditions[1].Equal(new ValueCondition("con2", 0, true)));
+        shortcut2.Conditions = [new ValueCondition("con1", 0, true), new ValueCondition("con2", 0, true)];
         shortcut2.Arrange();
-        Assert.True(shortcut2.Conditions[0].Equal(new Condition("con1", true)));
-        Assert.True(shortcut2.Conditions[1].Equal(new Condition("con2", true)));
+        Assert.True(shortcut2.Conditions[0].Equal(new ValueCondition("con1", 0, true)));
+        Assert.True(shortcut2.Conditions[1].Equal(new ValueCondition("con2", 0, true)));
 
         shortcut2 = new Shortcut();
-        shortcut2.RoomConditions = [new Condition("con1", true), new Condition("con2", false)];
+        shortcut2.RoomConditions = [new ValueCondition("con1", 0, true), new ValueCondition("con2", 0, false)];
         shortcut2.Arrange();
-        Assert.True(shortcut2.RoomConditions[0].Equal(new Condition("con2", false)));
-        Assert.True(shortcut2.RoomConditions[1].Equal(new Condition("con1", true)));
-        shortcut2.RoomConditions = [new Condition("con1", false), new Condition("con2", false)];
+        Assert.True(shortcut2.RoomConditions[0].Equal(new ValueCondition("con2", 0, false)));
+        Assert.True(shortcut2.RoomConditions[1].Equal(new ValueCondition("con1", 0, true)));
+        shortcut2.RoomConditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, false)];
         shortcut2.Arrange();
-        Assert.True(shortcut2.RoomConditions[0].Equal(new Condition("con1", false)));
-        Assert.True(shortcut2.RoomConditions[1].Equal(new Condition("con2", false)));
-        shortcut2.RoomConditions = [new Condition("con1", false), new Condition("con2", true)];
+        Assert.True(shortcut2.RoomConditions[0].Equal(new ValueCondition("con1", 0, false)));
+        Assert.True(shortcut2.RoomConditions[1].Equal(new ValueCondition("con2", 0, false)));
+        shortcut2.RoomConditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)];
         shortcut2.Arrange();
-        Assert.True(shortcut2.RoomConditions[0].Equal(new Condition("con1", false)));
-        Assert.True(shortcut2.RoomConditions[1].Equal(new Condition("con2", true)));
-        shortcut2.RoomConditions = [new Condition("con1", true), new Condition("con2", true)];
+        Assert.True(shortcut2.RoomConditions[0].Equal(new ValueCondition("con1", 0, false)));
+        Assert.True(shortcut2.RoomConditions[1].Equal(new ValueCondition("con2", 0, true)));
+        shortcut2.RoomConditions = [new ValueCondition("con1", 0, true), new ValueCondition("con2", 0, true)];
         shortcut2.Arrange();
-        Assert.True(shortcut2.RoomConditions[0].Equal(new Condition("con1", true)));
-        Assert.True(shortcut2.RoomConditions[1].Equal(new Condition("con2", true)));
+        Assert.True(shortcut2.RoomConditions[0].Equal(new ValueCondition("con1", 0, true)));
+        Assert.True(shortcut2.RoomConditions[1].Equal(new ValueCondition("con2", 0, true)));
 
         shortcut2 = shortcut.Clone();
         shortcut2.Arrange();

@@ -1236,12 +1236,12 @@ public class APITest
             Group = "group1",
             Desc = "desc1",
             Data = [new Data("key2", "value2"), new Data("key1", "value1")],
-            Tags = ["tag1", "tag2"],
+            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
             Exits = [new Exit(){
                 Command="cmd1",
                 To="to1",
                 Cost=1,
-                Conditions=[new Condition("key1", true),new Condition("key2", true)],
+                Conditions=[new ValueCondition("key1", 0,true),new ValueCondition("key2", 0,true)],
             }],
         };
         mapDatabase.APIInsertRooms([room]);
@@ -1251,8 +1251,8 @@ public class APITest
         Assert.Equal("key1", rooms[0].Data[0].Key);
         Assert.Equal("key2", rooms[0].Data[1].Key);
         Assert.Equal(2, rooms[0].Tags.Count);
-        Assert.Equal("tag1", rooms[0].Tags[0]);
-        Assert.Equal("tag2", rooms[0].Tags[1]);
+        Assert.Equal("tag1", rooms[0].Tags[0].Key);
+        Assert.Equal("tag2", rooms[0].Tags[1].Key);
         Assert.Single(rooms[0].Exits);
         Assert.Equal(2, rooms[0].Exits[0].Conditions.Count);
         Assert.Equal("key1", rooms[0].Exits[0].Conditions[0].Key);
@@ -1279,7 +1279,7 @@ public class APITest
             Command = "cmd1",
             Group = "group1",
             Desc = "desc1",
-            Conditions = [new Condition("key2", true), new Condition("key1", true)],
+            Conditions = [new ValueCondition("key2", 0, true), new ValueCondition("key1", 0, true)],
         };
         mapDatabase.APIInsertShortcuts([shortcut]);
         var shortcuts = mapDatabase.APIListShortcuts(new APIListOption());

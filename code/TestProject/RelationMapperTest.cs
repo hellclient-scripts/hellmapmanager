@@ -3,6 +3,7 @@ using HellMapManager.Helpers;
 using HellMapManager.Models;
 using HellMapManager.Cores;
 using HellMapManager.Windows.RelationMapWindow;
+using HarfBuzzSharp;
 
 [Collection("MainState")]
 public class RelationMapperTest
@@ -118,7 +119,7 @@ public class RelationMapperTest
                 Name="name2",
                 Group="group2",
                 Desc="desc2",
-                Tags=["tag1", "tag2"],
+                Tags=[new ValueTag("tag1",0), new ValueTag("tag2",0)],
                 Exits = [
                     new Exit() {
                     Command = "cmd",

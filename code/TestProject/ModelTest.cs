@@ -66,7 +66,7 @@ public class ModelTest
             To = "to",
             Command = "cmd",
             Cost = 2,
-            Conditions = [new Condition("con1", false), new Condition("con2", true)]
+            Conditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)]
         };
         Exit exit2;
         exit2 = exit.Clone();
@@ -89,7 +89,7 @@ public class ModelTest
         Assert.False(exit.Equal(exit2));
         Assert.True(exit2.Validated());
         exit2 = exit.Clone();
-        exit2.Conditions.Add(new("con3", true));
+        exit2.Conditions.Add(new("con3", 0, true));
         Assert.False(exit.Equal(exit2));
         Assert.True(exit2.Validated());
         exit2 = exit.Clone();
@@ -159,7 +159,7 @@ public class ModelTest
             Name = "name",
             Group = "group",
             Desc = "desc",
-            Tags = ["tag1", "tag2"],
+            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
             Data = [new Data("dkey1", "dval1"), new Data("dkey2", "dval2")],
             Exits = [
                 new Exit(){
@@ -167,8 +167,8 @@ public class ModelTest
                 To="to1",
                 Cost=2,
                 Conditions=[
-                    new Condition("con1",true),
-                    new Condition("con2",false),
+                    new ValueCondition("con1",0,true),
+                    new ValueCondition("con2",0,false),
                 ]
             },
                new Exit(){
@@ -180,9 +180,9 @@ public class ModelTest
             ]
         };
 
-        Assert.True(room.HasTag("tag1"));
-        Assert.True(room.HasTag("tag2"));
-        Assert.False(room.HasTag("notexists"));
+        Assert.True(room.HasTag("tag1", 0));
+        Assert.True(room.HasTag("tag2", 0));
+        Assert.False(room.HasTag("notexists", 0));
         Room room2;
 
         Assert.False(room.Filter("unknow"));
@@ -226,12 +226,12 @@ public class ModelTest
         Assert.True(room2.Validated());
 
         room2 = room.Clone();
-        room2.Tags[1] = "";
+        room2.Tags[1] = new ValueTag("", 0);
         Assert.False(room.Equal(room2));
         Assert.True(room2.Validated());
 
         room2 = room.Clone();
-        room2.Tags.Add("");
+        room2.Tags.Add(new ValueTag("", 0));
         Assert.False(room.Equal(room2));
         Assert.True(room2.Validated());
 
@@ -559,8 +559,8 @@ public class ModelTest
             Command = "command1",
             To = "to1",
             Cost = 2,
-            RoomConditions = [new Condition("con1", false), new Condition("con2", true)],
-            Conditions = [new Condition("con3", false), new Condition("con4", true)]
+            RoomConditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)],
+            Conditions = [new ValueCondition("con3", 0, false), new ValueCondition("con4", 0, true)]
         };
         Assert.True(sc.Filter("key"));
         Assert.True(sc.Filter("command"));
@@ -595,7 +595,7 @@ public class ModelTest
         Assert.False(sc.Equal(sc2));
         Assert.True(sc2.Validated());
         sc2 = sc.Clone();
-        sc2.Conditions.Add(new("con5", true));
+        sc2.Conditions.Add(new("con5", 0, true));
         Assert.False(sc.Equal(sc2));
         Assert.True(sc2.Validated());
         sc2 = sc.Clone();
@@ -610,7 +610,7 @@ public class ModelTest
         Assert.False(sc.Equal(sc2));
         Assert.True(sc2.Validated());
         sc2 = sc.Clone();
-        sc2.RoomConditions.Add(new("con5", true));
+        sc2.RoomConditions.Add(new("con5", 0, true));
         Assert.False(sc.Equal(sc2));
         Assert.True(sc2.Validated());
     }
