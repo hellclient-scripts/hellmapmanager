@@ -8,9 +8,9 @@ public class FormatterTest
     [Fact]
     public void TestBasic()
     {
-        Assert.Equal("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n", HMMFormatter.Escaper.Pack(HMMFormatter.Escape(">:=@!;\\,&!\n")));
-        Assert.Equal(">:=@!;\\,&!\n>:=@!;,&!\n", HMMFormatter.Unescape(HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n>:=@!;,&!\n")));
-        Assert.Equal(">:=@!;,&!\n", HMMFormatter.Escaper.Pack(HMMFormatter.Unescape(HMMFormatter.Escape(">:=@!;,&!\n"))));
+        Assert.Equal("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n\\^\\`", HMMFormatter.Escaper.Pack(HMMFormatter.Escape(">:=@!;\\,&!\n^`")));
+        Assert.Equal(">:=@!;\\,&!\n>:=@!;,&!\n^`", HMMFormatter.Unescape(HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\!\\;\\\\\\,\\&\\!\\n>:=@!;,&!\n\\^\\`")));
+        Assert.Equal(">:=@!;,&!\n^`", HMMFormatter.Escaper.Pack(HMMFormatter.Unescape(HMMFormatter.Escape(">:=@!;,&!\n^`"))));
     }
     private static void IsListEqual(List<string> src, List<string> dst)
     {
@@ -24,7 +24,7 @@ public class FormatterTest
     [Fact]
     public void TestList()
     {
-        var list = new List<string>(["1", "2", "\n", "", "", "|", ",", ";", "&", "\\"]).ConvertAll(HMMFormatter.Escaper.Unpack).ConvertAll(HMMFormatter.Escape);
+        var list = new List<string>(["1", "2", "\n", "", "", "|", ",", ";", "&", "^", "`", "\\"]).ConvertAll(HMMFormatter.Escaper.Unpack).ConvertAll(HMMFormatter.Escape);
         var unescapedList = HMMFormatter.UnescapeList(list);
         Assert.Equal(HMMFormatter.Level1.SepToken.EncodedCode, HMMFormatter.At(list, 5));
         Assert.Equal("", HMMFormatter.At(list, -1));
@@ -58,13 +58,13 @@ public class FormatterTest
     [Fact]
     public void TestKeyValue()
     {
-        var kv = new KeyValue(HMMFormatter.Escaper.Unpack("\\>\\!\\=\\@"), HMMFormatter.Escaper.Unpack("\\@\\=\\!\\>"));
+        var kv = new KeyValue(HMMFormatter.Escaper.Unpack("\\>\\!\\=\\@\\^"), HMMFormatter.Escaper.Unpack("\\^\\@\\=\\!\\>"));
         var kv2 = new KeyValue("key", "");
-        Assert.Equal(">!=@", kv.UnescapeKey());
-        Assert.Equal("@=!>", kv.UnescapeValue());
+        Assert.Equal(">!=@^", kv.UnescapeKey());
+        Assert.Equal("^@=!>", kv.UnescapeValue());
         var data = kv.ToData();
-        Assert.Equal(">!=@", data.Key);
-        Assert.Equal("@=!>", data.Value);
+        Assert.Equal(">!=@^", data.Key);
+        Assert.Equal("^@=!>", data.Value);
         IsKeyValueEqual(kv, KeyValue.FromData(data));
 
         IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, HMMFormatter.EncodeKeyValue(HMMFormatter.Level1, kv)));
@@ -106,14 +106,15 @@ public class FormatterTest
     [Fact]
     public void TestToggleKeyValues()
     {
-        var tkv = new ToggleKeyValues(HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\|\\;\\,\\&\\!"),
+        var tkv = new ToggleKeyValues(HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\|\\;\\,\\&\\!\\^\\`"),
         new([
             HMMFormatter.Escaper.Unpack(""), HMMFormatter.Escaper.Unpack("\\>"), HMMFormatter.Escaper.Unpack("\\:"), HMMFormatter.Escaper.Unpack("\\="), HMMFormatter.Escaper.Unpack("\\@"),
         HMMFormatter.Escaper.Unpack("\\|"), HMMFormatter.Escaper.Unpack("\\;"), HMMFormatter.Escaper.Unpack("\\,"), HMMFormatter.Escaper.Unpack("\\&"), HMMFormatter.Escaper.Unpack("\\!"),
+        HMMFormatter.Escaper.Unpack("\\^"),HMMFormatter.Escaper.Unpack("\\`")
         ]),
         true);
-        Assert.Equal(">:=@|;,&!", tkv.ToTypedConditions().Key);
-        IsListEqual(["", ">", ":", "=", "@", "|", ";", ",", "&", "!"], tkv.ToTypedConditions().Conditions);
+        Assert.Equal(">:=@|;,&!^`", tkv.ToTypedConditions().Key);
+        IsListEqual(["", ">", ":", "=", "@", "|", ";", ",", "&", "!", "^", "`"], tkv.ToTypedConditions().Conditions);
         Assert.True(tkv.ToTypedConditions().Not);
 
         var tkv2 = new ToggleKeyValues("", [], false);
@@ -148,12 +149,12 @@ public class FormatterTest
     public void TestToggleKeyValue()
     {
         var tkv = new ToggleKeyValue(
-            HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\|\\;\\,\\&\\!"),
-            HMMFormatter.Escaper.Unpack("\\!\\&\\,\\;\\|\\@\\=\\:\\>"),
+            HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\|\\;\\,\\&\\!\\^\\`"),
+            HMMFormatter.Escaper.Unpack("\\`\\^\\!\\&\\,\\;\\|\\@\\=\\:\\>"),
             true
         );
-        Assert.Equal(">:=@|;,&!", tkv.UnescapeKey());
-        Assert.Equal("!&,;|@=:>", tkv.UnescapeValue());
+        Assert.Equal(">:=@|;,&!^`", tkv.UnescapeKey());
+        Assert.Equal("`^!&,;|@=:>", tkv.UnescapeValue());
         Assert.True(tkv.Not);
         var tkv2 = new ToggleKeyValue("", "", false);
         Assert.Equal("", tkv2.UnescapeKey());
@@ -230,8 +231,8 @@ public class FormatterTest
     [Fact]
     public void TestToggleValue()
     {
-        var tv = new ToggleValue(HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\|\\;\\,\\&\\!"), true);
-        Assert.Equal(">:=@|;,&!", tv.UnescapeValue());
+        var tv = new ToggleValue(HMMFormatter.Escaper.Unpack("\\>\\:\\=\\@\\|\\;\\,\\&\\!\\^\\`"), true);
+        Assert.Equal(">:=@|;,&!^`", tv.UnescapeValue());
         Assert.True(tv.Not);
         IsToggleValueEqual(tv, HMMFormatter.DecodeToggleValue(HMMFormatter.EncodeToggleValue(tv)));
 
@@ -242,10 +243,10 @@ public class FormatterTest
 
         Condition co;
         co = tv.ToCondition();
-        Assert.Equal(">:=@|;,&!", co.Key);
+        Assert.Equal(">:=@|;,&!^`", co.Key);
         Assert.True(co.Not);
         var tvco = ToggleValue.FromCondition(co);
-        Assert.Equal(">:=@|;,&!", tvco.UnescapeValue());
+        Assert.Equal(">:=@|;,&!^`", tvco.UnescapeValue());
         Assert.True(tvco.Not);
     }
 }
