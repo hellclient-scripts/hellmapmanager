@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
-using HarfBuzzSharp;
 
 
 namespace HellMapManager.Models;
@@ -14,18 +12,24 @@ public class Link
 {
     public string From { get; set; } = "";
     public string To { get; set; } = "";
-
+}
+public class CommandCost
+{
+    public string Command { get; set; } = "";
+    public string To { get; set; } = "";
+    public int Cost { get; set; } = 1;
 }
 public class Environment
 {
-    public List<string> Tags = [];
-    public List<Condition> RoomConditions = [];
+    public List<ValueTag> Tags = [];
+    public List<ValueCondition> RoomConditions = [];
     public List<Room> Rooms = [];
     public List<Path> Paths = [];
     public List<RoomConditionExit> Shortcuts = [];
     public List<string> Whitelist = [];
     public List<string> Blacklist = [];
     public List<Link> BlockedLinks = [];
+    public List<CommandCost> CommandCosts = [];
     public bool DisableShortcuts = false;
 
     public int MaxExitCost = 0;
@@ -38,14 +42,16 @@ public class Context
         MapFile = mf;
     }
     public MapFile MapFile;
-    public Dictionary<string, bool> Tags = [];
-    public List<Condition> RoomConditions = [];
+    public Dictionary<string, int> Tags = [];
+    public List<ValueCondition> RoomConditions = [];
     public Dictionary<string, Room> Rooms = [];
     public Dictionary<string, bool> Whitelist = [];
     public Dictionary<string, bool> Blacklist = [];
     public List<RoomConditionExit> Shortcuts = [];
     public Dictionary<string, List<Path>> Paths = [];
     public Dictionary<string, Dictionary<string, bool>> BlockedLinks = [];
+
+    public Dictionary<string, Dictionary<string, int>> CommandCosts = [];
     public bool DisableShortcuts = false;
 
     public int MaxExitCost = 0;
@@ -54,11 +60,11 @@ public class Context
         Tags.Clear();
         return this;
     }
-    public Context WithTags(List<string> tags)
+    public Context WithTags(List<ValueTag> tags)
     {
         foreach (var tag in tags)
         {
-            Tags[tag] = true;
+            Tags[tag.Key] = tag.Value;
         }
         return this;
     }
@@ -67,9 +73,9 @@ public class Context
         RoomConditions.Clear();
         return this;
     }
-    public Context WithRoomConditions(List<Condition> conditions)
+    public Context WithRoomConditions(List<ValueCondition> conditions)
     {
-        RoomConditions = (List<Condition>)RoomConditions.Concat(conditions);
+        RoomConditions = (List<ValueCondition>)RoomConditions.Concat(conditions);
         return this;
     }
     public Context ClearRooms()
@@ -154,9 +160,26 @@ public class Context
         {
             if (!BlockedLinks.ContainsKey(link.From))
             {
-                BlockedLinks[link.From] = new Dictionary<string, bool>();
+                BlockedLinks[link.From] = [];
             }
             BlockedLinks[link.From][link.To] = true;
+        }
+        return this;
+    }
+    public Context ClearCommandCosts()
+    {
+        CommandCosts.Clear();
+        return this;
+    }
+    public Context WithCommandCosts(List<CommandCost> list)
+    {
+        foreach (var item in list)
+        {
+            if (!CommandCosts.ContainsKey(item.Command))
+            {
+                CommandCosts[item.Command] = [];
+            }
+            CommandCosts[item.Command][item.To] = item.Cost;
         }
         return this;
     }
@@ -180,6 +203,17 @@ public class Context
             }
         }
         return room;
+    }
+    public int GetExitCost(Exit exit)
+    {
+        if (CommandCosts.TryGetValue(exit.Command, out var costs))
+        {
+            if (costs.TryGetValue(exit.To, out var cost))
+            {
+                return cost;
+            }
+        }
+        return exit.Cost;
     }
     public List<Exit> GetRoomExits(Room room)
     {

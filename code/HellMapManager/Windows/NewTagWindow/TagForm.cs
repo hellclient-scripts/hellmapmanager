@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using HellMapManager.Models;
 namespace HellMapManager.Windows.NewTagWindow;
 
 public delegate string ExternalValidator(TagForm form);
@@ -8,19 +9,21 @@ public partial class TagForm : ObservableObject
     {
         ExternalValidator = checker;
     }
-    public TagForm(string model, ExternalValidator checker)
+    public TagForm(ValueTag model, ExternalValidator checker)
     {
         Raw = model;
-        Key = model;
+        Key = model.Key;
+        Value = model.Value;
         ExternalValidator = checker;
     }
-    public string ToTag()
+    public ValueTag ToTag()
     {
-        return Key;
+        return new ValueTag(Key, Value);
     }
-    public string? Raw;
+    public ValueTag? Raw;
     public ExternalValidator ExternalValidator;
     public string Key { get; set; } = "";
+    public int Value { get; set; } = 0;
     public string Validate()
     {
         var err = ExternalValidator(this);

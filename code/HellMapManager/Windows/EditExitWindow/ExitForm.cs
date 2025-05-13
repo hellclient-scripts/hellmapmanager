@@ -36,12 +36,12 @@ public partial class ExitForm : ObservableObject
     public ExternalValidator ExternalValidator;
     public string Command { get; set; } = "";
     public string To { get; set; } = "";
-    public ObservableCollection<Condition> Conditions { get; set; } = [];
+    public ObservableCollection<ValueCondition> Conditions { get; set; } = [];
     public int Cost { get; set; } = 1;
 
     public void Arrange()
     {
-        var list = new List<Condition>(this.Conditions);
+        var list = new List<ValueCondition>(this.Conditions);
         list.Sort(((x, y) =>
         {
             if (x.Not == y.Not)
@@ -53,7 +53,7 @@ public partial class ExitForm : ObservableObject
                 return x.Not.CompareTo(y.Not);
             }
         }));
-        Conditions = new ObservableCollection<Condition>(list);
+        Conditions = new ObservableCollection<ValueCondition>(list);
         OnPropertyChanged(nameof(Conditions));
     }
     public string Validate()

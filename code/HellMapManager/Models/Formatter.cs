@@ -22,7 +22,14 @@ public class KeyValue(string key, string value)
     {
         return new KeyValue(HMMFormatter.Escape(k.Key), HMMFormatter.Escape(k.Value));
     }
-
+    public ValueTag ToValueTag()
+    {
+        return new ValueTag(HMMFormatter.Unescape(Key), HMMFormatter.UnescapeInt(Value, 0));
+    }
+    public static KeyValue FromValueTag(ValueTag k)
+    {
+        return new KeyValue(HMMFormatter.Escape(k.Key), k.Value.ToString());
+    }
 
 }
 
@@ -42,7 +49,6 @@ public class ToggleValue(string value, bool not)
     {
         return new ToggleValue(HMMFormatter.Escape(c.Key), c.Not);
     }
-
 }
 public class ToggleKeyValue(string key, string value, bool not)
 {
@@ -66,6 +72,15 @@ public class ToggleKeyValue(string key, string value, bool not)
     {
         return new ToggleKeyValue(HMMFormatter.Escape(i.Type == RegionItemType.Room ? "Room" : "Zone"), HMMFormatter.Escape(i.Value), i.Not);
     }
+    public ValueCondition ToValueCondition()
+    {
+        return new ValueCondition(HMMFormatter.Unescape(Key), HMMFormatter.UnescapeInt(Value, 0), Not);
+    }
+    public static ToggleKeyValue FromValueCondition(ValueCondition c)
+    {
+        return new ToggleKeyValue(HMMFormatter.Escape(c.Key), c.Value.ToString(), c.Not);
+    }
+
 
 }
 public class ToggleKeyValues(string key, List<string> values, bool not)
@@ -93,12 +108,16 @@ public class HMMFormatter
     public static Command TokenKey2 { get; } = new Command(":", "2", "\\:");
     public static Command TokenKey3 { get; } = new Command("=", "3", "\\=");
     public static Command TokenKey4 { get; } = new Command("@", "4", "\\@");
-    public static Command TokenSep1 { get; } = new Command("|", "5", "\\|");
-    public static Command TokenSep2 { get; } = new Command(";", "6", "\\;");
-    public static Command TokenSep3 { get; } = new Command(",", "7", "\\,");
-    public static Command TokenSep4 { get; } = new Command("&", "8", "\\&");
-    public static Command TokenNot { get; } = new Command("!", "9", "\\!");
-    public static Command TokenNewline { get; } = new Command("\n", "10", "\\n");
+    public static Command TokenKey5 { get; } = new Command("^", "5", "\\^");
+
+    public static Command TokenSep1 { get; } = new Command("|", "6", "\\|");
+    public static Command TokenSep2 { get; } = new Command(";", "7", "\\;");
+    public static Command TokenSep3 { get; } = new Command(",", "8", "\\,");
+    public static Command TokenSep4 { get; } = new Command("&", "9", "\\&");
+    public static Command TokenSep5 { get; } = new Command("`", "10", "\\`");
+
+    public static Command TokenNot { get; } = new Command("!", "11", "\\!");
+    public static Command TokenNewline { get; } = new Command("\n", "12", "\\n");
     public static readonly ControlCode Escaper = (new ControlCode())
     .WithCommand(new Command("\\", "0", "\\\\"))
         .WithCommand(TokenKey1)
@@ -177,6 +196,20 @@ public class HMMFormatter
         var decoded = val.Split(TokenKey4.Raw, 2);
         return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
+    public static string EncodeKeyAndValue5(string key, string val)
+    {
+        return EncodeKeyValue5(new KeyValue(key, val));
+    }
+    public static string EncodeKeyValue5(KeyValue kv)
+    {
+        return $"{kv.Key}{TokenKey5.Raw}{kv.Value}";
+    }
+    public static KeyValue DecodeKeyValue5(string val)
+    {
+        var decoded = val.Split(TokenKey5.Raw, 2);
+        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
+    }
+
     public static string EncodeToggleKeyValue1(ToggleKeyValue kv)
     {
         return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue1(kv.Key, kv.Value), kv.Not));
@@ -215,6 +248,16 @@ public class HMMFormatter
     {
         var v = DecodeToggleValue(val);
         var kv = DecodeKeyValue4(v.Value);
+        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
+    }
+    public static string EncodeToggleKeyValue5(ToggleKeyValue kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue5(kv.Key, kv.Value), kv.Not));
+    }
+    public static ToggleKeyValue DecodeToggleKeyValue5(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue5(v.Value);
         return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
     }
 
@@ -257,6 +300,17 @@ public class HMMFormatter
         var v = DecodeToggleValue(val);
         var kv = DecodeKeyValue4(v.Value);
         return new ToggleKeyValues(kv.Key, DecodeList4(kv.Value), v.Not);
+    }
+
+    public static string EncodeToggleKeyValues5(ToggleKeyValues kv)
+    {
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue5(kv.Key, EncodeList5(kv.Values)), kv.Not));
+    }
+    public static ToggleKeyValues DecodeToggleKeyValues5(string val)
+    {
+        var v = DecodeToggleValue(val);
+        var kv = DecodeKeyValue5(v.Value);
+        return new ToggleKeyValues(kv.Key, DecodeList5(kv.Value), v.Not);
     }
 
     public static string EncodeList1(List<string> items)
@@ -310,6 +364,19 @@ public class HMMFormatter
         }
         return [.. val.Split(TokenSep4.Raw)];
     }
+    public static string EncodeList5(List<string> items)
+    {
+        return string.Join(TokenSep5.Raw, items);
+    }
+    public static List<string> DecodeList5(string val)
+    {
+        if (val == "")
+        {
+            return [];
+        }
+        return [.. val.Split(TokenSep5.Raw)];
+    }
+
     public static string At(List<string> list, int index)
     {
         return index >= 0 && index < list.Count ? list[index] : "";
@@ -320,14 +387,11 @@ public class HMMFormatter
     }
     public static int UnescapeInt(string val, int defaultValue)
     {
-        try
-        {
-            return int.Parse(Unescape(val));
-        }
-        catch
+        if (!int.TryParse(Unescape(val), out var result))
         {
             return defaultValue;
         }
+        return result;
     }
     public static int UnescapeIntAt(List<string> list, int index, int defaultValue)
     {

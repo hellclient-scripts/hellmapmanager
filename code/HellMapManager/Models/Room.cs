@@ -25,7 +25,7 @@ public partial class Room
     //房间的区域，筛选用
     public string Group { get; set; } = "";
     //标签列表，筛选用
-    public List<string> Tags = [];
+    public List<ValueTag> Tags = [];
     //房间出口列表
     public List<Exit> Exits { get; set; } = [];
     public List<Data> Data { get; set; } = [];
@@ -54,13 +54,15 @@ public partial class Room
                 HMMFormatter.Escape(Name),//1
                 HMMFormatter.Escape(Group),//2
                 HMMFormatter.Escape(Desc),//3
-                HMMFormatter.EncodeList2(Tags.ConvertAll(HMMFormatter.Escape)),//4
+                HMMFormatter.EncodeList2(Tags.ConvertAll(
+                    e=>HMMFormatter.EncodeKeyValue3(KeyValue.FromValueTag(e))
+                )),//4
                 HMMFormatter.EncodeList2(Exits.ConvertAll(//5
                     e=>HMMFormatter.EncodeList3([
                         HMMFormatter.Escape(e.Command),//5-0
                         HMMFormatter.Escape(e.To),//5-1
-                    HMMFormatter.EncodeList4(e.Conditions.ConvertAll(c=>HMMFormatter.EncodeToggleValue(ToggleValue.FromCondition(c)))),//5-2
-                    HMMFormatter.Escape(HMMFormatter.Escape(e.Cost.ToString())),//5-4
+                        HMMFormatter.EncodeList4(e.Conditions.ConvertAll(c=>HMMFormatter.EncodeToggleKeyValue5(ToggleKeyValue.FromValueCondition(c)))),//5-2
+                        HMMFormatter.Escape(HMMFormatter.Escape(e.Cost.ToString())),//5-4
                     ])
                 )),
                 HMMFormatter.EncodeList2(//6
@@ -85,7 +87,7 @@ public partial class Room
         result.Name = HMMFormatter.UnescapeAt(list, 1);
         result.Group = HMMFormatter.UnescapeAt(list, 2);
         result.Desc = HMMFormatter.UnescapeAt(list, 3);
-        result.Tags = HMMFormatter.DecodeList2(HMMFormatter.At(list, 4)).ConvertAll(HMMFormatter.Unescape);
+        result.Tags = HMMFormatter.DecodeList2(HMMFormatter.At(list, 4)).ConvertAll(e => HMMFormatter.DecodeKeyValue3(e).ToValueTag());
         result.Exits = HMMFormatter.DecodeList2(HMMFormatter.At(list, 5)).ConvertAll(d =>
         {
             var list = HMMFormatter.DecodeList3(d);
@@ -93,7 +95,7 @@ public partial class Room
             {
                 Command = HMMFormatter.UnescapeAt(list, 0),
                 To = HMMFormatter.UnescapeAt(list, 1),
-                Conditions = HMMFormatter.DecodeList4(HMMFormatter.At(list, 2)).ConvertAll(d => HMMFormatter.DecodeToggleValue(d).ToCondition()),
+                Conditions = HMMFormatter.DecodeList4(HMMFormatter.At(list, 4)).ConvertAll(e => HMMFormatter.DecodeToggleKeyValue5(e).ToValueCondition()),
                 Cost = HMMFormatter.UnescapeInt(HMMFormatter.At(list, 3), 0),
             };
         });
@@ -101,9 +103,16 @@ public partial class Room
             d => HMMFormatter.DecodeKeyValue3(d).ToData());
         return result;
     }
-    public bool HasTag(string key)
+    public bool HasTag(string key, int value)
     {
-        return Tags.Contains(key);
+        foreach (var tag in Tags)
+        {
+            if (tag.Key == key && tag.Value >= value)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 public partial class Room
@@ -115,7 +124,7 @@ public partial class Room
     }
     public string AllTags
     {
-        get => String.Join(",", Tags.ToArray());
+        get => String.Join(",", Tags.ConvertAll(d => d.Key + ":" + d.Value));
     }
     public bool HasExitTo(string key)
     {
@@ -153,7 +162,7 @@ public partial class Room
     public void Arrange()
     {
         Data.Sort((x, y) => x.Key.CompareTo(y.Key));
-        Tags.Sort((x, y) => x.CompareTo(y));
+        Tags.Sort((x, y) => x.Key.CompareTo(y.Key));
         Exits.ForEach(e => e.Arrange());
     }
     public bool Filter(string val)
@@ -167,7 +176,7 @@ public partial class Room
         }
         foreach (var tag in Tags)
         {
-            if (tag.Contains(val))
+            if (tag.Key.Contains(val))
             {
                 return true;
             }
@@ -235,11 +244,11 @@ public partial class Room
         }
         return true;
     }
-    public bool ValidteConditions(List<Condition> conditions)
+    public bool ValidteConditions(List<ValueCondition> conditions)
     {
         foreach (var rcondition in conditions)
         {
-            if (HasTag(rcondition.Key) != rcondition.Not)
+            if (HasTag(rcondition.Key, rcondition.Value) != rcondition.Not)
             {
                 return false;
             }

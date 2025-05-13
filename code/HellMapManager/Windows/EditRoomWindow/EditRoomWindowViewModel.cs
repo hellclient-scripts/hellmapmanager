@@ -85,7 +85,7 @@ public class EditRoomWindowViewModel : ObservableObject
     {
         foreach (var data in Item.Tags)
         {
-            if (data == form.Key)
+            if (data.Key == form.Key)
             {
                 return "标签已存在";
             }

@@ -31,6 +31,7 @@ public class RoomFormatter
     .WithCommand(new Command(",", "8", "\\,"))
     .WithCommand(new Command("%", "9", "\\%"))
     .WithCommand(new Command(":", "10", "\\:"))
+    .WithCommand(new Command("^", "11", "\\^"))
     .WithCommand(new Command("", "99", "\\"))
     ;
     public static string Escape(string val)
@@ -77,9 +78,13 @@ public class RoomFormatter
         }
         var AllExits = new StringBuilder().AppendJoin(",", Exits);
         var RoomDef = new StringBuilder("@" + Escape(room.Group));
-        foreach (string tag in room.Tags)
+        foreach (var tag in room.Tags)
         {
-            RoomDef.Append('+').Append(Escape(tag));
+            RoomDef.Append('+').Append(Escape(tag.Key));
+            if (tag.Value != 0)
+            {
+                RoomDef.Append('^').Append(Escape(tag.Value.ToString()));
+            }
         }
         var RoomDesc = new StringBuilder(Escape(room.Name));
         if (!opt.DisableRoomDef)
@@ -117,11 +122,18 @@ public class RoomFormatter
                 room.Group = Unescape(RoomGroupAndRoomTags[0].Trim());
                 for (var i = 1; i < RoomGroupAndRoomTags.Length; i++)
                 {
-                    var tag = Unescape(RoomGroupAndRoomTags[i].Trim());
-                    if (tag != "")
+                    var tagdata = RoomGroupAndRoomTags[i].Split("^", 2);
+                    var tag = tagdata[0].Trim();
+                    if (tag == "")
                     {
-                        room.Tags.Add(tag);
+                        continue;
                     }
+                    var value = 0;
+                    if (tagdata.Length > 1)
+                    {
+                        int.TryParse(tagdata[1].Trim(), out value);
+                    }
+                    room.Tags.Add(new ValueTag(tag, value));
                 }
             }
         }
@@ -145,21 +157,36 @@ public class RoomFormatter
                 var tagscount = TagsAndCondCommand.Length - 1;
                 for (var i = 0; i < tagscount; i++)
                 {
-                    var tag = Unescape(TagsAndCondCommand[i].Trim());
-                    if (tag != "")
+                    var tagdata = TagsAndCondCommand[i].Split("^", 2);
+                    var tag = tagdata[0].Trim();
+                    if (tag == "")
                     {
-                        exit.Conditions.Add(new Condition(tag, false));
+                        continue;
                     }
+                    var value = 0;
+                    if (tagdata.Length > 1)
+                    {
+                        int.TryParse(tagdata[1].Trim(), out value);
+                    }
+                    exit.Conditions.Add(new ValueCondition(tag, value, false));
+
                 }
                 var ExtagsAndCommand = CondCommand.Split("<");
                 var extagscount = ExtagsAndCommand.Length - 1;
                 for (var i = 0; i < extagscount; i++)
                 {
-                    var extag = Unescape(ExtagsAndCommand[i].Trim());
-                    if (extag != "")
+                    var extagdata = TagsAndCondCommand[i].Split("^", 2);
+                    var extag = extagdata[0].Trim();
+                    if (extag == "")
                     {
-                        exit.Conditions.Add(new Condition(extag, true));
+                        continue;
                     }
+                    var value = 0;
+                    if (extagdata.Length > 1)
+                    {
+                        int.TryParse(extagdata[1].Trim(), out value);
+                    }
+                    exit.Conditions.Add(new ValueCondition(extag, value, false));
                 }
                 exit.Command = Unescape(ExtagsAndCommand.Last().Trim());
                 if (exit.Command == "")

@@ -6,12 +6,12 @@ namespace HellMapManager.Windows.NewConditionWindow;
 
 public class NewConditionWindowViewModel : ObservableObject
 {
-    public NewConditionWindowViewModel(Condition? raw, ExternalValidator checker)
+    public NewConditionWindowViewModel(ValueCondition? raw, ExternalValidator checker)
     {
         Raw = raw;
         Item = (raw is not null) ? new ConditionForm(raw, checker) : new ConditionForm(checker);
     }
-    public Condition? Raw { get; set; }
+    public ValueCondition? Raw { get; set; }
     public ConditionForm Item { get; set; }
     public string Title
     {

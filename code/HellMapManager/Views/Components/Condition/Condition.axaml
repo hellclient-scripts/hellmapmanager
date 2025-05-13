@@ -7,7 +7,7 @@
   xmlns:models="using:HellMapManager.Models"
   d:DesignHeight="450"
   d:DesignWidth="800"
-  x:DataType="models:Condition"
+  x:DataType="models:ValueCondition"
   mc:Ignorable="d">
   <UserControl.Styles>
     <Style Selector="Border">
@@ -39,7 +39,7 @@
       <StackPanel Orientation="Horizontal">
         <Image IsVisible="{Binding !Not}" Source="avares://HellMapManager/Assets/check_circle.png" />
         <Image IsVisible="{Binding Not}" Source="avares://HellMapManager/Assets/unpublished.png" />
-        <TextBlock Text="{Binding Key}" />
+        <TextBlock Text="{Binding KeyLabel}" />
       </StackPanel>
     </Border>
     <Panel />

@@ -632,18 +632,15 @@ public partial class MapDatabase
             }
         }
     }
-    public void APITagRoom(string key, string tag)
+    public void APITagRoom(string key, string tag, int value)
     {
         if (Current != null)
         {
             if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
             {
-                if (room.Tags.Contains(tag))
-                {
-                    return;
-                }
+                room.Tags.RemoveAll((t) => t.Key == tag);
                 var prev = room.ToString();
-                room.Tags.Add(tag);
+                room.Tags.Add(new ValueTag(tag, value));
                 room.Arrange();
                 if (room.ToString() != prev)
                 {
@@ -660,12 +657,8 @@ public partial class MapDatabase
         {
             if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
             {
-                if (!room.Tags.Contains(tag))
-                {
-                    return;
-                }
                 var prev = room.ToString();
-                room.Tags.Remove(tag);
+                room.Tags.RemoveAll((t) => t.Key == tag);
                 room.Arrange();
                 if (room.ToString() != prev)
                 {

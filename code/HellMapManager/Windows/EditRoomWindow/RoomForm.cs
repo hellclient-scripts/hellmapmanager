@@ -21,7 +21,7 @@ public partial class RoomForm : ObservableObject
         Name = room.Name;
         Group = room.Group;
         Desc = room.Desc;
-        Tags = new ObservableCollection<string>(room.Tags);
+        Tags = new ObservableCollection<ValueTag>(room.Tags);
         Exits = new ObservableCollection<Exit>(room.Exits);
         Data = new ObservableCollection<Data>(room.Data);
         ExternalValidator = checker;
@@ -43,7 +43,7 @@ public partial class RoomForm : ObservableObject
     public void Arrange()
     {
         Data = new ObservableCollection<Data>(this.Data.OrderBy(x => x.Key));
-        Tags = new ObservableCollection<string>(this.Tags.OrderBy(x => x));
+        Tags = new ObservableCollection<ValueTag>(this.Tags.OrderBy(x => x.Key));
         foreach (var exit in Exits)
         {
             exit.Arrange();
@@ -56,7 +56,7 @@ public partial class RoomForm : ObservableObject
     public string Name { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
-    public ObservableCollection<string> Tags { get; set; } = [];
+    public ObservableCollection<ValueTag> Tags { get; set; } = [];
     public ObservableCollection<Exit> Exits { get; set; } = [];
     public ObservableCollection<Data> Data { get; set; } = [];
 

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 namespace HellMapManager.Models;
 
-public class RoomConditionExit:Exit{
-    public List<Condition> RoomConditions { get; set; } = [];
+public class RoomConditionExit : Exit
+{
+    public List<ValueCondition> RoomConditions { get; set; } = [];
 
 }
 public partial class Shortcut : RoomConditionExit
@@ -39,10 +40,10 @@ public partial class Shortcut : RoomConditionExit
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(RoomConditions.ConvertAll(d=>HMMFormatter.EncodeToggleValue(ToggleValue.FromCondition(d)))),//3
+                HMMFormatter.EncodeList2(RoomConditions.ConvertAll(d=>HMMFormatter.EncodeToggleKeyValue3(ToggleKeyValue.FromValueCondition(d)))),//3
                 HMMFormatter.Escape(Command),//4
                 HMMFormatter.Escape(To),//5
-                HMMFormatter.EncodeList2(Conditions.ConvertAll(d=>HMMFormatter.EncodeToggleValue(ToggleValue.FromCondition(d)))),//6
+                HMMFormatter.EncodeList2(Conditions.ConvertAll(d=>HMMFormatter.EncodeToggleKeyValue3(ToggleKeyValue.FromValueCondition(d)))),//6
                 HMMFormatter.Escape(HMMFormatter.Escape(Cost.ToString())),//7
             ])
         );
@@ -55,10 +56,10 @@ public partial class Shortcut : RoomConditionExit
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
-        result.RoomConditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleValue(d).ToCondition());
+        result.RoomConditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleKeyValue3(d).ToValueCondition());
         result.Command = HMMFormatter.UnescapeAt(list, 4);
         result.To = HMMFormatter.UnescapeAt(list, 5);
-        result.Conditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 6)).ConvertAll(d => HMMFormatter.DecodeToggleValue(d).ToCondition());
+        result.Conditions = HMMFormatter.DecodeList2(HMMFormatter.At(list, 6)).ConvertAll(d => HMMFormatter.DecodeToggleKeyValue3(d).ToValueCondition());
         result.Cost = HMMFormatter.UnescapeIntAt(list, 7, 0);
         return result;
     }

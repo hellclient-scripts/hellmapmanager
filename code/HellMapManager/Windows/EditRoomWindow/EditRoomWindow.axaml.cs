@@ -99,7 +99,7 @@ public partial class EditRoomWindow : Window
             {
                 DataContext = wvm
             };
-            var result = await editDataWindow.ShowDialog<string?>((TopLevel.GetTopLevel(this) as Window)!);
+            var result = await editDataWindow.ShowDialog<ValueTag?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
                 vm.Item.Tags.Add(result);
@@ -111,7 +111,7 @@ public partial class EditRoomWindow : Window
     {
         if (DataContext is EditRoomWindowViewModel vm)
         {
-            if (sender is not null && sender is Button bn && bn.DataContext is string tag)
+            if (sender is not null && sender is Button bn && bn.DataContext is ValueTag tag)
             {
                 if (await AppUI.Confirm("删除", "确定要删除该元素吗？") == false) return;
                 vm.Item.Tags.Remove(tag);

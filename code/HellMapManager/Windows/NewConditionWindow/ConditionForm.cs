@@ -9,20 +9,22 @@ public partial class ConditionForm : ObservableObject
     {
         ExternalValidator = checker;
     }
-    public ConditionForm(Condition model, ExternalValidator checker)
+    public ConditionForm(ValueCondition model, ExternalValidator checker)
     {
         Raw = model;
         Key = model.Key;
+        Value = model.Value;
         Not = model.Not;
         ExternalValidator = checker;
     }
-    public Condition ToCondition()
+    public ValueCondition ToCondition()
     {
-        return new Condition(Key, Not);
+        return new ValueCondition(Key, Value, Not);
     }
-    public Condition? Raw;
+    public ValueCondition? Raw;
     public ExternalValidator ExternalValidator;
     public bool Not { get; set; } = false;
+    public int Value { get; set; } = 0;
     public string Key { get; set; } = "";
     public string Validate()
     {

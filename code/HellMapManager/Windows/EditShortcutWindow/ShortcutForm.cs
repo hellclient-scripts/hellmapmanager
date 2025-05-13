@@ -41,7 +41,7 @@ public partial class ShortcutForm : ObservableObject
     }
     public void Arrange()
     {
-        var list = new List<Condition>(this.Conditions);
+        var list = new List<ValueCondition>(this.Conditions);
         list.Sort(((x, y) =>
         {
             if (x.Not == y.Not)
@@ -53,9 +53,9 @@ public partial class ShortcutForm : ObservableObject
                 return x.Not.CompareTo(y.Not);
             }
         }));
-        Conditions = new ObservableCollection<Condition>(list);
+        Conditions = new ObservableCollection<ValueCondition>(list);
         OnPropertyChanged(nameof(Conditions));
-        list = new List<Condition>(this.RoomConditions);
+        list = new List<ValueCondition>(this.RoomConditions);
         list.Sort(((x, y) =>
         {
             if (x.Not == y.Not)
@@ -67,16 +67,16 @@ public partial class ShortcutForm : ObservableObject
                 return x.Not.CompareTo(y.Not);
             }
         }));
-        RoomConditions = new ObservableCollection<Condition>(list);
+        RoomConditions = new ObservableCollection<ValueCondition>(list);
         OnPropertyChanged(nameof(RoomConditions));
     }
     public ExternalValidator ExternalValidator;
     public string Key { get; set; } = "";
     public string To { get; set; } = "";
     public string Command { get; set; } = "";
-    public ObservableCollection<Condition> RoomConditions { get; set; } = [];
+    public ObservableCollection<ValueCondition> RoomConditions { get; set; } = [];
 
-    public ObservableCollection<Condition> Conditions { get; set; } = [];
+    public ObservableCollection<ValueCondition> Conditions { get; set; } = [];
 
     public int Cost { get; set; } = 1;
     public string Group { get; set; } = "";

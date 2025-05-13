@@ -52,7 +52,7 @@ public class Exit
     public string Command { get; set; } = "";
     //目标房间
     public string To { get; set; } = "";
-    public List<Condition> Conditions { get; set; } = [];
+    public List<ValueCondition> Conditions { get; set; } = [];
     public int Cost { get; set; } = 1;
     public bool Validated()
     {
@@ -80,7 +80,7 @@ public class Exit
             };
             foreach (var c in Conditions)
             {
-                labels.Add(new ExitLabel(c.Not ? ExitLabel.Types.ExCondition : ExitLabel.Types.Condition, c.Key));
+                labels.Add(new ExitLabel(c.Not ? ExitLabel.Types.ExCondition : ExitLabel.Types.Condition, c.KeyLabel));
             }
             if (Cost != 1)
             {
@@ -95,7 +95,7 @@ public class Exit
     }
     public string AllConditions
     {
-        get => string.Join(",", Conditions.ConvertAll(d => (d.Not ? "! " : "") + d.Key));
+        get => string.Join(",", Conditions.ConvertAll(d => (d.Not ? "! " : "") + d.Key + (d.Value == 0 ? "" : ":" + d.Value)));
     }
     public bool Equal(Exit model)
     {

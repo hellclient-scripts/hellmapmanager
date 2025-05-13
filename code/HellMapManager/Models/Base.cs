@@ -20,6 +20,57 @@ public class Condition(string key, bool not)
     }
 }
 
+public class ValueTag(string key, int value)
+{
+    public string Key { get; set; } = key;
+    public int Value { get; set; } = value;
+    public bool Validated()
+    {
+        return Key != "";
+    }
+    public bool Equal(ValueTag model)
+    {
+        return Key == model.Key && Value == model.Value;
+    }
+    public ValueTag Clone()
+    {
+        return new ValueTag(Key, Value);
+    }
+    public override string ToString()
+    {
+        return Value == 0 ? Key : $"{Key}:{Value}";
+    }
+
+}
+public class ValueCondition(string key, int value, bool not)
+{
+    public string Key { get; set; } = key;
+    public bool Not { get; set; } = not;
+    public int Value { get; set; } = value;
+    public bool Validated()
+    {
+        return Key != "";
+    }
+    public bool Equal(ValueCondition model)
+    {
+        return Key == model.Key && Not == model.Not && Value == model.Value;
+    }
+    public ValueCondition Clone()
+    {
+        return new ValueCondition(Key, Value, Not);
+    }
+    public override string ToString()
+    {
+        var label = Not ? $"!{Key}" : Key;
+        return Value == 0 ? label : $"{label}:{Value}";
+    }
+    public string KeyLabel
+    {
+        get => Value == 0 ? Key : $"{Key}:{Value}";
+    }
+}
+
+
 public class TypedConditions(string key, List<string> conditions, bool not)
 {
     public string Key { get; set; } = key;

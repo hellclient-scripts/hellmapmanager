@@ -40,7 +40,7 @@ public partial class EditExitWindow : Window
             {
                 DataContext = wvm
             };
-            var result = await newCondtionWindow.ShowDialog<Condition?>((TopLevel.GetTopLevel(this) as Window)!);
+            var result = await newCondtionWindow.ShowDialog<ValueCondition?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
                 vm.Item.Conditions.Add(result);
@@ -52,7 +52,7 @@ public partial class EditExitWindow : Window
     {
         if (DataContext is EditExitWindowViewModel vm)
         {
-            if (sender is not null && sender is Button bn && bn.DataContext is Condition c)
+            if (sender is not null && sender is Button bn && bn.DataContext is ValueCondition c)
             {
                 if (await AppUI.Confirm("删除", "确定要删除该元素吗？") == false) return;
                 vm.Item.Conditions.Remove(c);

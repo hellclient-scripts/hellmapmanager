@@ -57,6 +57,8 @@
         <StackPanel Margin="20">
           <TextBlock Classes="Label" Text="标签:" />
           <TextBox Text="{Binding Item.Key}" Watermark="标签" />
+          <TextBlock Classes="Label" Text="数值:" />
+          <NumericUpDown Increment="1" Value="{Binding Item.Value}" />
         </StackPanel>
       </ScrollViewer>
     </DockPanel>
