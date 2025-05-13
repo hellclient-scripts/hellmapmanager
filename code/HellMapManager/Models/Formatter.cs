@@ -99,35 +99,34 @@ public class ToggleKeyValues(string key, List<string> values, bool not)
 }
 
 
-
-//四层简单结构格式化工具
-//只支持列表和键值对列表，最多支持3层
+public class HMMLevel(Command keyToken, Command sepToken)
+{
+    public Command KeyToken { get; set; } = keyToken;
+    public Command SepToken { get; set; } = sepToken;
+}
+//五层简单结构格式化工具
+//只支持列表和键值对列表，最多支持5层
 public class HMMFormatter
 {
-    public static Command TokenKey1 { get; } = new Command(">", "1", "\\>");
-    public static Command TokenKey2 { get; } = new Command(":", "2", "\\:");
-    public static Command TokenKey3 { get; } = new Command("=", "3", "\\=");
-    public static Command TokenKey4 { get; } = new Command("@", "4", "\\@");
-    public static Command TokenKey5 { get; } = new Command("^", "5", "\\^");
-
-    public static Command TokenSep1 { get; } = new Command("|", "6", "\\|");
-    public static Command TokenSep2 { get; } = new Command(";", "7", "\\;");
-    public static Command TokenSep3 { get; } = new Command(",", "8", "\\,");
-    public static Command TokenSep4 { get; } = new Command("&", "9", "\\&");
-    public static Command TokenSep5 { get; } = new Command("`", "10", "\\`");
-
+    public static HMMLevel Level1 { get; } = new HMMLevel(new Command(">", "1", "\\>"), new Command("|", "6", "\\|"));
+    public static HMMLevel Level2 { get; } = new HMMLevel(new Command(":", "2", "\\:"), new Command(";", "7", "\\;"));
+    public static HMMLevel Level3 { get; } = new HMMLevel(new Command("=", "3", "\\="), new Command(",", "8", "\\,"));
+    public static HMMLevel Level4 { get; } = new HMMLevel(new Command("@", "4", "\\@"), new Command("&", "9", "\\&"));
+    public static HMMLevel Level5 { get; } = new HMMLevel(new Command("^", "5", "\\^"), new Command("`", "10", "\\`"));
     public static Command TokenNot { get; } = new Command("!", "11", "\\!");
     public static Command TokenNewline { get; } = new Command("\n", "12", "\\n");
     public static readonly ControlCode Escaper = (new ControlCode())
     .WithCommand(new Command("\\", "0", "\\\\"))
-        .WithCommand(TokenKey1)
-        .WithCommand(TokenKey2)
-        .WithCommand(TokenKey3)
-        .WithCommand(TokenKey4)
-        .WithCommand(TokenSep1)
-        .WithCommand(TokenSep2)
-        .WithCommand(TokenSep3)
-        .WithCommand(TokenSep4)
+        .WithCommand(Level1.KeyToken)
+        .WithCommand(Level1.SepToken)
+        .WithCommand(Level2.KeyToken)
+        .WithCommand(Level2.SepToken)
+        .WithCommand(Level3.KeyToken)
+        .WithCommand(Level3.SepToken)
+        .WithCommand(Level4.KeyToken)
+        .WithCommand(Level4.SepToken)
+        .WithCommand(Level5.KeyToken)
+        .WithCommand(Level5.SepToken)
         .WithCommand(TokenNot)
         .WithCommand(TokenNewline)
         .WithCommand(new Command("", "99", "\\"))
@@ -141,242 +140,55 @@ public class HMMFormatter
     {
         return Escaper.Decode(val);
     }
-    public static string EncodeKeyAndValue1(string key, string val)
+    public static string EncodeKeyAndValue(HMMLevel level, string key, string val)
     {
-        return EncodeKeyValue1(new KeyValue(key, val));
+        return EncodeKeyValue(level, new KeyValue(key, val));
     }
 
-    public static string EncodeKeyValue1(KeyValue kv)
+    public static string EncodeKeyValue(HMMLevel level, KeyValue kv)
     {
-        return $"{kv.Key}{TokenKey1.Raw}{kv.Value}";
+        return $"{kv.Key}{level.KeyToken.Raw}{kv.Value}";
     }
 
-    public static KeyValue DecodeKeyValue1(string val)
+    public static KeyValue DecodeKeyValue(HMMLevel level, string val)
     {
-        var decoded = val.Split(TokenKey1.Raw, 2);
+        var decoded = val.Split(level.KeyToken.Raw, 2);
         return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
     }
-    public static string EncodeKeyAndValue2(string key, string val)
+    public static string EncodeToggleKeyValue(HMMLevel level, ToggleKeyValue kv)
     {
-        return EncodeKeyValue2(new KeyValue(key, val));
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue(level, kv.Key, kv.Value), kv.Not));
     }
-    public static string EncodeKeyValue2(KeyValue kv)
-    {
-        return $"{kv.Key}{TokenKey2.Raw}{kv.Value}";
-    }
-
-    public static KeyValue DecodeKeyValue2(string val)
-    {
-        var decoded = val.Split(TokenKey2.Raw, 2);
-        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
-    }
-    public static string EncodeKeyAndValue3(string key, string val)
-    {
-        return EncodeKeyValue3(new KeyValue(key, val));
-    }
-    public static string EncodeKeyValue3(KeyValue kv)
-    {
-        return $"{kv.Key}{TokenKey3.Raw}{kv.Value}";
-    }
-    public static KeyValue DecodeKeyValue3(string val)
-    {
-        var decoded = val.Split(TokenKey3.Raw, 2);
-        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
-    }
-    public static string EncodeKeyAndValue4(string key, string val)
-    {
-        return EncodeKeyValue4(new KeyValue(key, val));
-    }
-    public static string EncodeKeyValue4(KeyValue kv)
-    {
-        return $"{kv.Key}{TokenKey4.Raw}{kv.Value}";
-    }
-    public static KeyValue DecodeKeyValue4(string val)
-    {
-        var decoded = val.Split(TokenKey4.Raw, 2);
-        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
-    }
-    public static string EncodeKeyAndValue5(string key, string val)
-    {
-        return EncodeKeyValue5(new KeyValue(key, val));
-    }
-    public static string EncodeKeyValue5(KeyValue kv)
-    {
-        return $"{kv.Key}{TokenKey5.Raw}{kv.Value}";
-    }
-    public static KeyValue DecodeKeyValue5(string val)
-    {
-        var decoded = val.Split(TokenKey5.Raw, 2);
-        return new KeyValue(decoded[0], decoded.Length > 1 ? decoded[1] : "");
-    }
-
-    public static string EncodeToggleKeyValue1(ToggleKeyValue kv)
-    {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue1(kv.Key, kv.Value), kv.Not));
-    }
-    public static ToggleKeyValue DecodeToggleKeyValue1(string val)
+    public static ToggleKeyValue DecodeToggleKeyValue(HMMLevel level, string val)
     {
         var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue1(v.Value);
-        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
-    }
-    public static string EncodeToggleKeyValue2(ToggleKeyValue kv)
-    {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue2(kv.Key, kv.Value), kv.Not));
-    }
-    public static ToggleKeyValue DecodeToggleKeyValue2(string val)
-    {
-        var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue2(v.Value);
-        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
-    }
-    public static string EncodeToggleKeyValue3(ToggleKeyValue kv)
-    {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue3(kv.Key, kv.Value), kv.Not));
-    }
-    public static ToggleKeyValue DecodeToggleKeyValue3(string val)
-    {
-        var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue3(v.Value);
-        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
-    }
-    public static string EncodeToggleKeyValue4(ToggleKeyValue kv)
-    {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue4(kv.Key, kv.Value), kv.Not));
-    }
-    public static ToggleKeyValue DecodeToggleKeyValue4(string val)
-    {
-        var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue4(v.Value);
-        return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
-    }
-    public static string EncodeToggleKeyValue5(ToggleKeyValue kv)
-    {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue5(kv.Key, kv.Value), kv.Not));
-    }
-    public static ToggleKeyValue DecodeToggleKeyValue5(string val)
-    {
-        var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue5(v.Value);
+        var kv = DecodeKeyValue(level, v.Value);
         return new ToggleKeyValue(kv.Key, kv.Value, v.Not);
     }
 
-    public static string EncodeToggleKeyValues1(ToggleKeyValues kv)
+    public static string EncodeToggleKeyValues(HMMLevel level, ToggleKeyValues kv)
     {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue1(kv.Key, EncodeList1(kv.Values)), kv.Not));
+        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue(level, kv.Key, EncodeList(level, kv.Values)), kv.Not));
     }
-    public static ToggleKeyValues DecodeToggleKeyValues1(string val)
-    {
-        var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue1(v.Value);
-        return new ToggleKeyValues(kv.Key, DecodeList1(kv.Value), v.Not);
-    }
-    public static string EncodeToggleKeyValues2(ToggleKeyValues kv)
-    {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue2(kv.Key, EncodeList2(kv.Values)), kv.Not));
-    }
-    public static ToggleKeyValues DecodeToggleKeyValues2(string val)
+    public static ToggleKeyValues DecodeToggleKeyValues1(HMMLevel level, string val)
     {
         var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue2(v.Value);
-        return new ToggleKeyValues(kv.Key, DecodeList2(kv.Value), v.Not);
+        var kv = DecodeKeyValue(level, v.Value);
+        return new ToggleKeyValues(kv.Key, DecodeList(level, kv.Value), v.Not);
     }
-    public static string EncodeToggleKeyValues3(ToggleKeyValues kv)
+    public static string EncodeList(HMMLevel level, List<string> items)
     {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue3(kv.Key, EncodeList3(kv.Values)), kv.Not));
+        return string.Join(level.SepToken.Raw, items);
     }
-    public static ToggleKeyValues DecodeToggleKeyValues3(string val)
-    {
-        var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue3(v.Value);
-        return new ToggleKeyValues(kv.Key, DecodeList3(kv.Value), v.Not);
-    }
-    public static string EncodeToggleKeyValues4(ToggleKeyValues kv)
-    {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue4(kv.Key, EncodeList4(kv.Values)), kv.Not));
-    }
-    public static ToggleKeyValues DecodeToggleKeyValues4(string val)
-    {
-        var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue4(v.Value);
-        return new ToggleKeyValues(kv.Key, DecodeList4(kv.Value), v.Not);
-    }
-
-    public static string EncodeToggleKeyValues5(ToggleKeyValues kv)
-    {
-        return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue5(kv.Key, EncodeList5(kv.Values)), kv.Not));
-    }
-    public static ToggleKeyValues DecodeToggleKeyValues5(string val)
-    {
-        var v = DecodeToggleValue(val);
-        var kv = DecodeKeyValue5(v.Value);
-        return new ToggleKeyValues(kv.Key, DecodeList5(kv.Value), v.Not);
-    }
-
-    public static string EncodeList1(List<string> items)
-    {
-        return string.Join(TokenSep1.Raw, items);
-    }
-    public static List<string> DecodeList1(string val)
+    public static List<string> DecodeList(HMMLevel level, string val)
     {
         if (val == "")
         {
             return [];
         }
 
-        return [.. val.Split(TokenSep1.Raw)];
+        return [.. val.Split(level.SepToken.Raw)];
     }
-    public static string EncodeList2(List<string> items)
-    {
-
-        return string.Join(TokenSep2.Raw, items);
-    }
-    public static List<string> DecodeList2(string val)
-    {
-        if (val == "")
-        {
-            return [];
-        }
-        return [.. val.Split(TokenSep2.Raw)];
-    }
-    public static string EncodeList3(List<string> items)
-    {
-        return string.Join(TokenSep3.Raw, items);
-    }
-    public static List<string> DecodeList3(string val)
-    {
-        if (val == "")
-        {
-            return [];
-        }
-
-        return [.. val.Split(TokenSep3.Raw)];
-    }
-    public static string EncodeList4(List<string> items)
-    {
-        return string.Join(TokenSep4.Raw, items);
-    }
-    public static List<string> DecodeList4(string val)
-    {
-        if (val == "")
-        {
-            return [];
-        }
-        return [.. val.Split(TokenSep4.Raw)];
-    }
-    public static string EncodeList5(List<string> items)
-    {
-        return string.Join(TokenSep5.Raw, items);
-    }
-    public static List<string> DecodeList5(string val)
-    {
-        if (val == "")
-        {
-            return [];
-        }
-        return [.. val.Split(TokenSep5.Raw)];
-    }
-
     public static string At(List<string> list, int index)
     {
         return index >= 0 && index < list.Count ? list[index] : "";
@@ -424,5 +236,4 @@ public class HMMFormatter
     {
         return list.ConvertAll(Unescape);
     }
-
 }
