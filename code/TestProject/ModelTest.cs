@@ -1,3 +1,4 @@
+using Avalonia.Platform;
 using HellMapManager.Models;
 
 namespace TestProject;
@@ -57,6 +58,82 @@ public class ModelTest
         Assert.False(tc.Equal(tc2));
         Assert.True(tc2.Validated());
 
+        var vt = new ValueTag("key", 0);
+        ValueTag vt2;
+        vt2 = vt.Clone();
+        Assert.True(vt.Equal(vt2));
+        Assert.True(vt2.Validated());
+        Assert.Equal("key", vt2.ToString());
+        vt2 = vt.Clone();
+        vt2.Key = "";
+        Assert.False(vt.Equal(vt2));
+        Assert.False(vt2.Validated());
+        Assert.Equal("", vt2.ToString());
+        vt2 = vt.Clone();
+        vt2.Value = -1;
+        Assert.False(vt.Equal(vt2));
+        Assert.True(vt2.Validated());
+        Assert.Equal("key:-1", vt2.ToString());
+        vt2 = vt.Clone();
+        vt2.Value = 1;
+        vt2.Key = "key2";
+        Assert.False(vt.Equal(vt2));
+        Assert.Equal("key2:1", vt2.ToString());
+
+        Assert.True(vt.Match("key", 0));
+        Assert.True(vt.Match("key", -1));
+        Assert.False(vt.Match("key", 1));
+        Assert.False(vt.Match("key2", 0));
+
+        var vc = new ValueCondition("key", 0, true);
+        ValueCondition vc2;
+        vc2 = vc.Clone();
+        Assert.True(vc.Equal(vc2));
+        Assert.True(vc2.Validated());
+        Assert.Equal("!key", vc2.ToString());
+        Assert.Equal("key", vc2.KeyLabel);
+        vc2 = vc.Clone();
+        vc2.Key = "";
+        Assert.False(vc.Equal(vc2));
+        Assert.False(vc2.Validated());
+        Assert.Equal("!", vc2.ToString());
+        Assert.Equal("", vc2.KeyLabel);
+        vc2 = vc.Clone();
+        vc2.Value = -1;
+        Assert.False(vc.Equal(vc2));
+        Assert.True(vc2.Validated());
+        Assert.Equal("!key:-1", vc2.ToString());
+        Assert.Equal("key:-1", vc2.KeyLabel);
+        vc2 = vc.Clone();
+        vc2.Not = false;
+        vc2.Value = 1;
+        vc2.Key = "key2";
+        Assert.False(vc.Equal(vc2));
+        Assert.True(vc2.Validated());
+        Assert.Equal("key2:1", vc2.ToString());
+        Assert.Equal("key2:1", vc2.KeyLabel);
+
+        List<ValueTag> tags = [
+            new ("key1", 0),
+            new ("key2", 5),
+        ];
+        Assert.True(ValueTag.HasTag(tags, "key1", 0));
+        Assert.True(ValueTag.HasTag(tags, "key2", 5));
+        Assert.False(ValueTag.HasTag(tags, "key1", 1));
+        Assert.False(ValueTag.HasTag(tags, "key2", 6));
+
+        Assert.True(ValueTag.ValidteConditions([], []));
+        Assert.False(ValueTag.ValidteConditions([], [new("key1", 0, false)]));
+        Assert.True(ValueTag.ValidteConditions(tags, []));
+        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 0, false)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, true)]));
+        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key2", 0, false)]));
+        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key2", 10, true)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key2", 10, false)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key2", 4, true)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, true), new("key2", 0, false)]));
+        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key3", 0, true)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key3", 0, false)]));
     }
     [Fact]
     public void TestExit()

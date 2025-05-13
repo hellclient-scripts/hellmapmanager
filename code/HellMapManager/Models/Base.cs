@@ -40,11 +40,15 @@ public class ValueTag(string key, int value)
     {
         return Value == 0 ? Key : $"{Key}:{Value}";
     }
+    public bool Match(string key, int value)
+    {
+        return Key == key && Value >= value;
+    }
     public static bool HasTag(List<ValueTag> tags, string key, int value)
     {
         foreach (var tag in tags)
         {
-            if (tag.Key == key && tag.Value >= value)
+            if (tag.Match(key, value))
             {
                 return true;
             }
@@ -55,7 +59,7 @@ public class ValueTag(string key, int value)
     {
         foreach (var rcondition in conditions)
         {
-            if (HasTag(tags, rcondition.Key, rcondition.Value) != rcondition.Not)
+            if (HasTag(tags, rcondition.Key, rcondition.Value) == rcondition.Not)
             {
                 return false;
             }
