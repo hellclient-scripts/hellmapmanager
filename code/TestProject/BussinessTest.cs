@@ -33,7 +33,7 @@ public class BussinessTest
             Name = $"name{suff}",
             Group = $"group{suff}",
             Desc = $"desc{suff}",
-            Tags = [new ValueTag($"tag1{suff}", 0), new ValueTag($"tag2{suff}", 0)],
+            Tags = [new ValueTag($"tag1{suff}", 0), new ValueTag($"tag2{suff}", 15)],
             Exits = [
                         new Exit(){
                     To=$"to1{suff}",
@@ -267,10 +267,10 @@ public class BussinessTest
             Key = $"key{suff}",
             Group = $"group{suff}",
             Desc = $"desc{suff}",
-            RoomConditions = [new ValueCondition($"con1{suff}", 0, false), new ValueCondition($"con2{suff}", 0, true)],
+            RoomConditions = [new ValueCondition($"con1{suff}", 0, false), new ValueCondition($"con2{suff}", 10, true)],
             Command = $"cmd{suff}",
             To = $"to{suff}",
-            Conditions = [new ValueCondition($"con3{suff}", 0, false), new ValueCondition($"con4{suff}", 0, true)],
+            Conditions = [new ValueCondition($"con3{suff}", 0, false), new ValueCondition($"con4{suff}", 5, true)],
             Cost = 1
         };
     }
