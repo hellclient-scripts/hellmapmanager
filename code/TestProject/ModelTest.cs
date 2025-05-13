@@ -1,5 +1,5 @@
-using Avalonia.Platform;
 using HellMapManager.Models;
+using Xunit.Sdk;
 
 namespace TestProject;
 
@@ -1250,6 +1250,235 @@ public class ModelTest
         Assert.False(snapshot.Validated());
         snapshot.Key = "a\nb";
         Assert.False(snapshot.Validated());
+    }
+    [Fact]
+    public void TestContext()
+    {
+        var ctx = new Context();
+        Assert.Empty(ctx.Tags);
+        Assert.Equal(ctx, ctx.WithTags([new ValueTag("tag1", 1), new ValueTag("tag2", 2)]));
+        Assert.Equal(2, ctx.Tags.Count);
+        Assert.Equal(1, ctx.Tags["tag1"]);
+        Assert.Equal(2, ctx.Tags["tag2"]);
+        Assert.Empty(ctx.RoomConditions);
+        Assert.Equal(ctx, ctx.WithRoomConditions([new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)]));
+        Assert.Equal(2, ctx.RoomConditions.Count);
+        Assert.Equal("con1", ctx.RoomConditions[0].Key);
+        Assert.Equal(0, ctx.RoomConditions[0].Value);
+        Assert.False(ctx.RoomConditions[0].Not);
+        Assert.Equal("con2", ctx.RoomConditions[1].Key);
+        Assert.Empty(ctx.Rooms);
+        Assert.Equal(ctx, ctx.WithRooms([new Room() { Key = "room1" }, new Room() { Key = "room2" }]));
+        Assert.Equal(2, ctx.Rooms.Count);
+        Assert.Equal("room1", ctx.Rooms["room1"].Key);
+        Assert.Equal("room2", ctx.Rooms["room2"].Key);
+        Assert.Empty(ctx.Whitelist);
+        Assert.Equal(ctx, ctx.WithWhitelist(["room1", "room2"]));
+        Assert.Equal(2, ctx.Whitelist.Count);
+        Assert.True(ctx.Whitelist["room1"]);
+        Assert.True(ctx.Whitelist["room2"]);
+        Assert.Empty(ctx.Blacklist);
+        Assert.Equal(ctx, ctx.WithBlacklist(["room3", "room4"]));
+        Assert.Equal(2, ctx.Blacklist.Count);
+        Assert.True(ctx.Blacklist["room3"]);
+        Assert.True(ctx.Blacklist["room4"]);
+        Assert.Empty(ctx.Shortcuts);
+        Assert.Equal(ctx, ctx.WithShortcuts([
+            new RoomConditionExit() {  Command = "cmd1",To="to1" },
+            new RoomConditionExit() { Command = "cmd2" ,To="to2"},
+        ]));
+        Assert.Equal(2, ctx.Shortcuts.Count);
+        Assert.Equal("to1", ctx.Shortcuts[0].To);
+        Assert.Equal("cmd1", ctx.Shortcuts[0].Command);
+        Assert.Equal("to2", ctx.Shortcuts[1].To);
+        Assert.Equal("cmd2", ctx.Shortcuts[1].Command);
+        Assert.Empty(ctx.Paths);
+        Assert.Equal(ctx, ctx.WithPaths([
+            new HellMapManager.Models.Path() { To = "to1" ,From="from1",Command="cmd1"},
+            new HellMapManager.Models.Path() { To = "to2" ,From="from2",Command="cmd2"},
+            new HellMapManager.Models.Path() { To = "to3" ,From="from1",Command="cmd3"},
+        ]));
+        Assert.Equal(2, ctx.Paths.Count);
+        Assert.Equal("to1", ctx.Paths["from1"][0].To);
+        Assert.Equal("cmd1", ctx.Paths["from1"][0].Command);
+        Assert.Equal("to3", ctx.Paths["from1"][1].To);
+        Assert.Equal("cmd3", ctx.Paths["from1"][1].Command);
+        Assert.Equal("to2", ctx.Paths["from2"][0].To);
+        Assert.Equal("cmd2", ctx.Paths["from2"][0].Command);
+        Assert.Empty(ctx.BlockedLinks);
+        Assert.Equal(ctx, ctx.WithBlockedLinks([
+            new Link() { From = "from1", To = "to1" },
+            new Link() { From = "from2", To = "to2" },
+            new Link() { From = "from1", To = "to3" },
+        ]));
+        Assert.Equal(2, ctx.BlockedLinks.Count);
+        Assert.True(ctx.BlockedLinks["from1"]["to1"]);
+        Assert.True(ctx.BlockedLinks["from1"]["to3"]);
+        Assert.True(ctx.BlockedLinks["from2"]["to2"]);
+        Assert.True(ctx.IsBlocked("from1", "to1"));
+        Assert.True(ctx.IsBlocked("from2", "to2"));
+        Assert.True(ctx.IsBlocked("from1", "to3"));
+        Assert.False(ctx.IsBlocked("notexist1", "notexist2"));
+        Assert.False(ctx.IsBlocked("from1", "notexist2"));
+        Assert.False(ctx.IsBlocked("from1", "notexist2"));
+        Assert.False(ctx.IsBlocked("notexist1", "to1"));
+        Assert.False(ctx.IsBlocked("notexist1", "to2"));
+        Assert.False(ctx.IsBlocked("notexist1", "to3"));
 
+        Assert.Empty(ctx.CommandCosts);
+        Assert.Equal(ctx, ctx.WithCommandCosts([
+            new CommandCost() { Command = "cmd1",To="to1", Cost = 1 },
+            new CommandCost() { Command = "cmd2",To="to1", Cost = 2 },
+            new CommandCost() { Command = "cmd1",To="to3", Cost = 3 },
+        ]));
+        Assert.Equal(2, ctx.CommandCosts.Count);
+        Assert.Equal(1, ctx.CommandCosts["cmd1"]["to1"]);
+        Assert.Equal(2, ctx.CommandCosts["cmd2"]["to1"]);
+        Assert.Equal(3, ctx.CommandCosts["cmd1"]["to3"]);
+        Assert.Equal(ctx, ctx.ClearTags());
+        Assert.Empty(ctx.Tags);
+        Assert.Equal(ctx, ctx.ClearRoomConditions());
+        Assert.Empty(ctx.RoomConditions);
+        Assert.Equal(ctx, ctx.ClearRooms());
+        Assert.Empty(ctx.Rooms);
+        Assert.Equal(ctx, ctx.ClearWhitelist());
+        Assert.Empty(ctx.Whitelist);
+        Assert.Equal(ctx, ctx.ClearBlacklist());
+        Assert.Empty(ctx.Blacklist);
+        Assert.Equal(ctx, ctx.ClearShortcuts());
+        Assert.Empty(ctx.Shortcuts);
+        Assert.Equal(ctx, ctx.ClearPaths());
+        Assert.Empty(ctx.Paths);
+        Assert.Equal(ctx, ctx.ClearBlockedLinks());
+        Assert.Empty(ctx.BlockedLinks);
+        Assert.Equal(ctx, ctx.ClearCommandCosts());
+        Assert.Empty(ctx.CommandCosts);
+    }
+    [Fact]
+    public void TestEnvironment()
+    {
+        var env = new HellMapManager.Models.Environment()
+        {
+            Tags = [new ValueTag("tag1", 1), new ValueTag("tag2", 2)],
+            RoomConditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)],
+            Rooms = [new Room() { Key = "room1" }, new Room() { Key = "room2" }],
+            Whitelist = ["room1", "room2"],
+            Blacklist = ["room3", "room4"],
+            Shortcuts = [new RoomConditionExit() { Command = "cmd1", To = "to1" }, new RoomConditionExit() { Command = "cmd2", To = "to2" }],
+            Paths = [new HellMapManager.Models.Path() { To = "to1", From = "from1", Command = "cmd1" }, new HellMapManager.Models.Path() { To = "to2", From = "from2", Command = "cmd2" }, new HellMapManager.Models.Path() { To = "to3", From = "from1", Command = "cmd3" }],
+            BlockedLinks = [new Link() { From = "from1", To = "to1" }, new Link() { From = "from2", To = "to2" }, new Link() { From = "from1", To = "to3" }],
+            CommandCosts = [new CommandCost() { Command = "cmd1", To = "to1", Cost = 1 }, new CommandCost() { Command = "cmd2", To = "to1", Cost = 2 }, new CommandCost() { Command = "cmd1", To = "to3", Cost = 3 }],
+        };
+        var ctx = Context.FromEnvironment(env);
+        Assert.Equal(2, ctx.Tags.Count);
+        Assert.Equal(1, ctx.Tags["tag1"]);
+        Assert.Equal(2, ctx.Tags["tag2"]);
+        Assert.Equal(2, ctx.RoomConditions.Count);
+        Assert.Equal("con1", ctx.RoomConditions[0].Key);
+        Assert.Equal(0, ctx.RoomConditions[0].Value);
+        Assert.False(ctx.RoomConditions[0].Not);
+        Assert.Equal("con2", ctx.RoomConditions[1].Key);
+        Assert.Equal(2, ctx.Rooms.Count);
+        Assert.Equal("room1", ctx.Rooms["room1"].Key);
+        Assert.Equal("room2", ctx.Rooms["room2"].Key);
+        Assert.Equal(2, ctx.Whitelist.Count);
+        Assert.True(ctx.Whitelist["room1"]);
+        Assert.True(ctx.Whitelist["room2"]);
+        Assert.Equal(2, ctx.Blacklist.Count);
+        Assert.True(ctx.Blacklist["room3"]);
+        Assert.True(ctx.Blacklist["room4"]);
+        Assert.Equal(2, ctx.Shortcuts.Count);
+        Assert.Equal("to1", ctx.Shortcuts[0].To);
+        Assert.Equal("cmd1", ctx.Shortcuts[0].Command);
+        Assert.Equal("to2", ctx.Shortcuts[1].To);
+        Assert.Equal("cmd2", ctx.Shortcuts[1].Command);
+        Assert.Equal(2, ctx.Paths.Count);
+        Assert.Equal("to1", ctx.Paths["from1"][0].To);
+        Assert.Equal("cmd1", ctx.Paths["from1"][0].Command);
+        Assert.Equal("to3", ctx.Paths["from1"][1].To);
+        Assert.Equal("cmd3", ctx.Paths["from1"][1].Command);
+        Assert.Equal("to2", ctx.Paths["from2"][0].To);
+        Assert.Equal("cmd2", ctx.Paths["from2"][0].Command);
+        Assert.Equal(2, ctx.BlockedLinks.Count);
+        Assert.True(ctx.BlockedLinks["from1"]["to1"]);
+        Assert.True(ctx.BlockedLinks["from1"]["to3"]);
+        Assert.True(ctx.BlockedLinks["from2"]["to2"]);
+        Assert.Equal(2, ctx.CommandCosts.Count);
+        Assert.Equal(1, ctx.CommandCosts["cmd1"]["to1"]);
+        Assert.Equal(2, ctx.CommandCosts["cmd2"]["to1"]);
+        Assert.Equal(3, ctx.CommandCosts["cmd1"]["to3"]);
+        var env2 = ctx.ToEnvironment();
+        Assert.Equal(env.Tags.Count, env2.Tags.Count);
+        env.Tags.Sort((a, b) => a.Key.CompareTo(b.Key));
+        env2.Tags.Sort((a, b) => a.Key.CompareTo(b.Key));
+        for (var i = 0; i < env.Tags.Count; i++)
+        {
+            Assert.Equal(env.Tags[i].Key, env2.Tags[i].Key);
+            Assert.Equal(env.Tags[i].Value, env2.Tags[i].Value);
+        }
+        Assert.Equal(env.RoomConditions.Count, env2.RoomConditions.Count);
+        env.RoomConditions.Sort((a, b) => a.Key.CompareTo(b.Key));
+        env2.RoomConditions.Sort((a, b) => a.Key.CompareTo(b.Key));
+        for (var i = 0; i < env.RoomConditions.Count; i++)
+        {
+            Assert.Equal(env.RoomConditions[i].Key, env2.RoomConditions[i].Key);
+            Assert.Equal(env.RoomConditions[i].Value, env2.RoomConditions[i].Value);
+            Assert.Equal(env.RoomConditions[i].Not, env2.RoomConditions[i].Not);
+        }
+        Assert.Equal(env.Rooms.Count, env2.Rooms.Count);
+        env.Rooms.Sort((a, b) => a.Key.CompareTo(b.Key));
+        env2.Rooms.Sort((a, b) => a.Key.CompareTo(b.Key));
+        for (var i = 0; i < env.Rooms.Count; i++)
+        {
+            Assert.Equal(env.Rooms[i].Key, env2.Rooms[i].Key);
+        }
+        Assert.Equal(env.Whitelist.Count, env2.Whitelist.Count);
+        env.Whitelist.Sort();
+        env2.Whitelist.Sort();
+        for (var i = 0; i < env.Whitelist.Count; i++)
+        {
+            Assert.Equal(env.Whitelist[i], env2.Whitelist[i]);
+        }
+        Assert.Equal(env.Blacklist.Count, env2.Blacklist.Count);
+        env.Blacklist.Sort();
+        env2.Blacklist.Sort();
+        for (var i = 0; i < env.Blacklist.Count; i++)
+        {
+            Assert.Equal(env.Blacklist[i], env2.Blacklist[i]);
+        }
+        Assert.Equal(env.Shortcuts.Count, env2.Shortcuts.Count);
+        env.Shortcuts.Sort((a, b) => a.To.CompareTo(b.To));
+        env2.Shortcuts.Sort((a, b) => a.To.CompareTo(b.To));
+        for (var i = 0; i < env.Shortcuts.Count; i++)
+        {
+            Assert.Equal(env.Shortcuts[i].Command, env2.Shortcuts[i].Command);
+            Assert.Equal(env.Shortcuts[i].To, env2.Shortcuts[i].To);
+        }
+        Assert.Equal(env.Paths.Count, env2.Paths.Count);
+        env.Paths.Sort((a, b) => a.To.CompareTo(b.To));
+        env2.Paths.Sort((a, b) => a.To.CompareTo(b.To));
+        for (var i = 0; i < env.Paths.Count; i++)
+        {
+            Assert.Equal(env.Paths[i].To, env2.Paths[i].To);
+            Assert.Equal(env.Paths[i].From, env2.Paths[i].From);
+            Assert.Equal(env.Paths[i].Command, env2.Paths[i].Command);
+        }
+        Assert.Equal(env.BlockedLinks.Count, env2.BlockedLinks.Count);
+        env.BlockedLinks.Sort((a, b) => a.From.CompareTo(b.From));
+        env2.BlockedLinks.Sort((a, b) => a.From.CompareTo(b.From));
+        for (var i = 0; i < env.BlockedLinks.Count; i++)
+        {
+            Assert.Equal(env.BlockedLinks[i].From, env2.BlockedLinks[i].From);
+            Assert.Equal(env.BlockedLinks[i].To, env2.BlockedLinks[i].To);
+        }
+        Assert.Equal(env.CommandCosts.Count, env2.CommandCosts.Count);
+        env.CommandCosts.Sort((a, b) => a.To.CompareTo(b.To));
+        env2.CommandCosts.Sort((a, b) => a.To.CompareTo(b.To));
+        for (var i = 0; i < env.CommandCosts.Count; i++)
+        {
+            Assert.Equal(env.CommandCosts[i].Command, env2.CommandCosts[i].Command);
+            Assert.Equal(env.CommandCosts[i].To, env2.CommandCosts[i].To);
+            Assert.Equal(env.CommandCosts[i].Cost, env2.CommandCosts[i].Cost);
+        }
     }
 }

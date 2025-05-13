@@ -65,7 +65,7 @@ public class Context
     }
     public Context WithRoomConditions(List<ValueCondition> conditions)
     {
-        RoomConditions = (List<ValueCondition>)RoomConditions.Concat(conditions);
+        RoomConditions.AddRange(conditions);
         return this;
     }
     public Context ClearRooms()
@@ -81,12 +81,12 @@ public class Context
         }
         return this;
     }
-    public Context ClearWhiteList()
+    public Context ClearWhitelist()
     {
         Whitelist.Clear();
         return this;
     }
-    public Context WithWhiteList(List<string> list)
+    public Context WithWhitelist(List<string> list)
     {
         foreach (var item in list)
         {
@@ -94,12 +94,12 @@ public class Context
         }
         return this;
     }
-    public Context ClearBlackList()
+    public Context ClearBlacklist()
     {
-        Whitelist.Clear();
+        Blacklist.Clear();
         return this;
     }
-    public Context WithBlackList(List<string> list)
+    public Context WithBlacklist(List<string> list)
     {
         foreach (var item in list)
         {
@@ -114,7 +114,7 @@ public class Context
     }
     public Context WithShortcuts(List<RoomConditionExit> list)
     {
-        Shortcuts = (List<RoomConditionExit>)Shortcuts.Concat(list);
+        Shortcuts.AddRange(list);
         return this;
     }
     public Context ClearPaths()
@@ -129,11 +129,11 @@ public class Context
 
             if (Paths.TryGetValue(item.From, out var paths))
             {
-                Paths[item.From] = (List<Path>)paths.Concat(list);
+                Paths[item.From].Add(item);
             }
             else
             {
-                Paths[item.From] = [.. list];
+                Paths[item.From] = [item];
             }
 
         }
@@ -177,5 +177,47 @@ public class Context
     {
         return BlockedLinks.ContainsKey(from) && BlockedLinks[from].ContainsKey(to);
     }
-
+    public static Context FromEnvironment(Environment env)
+    {
+        var context = new Context();
+        context.WithTags(env.Tags);
+        context.WithRoomConditions(env.RoomConditions);
+        context.WithRooms(env.Rooms);
+        context.WithWhitelist(env.Whitelist);
+        context.WithBlacklist(env.Blacklist);
+        context.WithShortcuts(env.Shortcuts);
+        context.WithPaths(env.Paths);
+        context.WithBlockedLinks(env.BlockedLinks);
+        context.WithCommandCosts(env.CommandCosts);
+        return context;
+    }
+    public Environment ToEnvironment()
+    {
+        var env = new Environment();
+        env.Tags = [.. Tags.Select(kv => new ValueTag(kv.Key, kv.Value))];
+        env.RoomConditions = RoomConditions;
+        env.Rooms = Rooms.Values.ToList();
+        env.Whitelist = Whitelist.Keys.ToList();
+        env.Blacklist = Blacklist.Keys.ToList();
+        env.Shortcuts = Shortcuts;
+        env.Paths = Paths.Values.SelectMany(p => p).ToList();
+        foreach (var f in BlockedLinks)
+        {
+            foreach (var t in f.Value)
+            {
+                if (t.Value)
+                {
+                    env.BlockedLinks.Add(new Link() { From = f.Key, To = t.Key });
+                }
+            }
+        }
+        foreach (var c in CommandCosts)
+        {
+            foreach (var t in c.Value)
+            {
+                env.CommandCosts.Add(new CommandCost() { Command = c.Key, To = t.Key, Cost = t.Value });
+            }
+        }
+        return env;
+    }
 }
