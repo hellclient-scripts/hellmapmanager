@@ -40,6 +40,29 @@ public class ValueTag(string key, int value)
     {
         return Value == 0 ? Key : $"{Key}:{Value}";
     }
+    public static bool HasTag(List<ValueTag> tags, string key, int value)
+    {
+        foreach (var tag in tags)
+        {
+            if (tag.Key == key && tag.Value >= value)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static bool ValidteConditions(List<ValueTag> tags, List<ValueCondition> conditions)
+    {
+        foreach (var rcondition in conditions)
+        {
+            if (HasTag(tags, rcondition.Key, rcondition.Value) != rcondition.Not)
+            {
+                return false;
+            }
+        }
+        return true;
+
+    }
 
 }
 public class ValueCondition(string key, int value, bool not)

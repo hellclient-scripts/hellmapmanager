@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using HarfBuzzSharp;
 
 namespace HellMapManager.Models;
 
@@ -105,14 +106,7 @@ public partial class Room
     }
     public bool HasTag(string key, int value)
     {
-        foreach (var tag in Tags)
-        {
-            if (tag.Key == key && tag.Value >= value)
-            {
-                return true;
-            }
-        }
-        return false;
+        return ValueTag.HasTag(Tags, key, value);
     }
 }
 public partial class Room
@@ -243,18 +237,6 @@ public partial class Room
             }
         }
         return true;
-    }
-    public bool ValidteConditions(List<ValueCondition> conditions)
-    {
-        foreach (var rcondition in conditions)
-        {
-            if (HasTag(rcondition.Key, rcondition.Value) != rcondition.Not)
-            {
-                return false;
-            }
-        }
-        return true;
-
     }
     public int NumberID
     {

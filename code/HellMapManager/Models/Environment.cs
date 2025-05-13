@@ -226,14 +226,14 @@ public class Context
         {
             MapFile.Map.Shortcuts.ForEach(e =>
             {
-                if (room.ValidteConditions(e.RoomConditions))
+                if (ValueTag.ValidteConditions(room.Tags, e.RoomConditions))
                 {
                     result.Add(e);
                 }
             });
             Shortcuts.ForEach(e =>
             {
-                if (room.ValidteConditions(e.RoomConditions))
+                if (ValueTag.ValidteConditions(room.Tags, e.RoomConditions))
                 {
                     result.Add(e);
                 }
@@ -273,7 +273,7 @@ public class Context
         {
             return false;
         }
-        if (!room.ValidteConditions(RoomConditions))
+        if (!ValueTag.ValidteConditions(room.Tags, RoomConditions))
         {
             return false;
         }
