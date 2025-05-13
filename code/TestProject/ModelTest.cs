@@ -1481,4 +1481,48 @@ public class ModelTest
             Assert.Equal(env.CommandCosts[i].Cost, env2.CommandCosts[i].Cost);
         }
     }
+    [Fact]
+    public void TestMapperOption()
+    {
+        var opt = new MapperOptions();
+        Assert.Equal(0, opt.MaxExitCost);
+        Assert.Equal(0, opt.MaxTotalCost);
+        Assert.False(opt.DisableShortcuts);
+        Assert.Equal(opt, opt.WithMaxExitCost(5));
+        Assert.Equal(5, opt.MaxExitCost);
+        Assert.Equal(opt, opt.WithMaxTotalCost(50));
+        Assert.Equal(50, opt.MaxTotalCost);
+        Assert.Equal(opt, opt.WithDisableShortcuts(true));
+        Assert.True(opt.DisableShortcuts);
+    }
+    [Fact]
+    public void TestStep()
+    {
+        var step = new Step("cmd1", "to1", 5);
+        Assert.Equal("cmd1", step.Command);
+        Assert.Equal("to1", step.Target);
+        Assert.Equal(5, step.Cost);
+        var result = new QueryReuslt();
+        Assert.Equal(0, result.Cost);
+        Assert.Equal("", result.From);
+        Assert.Equal("", result.To);
+        Assert.Empty(result.Steps);
+        Assert.Empty(result.Unvisited);
+        Assert.False(result.IsSuccess());
+        Assert.Null(result.SuccessOrNull());
+        result.To = "to1";
+        Assert.False(result.IsSuccess());
+        Assert.Null(result.SuccessOrNull());
+        result.To = "";
+        result.From = "from1";
+        Assert.False(result.IsSuccess());
+        Assert.Null(result.SuccessOrNull());
+        result.To = "to1";
+        result.From = "from1";
+        Assert.True(result.IsSuccess());
+        Assert.NotNull(result.SuccessOrNull());
+        var result2 = QueryReuslt.Fail;
+        Assert.False(result2.IsSuccess());
+        Assert.Null(result2.SuccessOrNull());
+    }
 }
