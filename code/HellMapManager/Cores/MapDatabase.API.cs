@@ -677,9 +677,12 @@ public partial class MapDatabase
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public List<SnapshotSearchResult> APISearchSnapshots()
+    public List<SnapshotSearchResult> APISearchSnapshots(SnapshotFilter filter)
     {
-        //Todo
+        if (Current != null)
+        {
+            return SnapshotHelper.Search(filter, Current.Map.Snapshots);
+        }
         return [];
     }
     public void APITraceLocation(string key, string location)

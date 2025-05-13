@@ -30,5 +30,13 @@ public class SnapshotSearchResult
     public int Sum { get; set; } = 0;
     public int Count { get; set; } = 0;
     public List<Snapshot> Items { get; set; } = [];
-
+    public void Add(Snapshot model, bool match)
+    {
+        Items.Add(model);
+        Sum += model.Count;
+        if (match)
+        {
+            Count += model.Count;
+        }
+    }
 }
