@@ -17,8 +17,8 @@ public class Variable
 
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
-            HMMFormatter.EncodeList1([
+        return HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level1, EncodeKey,
+            HMMFormatter.EncodeList(HMMFormatter.Level1, [
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Value),//1
                 HMMFormatter.Escape(Group),//2
@@ -29,8 +29,8 @@ public class Variable
     public static Variable Decode(string val)
     {
         var result = new Variable();
-        var kv = HMMFormatter.DecodeKeyValue1(val);
-        var list = HMMFormatter.DecodeList1(kv.Value);
+        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Value = HMMFormatter.UnescapeAt(list, 1);
         result.Group = HMMFormatter.UnescapeAt(list, 2);

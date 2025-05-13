@@ -30,12 +30,12 @@ public partial class Trace
 
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
-            HMMFormatter.EncodeList1([
+        return HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level1, EncodeKey,
+            HMMFormatter.EncodeList(HMMFormatter.Level1, [
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(Locations.ConvertAll(HMMFormatter.Escape)),//3
+                HMMFormatter.EncodeList(HMMFormatter.Level2,Locations.ConvertAll(HMMFormatter.Escape)),//3
                 HMMFormatter.Escape(Message),//4
             ])
         );
@@ -43,12 +43,12 @@ public partial class Trace
     public static Trace Decode(string val)
     {
         var result = new Trace();
-        var kv = HMMFormatter.DecodeKeyValue1(val);
-        var list = HMMFormatter.DecodeList1(kv.Value);
+        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
-        result.Locations = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(HMMFormatter.Unescape);
+        result.Locations = HMMFormatter.DecodeList(HMMFormatter.Level2, HMMFormatter.At(list, 3)).ConvertAll(HMMFormatter.Unescape);
         result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }

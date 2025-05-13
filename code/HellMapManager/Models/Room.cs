@@ -48,26 +48,26 @@ public partial class Room
     }
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
-            HMMFormatter.EncodeList1([
+        return HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level1, EncodeKey,
+            HMMFormatter.EncodeList(HMMFormatter.Level1, [
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Name),//1
                 HMMFormatter.Escape(Group),//2
                 HMMFormatter.Escape(Desc),//3
-                HMMFormatter.EncodeList2(Tags.ConvertAll(
-                    e=>HMMFormatter.EncodeKeyValue3(KeyValue.FromValueTag(e))
+                HMMFormatter.EncodeList(HMMFormatter.Level2,Tags.ConvertAll(
+                    e=>HMMFormatter.EncodeKeyValue(HMMFormatter.Level3,KeyValue.FromValueTag(e))
                 )),//4
-                HMMFormatter.EncodeList2(Exits.ConvertAll(//5
-                    e=>HMMFormatter.EncodeList3([
+                HMMFormatter.EncodeList(HMMFormatter.Level2,Exits.ConvertAll(//5
+                    e=>HMMFormatter.EncodeList(HMMFormatter.Level3,[
                         HMMFormatter.Escape(e.Command),//5-0
                         HMMFormatter.Escape(e.To),//5-1
-                        HMMFormatter.EncodeList4(e.Conditions.ConvertAll(c=>HMMFormatter.EncodeToggleKeyValue5(ToggleKeyValue.FromValueCondition(c)))),//5-2
+                        HMMFormatter.EncodeList(HMMFormatter.Level4,e.Conditions.ConvertAll(c=>HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level5,ToggleKeyValue.FromValueCondition(c)))),//5-2
                         HMMFormatter.Escape(HMMFormatter.Escape(e.Cost.ToString())),//5-4
                     ])
                 )),
-                HMMFormatter.EncodeList2(//6
+                HMMFormatter.EncodeList(HMMFormatter.Level2,//6
                     Data.ConvertAll(
-                        d=>HMMFormatter.EncodeKeyValue3(KeyValue.FromData(d))
+                        d=>HMMFormatter.EncodeKeyValue(HMMFormatter.Level3,KeyValue.FromData(d))
                         )
                     ),
              ])
@@ -81,26 +81,26 @@ public partial class Room
     public static Room Decode(string val)
     {
         var result = new Room();
-        var kv = HMMFormatter.DecodeKeyValue1(val);
-        var list = HMMFormatter.DecodeList1(kv.Value);
+        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Name = HMMFormatter.UnescapeAt(list, 1);
         result.Group = HMMFormatter.UnescapeAt(list, 2);
         result.Desc = HMMFormatter.UnescapeAt(list, 3);
-        result.Tags = HMMFormatter.DecodeList2(HMMFormatter.At(list, 4)).ConvertAll(e => HMMFormatter.DecodeKeyValue3(e).ToValueTag());
-        result.Exits = HMMFormatter.DecodeList2(HMMFormatter.At(list, 5)).ConvertAll(d =>
+        result.Tags = HMMFormatter.DecodeList(HMMFormatter.Level2, HMMFormatter.At(list, 4)).ConvertAll(e => HMMFormatter.DecodeKeyValue(HMMFormatter.Level3, e).ToValueTag());
+        result.Exits = HMMFormatter.DecodeList(HMMFormatter.Level2, HMMFormatter.At(list, 5)).ConvertAll(d =>
         {
-            var list = HMMFormatter.DecodeList3(d);
+            var list = HMMFormatter.DecodeList(HMMFormatter.Level3, d);
             return new Exit()
             {
                 Command = HMMFormatter.UnescapeAt(list, 0),
                 To = HMMFormatter.UnescapeAt(list, 1),
-                Conditions = HMMFormatter.DecodeList4(HMMFormatter.At(list, 4)).ConvertAll(e => HMMFormatter.DecodeToggleKeyValue5(e).ToValueCondition()),
+                Conditions = HMMFormatter.DecodeList(HMMFormatter.Level4, HMMFormatter.At(list, 4)).ConvertAll(e => HMMFormatter.DecodeToggleKeyValue(HMMFormatter.Level5, e).ToValueCondition()),
                 Cost = HMMFormatter.UnescapeInt(HMMFormatter.At(list, 3), 0),
             };
         });
-        result.Data = HMMFormatter.DecodeList2(HMMFormatter.At(list, 6)).ConvertAll(
-            d => HMMFormatter.DecodeKeyValue3(d).ToData());
+        result.Data = HMMFormatter.DecodeList(HMMFormatter.Level2, HMMFormatter.At(list, 6)).ConvertAll(
+            d => HMMFormatter.DecodeKeyValue(HMMFormatter.Level3, d).ToData());
         return result;
     }
     public bool HasTag(string key, int value)

@@ -73,12 +73,12 @@ public partial class Region
 
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
-            HMMFormatter.EncodeList1([
+        return HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level1, EncodeKey,
+            HMMFormatter.EncodeList(HMMFormatter.Level1, [
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Group),//1
                 HMMFormatter.Escape(Desc),//2
-                HMMFormatter.EncodeList2(Items.ConvertAll(d=>HMMFormatter.EncodeToggleKeyValue2(ToggleKeyValue.FromRegionItem(d)))),//3
+                HMMFormatter.EncodeList(HMMFormatter.Level2,Items.ConvertAll(d=>HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level2,ToggleKeyValue.FromRegionItem(d)))),//3
                 HMMFormatter.Escape(Message),//4
             ])
         );
@@ -86,12 +86,12 @@ public partial class Region
     public static Region Decode(string val)
     {
         var result = new Region();
-        var kv = HMMFormatter.DecodeKeyValue1(val);
-        var list = HMMFormatter.DecodeList1(kv.Value);
+        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Group = HMMFormatter.UnescapeAt(list, 1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);
-        result.Items = HMMFormatter.DecodeList2(HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleKeyValue2(d).ToRegionItem());
+        result.Items = HMMFormatter.DecodeList(HMMFormatter.Level2, HMMFormatter.At(list, 3)).ConvertAll(d => HMMFormatter.DecodeToggleKeyValue(HMMFormatter.Level2, d).ToRegionItem());
         result.Message = HMMFormatter.UnescapeAt(list, 4);
         return result;
     }

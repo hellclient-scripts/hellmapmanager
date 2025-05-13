@@ -42,8 +42,8 @@ public partial class MapInfo
 
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
-            HMMFormatter.EncodeList1([
+        return HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level1, EncodeKey,
+            HMMFormatter.EncodeList(HMMFormatter.Level1, [
                 HMMFormatter.Escape(Name),//0
                 HMMFormatter.Escape(UpdatedTime.ToString()),//1
                 HMMFormatter.Escape(Desc),//2
@@ -53,8 +53,8 @@ public partial class MapInfo
     public static MapInfo Decode(string val)
     {
         var result = new MapInfo();
-        var kv = HMMFormatter.DecodeKeyValue1(val);
-        var list = HMMFormatter.DecodeList1(kv.Value);
+        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Name = HMMFormatter.UnescapeAt(list, 0);
         result.UpdatedTime = HMMFormatter.UnescapeIntAt(list, 1, -1);
         result.Desc = HMMFormatter.UnescapeAt(list, 2);

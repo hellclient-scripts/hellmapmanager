@@ -170,7 +170,7 @@ public class HMMFormatter
     {
         return EncodeToggleValue(new ToggleValue(EncodeKeyAndValue(level, kv.Key, EncodeList(level, kv.Values)), kv.Not));
     }
-    public static ToggleKeyValues DecodeToggleKeyValues1(HMMLevel level, string val)
+    public static ToggleKeyValues DecodeToggleKeyValues(HMMLevel level, string val)
     {
         var v = DecodeToggleValue(val);
         var kv = DecodeKeyValue(level, v.Value);

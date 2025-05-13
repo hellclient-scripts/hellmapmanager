@@ -33,21 +33,21 @@ public class FormatterTest
         Assert.Equal("", HMMFormatter.UnescapeAt(list, -1));
         Assert.Equal("", HMMFormatter.UnescapeAt(list, 99));
         IsListEqual(list, HMMFormatter.EscapeList(unescapedList));
-        IsListEqual(list, HMMFormatter.DecodeList1(HMMFormatter.EncodeList1(list)));
-        IsListEqual([], HMMFormatter.DecodeList1(""));
-        IsListEqual(list, HMMFormatter.DecodeList2(HMMFormatter.EncodeList2(list)));
-        IsListEqual([], HMMFormatter.DecodeList2(""));
-        IsListEqual(list, HMMFormatter.DecodeList3(HMMFormatter.EncodeList3(list)));
-        IsListEqual([], HMMFormatter.DecodeList3(""));
-        IsListEqual(list, HMMFormatter.DecodeList4(HMMFormatter.EncodeList4(list)));
-        IsListEqual([], HMMFormatter.DecodeList4(""));
+        IsListEqual(list, HMMFormatter.DecodeList(HMMFormatter.Level1,HMMFormatter.EncodeList(HMMFormatter.Level1,list)));
+        IsListEqual([], HMMFormatter.DecodeList(HMMFormatter.Level1,""));
+        IsListEqual(list, HMMFormatter.DecodeList(HMMFormatter.Level2,HMMFormatter.EncodeList(HMMFormatter.Level2,list)));
+        IsListEqual([], HMMFormatter.DecodeList(HMMFormatter.Level2,""));
+        IsListEqual(list, HMMFormatter.DecodeList(HMMFormatter.Level3,HMMFormatter.EncodeList(HMMFormatter.Level3,list)));
+        IsListEqual([], HMMFormatter.DecodeList(HMMFormatter.Level3,""));
+        IsListEqual(list, HMMFormatter.DecodeList(HMMFormatter.Level4,HMMFormatter.EncodeList(HMMFormatter.Level4,list)));
+        IsListEqual([], HMMFormatter.DecodeList(HMMFormatter.Level4,""));
 
-        Assert.NotEqual(HMMFormatter.EncodeList1(list), HMMFormatter.EncodeList2(list));
-        Assert.NotEqual(HMMFormatter.EncodeList1(list), HMMFormatter.EncodeList3(list));
-        Assert.NotEqual(HMMFormatter.EncodeList1(list), HMMFormatter.EncodeList4(list));
-        Assert.NotEqual(HMMFormatter.EncodeList2(list), HMMFormatter.EncodeList3(list));
-        Assert.NotEqual(HMMFormatter.EncodeList2(list), HMMFormatter.EncodeList4(list));
-        Assert.NotEqual(HMMFormatter.EncodeList3(list), HMMFormatter.EncodeList4(list));
+        Assert.NotEqual(HMMFormatter.EncodeList(HMMFormatter.Level1,list), HMMFormatter.EncodeList(HMMFormatter.Level2,list));
+        Assert.NotEqual(HMMFormatter.EncodeList(HMMFormatter.Level1,list), HMMFormatter.EncodeList(HMMFormatter.Level3,list));
+        Assert.NotEqual(HMMFormatter.EncodeList(HMMFormatter.Level1,list), HMMFormatter.EncodeList(HMMFormatter.Level4,list));
+        Assert.NotEqual(HMMFormatter.EncodeList(HMMFormatter.Level2,list), HMMFormatter.EncodeList(HMMFormatter.Level3,list));
+        Assert.NotEqual(HMMFormatter.EncodeList(HMMFormatter.Level2,list), HMMFormatter.EncodeList(HMMFormatter.Level4,list));
+        Assert.NotEqual(HMMFormatter.EncodeList(HMMFormatter.Level3,list), HMMFormatter.EncodeList(HMMFormatter.Level4,list));
     }
     private static void IsKeyValueEqual(KeyValue src, KeyValue dst)
     {
@@ -67,32 +67,32 @@ public class FormatterTest
         Assert.Equal("@=!>", data.Value);
         IsKeyValueEqual(kv, KeyValue.FromData(data));
 
-        IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue1(HMMFormatter.EncodeKeyValue1(kv)));
-        Assert.Equal(HMMFormatter.EncodeKeyAndValue1(kv.Key, kv.Value), HMMFormatter.EncodeKeyValue1(kv));
-        Assert.Equal($"key{HMMFormatter.TokenKey1.Raw}", HMMFormatter.EncodeKeyValue1(kv2));
-        IsKeyValueEqual(kv2, HMMFormatter.DecodeKeyValue1("key"));
+        IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue(HMMFormatter.Level1HMMFormatter.EncodeKeyValue(HMMFormatter.Level1kv)));
+        Assert.Equal(HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level1,kv.Key, kv.Value), HMMFormatter.EncodeKeyValue(HMMFormatter.Level1kv));
+        Assert.Equal($"key{HMMFormatter.TokenKey1.Raw}", HMMFormatter.EncodeKeyValue(HMMFormatter.Level1kv2));
+        IsKeyValueEqual(kv2, HMMFormatter.DecodeKeyValue(HMMFormatter.Level1"key"));
 
-        IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue2(HMMFormatter.EncodeKeyValue2(kv)));
-        Assert.Equal(HMMFormatter.EncodeKeyAndValue2(kv.Key, kv.Value), HMMFormatter.EncodeKeyValue2(kv));
-        Assert.Equal($"key{HMMFormatter.TokenKey2.Raw}", HMMFormatter.EncodeKeyValue2(kv2));
-        IsKeyValueEqual(kv2, HMMFormatter.DecodeKeyValue2("key"));
+        IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue(HMMFormatter.Level2HMMFormatter.EncodeKeyValue(HMMFormatter.Level2kv)));
+        Assert.Equal(HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level2,kv.Key, kv.Value), HMMFormatter.EncodeKeyValue(HMMFormatter.Level2kv));
+        Assert.Equal($"key{HMMFormatter.TokenKey2.Raw}", HMMFormatter.EncodeKeyValue(HMMFormatter.Level2kv2));
+        IsKeyValueEqual(kv2, HMMFormatter.DecodeKeyValue(HMMFormatter.Level2"key"));
 
-        IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue3(HMMFormatter.EncodeKeyValue3(kv)));
-        Assert.Equal(HMMFormatter.EncodeKeyAndValue3(kv.Key, kv.Value), HMMFormatter.EncodeKeyValue3(kv));
-        Assert.Equal($"key{HMMFormatter.TokenKey3.Raw}", HMMFormatter.EncodeKeyValue3(kv2));
-        IsKeyValueEqual(kv2, HMMFormatter.DecodeKeyValue3("key"));
+        IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue(HMMFormatter.Level3HMMFormatter.EncodeKeyValue(HMMFormatter.Level3kv)));
+        Assert.Equal(HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level3,kv.Key, kv.Value), HMMFormatter.EncodeKeyValue(HMMFormatter.Level3kv));
+        Assert.Equal($"key{HMMFormatter.TokenKey3.Raw}", HMMFormatter.EncodeKeyValue(HMMFormatter.Level3kv2));
+        IsKeyValueEqual(kv2, HMMFormatter.DecodeKeyValue(HMMFormatter.Level3"key"));
 
-        IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue4(HMMFormatter.EncodeKeyValue4(kv)));
-        Assert.Equal(HMMFormatter.EncodeKeyAndValue4(kv.Key, kv.Value), HMMFormatter.EncodeKeyValue4(kv));
-        Assert.Equal($"key{HMMFormatter.TokenKey4.Raw}", HMMFormatter.EncodeKeyValue4(kv2));
-        IsKeyValueEqual(kv2, HMMFormatter.DecodeKeyValue4("key"));
+        IsKeyValueEqual(kv, HMMFormatter.DecodeKeyValue(HMMFormatter.Level4HMMFormatter.EncodeKeyValue(HMMFormatter.Level4kv)));
+        Assert.Equal(HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level4,kv.Key, kv.Value), HMMFormatter.EncodeKeyValue(HMMFormatter.Level4kv));
+        Assert.Equal($"key{HMMFormatter.TokenKey4.Raw}", HMMFormatter.EncodeKeyValue(HMMFormatter.Level4kv2));
+        IsKeyValueEqual(kv2, HMMFormatter.DecodeKeyValue(HMMFormatter.Level4"key"));
 
-        Assert.NotEqual(HMMFormatter.EncodeKeyValue1(kv), HMMFormatter.EncodeKeyValue2(kv));
-        Assert.NotEqual(HMMFormatter.EncodeKeyValue1(kv), HMMFormatter.EncodeKeyValue3(kv));
-        Assert.NotEqual(HMMFormatter.EncodeKeyValue1(kv), HMMFormatter.EncodeKeyValue4(kv));
-        Assert.NotEqual(HMMFormatter.EncodeKeyValue2(kv), HMMFormatter.EncodeKeyValue3(kv));
-        Assert.NotEqual(HMMFormatter.EncodeKeyValue2(kv), HMMFormatter.EncodeKeyValue4(kv));
-        Assert.NotEqual(HMMFormatter.EncodeKeyValue3(kv), HMMFormatter.EncodeKeyValue4(kv));
+        Assert.NotEqual(HMMFormatter.EncodeKeyValue(HMMFormatter.Level1kv), HMMFormatter.EncodeKeyValue(HMMFormatter.Level2kv));
+        Assert.NotEqual(HMMFormatter.EncodeKeyValue(HMMFormatter.Level1kv), HMMFormatter.EncodeKeyValue(HMMFormatter.Level3kv));
+        Assert.NotEqual(HMMFormatter.EncodeKeyValue(HMMFormatter.Level1kv), HMMFormatter.EncodeKeyValue(HMMFormatter.Level4kv));
+        Assert.NotEqual(HMMFormatter.EncodeKeyValue(HMMFormatter.Level2kv), HMMFormatter.EncodeKeyValue(HMMFormatter.Level3kv));
+        Assert.NotEqual(HMMFormatter.EncodeKeyValue(HMMFormatter.Level2kv), HMMFormatter.EncodeKeyValue(HMMFormatter.Level4kv));
+        Assert.NotEqual(HMMFormatter.EncodeKeyValue(HMMFormatter.Level3kv), HMMFormatter.EncodeKeyValue(HMMFormatter.Level4kv));
 
     }
 
@@ -123,14 +123,14 @@ public class FormatterTest
 
         IsToggleKeyValuesEqual(tkv, ToggleKeyValues.FromTypedConditions(tkv.ToTypedConditions()));
 
-        IsToggleKeyValuesEqual(tkv, HMMFormatter.DecodeToggleKeyValues1(HMMFormatter.EncodeToggleKeyValues1(tkv)));
+        IsToggleKeyValuesEqual(tkv, HMMFormatter.DecodeToggleKeyValues(HMMFormatter.Level1,HMMFormatter.EncodeToggleKeyValues(HMMFormatter.Level1,tkv)));
         IsToggleKeyValuesEqual(tkv, HMMFormatter.DecodeToggleKeyValues2(HMMFormatter.EncodeToggleKeyValues2(tkv)));
         IsToggleKeyValuesEqual(tkv, HMMFormatter.DecodeToggleKeyValues3(HMMFormatter.EncodeToggleKeyValues3(tkv)));
         IsToggleKeyValuesEqual(tkv, HMMFormatter.DecodeToggleKeyValues4(HMMFormatter.EncodeToggleKeyValues4(tkv)));
 
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues1(tkv), HMMFormatter.EncodeToggleKeyValues2(tkv));
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues1(tkv), HMMFormatter.EncodeToggleKeyValues3(tkv));
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues1(tkv), HMMFormatter.EncodeToggleKeyValues4(tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues(HMMFormatter.Level1,tkv), HMMFormatter.EncodeToggleKeyValues2(tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues(HMMFormatter.Level1,tkv), HMMFormatter.EncodeToggleKeyValues3(tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues(HMMFormatter.Level1,tkv), HMMFormatter.EncodeToggleKeyValues4(tkv));
         Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues2(tkv), HMMFormatter.EncodeToggleKeyValues3(tkv));
         Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues2(tkv), HMMFormatter.EncodeToggleKeyValues4(tkv));
         Assert.NotEqual(HMMFormatter.EncodeToggleKeyValues3(tkv), HMMFormatter.EncodeToggleKeyValues4(tkv));
@@ -193,17 +193,17 @@ public class FormatterTest
         Assert.True(tkvri.Not);
 
 
-        IsToggleKeyValueEqual(tkv, HMMFormatter.DecodeToggleKeyValue1(HMMFormatter.EncodeToggleKeyValue1(tkv)));
-        IsToggleKeyValueEqual(tkv, HMMFormatter.DecodeToggleKeyValue2(HMMFormatter.EncodeToggleKeyValue2(tkv)));
-        IsToggleKeyValueEqual(tkv, HMMFormatter.DecodeToggleKeyValue3(HMMFormatter.EncodeToggleKeyValue3(tkv)));
-        IsToggleKeyValueEqual(tkv, HMMFormatter.DecodeToggleKeyValue4(HMMFormatter.EncodeToggleKeyValue4(tkv)));
+        IsToggleKeyValueEqual(tkv, HMMFormatter.DecodeToggleKeyValue(HMMFormatter.Level1,HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level1,tkv)));
+        IsToggleKeyValueEqual(tkv, HMMFormatter.DecodeToggleKeyValue(HMMFormatter.Level2,HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level2,tkv)));
+        IsToggleKeyValueEqual(tkv, HMMFormatter.DecodeToggleKeyValue(HMMFormatter.Level3,HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level3,tkv)));
+        IsToggleKeyValueEqual(tkv, HMMFormatter.DecodeToggleKeyValue(HMMFormatter.Level4,HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level4,tkv)));
 
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue1(tkv), HMMFormatter.EncodeToggleKeyValue2(tkv));
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue1(tkv), HMMFormatter.EncodeToggleKeyValue3(tkv));
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue1(tkv), HMMFormatter.EncodeToggleKeyValue4(tkv));
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue2(tkv), HMMFormatter.EncodeToggleKeyValue3(tkv));
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue2(tkv), HMMFormatter.EncodeToggleKeyValue4(tkv));
-        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue3(tkv), HMMFormatter.EncodeToggleKeyValue4(tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level1,tkv), HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level2,tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level1,tkv), HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level3,tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level1,tkv), HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level4,tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level2,tkv), HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level3,tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level2,tkv), HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level4,tkv));
+        Assert.NotEqual(HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level3,tkv), HMMFormatter.EncodeToggleKeyValue(HMMFormatter.Level4,tkv));
     }
     [Fact]
     public void TestInt()

@@ -35,8 +35,8 @@ public partial class Landmark
     public const string EncodeKey = "Landmark";
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyAndValue1(EncodeKey,
-            HMMFormatter.EncodeList1([
+        return HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level1, EncodeKey,
+            HMMFormatter.EncodeList(HMMFormatter.Level1, [
                 HMMFormatter.Escape(Key),//0
                 HMMFormatter.Escape(Type),//1
                 HMMFormatter.Escape(Value),//2
@@ -48,8 +48,8 @@ public partial class Landmark
     public static Landmark Decode(string val)
     {
         var result = new Landmark();
-        var kv = HMMFormatter.DecodeKeyValue1(val);
-        var list = HMMFormatter.DecodeList1(kv.Value);
+        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
+        var list = HMMFormatter.DecodeList(HMMFormatter.Level1, kv.Value);
         result.Key = HMMFormatter.UnescapeAt(list, 0);
         result.Type = HMMFormatter.UnescapeAt(list, 1);
         result.Value = HMMFormatter.UnescapeAt(list, 2);

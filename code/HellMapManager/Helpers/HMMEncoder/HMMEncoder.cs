@@ -25,11 +25,11 @@ public class MapHeadData
     }
     public string Encode()
     {
-        return HMMFormatter.EncodeKeyAndValue1(CurrentFormat, HMMFormatter.Escape(EncodeEncoding(Encoding)));
+        return HMMFormatter.EncodeKeyAndValue(HMMFormatter.Level1, CurrentFormat, HMMFormatter.Escape(EncodeEncoding(Encoding)));
     }
     public static MapHeadData Decode(string val)
     {
-        var kv = HMMFormatter.DecodeKeyValue1(val);
+        var kv = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, val);
         return new MapHeadData
         {
             FileFormat = kv.Key,
@@ -104,7 +104,7 @@ public class HMMEncoder
         while ((data = sr.ReadLine()) != null)
         {
             data = HMMFormatter.Escaper.Unpack(data);
-            var key = HMMFormatter.DecodeKeyValue1(data);
+            var key = HMMFormatter.DecodeKeyValue(HMMFormatter.Level1, data);
             switch (key.Key)
             {
                 case MapInfo.EncodeKey:
