@@ -35,7 +35,7 @@ using HellMapManager.Helpers;
 using HellMapManager.Models;
 namespace TestProject;
 
-[Collection("MainState")]
+[Collection("Core")]
 public class WindowTest()
 {
     [Fact]

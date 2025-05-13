@@ -19,7 +19,7 @@ using HellMapManager.Windows.EditRegionItemWindow;
 using HellMapManager.ViewModels;
 namespace TestProject;
 
-[Collection("MainState")]
+[Collection("Core")]
 public class ViewModelTest
 {
     [Fact]

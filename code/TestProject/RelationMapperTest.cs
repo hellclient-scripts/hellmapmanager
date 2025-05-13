@@ -5,7 +5,7 @@ using HellMapManager.Cores;
 using HellMapManager.Windows.RelationMapWindow;
 using HarfBuzzSharp;
 
-[Collection("MainState")]
+[Collection("Core")]
 public class RelationMapperTest
 {
     [Fact]
