@@ -20,7 +20,7 @@ public class RoomsHTest
         Room? room;
         room = RoomFormatter.DecodeRoom("");
         Assert.Null(room);
-        room = RoomFormatter.DecodeRoom("rid=rname@rzone+tag1|rcon1>rcon2>rcon3<rcon4<rcmd:rto%2,rcmd2:rto2");
+        room = RoomFormatter.DecodeRoom("rid=rname@rzone+tag1|rcon1>rcon2^15>rcon3<rcon4^-1<rcmd:rto%2,rcmd2:rto2");
         Assert.NotNull(room);
         Assert.Equal("rid", room.Key);
         Assert.Equal("rname", room.Name);
@@ -32,12 +32,16 @@ public class RoomsHTest
         Assert.Equal(4, room.Exits[0].Conditions.Count);
         Assert.False(room.Exits[0].Conditions[0].Not);
         Assert.Equal("rcon1", room.Exits[0].Conditions[0].Key);
+        Assert.Equal(0, room.Exits[0].Conditions[0].Value);
         Assert.False(room.Exits[0].Conditions[1].Not);
         Assert.Equal("rcon2", room.Exits[0].Conditions[1].Key);
+        Assert.Equal(15, room.Exits[0].Conditions[1].Value);
         Assert.True(room.Exits[0].Conditions[2].Not);
         Assert.Equal("rcon3", room.Exits[0].Conditions[2].Key);
+        Assert.Equal(0, room.Exits[0].Conditions[2].Value);
         Assert.True(room.Exits[0].Conditions[3].Not);
         Assert.Equal("rcon4", room.Exits[0].Conditions[3].Key);
+        Assert.Equal(-1, room.Exits[0].Conditions[3].Value);
         Assert.Equal("rto", room.Exits[0].To);
         Assert.Equal(2, room.Exits[0].Cost);
         Assert.Equal("rcmd2", room.Exits[1].Command);
@@ -175,6 +179,40 @@ public class RoomsHTest
         Assert.Equal("tag1", room.Tags[0].Key);
         Assert.Empty(room.Exits);
         Assert.Empty(room.Data);
+
+        room = RoomFormatter.DecodeRoom("rid=rname@+tag1^0");
+        Assert.NotNull(room);
+        Assert.Equal("rid", room.Key);
+        Assert.Equal("rname", room.Name);
+        Assert.Equal("", room.Group);
+        Assert.Single(room.Tags);
+        Assert.Equal("tag1", room.Tags[0].Key);
+        Assert.Equal(0, room.Tags[0].Value);
+        Assert.Empty(room.Exits);
+        Assert.Empty(room.Data);
+
+        room = RoomFormatter.DecodeRoom("rid=rname@+tag1^1");
+        Assert.NotNull(room);
+        Assert.Equal("rid", room.Key);
+        Assert.Equal("rname", room.Name);
+        Assert.Equal("", room.Group);
+        Assert.Single(room.Tags);
+        Assert.Equal("tag1", room.Tags[0].Key);
+        Assert.Equal(1, room.Tags[0].Value);
+        Assert.Empty(room.Exits);
+        Assert.Empty(room.Data);
+
+        room = RoomFormatter.DecodeRoom("rid=rname@+tag1^^1");
+        Assert.NotNull(room);
+        Assert.Equal("rid", room.Key);
+        Assert.Equal("rname", room.Name);
+        Assert.Equal("", room.Group);
+        Assert.Single(room.Tags);
+        Assert.Equal("tag1", room.Tags[0].Key);
+        Assert.Equal(0, room.Tags[0].Value);
+        Assert.Empty(room.Exits);
+        Assert.Empty(room.Data);
+
 
         room = RoomFormatter.DecodeRoom("rid=rname@+tag1|");
         Assert.NotNull(room);
