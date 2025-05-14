@@ -134,9 +134,13 @@ public class MapperTest()
         {
             To = "key2",
             Command = "cmd1",
+            Conditions = [
+                new ValueCondition("etag1", 1, true)
+            ],
             Cost = 10,
         };
-        var mapper = new Mapper(md.Current!, ctx, new MapperOptions());
+        var opt = new MapperOptions();
+        var mapper = new Mapper(md.Current!, ctx, opt);
         Assert.True(mapper.ValidateExit("key1", exit, 10));
         var exit2 = exit.Clone();
         exit2.To = "notfound";
@@ -150,5 +154,17 @@ public class MapperTest()
         ctx.WithBlockedLinks([new Link("key2", "key1")]);
         Assert.True(mapper.ValidateExit("key1", exit, 10));
         ctx.ClearBlockedLinks();
+        Assert.True(mapper.ValidateExit("key1", exit, 10));
+        opt.MaxExitCost = 5;
+        Assert.False(mapper.ValidateExit("key1", exit, 10));
+        opt.MaxExitCost = 0;
+        Assert.True(mapper.ValidateExit("key1", exit, 10));
+        opt.MaxTotalCost = 5;
+        Assert.False(mapper.ValidateExit("key1", exit, 10));
+        opt.MaxTotalCost = 0;
+        Assert.True(mapper.ValidateExit("key1", exit, 10));
+        ctx.WithTags([new ValueTag("etag1", 5)]);
+        Assert.False(mapper.ValidateExit("key1", exit, 10));
+        ctx.ClearTags();
     }
 }

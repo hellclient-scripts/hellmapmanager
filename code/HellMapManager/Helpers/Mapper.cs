@@ -6,10 +6,11 @@ namespace HellMapManager.Helpers;
 
 public class WalkingStep
 {
-    public static WalkingStep FromExit(string from, Exit exit, int cost, int TotalCost)
+    public static WalkingStep FromExit(WalkingStep? prev, string from, Exit exit, int cost, int TotalCost)
     {
         return new WalkingStep()
         {
+            Prev = prev,
             From = from,
             To = exit.To,
             Command = exit.Command,
@@ -22,7 +23,8 @@ public class WalkingStep
     {
         return new Step(Command, To, Cost);
     }
-    public string From { get; set; } = "";
+    public WalkingStep? Prev { get; set; } = null;
+    public string From = "";
     public string To { get; set; } = "";
     public string Command { get; set; } = "";
     public int Cost { get; set; } = 0;
@@ -39,21 +41,15 @@ public class Walking(Mapper mapper)
     {
         var result = new QueryReuslt();
 
-        if (last.From == "")
+        if (last.Prev is null)
         {
             return QueryReuslt.Fail;
         }
-        var current = last;
-        WalkingStep? next;
-        while (current.From != "")
+        WalkingStep current = last;
+        while (current.Prev is not null)
         {
             result.Steps.Add(current.ToStep());
-            if (!Walked.TryGetValue(current.From, out next))
-            {
-                return QueryReuslt.Fail;
-            }
-            current = next;
-
+            current = current.Prev;
         }
         result.Steps.Reverse();
         result.From = current.From;
@@ -98,7 +94,7 @@ public class Walking(Mapper mapper)
                 From = "",
                 Command = "",
             };
-            Mapper.AddRoomWalkingSteps(pending, f, cost);
+            Mapper.AddRoomWalkingSteps(null, pending, f, cost);
         }
         while (pending.Count > 0)
         {
@@ -116,7 +112,7 @@ public class Walking(Mapper mapper)
                         if (step.Remain <= 1)
                         {
                             Walked[step.To] = step;
-                            Mapper.AddRoomWalkingSteps(pending, step.To, step.TotalCost);
+                            Mapper.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
                         }
                         else
                         {
@@ -142,7 +138,7 @@ public class Walking(Mapper mapper)
                 From = "",
                 Command = "",
             };
-            Mapper.AddRoomWalkingSteps(pending, f, 0);
+            Mapper.AddRoomWalkingSteps(null, pending, f, 0);
         }
         var i = 0;
         while (pending.Count > 0 || i > iterations)
@@ -154,7 +150,7 @@ public class Walking(Mapper mapper)
                 if (!Walked.ContainsKey(step.To))
                 {
                     Walked[step.To] = step;
-                    Mapper.AddRoomWalkingSteps(pending, step.To, step.TotalCost);
+                    Mapper.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
                 }
             }
             i++;
@@ -296,12 +292,9 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
         {
             return false;
         }
-        foreach (var condition in exit.Conditions)
+        if (!Context.ValidteConditions(exit.Conditions))
         {
-            if (Context.Tags.ContainsKey(condition.Key) != condition.Not)
-            {
-                return false;
-            }
+            return false;
         }
         return true;
     }
@@ -329,7 +322,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
         }
         return ValidateExit(start, exit, GetExitCost(exit));
     }
-    public WalkingStep? ValidateToWalkingStep(string from, Exit exit, int TotalCost)
+    public WalkingStep? ValidateToWalkingStep(WalkingStep? prev, string from, Exit exit, int TotalCost)
     {
         if (exit.To == "" || exit.To == from)
         {
@@ -342,18 +335,18 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             {
                 return null;
             }
-            return WalkingStep.FromExit(from, exit, cost, TotalCost);
+            return WalkingStep.FromExit(prev, from, exit, cost, TotalCost);
         }
         return null;
     }
-    public void AddRoomWalkingSteps(List<WalkingStep> list, string from, int TotalCost)
+    public void AddRoomWalkingSteps(WalkingStep? prev, List<WalkingStep> list, string from, int TotalCost)
     {
         var room = GetRoom(from);
         if (room is not null)
         {
             foreach (var exit in GetRoomExits(room))
             {
-                var step = ValidateToWalkingStep(from, exit, TotalCost);
+                var step = ValidateToWalkingStep(prev, from, exit, TotalCost);
                 if (step is not null)
                 {
                     list.Add(step);

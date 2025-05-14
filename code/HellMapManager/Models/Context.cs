@@ -228,4 +228,15 @@ public class Context
         }
         return value <= 0;
     }
+    public bool ValidteConditions(List<ValueCondition> conditions)
+    {
+        foreach (var rcondition in conditions)
+        {
+            if (HasTag(rcondition.Key, rcondition.Value) == rcondition.Not)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

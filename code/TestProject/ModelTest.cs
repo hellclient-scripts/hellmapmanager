@@ -115,26 +115,27 @@ public class ModelTest
         Assert.Equal("key2:1", vc2.KeyLabel);
 
         List<ValueTag> tags = [
-            new ("key1", 0),
+            new ("key1", 1),
             new ("key2", 5),
         ];
-        Assert.True(ValueTag.HasTag(tags, "key1", 0));
+        Assert.True(ValueTag.HasTag(tags, "key1", 1));
         Assert.True(ValueTag.HasTag(tags, "key2", 5));
-        Assert.False(ValueTag.HasTag(tags, "key1", 1));
+        Assert.False(ValueTag.HasTag(tags, "key1", 2));
         Assert.False(ValueTag.HasTag(tags, "key2", 6));
-
+        Assert.False(ValueTag.HasTag(tags, "key3", 1));
+        Assert.True(ValueTag.HasTag(tags, "key3", 0));
         Assert.True(ValueTag.ValidteConditions([], []));
-        Assert.False(ValueTag.ValidteConditions([], [new("key1", 0, false)]));
+        Assert.False(ValueTag.ValidteConditions([], [new("key1", 1, false)]));
         Assert.True(ValueTag.ValidteConditions(tags, []));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 0, false)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, true)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key2", 0, false)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key2", 10, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key2", 10, false)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key2", 4, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, true), new("key2", 0, false)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key3", 0, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key3", 0, false)]));
+        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, true)]));
+        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 0, false)]));
+        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 10, true)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 10, false)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 4, true)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, true), new("key2", 1, false)]));
+        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key3", 1, true)]));
+        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key3", 1, false)]));
     }
     [Fact]
     public void TestValueTag()
@@ -358,7 +359,7 @@ public class ModelTest
 
         Assert.True(room.HasTag("tag1", 0));
         Assert.True(room.HasTag("tag2", 0));
-        Assert.False(room.HasTag("notexists", 0));
+        Assert.False(room.HasTag("notexists", 1));
         Room room2;
 
         Assert.False(room.Filter("unknow"));
@@ -1623,6 +1624,25 @@ public class ModelTest
         var result2 = QueryReuslt.Fail;
         Assert.False(result2.IsSuccess());
         Assert.Null(result2.SuccessOrNull());
+    }
+    [Fact]
+    public void TestContextTags()
+    {
+        var ctx = new Context();
+        ctx.WithTags([
+            new ValueTag("tag1", 1),
+            new ValueTag("tag2", 2),
+        ]);
+        Assert.True(ctx.HasTag("tag1", 1));
+        Assert.False(ctx.HasTag("tag1", 2));
+        Assert.True(ctx.HasTag("tag2", 2));
+        Assert.False(ctx.HasTag("tag2", 3));
+        Assert.False(ctx.HasTag("tag3", 1));
+        Assert.True(ctx.HasTag("tag3", 0));
+        Assert.True(ctx.ValidteConditions([new("tag1", 1, false), new("tag2", 2, false)]));
+        Assert.True(ctx.ValidteConditions([new("tag1", 1, false), new("tag3", 1, true)]));
+        Assert.False(ctx.ValidteConditions([new("tag1", 1, false), new("tag3", 1, false)]));
+        Assert.True(ctx.ValidteConditions([new("tag3", 0, false)]));
     }
     [Fact]
     public void TestSnapshotFilter()

@@ -53,7 +53,7 @@ public class ValueTag(string key, int value)
                 return true;
             }
         }
-        return false;
+        return value < 1;
     }
     public static bool ValidteConditions(List<ValueTag> tags, List<ValueCondition> conditions)
     {
