@@ -233,4 +233,97 @@ public class MapperTest()
         Assert.Equal("key3", step.Target);
         Assert.Equal(12, step.Cost);
     }
+    [Fact]
+    public void TestGetRoomExits()
+    {
+        var room = new Room()
+        {
+            Key = "key1",
+            Tags = [
+                new ValueTag("tag1", 10)
+            ],
+            Exits = [
+                new Exit()
+                {
+                    To = "key2",
+                    Command = "cmd1",
+                    Conditions = [
+                        new ValueCondition("etag1", 1, true)
+                    ],
+                    Cost = 10,
+                },
+                new Exit()
+                {
+                    To = "key3",
+                    Command = "cmd2",
+                    Cost = 20,
+                },
+            ],
+        };
+        var md = new MapDatabase();
+        md.NewMap();
+        var ctx = new Context();
+        var opt = new MapperOptions();
+        var mapper = new Mapper(md.Current!, ctx, opt);
+        var exits = mapper.GetRoomExits(room);
+        Assert.Equal(2, exits.Count);
+        md.APIInsertShortcuts([new Shortcut()
+        {
+            Key="shortcut1",
+            Command="cmd1",
+            To="key3",
+            Cost=1,
+        },
+        ]);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(3, exits.Count);
+        md.APIInsertShortcuts([new Shortcut()
+        {
+            Key="shortcut2",
+            Command="cmd2",
+            To="key4",
+            RoomConditions=[
+                new ValueCondition("tag1", 1, true)
+            ],
+            Cost=1,
+        },
+        ]);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(3, exits.Count);
+        ctx.WithShortcuts([
+            new RoomConditionExit(){
+                To="key4",
+                Command="cmd2",
+                RoomConditions=[
+                    new ValueCondition("tag1", 1, false)
+                ],
+                Cost=1,
+            },
+        ]);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(4, exits.Count);
+        ctx.WithShortcuts([
+                new RoomConditionExit(){
+                To="key5",
+                Command="cmd3",
+                RoomConditions=[
+                    new ValueCondition("tag1", 99, false)
+                ],
+                Cost=1,
+            },
+        ]);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(4, exits.Count);
+        opt.WithDisableShortcuts(true);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(2, exits.Count);
+        ctx.WithPaths([new HellMapManager.Models.Path(){
+            From="key1",
+            To="key6",
+            Command="cmd4",
+            Cost=10,
+        }]);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(3, exits.Count);
+    }
 }

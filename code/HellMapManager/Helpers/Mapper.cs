@@ -246,7 +246,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
         List<Exit> result = [.. room.Exits];
         if (Context.Paths.TryGetValue(room.Key, out var list))
         {
-            result = (List<Exit>)result.Concat(list);
+            result.AddRange(list);
         }
         if (!Options.DisableShortcuts)
         {
