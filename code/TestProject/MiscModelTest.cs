@@ -8,7 +8,6 @@ public class MiscModelTest
     {
         var cache = new Cache();
         var env = new HellMapManager.Models.Environment();
-        var link = new HellMapManager.Models.Link();
         var path = new HellMapManager.Models.Path();
 
     }

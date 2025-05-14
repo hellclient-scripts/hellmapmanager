@@ -60,7 +60,12 @@ public class RoomFormatter
             {
                 if (extag.Not)
                 {
-                    Extags.Append(Escape(extag.Key)).Append('<');
+                    Extags.Append(Escape(extag.Key));
+                    if (extag.Value != 1)
+                    {
+                        Extags.Append('^').Append(Escape(extag.Value.ToString()));
+                    }
+                    Extags.Append('<');
                 }
             }
             var CondCommand = Extags.Append(CondExit);
@@ -69,7 +74,12 @@ public class RoomFormatter
             {
                 if (!tag.Not)
                 {
-                    Tags.Append(Escape(tag.Key)).Append('>');
+                    Tags.Append(Escape(tag.Key));
+                    if (tag.Value != 1)
+                    {
+                        Tags.Append('^').Append(Escape(tag.Value.ToString()));
+                    }
+                    Tags.Append('>');
                 }
             }
             var Command = Tags.Append(CondCommand);
@@ -81,7 +91,7 @@ public class RoomFormatter
         foreach (var tag in room.Tags)
         {
             RoomDef.Append('+').Append(Escape(tag.Key));
-            if (tag.Value != 0)
+            if (tag.Value != 1)
             {
                 RoomDef.Append('^').Append(Escape(tag.Value.ToString()));
             }
@@ -131,7 +141,10 @@ public class RoomFormatter
                     var value = 0;
                     if (tagdata.Length > 1)
                     {
-                        int.TryParse(tagdata[1].Trim(), out value);
+                        if (!int.TryParse(tagdata[1].Trim(), out value))
+                        {
+                            value = 1;
+                        }
                     }
                     room.Tags.Add(new ValueTag(Unescape(tag), value));
                 }
@@ -166,7 +179,10 @@ public class RoomFormatter
                     var value = 0;
                     if (tagdata.Length > 1)
                     {
-                        int.TryParse(tagdata[1].Trim(), out value);
+                        if (!int.TryParse(tagdata[1].Trim(), out value))
+                        {
+                            value = 1;
+                        }
                     }
                     exit.Conditions.Add(new ValueCondition(Unescape(tag), value, false));
 
@@ -184,7 +200,10 @@ public class RoomFormatter
                     var value = 0;
                     if (extagdata.Length > 1)
                     {
-                        int.TryParse(extagdata[1].Trim(), out value);
+                        if (!int.TryParse(extagdata[1].Trim(), out value))
+                        {
+                            value = 1;
+                        }
                     }
                     exit.Conditions.Add(new ValueCondition(Unescape(extag), value, true));
                 }

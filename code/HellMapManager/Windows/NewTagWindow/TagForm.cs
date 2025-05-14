@@ -23,7 +23,7 @@ public partial class TagForm : ObservableObject
     public ValueTag? Raw;
     public ExternalValidator ExternalValidator;
     public string Key { get; set; } = "";
-    public int Value { get; set; } = 0;
+    public int Value { get; set; } = 1;
     public string Validate()
     {
         var err = ExternalValidator(this);

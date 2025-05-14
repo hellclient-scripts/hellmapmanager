@@ -307,7 +307,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
     }
     public bool ValidateRoom(Room room)
     {
-        if (Context.BlockedLinks.ContainsKey(room.Key))
+        if (Context.Blacklist.ContainsKey(room.Key))
         {
             return false;
         }

@@ -24,11 +24,11 @@ public class KeyValue(string key, string value)
     }
     public ValueTag ToValueTag()
     {
-        return new ValueTag(HMMFormatter.Unescape(Key), HMMFormatter.UnescapeInt(Value, 0));
+        return new ValueTag(HMMFormatter.Unescape(Key), HMMFormatter.UnescapeInt(Value, 1));
     }
     public static KeyValue FromValueTag(ValueTag k)
     {
-        return new KeyValue(HMMFormatter.Escape(k.Key), k.Value.ToString());
+        return new KeyValue(HMMFormatter.Escape(k.Key), k.Value == 1 ? "" : k.Value.ToString());
     }
 
 }
@@ -74,11 +74,11 @@ public class ToggleKeyValue(string key, string value, bool not)
     }
     public ValueCondition ToValueCondition()
     {
-        return new ValueCondition(HMMFormatter.Unescape(Key), HMMFormatter.UnescapeInt(Value, 0), Not);
+        return new ValueCondition(HMMFormatter.Unescape(Key), HMMFormatter.UnescapeInt(Value, 1), Not);
     }
     public static ToggleKeyValue FromValueCondition(ValueCondition c)
     {
-        return new ToggleKeyValue(HMMFormatter.Escape(c.Key), c.Value.ToString(), c.Not);
+        return new ToggleKeyValue(HMMFormatter.Escape(c.Key), c.Value == 1 ? "" : c.Value.ToString(), c.Not);
     }
 
 

@@ -137,6 +137,104 @@ public class ModelTest
         Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 0, false), new("key3", 0, false)]));
     }
     [Fact]
+    public void TestValueTag()
+    {
+        var kv = new KeyValue("key", "value");
+        var tag = kv.ToValueTag();
+        Assert.Equal("key", tag.Key);
+        Assert.Equal(1, tag.Value);
+        kv = new KeyValue("key", "");
+        tag = kv.ToValueTag();
+        Assert.Equal("key", tag.Key);
+        Assert.Equal(1, tag.Value);
+        kv = new KeyValue("key", "1");
+        tag = kv.ToValueTag();
+        Assert.Equal("key", tag.Key);
+        Assert.Equal(1, tag.Value);
+        kv = new KeyValue("key", "0");
+        tag = kv.ToValueTag();
+        Assert.Equal("key", tag.Key);
+        Assert.Equal(0, tag.Value);
+        kv = new KeyValue("key", "2");
+        tag = kv.ToValueTag();
+        Assert.Equal("key", tag.Key);
+        Assert.Equal(2, tag.Value);
+        kv = new KeyValue("key", "-1");
+        tag = kv.ToValueTag();
+        Assert.Equal("key", tag.Key);
+        Assert.Equal(-1, tag.Value);
+        tag = new ValueTag("key", 0);
+        kv = KeyValue.FromValueTag(tag);
+        Assert.Equal("key", kv.Key);
+        Assert.Equal("0", kv.Value);
+        tag = new ValueTag("key", -1);
+        kv = KeyValue.FromValueTag(tag);
+        Assert.Equal("key", kv.Key);
+        Assert.Equal("-1", kv.Value);
+        tag = new ValueTag("key", 1);
+        kv = KeyValue.FromValueTag(tag);
+        Assert.Equal("key", kv.Key);
+        Assert.Equal("", kv.Value);
+        tag = new ValueTag("key", 2);
+        kv = KeyValue.FromValueTag(tag);
+        Assert.Equal("key", kv.Key);
+        Assert.Equal("2", kv.Value);
+    }
+    [Fact]
+    public void TestValueCondition()
+    {
+        var kv = new ToggleKeyValue("key", "value", false);
+        var vc = kv.ToValueCondition();
+        Assert.Equal("key", vc.Key);
+        Assert.Equal(1, vc.Value);
+        Assert.False(vc.Not);
+        kv = new ToggleKeyValue("key", "", true);
+        vc = kv.ToValueCondition();
+        Assert.Equal("key", vc.Key);
+        Assert.Equal(1, vc.Value);
+        Assert.True(vc.Not);
+        kv = new ToggleKeyValue("key", "1", false);
+        vc = kv.ToValueCondition();
+        Assert.Equal("key", vc.Key);
+        Assert.Equal(1, vc.Value);
+        Assert.False(vc.Not);
+        kv = new ToggleKeyValue("key", "0", true);
+        vc = kv.ToValueCondition();
+        Assert.Equal("key", vc.Key);
+        Assert.Equal(0, vc.Value);
+        Assert.True(vc.Not);
+        kv = new ToggleKeyValue("key", "2", false);
+        vc = kv.ToValueCondition();
+        Assert.Equal("key", vc.Key);
+        Assert.Equal(2, vc.Value);
+        Assert.False(vc.Not);
+        kv = new ToggleKeyValue("key", "-1", true);
+        vc = kv.ToValueCondition();
+        Assert.Equal("key", vc.Key);
+        Assert.Equal(-1, vc.Value);
+        Assert.True(vc.Not);
+        vc = new ValueCondition("key", 0, false);
+        kv = ToggleKeyValue.FromValueCondition(vc);
+        Assert.Equal("key", kv.Key);
+        Assert.Equal("0", kv.Value);
+        Assert.False(kv.Not);
+        vc = new ValueCondition("key", -1, true);
+        kv = ToggleKeyValue.FromValueCondition(vc);
+        Assert.Equal("key", kv.Key);
+        Assert.Equal("-1", kv.Value);
+        Assert.True(kv.Not);
+        vc = new ValueCondition("key", 1, false);
+        kv = ToggleKeyValue.FromValueCondition(vc);
+        Assert.Equal("key", kv.Key);
+        Assert.Equal("", kv.Value);
+        Assert.False(kv.Not);
+        vc = new ValueCondition("key", 2, true);
+        kv = ToggleKeyValue.FromValueCondition(vc);
+        Assert.Equal("key", kv.Key);
+        Assert.Equal("2", kv.Value);
+        Assert.True(kv.Not);
+    }
+    [Fact]
     public void TestExit()
     {
         var exit = new Exit()
@@ -1308,9 +1406,9 @@ public class ModelTest
         Assert.Equal("cmd2", ctx.Paths["from2"][0].Command);
         Assert.Empty(ctx.BlockedLinks);
         Assert.Equal(ctx, ctx.WithBlockedLinks([
-            new Link() { From = "from1", To = "to1" },
-            new Link() { From = "from2", To = "to2" },
-            new Link() { From = "from1", To = "to3" },
+            new Link("from1","to1"),
+            new Link("from2","to2") {},
+            new Link("from1", "to3") ,
         ]));
         Assert.Equal(2, ctx.BlockedLinks.Count);
         Assert.True(ctx.BlockedLinks["from1"]["to1"]);
@@ -1367,7 +1465,7 @@ public class ModelTest
             Blacklist = ["room3", "room4"],
             Shortcuts = [new RoomConditionExit() { Command = "cmd1", To = "to1" }, new RoomConditionExit() { Command = "cmd2", To = "to2" }],
             Paths = [new HellMapManager.Models.Path() { To = "to1", From = "from1", Command = "cmd1" }, new HellMapManager.Models.Path() { To = "to2", From = "from2", Command = "cmd2" }, new HellMapManager.Models.Path() { To = "to3", From = "from1", Command = "cmd3" }],
-            BlockedLinks = [new Link() { From = "from1", To = "to1" }, new Link() { From = "from2", To = "to2" }, new Link() { From = "from1", To = "to3" }],
+            BlockedLinks = [new Link("from1", "to1"), new Link("from2", "to2"), new Link("from1", "to3")],
             CommandCosts = [new CommandCost() { Command = "cmd1", To = "to1", Cost = 1 }, new CommandCost() { Command = "cmd2", To = "to1", Cost = 2 }, new CommandCost() { Command = "cmd1", To = "to3", Cost = 3 }],
         };
         var ctx = Context.FromEnvironment(env);

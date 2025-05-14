@@ -8,10 +8,10 @@ public class Path : Exit
 {
     public string From { get; set; } = "";
 }
-public class Link
+public class Link(string from, string to)
 {
-    public string From { get; set; } = "";
-    public string To { get; set; } = "";
+    public string From { get; set; } = from;
+    public string To { get; set; } = to;
 }
 public class CommandCost
 {
@@ -207,7 +207,7 @@ public class Context
             {
                 if (t.Value)
                 {
-                    env.BlockedLinks.Add(new Link() { From = f.Key, To = t.Key });
+                    env.BlockedLinks.Add(new Link(f.Key, t.Key));
                 }
             }
         }
@@ -219,5 +219,13 @@ public class Context
             }
         }
         return env;
+    }
+    public bool HasTag(string key, int value)
+    {
+        if (Tags.TryGetValue(key, out var v))
+        {
+            return value <= v;
+        }
+        return value <= 0;
     }
 }
