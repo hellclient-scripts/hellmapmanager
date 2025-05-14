@@ -1,6 +1,7 @@
 using HellMapManager.Models;
 using HellMapManager.Helpers;
 using HellMapManager.Cores;
+using Avalonia.Diagnostics;
 
 namespace TestProject;
 
@@ -166,5 +167,70 @@ public class MapperTest()
         ctx.WithTags([new ValueTag("etag1", 5)]);
         Assert.False(mapper.ValidateExit("key1", exit, 10));
         ctx.ClearTags();
+        Assert.True(mapper.ValidatePath("key1", exit));
+        ctx.WithBlockedLinks([new("key1", "key2")]);
+        Assert.False(mapper.ValidatePath("key1", exit));
+        ctx.ClearBlockedLinks();
+        opt.MaxExitCost = 20;
+        Assert.True(mapper.ValidatePath("key1", exit));
+        ctx.WithCommandCosts([new CommandCost()
+        {
+            Command = "cmd1",
+            To = "key2",
+            Cost = 50,
+        }]);
+        Assert.False(mapper.ValidatePath("key1", exit));
+    }
+    [Fact]
+    public void TestWalkingStep()
+    {
+        var exit = new Exit()
+        {
+            To = "key2",
+            Command = "cmd1",
+            Conditions = [
+                new ValueCondition("etag1", 1, true)
+            ],
+            Cost = 150,
+        };
+        var ws2 = new WalkingStep();
+        Assert.Null(ws2.Prev);
+        Assert.Equal("", ws2.From);
+        Assert.Equal("", ws2.To);
+        Assert.Equal("", ws2.Command);
+        Assert.Equal(0, ws2.Cost);
+        Assert.Equal(0, ws2.TotalCost);
+        Assert.Equal(0, ws2.Remain);
+
+
+        var ws = WalkingStep.FromExit(null, "key1", exit, 10, 20);
+        Assert.NotNull(ws);
+        Assert.Null(ws2.Prev);
+        Assert.Equal("key1", ws.From);
+        Assert.Equal("key2", ws.To);
+        Assert.Equal("cmd1", ws.Command);
+        Assert.Equal(10, ws.Cost);
+        Assert.Equal(30, ws.TotalCost);
+        Assert.Equal(9, ws.Remain);
+
+        exit = new Exit()
+        {
+            To = "key3",
+            Command = "cmd2",
+            Cost = 20,
+        };
+        var ws3 = WalkingStep.FromExit(ws, "key2", exit, 12, 20);
+        Assert.NotNull(ws);
+        Assert.Equal(ws, ws3.Prev);
+        Assert.Equal("key2", ws3.From);
+        Assert.Equal("key3", ws3.To);
+        Assert.Equal("cmd2", ws3.Command);
+        Assert.Equal(12, ws3.Cost);
+        Assert.Equal(32, ws3.TotalCost);
+        Assert.Equal(11, ws3.Remain);
+        var step = ws3.ToStep();
+        Assert.Equal("cmd2", step.Command);
+        Assert.Equal("key3", step.Target);
+        Assert.Equal(12, step.Cost);
     }
 }

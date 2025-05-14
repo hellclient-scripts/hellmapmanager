@@ -15,7 +15,7 @@ public class WalkingStep
             To = exit.To,
             Command = exit.Command,
             Cost = cost,
-            TotalCost = TotalCost + exit.Cost,
+            TotalCost = TotalCost + cost,
             Remain = cost - 1,
         };
     }
