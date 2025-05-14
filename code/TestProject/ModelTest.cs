@@ -1,3 +1,4 @@
+using System.Reflection;
 using HellMapManager.Models;
 using Xunit.Sdk;
 
@@ -1524,5 +1525,81 @@ public class ModelTest
         var result2 = QueryReuslt.Fail;
         Assert.False(result2.IsSuccess());
         Assert.Null(result2.SuccessOrNull());
+    }
+    [Fact]
+    public void TestSnapshotFilter()
+    {
+        var snapshot = new Snapshot()
+        {
+            Key = "key1",
+            Type = "type1",
+            Value = "value1",
+            Group = "group1",
+            Timestamp = 1234567890
+        };
+        var sf = new SnapshotFilter("key1", "type1", "group1");
+        Assert.Equal("key1", sf.Key);
+        Assert.Equal("type1", sf.Type);
+        Assert.Equal("group1", sf.Group);
+        Assert.True(new SnapshotFilter(null, null, null).Validate(snapshot));
+        Assert.True(new SnapshotFilter("key1", null, null).Validate(snapshot));
+        Assert.True(new SnapshotFilter("key1", "type1", null).Validate(snapshot));
+        Assert.True(new SnapshotFilter("key1", "type1", "group1").Validate(snapshot));
+        Assert.True(new SnapshotFilter(null, "type1", null).Validate(snapshot));
+        Assert.True(new SnapshotFilter(null, "type1", "group1").Validate(snapshot));
+        Assert.True(new SnapshotFilter(null, null, "group1").Validate(snapshot));
+        Assert.False(new SnapshotFilter("keynotfound", null, null).Validate(snapshot));
+        Assert.False(new SnapshotFilter(null, "typenotfound", null).Validate(snapshot));
+        Assert.False(new SnapshotFilter(null, null, "groupnotfound").Validate(snapshot));
+        Assert.False(new SnapshotFilter("keynotfound", "typenotfound", "groupnotfound").Validate(snapshot));
+    }
+    [Fact]
+    public void TestSnapshotSearch()
+    {
+        var snapshot = new Snapshot()
+        {
+            Key = "key1",
+            Type = "type1",
+            Value = "value1\nvalue2",
+            Group = "group1",
+            Timestamp = 1234567890
+        };
+        var ss = new SnapshotSearch();
+        Assert.Null(ss.Type);
+        Assert.Null(ss.Group);
+        Assert.Empty(ss.Keywords);
+        Assert.True(ss.PartialMatch);
+        Assert.False(ss.Any);
+        Assert.True(ss.Validate(snapshot));
+        ss.Type = "type2";
+        Assert.False(ss.Validate(snapshot));
+        ss.Type = "type1";
+        Assert.True(ss.Validate(snapshot));
+        ss.Group = "group2";
+        Assert.False(ss.Validate(snapshot));
+        ss.Group = "group1";
+        Assert.True(ss.Validate(snapshot));
+        ss.Keywords = ["valuenotfound"];
+        Assert.False(ss.Validate(snapshot));
+        ss.Keywords = ["value1"];
+        Assert.True(ss.Validate(snapshot));
+        ss.Keywords = ["value1", "value3"];
+        Assert.False(ss.Validate(snapshot));
+        ss.Any = true;
+        Assert.True(ss.Validate(snapshot));
+        ss.PartialMatch = false;
+        ss.Keywords = ["value1"];
+        Assert.False(ss.Validate(snapshot));
+        ss.Keywords = ["value1\nvalue2"];
+        Assert.True(ss.Validate(snapshot));
+    }
+    [Fact]
+    public void TestSnapshotSearchResult()
+    {
+        var sr = new SnapshotSearchResult();
+        Assert.Equal(0, sr.Count);
+        Assert.Equal(0, sr.Sum);
+        Assert.Equal("", sr.Key);
+        Assert.Empty(sr.Items);
     }
 }

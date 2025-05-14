@@ -3,9 +3,9 @@ using System.Collections.Generic;
 namespace HellMapManager.Models;
 public class SnapshotFilter(string? key, string? type, string? group)
 {
-    public string? Key { get; set; } = key;
-    public string? Type { get; set; } = type;
-    public string? Group { get; set; } = group;
+    public string? Key { get; } = key;
+    public string? Type { get; } = type;
+    public string? Group { get; } = group;
     public bool Validate(Snapshot model)
     {
         if (Key != null && model.Key != Key)
