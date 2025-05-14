@@ -1601,5 +1601,36 @@ public class ModelTest
         Assert.Equal(0, sr.Sum);
         Assert.Equal("", sr.Key);
         Assert.Empty(sr.Items);
+        var snapshot = new Snapshot()
+        {
+            Key = "key1",
+            Type = "type1",
+            Value = "value1\nvalue2",
+            Group = "group1",
+            Timestamp = 1234567890,
+            Count = 15
+        };
+        var snapshot2 = new Snapshot()
+        {
+            Key = "key1",
+            Type = "type1",
+            Value = "value1\nvalue2",
+            Group = "group1",
+            Timestamp = 1234567890,
+            Count = 30
+        };
+        sr.Add(snapshot, true);
+        Assert.Equal(15, sr.Count);
+        Assert.Equal(15, sr.Sum);
+        Assert.Equal("", sr.Key);
+        Assert.Single(sr.Items);
+        Assert.Equal(snapshot, sr.Items[0]);
+        sr.Add(snapshot2, false);
+        Assert.Equal(15, sr.Count);
+        Assert.Equal(45, sr.Sum);
+        Assert.Equal("", sr.Key);
+        Assert.Single(sr.Items);
+        Assert.Equal(snapshot, sr.Items[0]);
+        Assert.Equal(snapshot, sr.Items[0]);
     }
 }

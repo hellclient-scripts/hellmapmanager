@@ -80,10 +80,10 @@ public class SnapshotSearchResult
     public List<Snapshot> Items { get; set; } = [];
     public void Add(Snapshot model, bool match)
     {
-        Items.Add(model);
         Sum += model.Count;
         if (match)
         {
+            Items.Add(model);
             Count += model.Count;
         }
     }
