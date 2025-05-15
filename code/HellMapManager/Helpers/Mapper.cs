@@ -168,25 +168,32 @@ public class Walking(Mapper mapper)
         {
             return QueryReuslt.Fail;
         }
-
-        var result = QueryPathAny([start], target, 0);
-        if (!result.IsSuccess())
+        var result = new QueryReuslt
         {
-            return QueryReuslt.Fail; ;
-        }
-        var pending = result.Unvisited;
+            From = start,
+            To = start,
+        };
+        var pending = target;
         while (pending.Count > 0)
         {
             var next = QueryPathAny([result.To], pending, result.Cost);
-            if (!next.IsSuccess())
+            if (next.IsSuccess())
             {
-                return result;
+                result.Steps.AddRange(next.Steps);
+                result.Cost = next.Cost;
+                result.Unvisited = next.Unvisited;
+                pending = result.Unvisited;
+                result.To = next.To;
             }
-            result.Steps.AddRange(next.Steps);
-            result.Cost = next.Cost;
-            result.Unvisited = next.Unvisited;
-            pending = result.Unvisited;
-            result.To = next.To;
+            else
+            {
+                pending = [];
+            }
+
+        }
+        if (result.Steps.Count == 0)
+        {
+            return QueryReuslt.Fail;
         }
         return result;
     }
@@ -197,23 +204,28 @@ public class Walking(Mapper mapper)
         {
             return QueryReuslt.Fail;
         }
-        var result = QueryPathAny([start], [target[0]], 0);
-        if (!result.IsSuccess())
+        var result = new QueryReuslt
         {
-            return QueryReuslt.Fail; ;
-        }
-        List<string> unvisited = [];
-        for (var i = 1; i < target.Count; i++)
+            From = start,
+            To = start,
+        };
+        for (var i = 0; i < target.Count; i++)
         {
             var next = QueryPathAny([result.To], [target[i]], result.Cost);
-            if (!next.IsSuccess())
+            if (next.IsSuccess())
             {
-                return result;
+                result.Steps.AddRange(next.Steps);
+                result.Cost = next.Cost;
+                result.To = next.To;
             }
-            result.Steps.AddRange(next.Steps);
-            result.Cost = next.Cost;
-            unvisited = next.Unvisited;
-            result.To = next.To;
+            else
+            {
+                result.Unvisited.Add(target[i]);
+            }
+        }
+        if (result.Steps.Count == 0)
+        {
+            return QueryReuslt.Fail;
         }
         return result;
     }
