@@ -2,11 +2,10 @@ namespace HellMapManager.Adapters;
 
 public class SystemAdapter
 {
-    public static readonly SystemAdapter Instance = new();
-    public void Reset()
+    public static void Reset()
     {
         File = new FileAdapter();
     }
-    public IFileAdapter File = new FileAdapter();
+    public static IFileAdapter File { get; set; } = new FileAdapter();
 }
 

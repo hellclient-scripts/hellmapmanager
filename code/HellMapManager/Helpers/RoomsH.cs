@@ -235,7 +235,7 @@ public class RoomsH
 {
     public static List<Room> Open(string file)
     {
-        using var fileStream = SystemAdapter.Instance.File.ReadStream(file);
+        using var fileStream = SystemAdapter.File.ReadStream(file);
         using var sr = new StreamReader(fileStream, Encoding.UTF8);
         var body = sr.ReadToEnd();
         var rooms = Load(body);
@@ -263,7 +263,7 @@ public class RoomsH
     }
     public static void Save(string file, List<Room> rooms, RoomsHExportOption opt)
     {
-        using var fileStream = SystemAdapter.Instance.File.WriteStream(file);
+        using var fileStream = SystemAdapter.File.WriteStream(file);
         using var sw = new StreamWriter(fileStream, Encoding.UTF8);
         var lines = Export(rooms, opt);
         sw.Write(string.Join("\n", lines));

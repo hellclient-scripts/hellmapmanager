@@ -30,7 +30,7 @@ public class SettingsHelper(string setingpath)
             {
                 return;
             }
-            using var fileStream = SystemAdapter.Instance.File.WriteStream(SettingPath);
+            using var fileStream = SystemAdapter.File.WriteStream(SettingPath);
             using var sw = new StreamWriter(fileStream, Encoding.UTF8);
             sw.Write(ToJSON(settings));
         }
@@ -62,11 +62,11 @@ public class SettingsHelper(string setingpath)
     {
         try
         {
-            if (SettingPath == "" || !SystemAdapter.Instance.File.Exists(this.SettingPath))
+            if (SettingPath == "" || !SystemAdapter.File.Exists(this.SettingPath))
             {
                 return null;
             }
-            using var fileStream = SystemAdapter.Instance.File.ReadStream(SettingPath);
+            using var fileStream = SystemAdapter.File.ReadStream(SettingPath);
             using var sr = new StreamReader(fileStream, Encoding.UTF8);
             var body = sr.ReadToEnd();
             return FromJSON(body);

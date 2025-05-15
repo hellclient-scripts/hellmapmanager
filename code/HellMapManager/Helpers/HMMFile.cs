@@ -15,7 +15,7 @@ public class HMMFile
         var result = HMMEncoder.HMMEncoder.Encode(mf);
         if (name.EndsWith(".hmz"))
         {
-            using var zipToOpen = SystemAdapter.Instance.File.WriteStream(name);
+            using var zipToOpen = SystemAdapter.File.WriteStream(name);
             using ZipArchive archive = new(zipToOpen, ZipArchiveMode.Update);
             ZipArchiveEntry hmmEntry = archive.CreateEntry(AppPreset.ZipEnityName);
             using var memoryStream = new MemoryStream(result);
@@ -23,7 +23,7 @@ public class HMMFile
         }
         else
         {
-            using var fileStream = SystemAdapter.Instance.File.WriteStream(name);
+            using var fileStream = SystemAdapter.File.WriteStream(name);
             fileStream.Write(result);
         }
     }
@@ -32,7 +32,7 @@ public class HMMFile
         byte[] body;
         if (name.EndsWith(".hmz"))
         {
-            using var zipToOpen = SystemAdapter.Instance.File.ReadStream(name);
+            using var zipToOpen = SystemAdapter.File.ReadStream(name);
             using ZipArchive archive = new(zipToOpen, ZipArchiveMode.Read);
             ZipArchiveEntry? hmmEntry = archive.GetEntry(AppPreset.ZipEnityName);
             if (hmmEntry is null)
