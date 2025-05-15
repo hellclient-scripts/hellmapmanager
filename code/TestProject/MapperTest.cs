@@ -3,6 +3,8 @@ using HellMapManager.Helpers;
 using HellMapManager.Cores;
 using Avalonia.Diagnostics;
 using Avalonia.Remote.Protocol.Viewport;
+using System.Net.Mail;
+using Tmds.DBus.Protocol;
 
 namespace TestProject;
 
@@ -386,7 +388,66 @@ public class MapperTest()
         opt.WithMaxTotalCost(15);
         ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
         Assert.Null(ws);
-
-
+    }
+    [Fact]
+    public void TestAddRoomWalkingSteps()
+    {
+        var md = new MapDatabase();
+        md.NewMap();
+        var ctx = new Context();
+        var opt = new MapperOptions();
+        var mapper = new Mapper(md.Current!, ctx, opt);
+        var list = new List<WalkingStep>();
+        var room = new Room()
+        {
+            Key = "key1",
+            Tags = [
+                new ValueTag("etag1", 1)
+            ],
+            Exits = [
+                new Exit()
+                {
+                    To = "key2",
+                    Command = "cmd1",
+                    Conditions = [
+                        new ValueCondition("etag1", 1, true)
+                    ],
+                    Cost = 10,
+                },
+                new Exit()
+                {
+                    To = "key3",
+                    Command = "cmd2",
+                    Cost = 20,
+                },
+            ],
+        };
+        md.APIInsertRooms([room, new Room() { Key = "key2" }, new Room() { Key = "key3" }, new Room() { Key = "key4" }]);
+        mapper.AddRoomWalkingSteps(null, list, "notfound", 15);
+        Assert.Empty(list);
+        md.APIInsertShortcuts([new Shortcut()
+        {
+            Key="shortcut1",
+            Command="cmd3",
+            To="key4",
+            Cost=1,
+        },
+        ]);
+        ctx.WithTags([new ValueTag("etag1", 2)]);
+        mapper.AddRoomWalkingSteps(null, list, "key1", 15);
+        Assert.Equal(2, list.Count);
+        list.Sort((a, b) => a.To.CompareTo(b.To));
+        Assert.Null(list[0].Prev);
+        Assert.Equal("key3", list[0].To);
+        Assert.Equal("cmd2", list[0].Command);
+        Assert.Equal(20, list[0].Cost);
+        Assert.Equal(35, list[0].TotalCost);
+        Assert.Equal(19, list[0].Remain);
+        Assert.Null(list[1].Prev);
+        Assert.Equal("key4", list[1].To);
+        Assert.Equal("cmd3", list[1].Command);
+        Assert.Equal(1, list[1].Cost);
+        Assert.Equal(16, list[1].TotalCost);
+        Assert.Equal(0, list[1].Remain);
     }
 }
