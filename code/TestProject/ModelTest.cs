@@ -1,6 +1,4 @@
-using System.Reflection;
 using HellMapManager.Models;
-using Xunit.Sdk;
 
 namespace TestProject;
 
@@ -445,6 +443,42 @@ public class ModelTest
         Assert.Equal(-1, room3.NumberID);
         room3.Key = "abc";
         Assert.Equal(-1, room3.NumberID);
+    }
+    [Fact]
+    public void TestRoomFilter()
+    {
+        var rf = new RoomFilter();
+        var room = new Room()
+        {
+            Key = "key",
+            Name = "name",
+            Group = "group",
+            Desc = "desc",
+            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
+            Data = [new Data("dkey1", "dval1"), new Data("dkey2", "dval2")],
+            Exits = [
+                new Exit(){
+                Command="command1",
+                To="to1",
+                Cost=2,
+                Conditions=[
+                    new ValueCondition("con1",0,true),
+                    new ValueCondition("con2",0,false),
+                ]
+            },
+               new Exit(){
+                Command="command2",
+                To="to2",
+                Cost=4,
+
+            }
+            ]
+        };
+        Assert.True(rf.Validate(room));
+        rf.ContainsAnyKey = ["key1", "name2"];
+        Assert.False(rf.Validate(room));
+        rf.ContainsAnyKey = ["ke", "name2"];
+        Assert.True(rf.Validate(room));
     }
     [Fact]
     public void TestMarker()

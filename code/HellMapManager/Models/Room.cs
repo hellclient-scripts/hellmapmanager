@@ -10,46 +10,86 @@ public class RoomFilter
     public List<string> HasExitTo = [];
     public List<Data> HasAnyData = [];
     public List<Data> ContainsAnyData = [];
-    public bool ValidateHasAnyData(Room room)
+    public List<string> ContainsAnyName = [];
+    public List<string> ContainsAnyKey = [];
+
+    private bool ValidateHasAnyData(Room room)
     {
         if (HasAnyData.Count > 0)
         {
             foreach (var data in HasAnyData)
             {
-                if (room.GetData(data.Key) != data.Value)
+                if (room.GetData(data.Key) == data.Value)
                 {
-                    return false;
+                    return true;
                 }
             }
+            return false;
         }
         return true;
     }
 
-    public bool ValidateContainsAnyData(Room room)
+    private bool ValidateContainsAnyData(Room room)
     {
         if (ContainsAnyData.Count > 0)
         {
             foreach (var data in ContainsAnyData)
             {
-                if (!room.GetData(data.Key).Contains(data.Value))
+                if (room.GetData(data.Key).Contains(data.Value))
                 {
-                    return false;
+                    return true;
                 }
             }
+            return false;
+
         }
         return true;
     }
+    private bool ValidateContainsAnyName(Room room)
+    {
+        if (ContainsAnyName.Count > 0)
+        {
+            foreach (var name in ContainsAnyName)
+            {
+                if (room.Name.Contains(name))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+
+    }
+    private bool ValidateContainsAnyKey(Room room)
+    {
+        if (ContainsAnyKey.Count > 0)
+        {
+            foreach (var key in ContainsAnyKey)
+            {
+                if (room.Key.Contains(key))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+
     private bool ValidateHasExitTo(Room room)
     {
         if (HasExitTo.Count > 0)
         {
             foreach (var to in HasExitTo)
             {
-                if (!room.HasExitTo(to))
+                if (room.HasExitTo(to))
                 {
-                    return false;
+                    return true;
                 }
             }
+            return false;
         }
         return true;
     }
@@ -74,7 +114,14 @@ public class RoomFilter
         {
             return false;
         }
-        //TODO
+        if (!ValidateContainsAnyName(room))
+        {
+            return false;
+        }
+        if (!ValidateContainsAnyKey(room))
+        {
+            return false;
+        }
         return true;
     }
 }
