@@ -141,7 +141,7 @@ public class Walking(Mapper mapper)
             Mapper.AddRoomWalkingSteps(null, pending, f, 0);
         }
         var i = 0;
-        while (pending.Count > 0 || i > iterations)
+        while (pending.Count > 0 && i < iterations)
         {
             current = pending;
             pending = [];
