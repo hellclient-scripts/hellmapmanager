@@ -1624,6 +1624,9 @@ public class ModelTest
         var result2 = QueryReuslt.Fail;
         Assert.False(result2.IsSuccess());
         Assert.Null(result2.SuccessOrNull());
+
+        Assert.Equal("", Step.JoinCommands(";", new List<Step>()));
+        Assert.Equal("cmd1;cmd2", Step.JoinCommands(";", new List<Step>([new Step("cmd1", "to1", 5), new Step("cmd2", "to2", 10)])));
     }
     [Fact]
     public void TestContextTags()

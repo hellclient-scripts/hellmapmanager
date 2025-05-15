@@ -2,6 +2,7 @@ using HellMapManager.Models;
 using HellMapManager.Helpers;
 using HellMapManager.Cores;
 using Avalonia.Diagnostics;
+using Avalonia.Remote.Protocol.Viewport;
 
 namespace TestProject;
 
@@ -325,5 +326,67 @@ public class MapperTest()
         }]);
         exits = mapper.GetRoomExits(room);
         Assert.Equal(3, exits.Count);
+    }
+    [Fact]
+    public void TestValidateToWalkingStep()
+    {
+        var md = new MapDatabase();
+        md.NewMap();
+        var ctx = new Context();
+        var opt = new MapperOptions();
+        var mapper = new Mapper(md.Current!, ctx, opt);
+        md.APIInsertRooms([new Room()
+        {
+            Key = "key2",
+            Tags = [
+                new ValueTag("etag1", 1)
+            ],
+        }]);
+        var exit = new Exit()
+        {
+            To = "key2",
+            Command = "cmd1",
+            Conditions = [
+                new ValueCondition("etag1", 1, true)
+            ],
+            Cost = 10,
+        };
+        var wsprev = new WalkingStep()
+        {
+        };
+        var ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+        Assert.NotNull(ws);
+        Assert.Equal(wsprev, ws.Prev);
+        Assert.Equal("key1", ws.From);
+        Assert.Equal("key2", ws.To);
+        Assert.Equal("cmd1", ws.Command);
+        Assert.Equal(10, ws.Cost);
+        Assert.Equal(20, ws.TotalCost);
+        Assert.Equal(9, ws.Remain);
+        var exit2 = exit.Clone();
+        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
+        Assert.NotNull(ws);
+        exit2.To = "";
+        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
+        Assert.Null(ws);
+        exit2 = exit.Clone();
+        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
+        Assert.NotNull(ws);
+        exit2.To = "key1";
+        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit2, 10);
+        Assert.Null(ws);
+        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+        Assert.NotNull(ws);
+        ctx.WithTags([new ValueTag("etag1", 2)]);
+        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+        ctx.ClearTags();
+        Assert.Null(ws);
+        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+        Assert.NotNull(ws);
+        opt.WithMaxTotalCost(15);
+        ws = mapper.ValidateToWalkingStep(wsprev, "key1", exit, 10);
+        Assert.Null(ws);
+
+
     }
 }

@@ -329,15 +329,16 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             return null;
         }
         var cost = GetExitCost(exit);
-        if (ValidateExit(from, exit, cost))
+        if (!ValidateExit(from, exit, cost))
         {
-            if (Options.MaxTotalCost > 0 && Options.MaxTotalCost < (cost + TotalCost))
-            {
-                return null;
-            }
-            return WalkingStep.FromExit(prev, from, exit, cost, TotalCost);
+            return null;
         }
-        return null;
+        if (Options.MaxTotalCost > 0 && Options.MaxTotalCost < (cost + TotalCost))
+        {
+            return null;
+        }
+        return WalkingStep.FromExit(prev, from, exit, cost, TotalCost);
+
     }
     public void AddRoomWalkingSteps(WalkingStep? prev, List<WalkingStep> list, string from, int TotalCost)
     {
