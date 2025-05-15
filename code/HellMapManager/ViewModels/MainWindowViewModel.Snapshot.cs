@@ -8,7 +8,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitSnapshots()
     {
-        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(FilteredSnapshots));
         };
@@ -22,9 +22,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (AppKernel.Instance.MapDatabase.Current != null)
+            if (AppKernel.MapDatabase.Current != null)
             {
-                var traces = AppKernel.Instance.MapDatabase.Current.Map.Snapshots;
+                var traces = AppKernel.MapDatabase.Current.Map.Snapshots;
                 if (string.IsNullOrEmpty(SnapshotsFilter))
                 {
                     return new ObservableCollection<Snapshot>(traces);

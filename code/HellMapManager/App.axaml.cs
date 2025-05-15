@@ -32,13 +32,13 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            AppUI.Main.MapDatabase = AppKernel.Instance.MapDatabase;
+            AppUI.Main.MapDatabase = AppKernel.MapDatabase;
             AppUI.Main.Desktop = desktop;
-            AppKernel.Instance.MapDatabase.SettingsUpdatedEvent += (sender, args) => { settingsHelper.Save(AppKernel.Instance.MapDatabase.Settings); };
-            AppKernel.Instance.MapDatabase.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
+            AppKernel.MapDatabase.SettingsUpdatedEvent += (sender, args) => { settingsHelper.Save(AppKernel.MapDatabase.Settings); };
+            AppKernel.MapDatabase.ExitEvent += (sender, args) => { desktop.Shutdown(0); };
             if (settings is not null)
             {
-                AppKernel.Instance.MapDatabase.Settings = settings;
+                AppKernel.MapDatabase.Settings = settings;
             }
             var mw = new MainWindow()
             {

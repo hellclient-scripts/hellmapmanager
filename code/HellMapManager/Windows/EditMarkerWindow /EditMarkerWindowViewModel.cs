@@ -58,7 +58,7 @@ public class EditMarkerWindowViewModel : ObservableObject
     }
     public string Checker(MarkerForm model)
     {
-        if (AppKernel.Instance.MapDatabase.Current!.Cache.Markers.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
+        if (AppKernel.MapDatabase.Current!.Cache.Markers.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
         {
             return "标记主键已存在";
         }

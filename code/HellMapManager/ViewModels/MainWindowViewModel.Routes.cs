@@ -8,7 +8,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitRoutes()
     {
-        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(FilteredRoutes));
         };
@@ -22,9 +22,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (AppKernel.Instance.MapDatabase.Current != null)
+            if (AppKernel.MapDatabase.Current != null)
             {
-                var routes = AppKernel.Instance.MapDatabase.Current.Map.Routes;
+                var routes = AppKernel.MapDatabase.Current.Map.Routes;
                 if (string.IsNullOrEmpty(RoutesFilter))
                 {
                     return new ObservableCollection<Route>(routes);

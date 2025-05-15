@@ -36,8 +36,8 @@ public partial class Regions : UserControl
             var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppKernel.Instance.MapDatabase.APIInsertRegions([result]);
-                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                AppKernel.MapDatabase.APIInsertRegions([result]);
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveRegions([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertRegions([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveRegions([model.Key]);
+                    AppKernel.MapDatabase.APIInsertRegions([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Regions : UserControl
                 var result = await window.ShowDialog<Region?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveRegions([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertRegions([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveRegions([model.Key]);
+                    AppKernel.MapDatabase.APIInsertRegions([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Regions : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Region model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该地区吗？") == false) return;
-            AppKernel.Instance.MapDatabase.APIRemoveRegions([model.Key]);
-            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+            AppKernel.MapDatabase.APIRemoveRegions([model.Key]);
+            AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

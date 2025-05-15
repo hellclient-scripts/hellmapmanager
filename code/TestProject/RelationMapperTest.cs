@@ -102,9 +102,9 @@ public class RelationMapperTest
     [Fact]
     public void TestViewModel()
     {
-        AppKernel.Instance.MapDatabase.CloseCurrent();
-        AppKernel.Instance.MapDatabase.NewMap();
-        AppKernel.Instance.MapDatabase.APIInsertRooms([
+        AppKernel.MapDatabase.CloseCurrent();
+        AppKernel.MapDatabase.NewMap();
+        AppKernel.MapDatabase.APIInsertRooms([
             new Room() {
                 Key = "key1",
                  Exits = [
@@ -153,7 +153,7 @@ public class RelationMapperTest
 
             },
         ]);
-        var vi = RelationMapper.RelationMap(AppKernel.Instance.MapDatabase.Current!, "key1", 9);
+        var vi = RelationMapper.RelationMap(AppKernel.MapDatabase.Current!, "key1", 9);
         Assert.NotNull(vi);
         var vm = new RelationMapWindowViewModel(vi);
         Assert.Equal("房间   (key1)   关系地图", vm.Title);

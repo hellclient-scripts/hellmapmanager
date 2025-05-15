@@ -277,14 +277,14 @@ public class AppUI(MapDatabase mapDatabase)
     }
     public async Task Save()
     {
-        if (AppKernel.Instance.MapDatabase.Current is not null)
+        if (AppKernel.MapDatabase.Current is not null)
         {
-            if (AppKernel.Instance.MapDatabase.Current.Path != "")
+            if (AppKernel.MapDatabase.Current.Path != "")
             {
                 try
                 {
 
-                    AppKernel.Instance.MapDatabase.Save();
+                    AppKernel.MapDatabase.Save();
                 }
                 catch (Exception ex)
                 {
@@ -305,7 +305,7 @@ public class AppUI(MapDatabase mapDatabase)
             try
             {
 
-                AppKernel.Instance.MapDatabase.OpenRecent(file);
+                AppKernel.MapDatabase.OpenRecent(file);
             }
             catch (Exception ex)
             {

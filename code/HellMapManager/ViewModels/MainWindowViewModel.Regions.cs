@@ -8,7 +8,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitRegions()
     {
-        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(FilteredRegions));
         };
@@ -22,9 +22,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (AppKernel.Instance.MapDatabase.Current != null)
+            if (AppKernel.MapDatabase.Current != null)
             {
-                var traces = AppKernel.Instance.MapDatabase.Current.Map.Regions;
+                var traces = AppKernel.MapDatabase.Current.Map.Regions;
                 if (string.IsNullOrEmpty(RegionsFilter))
                 {
                     return new ObservableCollection<Region>(traces);

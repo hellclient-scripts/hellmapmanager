@@ -58,7 +58,7 @@ public class EditLandmarkWindowViewModel : ObservableObject
     }
     public string Checker(LandmarkForm model)
     {
-        if (AppKernel.Instance.MapDatabase.Current!.Cache.Landmarks.ContainsKey(model.UniqueKey) && (Raw is null || model.UniqueKey.ToString() != Raw.UniqueKey().ToString()))
+        if (AppKernel.MapDatabase.Current!.Cache.Landmarks.ContainsKey(model.UniqueKey) && (Raw is null || model.UniqueKey.ToString() != Raw.UniqueKey().ToString()))
         {
             return "定位主键已存在";
         }

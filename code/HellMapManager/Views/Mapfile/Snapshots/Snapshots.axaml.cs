@@ -36,8 +36,8 @@ public partial class Snapshots : UserControl
             var result = await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppKernel.Instance.MapDatabase.APITakeSnapshot(result.Key, result.Type, result.Value, result.Group);
-                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                AppKernel.MapDatabase.APITakeSnapshot(result.Key, result.Type, result.Value, result.Group);
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,8 +54,8 @@ public partial class Snapshots : UserControl
                 await window.ShowDialog<Snapshot?>((TopLevel.GetTopLevel(this) as Window)!);
                 // if (result is not null)
                 // {
-                //     AppKernel.Instance.MapDatabase.UpdateSnapshot(model, result);
-                //     AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                //     AppKernel.MapDatabase.UpdateSnapshot(model, result);
+                //     AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 // }
             }
         }
@@ -65,8 +65,8 @@ public partial class Snapshots : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Snapshot model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该快照吗？") == false) return;
-            AppKernel.Instance.MapDatabase.APIRemoveSnapshots([model.UniqueKey()]);
-            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+            AppKernel.MapDatabase.APIRemoveSnapshots([model.UniqueKey()]);
+            AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

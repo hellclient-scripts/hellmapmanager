@@ -59,7 +59,7 @@ public class EditShortcutWindowViewModel : ObservableObject
     }
     public string Checker(ShortcutForm model)
     {
-        if (AppKernel.Instance.MapDatabase.Current!.Cache.Shortcuts.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
+        if (AppKernel.MapDatabase.Current!.Cache.Shortcuts.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
         {
             return "捷径主键已存在";
         }

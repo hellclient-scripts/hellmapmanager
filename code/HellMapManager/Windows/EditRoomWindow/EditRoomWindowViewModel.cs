@@ -61,7 +61,7 @@ public class EditRoomWindowViewModel : ObservableObject
     }
     public string Checker(RoomForm room)
     {
-        if (AppKernel.Instance.MapDatabase.Current!.Cache.Rooms.ContainsKey(room.Key) && (Raw is null || room.Key != Raw.Key))
+        if (AppKernel.MapDatabase.Current!.Cache.Rooms.ContainsKey(room.Key) && (Raw is null || room.Key != Raw.Key))
         {
             return "房间主键已存在";
         }

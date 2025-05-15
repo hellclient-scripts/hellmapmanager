@@ -58,7 +58,7 @@ public class EditVariableWindowViewModel : ObservableObject
     }
     public string Checker(VariableForm model)
     {
-        if (AppKernel.Instance.MapDatabase.Current!.Cache.Variables.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
+        if (AppKernel.MapDatabase.Current!.Cache.Variables.ContainsKey(model.Key) && (Raw is null || model.Key != Raw.Key))
         {
             return "变量主键已存在";
         }

@@ -8,7 +8,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitLandmarks()
     {
-        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(FilteredLandmarks));
         };
@@ -22,9 +22,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (AppKernel.Instance.MapDatabase.Current != null)
+            if (AppKernel.MapDatabase.Current != null)
             {
-                var traces = AppKernel.Instance.MapDatabase.Current.Map.Landmarks;
+                var traces = AppKernel.MapDatabase.Current.Map.Landmarks;
                 if (string.IsNullOrEmpty(LandmarksFilter))
                 {
                     return new ObservableCollection<Landmark>(traces);

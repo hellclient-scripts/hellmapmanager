@@ -8,7 +8,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitMarkers()
     {
-        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(FilteredMarkers));
         };
@@ -22,9 +22,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (AppKernel.Instance.MapDatabase.Current != null)
+            if (AppKernel.MapDatabase.Current != null)
             {
-                var markers = AppKernel.Instance.MapDatabase.Current.Map.Markers;
+                var markers = AppKernel.MapDatabase.Current.Map.Markers;
                 if (string.IsNullOrEmpty(MarkersFilter))
                 {
                     return new ObservableCollection<Marker>(markers);

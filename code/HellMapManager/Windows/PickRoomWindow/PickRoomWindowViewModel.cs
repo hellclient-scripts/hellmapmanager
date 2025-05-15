@@ -9,7 +9,7 @@ public class PickRoomWindowViewModel:ObservableObject
 {
     public int GetMapRoomsCount
     {
-        get => AppKernel.Instance.MapDatabase.Current != null ? (AppKernel.Instance.MapDatabase.Current.Map.Rooms.Count) : 0;
+        get => AppKernel.MapDatabase.Current != null ? (AppKernel.MapDatabase.Current.Map.Rooms.Count) : 0;
     }
     public string RoomsFilter { get; set; } = "";
     public void FilterRooms()
@@ -20,9 +20,9 @@ public class PickRoomWindowViewModel:ObservableObject
     {
         get
         {
-            if (AppKernel.Instance.MapDatabase.Current != null)
+            if (AppKernel.MapDatabase.Current != null)
             {
-                var rooms = AppKernel.Instance.MapDatabase.Current.Map.Rooms;
+                var rooms = AppKernel.MapDatabase.Current.Map.Rooms;
                 if (string.IsNullOrEmpty(RoomsFilter))
                 {
                     return new ObservableCollection<Room>(rooms);

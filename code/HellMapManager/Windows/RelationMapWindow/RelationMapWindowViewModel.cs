@@ -174,7 +174,7 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     public void EnterViewItem(object obj)
     {
-        if (obj is ViewItem item && AppKernel.Instance.MapDatabase.Current is not null)
+        if (obj is ViewItem item && AppKernel.MapDatabase.Current is not null)
         {
             var vi = item;
             EnterRoomKey(vi.Item.Room.Key);
@@ -186,9 +186,9 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     private void DoEnterRoomKey(string key, bool modfiyHistory)
     {
-        if (key != "" && key != Item.Room.Key && AppKernel.Instance.MapDatabase.Current is not null)
+        if (key != "" && key != Item.Room.Key && AppKernel.MapDatabase.Current is not null)
         {
-            var item = RelationMapper.RelationMap(AppKernel.Instance.MapDatabase.Current, key, AppPreset.RelationMaxDepth);
+            var item = RelationMapper.RelationMap(AppKernel.MapDatabase.Current, key, AppPreset.RelationMaxDepth);
             if (item is not null)
             {
                 if (modfiyHistory)

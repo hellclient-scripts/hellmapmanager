@@ -36,8 +36,8 @@ public partial class Shortcuts : UserControl
             var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppKernel.Instance.MapDatabase.APIInsertShortcuts([result]);
-                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                AppKernel.MapDatabase.APIInsertShortcuts([result]);
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Shortcuts : UserControl
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveShortcuts([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertShortcuts([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveShortcuts([model.Key]);
+                    AppKernel.MapDatabase.APIInsertShortcuts([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Shortcuts : UserControl
                 var result = await window.ShowDialog<Shortcut?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveShortcuts([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertShortcuts([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveShortcuts([model.Key]);
+                    AppKernel.MapDatabase.APIInsertShortcuts([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Shortcuts : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Shortcut model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该捷径吗？") == false) return;
-            AppKernel.Instance.MapDatabase.APIRemoveShortcuts([model.Key]);
-            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+            AppKernel.MapDatabase.APIRemoveShortcuts([model.Key]);
+            AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

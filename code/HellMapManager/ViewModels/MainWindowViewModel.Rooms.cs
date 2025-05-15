@@ -8,7 +8,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public partial void InitRooms()
     {
-        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(FilteredRooms));
         };
@@ -22,9 +22,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         get
         {
-            if (AppKernel.Instance.MapDatabase.Current != null)
+            if (AppKernel.MapDatabase.Current != null)
             {
-                var rooms = AppKernel.Instance.MapDatabase.Current.Map.Rooms;
+                var rooms = AppKernel.MapDatabase.Current.Map.Rooms;
                 if (string.IsNullOrEmpty(RoomsFilter))
                 {
                     return new ObservableCollection<Room>(rooms);

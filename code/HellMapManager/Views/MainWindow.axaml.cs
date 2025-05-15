@@ -23,7 +23,7 @@ public partial class MainWindow : Window
     }
     public async void OnExportRoomsH(object? sender, RoutedEventArgs args)
     {
-        if (AppKernel.Instance.MapDatabase.Current == null)
+        if (AppKernel.MapDatabase.Current == null)
         {
             return;
         }
@@ -37,7 +37,7 @@ public partial class MainWindow : Window
             {
                 try
                 {
-                    AppKernel.Instance.MapDatabase.ExportRoomsH(path, option);
+                    AppKernel.MapDatabase.ExportRoomsH(path, option);
                 }
                 catch (Exception ex)
                 {

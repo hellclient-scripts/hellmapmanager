@@ -36,8 +36,8 @@ public partial class Traces : UserControl
             var result = await window.ShowDialog<Trace?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppKernel.Instance.MapDatabase.APIInsertTraces([result]);
-                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                AppKernel.MapDatabase.APIInsertTraces([result]);
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Traces : UserControl
                 var result = await window.ShowDialog<Trace?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveTraces([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertTraces([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveTraces([model.Key]);
+                    AppKernel.MapDatabase.APIInsertTraces([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Traces : UserControl
                 var result = await window.ShowDialog<Trace?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveTraces([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertTraces([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveTraces([model.Key]);
+                    AppKernel.MapDatabase.APIInsertTraces([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Traces : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Trace model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该足迹吗？") == false) return;
-            AppKernel.Instance.MapDatabase.APIRemoveTraces([model.Key]);
-            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+            AppKernel.MapDatabase.APIRemoveTraces([model.Key]);
+            AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

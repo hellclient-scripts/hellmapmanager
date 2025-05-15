@@ -36,8 +36,8 @@ public partial class Landmarks : UserControl
             var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppKernel.Instance.MapDatabase.APIInsertLandmarks([result]);
-                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                AppKernel.MapDatabase.APIInsertLandmarks([result]);
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveLandmarks([marker.UniqueKey()]);
-                    AppKernel.Instance.MapDatabase.APIInsertLandmarks([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveLandmarks([marker.UniqueKey()]);
+                    AppKernel.MapDatabase.APIInsertLandmarks([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Landmarks : UserControl
                 var result = await window.ShowDialog<Landmark?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveLandmarks([marker.UniqueKey()]);
-                    AppKernel.Instance.MapDatabase.APIInsertLandmarks([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveLandmarks([marker.UniqueKey()]);
+                    AppKernel.MapDatabase.APIInsertLandmarks([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Landmarks : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Landmark model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该定位吗？") == false) return;
-            AppKernel.Instance.MapDatabase.APIRemoveLandmarks([model.UniqueKey()]);
-            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+            AppKernel.MapDatabase.APIRemoveLandmarks([model.UniqueKey()]);
+            AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

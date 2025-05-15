@@ -36,8 +36,8 @@ public partial class Routes : UserControl
             var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppKernel.Instance.MapDatabase.APIInsertRoutes([result]);
-                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                AppKernel.MapDatabase.APIInsertRoutes([result]);
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Routes : UserControl
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveRoutes([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertRoutes([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveRoutes([model.Key]);
+                    AppKernel.MapDatabase.APIInsertRoutes([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Routes : UserControl
                 var result = await window.ShowDialog<Route?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveRoutes([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertRoutes([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveRoutes([model.Key]);
+                    AppKernel.MapDatabase.APIInsertRoutes([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Routes : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Route model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该路线吗？") == false) return;
-            AppKernel.Instance.MapDatabase.APIRemoveRoutes([model.Key]);
-            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+            AppKernel.MapDatabase.APIRemoveRoutes([model.Key]);
+            AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

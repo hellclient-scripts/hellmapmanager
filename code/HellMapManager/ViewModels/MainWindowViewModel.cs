@@ -10,7 +10,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        AppKernel.Instance.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
+        AppKernel.MapDatabase.MapFileUpdatedEvent += (object? sender, EventArgs args) =>
         {
             OnPropertyChanged(nameof(Recents));
             OnPropertyChanged(nameof(IsFileModified));
@@ -53,7 +53,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (await AppUI.Main.ConfirmModified())
         {
-            AppKernel.Instance.MapDatabase.NewMap();
+            AppKernel.MapDatabase.NewMap();
         }
 
     }
@@ -66,16 +66,16 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public void OnExit()
     {
-        AppKernel.Instance.MapDatabase.Exit();
+        AppKernel.MapDatabase.Exit();
     }
-    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppKernel.Instance.MapDatabase.Settings.Recents.ToArray()); }
+    public ObservableCollection<RecentFile> Recents { get => new ObservableCollection<RecentFile>(AppKernel.MapDatabase.Settings.Recents.ToArray()); }
     public async void OnOpenRecent(String file)
     {
         await AppUI.Main.OnOpenRecent(file);
     }
     public bool IsFileModified
     {
-        get => AppKernel.Instance.MapDatabase.Current != null && AppKernel.Instance.MapDatabase.Current.Modified;
+        get => AppKernel.MapDatabase.Current != null && AppKernel.MapDatabase.Current.Modified;
     }
     public async void OnSave()
     {
@@ -89,7 +89,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (await AppUI.Main.ConfirmModified())
         {
-            AppKernel.Instance.MapDatabase.CloseCurrent();
+            AppKernel.MapDatabase.CloseCurrent();
         }
     }
     public void OnRevert()
@@ -98,14 +98,14 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public string TitleInfo
     {
-        get => (AppKernel.Instance.MapDatabase.Current == null ? "" : (AppKernel.Instance.MapDatabase.Current.Modified ? "* " : "") + (AppKernel.Instance.MapDatabase.Current.Path != "" ? AppKernel.Instance.MapDatabase.Current.Path : "<未保存>") + " ") + "Hell Map Manager";
+        get => (AppKernel.MapDatabase.Current == null ? "" : (AppKernel.MapDatabase.Current.Modified ? "* " : "") + (AppKernel.MapDatabase.Current.Path != "" ? AppKernel.MapDatabase.Current.Path : "<未保存>") + " ") + "Hell Map Manager";
     }
     public bool CanShowWelcome
     {
-        get => AppKernel.Instance.MapDatabase.Current == null;
+        get => AppKernel.MapDatabase.Current == null;
     }
     public bool IsFileOpend
     {
-        get => AppKernel.Instance.MapDatabase.Current != null;
+        get => AppKernel.MapDatabase.Current != null;
     }
 }

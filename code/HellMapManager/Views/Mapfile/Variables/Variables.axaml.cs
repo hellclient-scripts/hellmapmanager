@@ -36,8 +36,8 @@ public partial class Variables : UserControl
             var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
             if (result is not null)
             {
-                AppKernel.Instance.MapDatabase.APIInsertVariables([result]);
-                AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                AppKernel.MapDatabase.APIInsertVariables([result]);
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -54,9 +54,9 @@ public partial class Variables : UserControl
                 var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveVariables([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertVariables([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveVariables([model.Key]);
+                    AppKernel.MapDatabase.APIInsertVariables([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
 
                 }
             }
@@ -75,9 +75,9 @@ public partial class Variables : UserControl
                 var result = await window.ShowDialog<Variable?>((TopLevel.GetTopLevel(this) as Window)!);
                 if (result is not null)
                 {
-                    AppKernel.Instance.MapDatabase.APIRemoveVariables([model.Key]);
-                    AppKernel.Instance.MapDatabase.APIInsertVariables([result]);
-                    AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                    AppKernel.MapDatabase.APIRemoveVariables([model.Key]);
+                    AppKernel.MapDatabase.APIInsertVariables([result]);
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
                 }
             }
         }
@@ -87,8 +87,8 @@ public partial class Variables : UserControl
         if (sender is not null && sender is Button bn && bn.DataContext is Variable model)
         {
             if (await AppUI.Confirm("删除", "确定要删除该变量吗？") == false) return;
-            AppKernel.Instance.MapDatabase.APIRemoveVariables([model.Key]);
-            AppKernel.Instance.MapDatabase.RaiseMapFileUpdatedEvent(this);
+            AppKernel.MapDatabase.APIRemoveVariables([model.Key]);
+            AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
         }
     }
 }

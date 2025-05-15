@@ -58,7 +58,7 @@ public class EditTraceWindowViewModel : ObservableObject
     }
     public string Checker(TraceForm form)
     {
-        if (AppKernel.Instance.MapDatabase.Current!.Cache.Traces.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
+        if (AppKernel.MapDatabase.Current!.Cache.Traces.ContainsKey(form.Key) && (Raw is null || form.Key != Raw.Key))
         {
             return "足迹主键已存在";
         }
