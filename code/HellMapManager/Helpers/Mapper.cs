@@ -1,6 +1,5 @@
 using HellMapManager.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace HellMapManager.Helpers;
 
@@ -175,17 +174,18 @@ public class Walking(Mapper mapper)
         {
             return QueryReuslt.Fail; ;
         }
-        var unvisited = result.Unvisited;
-        while (unvisited.Count > 0)
+        var pending = result.Unvisited;
+        while (pending.Count > 0)
         {
-            var next = QueryPathAny([start], unvisited, result.Cost);
+            var next = QueryPathAny([result.To], pending, result.Cost);
             if (!next.IsSuccess())
             {
                 return result;
             }
             result.Steps.AddRange(next.Steps);
-            result.Cost += next.Cost;
+            result.Cost = next.Cost;
             result.Unvisited = next.Unvisited;
+            pending = result.Unvisited;
             result.To = next.To;
         }
         return result;
@@ -211,7 +211,7 @@ public class Walking(Mapper mapper)
                 return result;
             }
             result.Steps.AddRange(next.Steps);
-            result.Cost += next.Cost;
+            result.Cost = next.Cost;
             unvisited = next.Unvisited;
             result.To = next.To;
         }
