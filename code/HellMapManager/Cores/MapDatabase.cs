@@ -116,7 +116,5 @@ public partial class MapDatabase()
         {
             RoomsH.Save(path, Current.Map.Rooms, opt);
         }
-
     }
-
 }

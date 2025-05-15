@@ -360,8 +360,11 @@ public class ModelTest
         Assert.True(room.HasTag("tag1", 0));
         Assert.True(room.HasTag("tag2", 0));
         Assert.False(room.HasTag("notexists", 1));
-        Room room2;
+        Assert.Equal("dval1", room.GetData("dkey1"));
+        Assert.Equal("dval2", room.GetData("dkey2"));
+        Assert.Equal("", room.GetData("notfound"));
 
+        Room room2;
         Assert.False(room.Filter("unknow"));
         Assert.True(room.Filter("key"));
         Assert.True(room.Filter("name"));

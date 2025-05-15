@@ -1,14 +1,79 @@
 using System;
 using System.Collections.Generic;
-using HarfBuzzSharp;
 
 namespace HellMapManager.Models;
 
 
 public class RoomFilter
 {
+    public List<ValueCondition> RoomConditions = [];
+    public List<string> HasExitTo = [];
+    public List<Data> HasAnyData = [];
+    public List<Data> ContainsAnyData = [];
+    public bool ValidateHasAnyData(Room room)
+    {
+        if (HasAnyData.Count > 0)
+        {
+            foreach (var data in HasAnyData)
+            {
+                if (room.GetData(data.Key) != data.Value)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public bool ValidateContainsAnyData(Room room)
+    {
+        if (ContainsAnyData.Count > 0)
+        {
+            foreach (var data in ContainsAnyData)
+            {
+                if (!room.GetData(data.Key).Contains(data.Value))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private bool ValidateHasExitTo(Room room)
+    {
+        if (HasExitTo.Count > 0)
+        {
+            foreach (var to in HasExitTo)
+            {
+                if (!room.HasExitTo(to))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     public bool Validate(Room room)
     {
+        if (RoomConditions.Count > 0)
+        {
+            if (!ValueTag.ValidteConditions(room.Tags, RoomConditions))
+            {
+                return false;
+            }
+        }
+        if (!ValidateHasExitTo(room))
+        {
+            return false;
+        }
+        if (!ValidateContainsAnyData(room))
+        {
+            return false;
+        }
+        if (!ValidateHasAnyData(room))
+        {
+            return false;
+        }
         //TODO
         return true;
     }
@@ -108,10 +173,20 @@ public partial class Room
     {
         return ValueTag.HasTag(Tags, key, value);
     }
+    public string GetData(string key)
+    {
+        foreach (var data in Data)
+        {
+            if (data.Key == key)
+            {
+                return data.Value;
+            }
+        }
+        return "";
+    }
 }
 public partial class Room
 {
-    //房间的key,必须唯一，不能为空
     public int ExitsCount
     {
         get => Exits.Count;
