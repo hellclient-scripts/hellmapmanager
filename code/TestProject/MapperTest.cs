@@ -5,6 +5,7 @@ using Avalonia.Diagnostics;
 using Avalonia.Remote.Protocol.Viewport;
 using System.Net.Mail;
 using Tmds.DBus.Protocol;
+using Avalonia.Platform;
 
 namespace TestProject;
 
@@ -486,6 +487,62 @@ public class MapperTest()
         Assert.Equal("key2;key3;key4", SortAndJoin(new Walking(mapper).Dilate(["key3"], 1)));
         Assert.Equal("key1;key2;key3;key4;key5", SortAndJoin(new Walking(mapper).Dilate(["key3"], 2)));
         Assert.Equal("key1;key2;key3;key4;key5", SortAndJoin(new Walking(mapper).Dilate(["key3"], 99)));
+    }
+    [Fact]
+    public void TestQueryPathAny()
+    {
+        var md = new MapDatabase();
+        md.NewMap();
+        var ctx = new Context();
+        var opt = new MapperOptions();
+        var mapper = new Mapper(md.Current!, ctx, opt);
+        md.APIInsertRooms([
+            new Room() { Key = "key1" },
+            new Room() { Key = "key2" },
+            new Room() { Key = "key3" },
+            new Room() { Key = "key4" },
+            new Room() { Key = "key5" },
+
+        ]);
+        ctx.WithPaths([
+            new HellMapManager.Models.Path(){From = "key1",To = "key2",Command = "1>2",Cost=2},
+            new HellMapManager.Models.Path(){From = "key2",To = "key1",Command = "2>1",Cost=5},
+            new HellMapManager.Models.Path(){From = "key2",To = "key3",Command = "2>3",Cost=5},
+            new HellMapManager.Models.Path(){From = "key3",To = "key2",Command = "3>2",Cost=0},
+            new HellMapManager.Models.Path(){From = "key3",To = "key4",Command = "3>4",Cost=1},
+            new HellMapManager.Models.Path(){From = "key4",To = "key3",Command = "4>3",Cost=2},
+        ]);
+        var result = new Walking(mapper).QueryPathAny([], [], 0);
+        Assert.False(result.IsSuccess());
+        result = new Walking(mapper).QueryPathAny([""], ["key1"], 0);
+        Assert.False(result.IsSuccess());
+        result = new Walking(mapper).QueryPathAny(["key1"], [""], 0);
+        Assert.False(result.IsSuccess());
+        result = new Walking(mapper).QueryPathAny(["key1"], ["key4"], 0);
+        Assert.True(result.IsSuccess());
+        Assert.Equal(3, result.Steps.Count);
+        Assert.Equal("1>2;2>3;3>4", Step.JoinCommands(";", result.Steps));
+        Assert.Equal(8, result.Cost);
+        Assert.Equal("key1", result.From);
+        Assert.Equal("key4", result.To);
+        Assert.Empty(result.Unvisited);
+        result = new Walking(mapper).QueryPathAny(["key1", "key2", "key3", "key4"], ["key5"], 0);
+        Assert.False(result.IsSuccess());
+        result = new Walking(mapper).QueryPathAny(["key1", "key2", "key3"], ["key3", "key4", "key5"], 10);
+        Assert.True(result.IsSuccess());
+        Assert.Empty(result.Steps);
+        Assert.Equal(10, result.Cost);
+        Assert.Equal("key3", result.From);
+        Assert.Equal("key3", result.To);
+        Assert.Equal("key4;key5", SortAndJoin(result.Unvisited));
+        result = new Walking(mapper).QueryPathAny(["key1"], ["key3", "key4", "key5"], 10);
+        Assert.True(result.IsSuccess());
+        Assert.Equal("1>2;2>3", Step.JoinCommands(";", result.Steps));
+        Assert.Equal(17, result.Cost);
+        Assert.Equal("key1", result.From);
+        Assert.Equal("key3", result.To);
+        Assert.Equal("key4;key5", SortAndJoin(result.Unvisited));
+
     }
 }
 

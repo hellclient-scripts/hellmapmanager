@@ -37,20 +37,17 @@ public class Walking(Mapper mapper)
     private Dictionary<string, WalkingStep> Walked = new();
 
     public Mapper Mapper { get; } = mapper;
-    private QueryReuslt BuildResult(WalkingStep last, List<string> Targets)
+    private static QueryReuslt BuildResult(WalkingStep last, List<string> Targets)
     {
         var result = new QueryReuslt();
 
-        if (last.Prev is null)
-        {
-            return QueryReuslt.Fail;
-        }
         WalkingStep current = last;
         while (current.Prev is not null)
         {
             result.Steps.Add(current.ToStep());
             current = current.Prev;
         }
+        result.Steps.Add(current.ToStep());
         result.Steps.Reverse();
         result.From = current.From;
         result.To = last.To;
@@ -64,7 +61,7 @@ public class Walking(Mapper mapper)
         result.Cost = last.TotalCost;
         return result;
     }
-    public QueryReuslt QueryPathAny(List<string> from, List<string> target, int cost)
+    public QueryReuslt QueryPathAny(List<string> from, List<string> target, int initTotalCost)
     {
         from.RemoveAll(x => x == "");
         target.RemoveAll(x => x == "");
@@ -87,6 +84,14 @@ public class Walking(Mapper mapper)
                 var result = new QueryReuslt();
                 result.From = f;
                 result.To = f;
+                result.Cost = initTotalCost;
+                foreach (var to in target)
+                {
+                    if (to != f)
+                    {
+                        result.Unvisited.Add(to);
+                    }
+                }
                 return result;
             }
             Walked[f] = new WalkingStep()
@@ -94,7 +99,7 @@ public class Walking(Mapper mapper)
                 From = "",
                 Command = "",
             };
-            Mapper.AddRoomWalkingSteps(null, pending, f, cost);
+            Mapper.AddRoomWalkingSteps(null, pending, f, initTotalCost);
         }
         while (pending.Count > 0)
         {
