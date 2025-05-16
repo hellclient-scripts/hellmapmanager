@@ -644,6 +644,7 @@ public partial class MapDatabase
                     result.Add(model);
                 }
             });
+            Room.Sort(result);
             return result;
         }
         return [];
@@ -654,6 +655,7 @@ public partial class MapDatabase
         if (Current != null)
         {
             var result = new List<Room>() { };
+            src = [.. src.Distinct()];
             src.ForEach((key) =>
             {
                 if (Current.Cache.Rooms.TryGetValue(key, out Room? model))
@@ -664,6 +666,7 @@ public partial class MapDatabase
                     }
                 }
             });
+            Room.Sort(result);
             return result;
         }
         return [];

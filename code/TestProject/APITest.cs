@@ -1574,4 +1574,47 @@ public class APITest
         snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
         Assert.Empty(snapshots);
     }
+    [Fact]
+    public void TestAPIRoomsAll()
+    {
+        var mapDatabase = new MapDatabase();
+        var result = mapDatabase.APISearchRooms(new RoomFilter());
+        Assert.Empty(result);
+        result = mapDatabase.APIFilterRooms(["key1", "key2", "key3"], new RoomFilter());
+        Assert.Empty(result);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([
+            new Room()
+            {
+                Key = "key1",
+                Group = "group1",
+                Desc = "desc1",
+            },
+            new Room()
+            {
+                Key = "key2",
+                Group = "group2",
+                Desc = "desc2",
+            },
+            new Room()
+            {
+                Key = "key3",
+                Group = "group3",
+                Desc = "desc3",
+            },
+        ]);
+        result = mapDatabase.APIFilterRooms(["key1", "key2", "key3"], new RoomFilter());
+        Assert.Equal(3, result.Count);
+        Assert.Equal("key1;key2;key3", string.Join(";", result.Select(r => r.Key)));
+        result = mapDatabase.APIFilterRooms(["key3", "key2", "key2", "key5"], new RoomFilter());
+        Assert.Equal(2, result.Count);
+        Assert.Equal("key2;key3", string.Join(";", result.Select(r => r.Key)));
+        var rf = new RoomFilter()
+        {
+            ContainsAnyKey = ["key1", "key2", "key3"],
+        };
+        result = mapDatabase.APISearchRooms(rf);
+        Assert.Equal(3, result.Count);
+        Assert.Equal("key1;key2;key3", string.Join(";", result.Select(r => r.Key)));
+    }
 }
