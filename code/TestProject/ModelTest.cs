@@ -454,7 +454,7 @@ public class ModelTest
             Name = "name",
             Group = "group",
             Desc = "desc",
-            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
+            Tags = [new ValueTag("tag1", 1), new ValueTag("tag2", 1)],
             Data = [new Data("dkey1", "dval1"), new Data("dkey2", "dval2")],
             Exits = [
                 new Exit(){
@@ -462,8 +462,8 @@ public class ModelTest
                 To="to1",
                 Cost=2,
                 Conditions=[
-                    new ValueCondition("con1",0,true),
-                    new ValueCondition("con2",0,false),
+                    new ValueCondition("con1",1,true),
+                    new ValueCondition("con2",1,false),
                 ]
             },
                new Exit(){
@@ -479,6 +479,34 @@ public class ModelTest
         Assert.False(rf.Validate(room));
         rf.ContainsAnyKey = ["ke", "name2"];
         Assert.True(rf.Validate(room));
+        rf.ContainsAnyKey = [];
+        Assert.True(rf.Validate(room));
+        rf.ContainsAnyName = ["name1", "name2"];
+        Assert.False(rf.Validate(room));
+        rf.ContainsAnyName = ["na", "name2"];
+        Assert.True(rf.Validate(room));
+        rf.ContainsAnyName = [];
+        Assert.True(rf.Validate(room));
+        rf.HasAnyExitTo = ["to3", "to4"];
+        Assert.False(rf.Validate(room)); ;
+        rf.HasAnyExitTo = ["to3", "to2"];
+        Assert.True(rf.Validate(room));
+        rf.HasAnyExitTo = [];
+        rf.HasAnyData = [new("dkey1", "dval"), new("dkey2", "dval3")];
+        Assert.False(rf.Validate(room)); ;
+        rf.HasAnyData = [new("dkey1", "dval1"), new("dkey2", "dval3")];
+        Assert.True(rf.Validate(room));
+        rf.HasAnyData = [];
+        rf.ContainsAnyData = [new("dkey1", "dval2"), new("dkey2", "dval3")];
+        Assert.False(rf.Validate(room)); ;
+        rf.ContainsAnyData = [new("dkey1", "dval"), new("dkey2", "dval3")];
+        Assert.True(rf.Validate(room));
+        rf.ContainsAnyData = [];
+        rf.RoomConditions = [new ValueCondition("tag1", 1, true), new ValueCondition("tag2", 1, false)];
+        Assert.False(rf.Validate(room)); ;
+        rf.RoomConditions = [new ValueCondition("tag1", 2, true), new ValueCondition("tag2", 1, false)];
+        Assert.True(rf.Validate(room));
+        rf.ContainsAnyData = [];
     }
     [Fact]
     public void TestMarker()

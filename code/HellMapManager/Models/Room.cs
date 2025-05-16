@@ -7,7 +7,7 @@ namespace HellMapManager.Models;
 public class RoomFilter
 {
     public List<ValueCondition> RoomConditions = [];
-    public List<string> HasExitTo = [];
+    public List<string> HasAnyExitTo = [];
     public List<Data> HasAnyData = [];
     public List<Data> ContainsAnyData = [];
     public List<string> ContainsAnyName = [];
@@ -78,11 +78,11 @@ public class RoomFilter
     }
 
 
-    private bool ValidateHasExitTo(Room room)
+    private bool ValidateHasAnyExitTo(Room room)
     {
-        if (HasExitTo.Count > 0)
+        if (HasAnyExitTo.Count > 0)
         {
-            foreach (var to in HasExitTo)
+            foreach (var to in HasAnyExitTo)
             {
                 if (room.HasExitTo(to))
                 {
@@ -102,7 +102,7 @@ public class RoomFilter
                 return false;
             }
         }
-        if (!ValidateHasExitTo(room))
+        if (!ValidateHasAnyExitTo(room))
         {
             return false;
         }
