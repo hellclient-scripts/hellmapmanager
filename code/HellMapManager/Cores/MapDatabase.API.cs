@@ -603,7 +603,7 @@ public partial class MapDatabase
         }
         return "";
     }
-    public string GetVariable(string key)
+    public string APIGetVariable(string key)
     {
         if (Current != null)
         {
@@ -614,7 +614,7 @@ public partial class MapDatabase
         }
         return "";
     }
-    public Room? GetRoom(string key, Context context, MapperOptions options)
+    public Room? APIGetRoom(string key, Context context, MapperOptions options)
     {
         if (Current != null)
         {
@@ -692,14 +692,19 @@ public partial class MapDatabase
         {
             if (Current.Cache.Traces.TryGetValue(key, out Trace? trace))
             {
+                var prev = trace.Clone();
+
                 if (trace.Locations.Contains(location))
                 {
                     return;
                 }
                 trace.AddLocations(new List<string>() { location });
                 trace.Arrange();
-                Current.MarkAsModified();
-                RaiseMapFileUpdatedEvent(this);
+                if (!trace.Equal(prev))
+                {
+                    Current.MarkAsModified();
+                    RaiseMapFileUpdatedEvent(this);
+                }
             }
         }
     }

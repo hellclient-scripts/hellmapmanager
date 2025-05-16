@@ -1330,7 +1330,7 @@ public class APITest
         Assert.True(updated);
         updated = false;
         mapDatabase.APIGroupRoom("roomnotfound", "newgroup");
-        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1", "roomnotfound"]));
         Assert.Single(rooms);
         Assert.Equal("newgroup", rooms[0].Group);
         Assert.False(updated);
@@ -1375,7 +1375,7 @@ public class APITest
         Assert.True(updated);
         updated = false;
         mapDatabase.APISetRoomData("roomnotfound", "key1", "newdata");
-        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1", "roomnotfound"]));
         Assert.Single(rooms);
         Assert.Equal("newdata", rooms[0].GetData("key1"));
         Assert.False(updated);
@@ -1426,7 +1426,7 @@ public class APITest
         Assert.True(updated);
         updated = false;
         mapDatabase.APITagRoom("roomnotfound", "tag1", 2);
-        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1", "roomnotfound"]));
         Assert.Single(rooms);
         Assert.NotEmpty(rooms[0].Tags);
         Assert.Equal("tag1", rooms[0].Tags[0].Key);
@@ -1440,5 +1440,105 @@ public class APITest
         Assert.Equal("tag2", rooms[0].Tags[0].Key);
         Assert.Equal(1, rooms[0].Tags[0].Value);
         Assert.True(updated);
+    }
+    [Fact]
+    public void TestAPITraceLocation()
+    {
+        bool updated = false;
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        var trace = new Trace()
+        {
+            Key = "trace1",
+            Group = "group1",
+            Desc = "desc1",
+            Locations = ["1", "2"],
+            Message = "message1",
+        };
+        mapDatabase.APITraceLocation("trace1", "3");
+        Assert.False(updated);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertTraces([trace]);
+        updated = false;
+        mapDatabase.APITraceLocation("trace1", "1");
+        var traces = mapDatabase.APIListTraces(new APIListOption().WithKeys(["trace1"]));
+        Assert.Single(traces);
+        Assert.Equal("1;2", string.Join(";", traces[0].Locations));
+        Assert.False(updated);
+        mapDatabase.APITraceLocation("trace1", "3");
+        traces = mapDatabase.APIListTraces(new APIListOption().WithKeys(["trace1"]));
+        Assert.Single(traces);
+        Assert.Equal("1;2;3", string.Join(";", traces[0].Locations));
+        Assert.True(updated);
+        updated = false;
+        mapDatabase.APITraceLocation("traceNotfound", "3");
+        traces = mapDatabase.APIListTraces(new APIListOption().WithKeys(["trace1", "traceNotfound"]));
+        Assert.Single(traces);
+        Assert.Equal("1;2;3", string.Join(";", traces[0].Locations));
+        Assert.False(updated);
+        updated = false;
+    }
+    [Fact]
+    public void TestGetVariable()
+    {
+        var mapDatabase = new MapDatabase();
+        mapDatabase.NewMap();
+        var variable = mapDatabase.APIGetVariable("key1");
+        Assert.Equal("", variable);
+        mapDatabase.APIInsertVariables([new (){
+            Key = "key1",
+            Value = "value1",
+            Group = "group1",
+            Desc = "desc1",
+        }]);
+        variable = mapDatabase.APIGetVariable("key1");
+        Assert.Equal("value1", variable);
+        variable = mapDatabase.APIGetVariable("keynotfound");
+        Assert.Equal("", variable);
+    }
+    [Fact]
+    public void TestAPIGetRoom()
+    {
+        var mapDatabase = new MapDatabase();
+        var ctx = new Context().WithRooms([
+            new Room()
+            {
+                Key = "ctx1",
+                Group="ctxroom",
+            },
+            new Room()
+            {
+                Key = "ctx2",
+                Group="ctxroom",
+            },
+        ]);
+        var opt = new MapperOptions();
+        var room = mapDatabase.APIGetRoom("key1", ctx, opt);
+        Assert.Null(room);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([
+            new Room()
+            {
+                Key = "key1"
+            },
+            new Room()
+            {
+                Key = "ctx2"
+            },
+        ]);
+        room = mapDatabase.APIGetRoom("key1", ctx, opt);
+        Assert.NotNull(room);
+        Assert.Equal("key1", room.Key);
+        room = mapDatabase.APIGetRoom("ctx1", ctx, opt);
+        Assert.NotNull(room);
+        Assert.Equal("ctx1", room.Key);
+        room = mapDatabase.APIGetRoom("ctx2", ctx, opt);
+        Assert.NotNull(room);
+        Assert.Equal("ctx2", room.Key);
+        Assert.Equal("ctxroom", room.Group);
+
     }
 }
