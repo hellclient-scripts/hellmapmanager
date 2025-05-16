@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Avalonia.OpenGL.Egl;
 using HellMapManager.Helpers;
 using HellMapManager.Models;
-using HellMapManager.Views.Mapfile.Rooms;
 
 namespace HellMapManager.Cores;
 

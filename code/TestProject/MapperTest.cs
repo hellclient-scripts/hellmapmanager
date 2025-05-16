@@ -1,11 +1,6 @@
 using HellMapManager.Models;
 using HellMapManager.Helpers;
 using HellMapManager.Cores;
-using Avalonia.Diagnostics;
-using Avalonia.Remote.Protocol.Viewport;
-using System.Net.Mail;
-using Tmds.DBus.Protocol;
-using Avalonia.Platform;
 
 namespace TestProject;
 
