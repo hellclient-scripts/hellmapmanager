@@ -6,6 +6,7 @@ using HellMapManager.Models;
 using HellMapManager.Views.Mapfile.Rooms;
 
 namespace HellMapManager.Cores;
+
 public class APIListOption
 {
     private readonly Dictionary<string, bool> AllKeys = new();
@@ -706,36 +707,24 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
+            if (tag != "")
             {
-                room.Tags.RemoveAll((t) => t.Key == tag);
-                var prev = room.Encode();
-                room.Tags.Add(new ValueTag(tag, value));
-                room.Arrange();
-                if (room.Encode() != prev)
+                if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
                 {
-                    Current.MarkAsModified();
-                    RaiseMapFileUpdatedEvent(this);
+                    var prev = room.Clone();
+                    room.Tags.RemoveAll((t) => t.Key == tag);
+                    if (value != 0)
+                    {
+                        room.Tags.Add(new ValueTag(tag, value));
+                    }
+                    room.Arrange();
+                    if (!room.Equal(prev))
+                    {
+                        Current.MarkAsModified();
+                        RaiseMapFileUpdatedEvent(this);
+                    }
+                    return;
                 }
-                return;
-            }
-        }
-    }
-    public void APIUntagRoom(string key, string tag)
-    {
-        if (Current != null)
-        {
-            if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
-            {
-                var prev = room.Encode();
-                room.Tags.RemoveAll((t) => t.Key == tag);
-                room.Arrange();
-                if (room.Encode() != prev)
-                {
-                    Current.MarkAsModified();
-                    RaiseMapFileUpdatedEvent(this);
-                }
-                return;
             }
         }
     }
@@ -745,11 +734,11 @@ public partial class MapDatabase
         {
             if (Current.Cache.Rooms.TryGetValue(roomkey, out Room? room))
             {
-                var prev = room.Encode();
+                var prev = room.Clone();
                 room.Data.RemoveAll((d) => d.Key == datakey);
                 room.Data.Add(new Data(datakey, datavalue));
                 room.Arrange();
-                if (room.Encode() != prev)
+                if (!room.Equal(prev))
                 {
                     Current.MarkAsModified();
                     RaiseMapFileUpdatedEvent(this);

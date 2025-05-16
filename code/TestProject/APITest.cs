@@ -1379,6 +1379,66 @@ public class APITest
         Assert.Single(rooms);
         Assert.Equal("newdata", rooms[0].GetData("key1"));
         Assert.False(updated);
-
+    }
+    [Fact]
+    public void TestAPITagRoom()
+    {
+        bool updated = false;
+        var room = new Room()
+        {
+            Key = "room1",
+            Group = "group1",
+            Desc = "desc1",
+            Data = [new Data("key2", "value2"), new Data("key1", "value1")],
+            Tags = [new ValueTag("tag1", 1), new ValueTag("tag2", 1)],
+            Exits = [new Exit(){
+                Command="cmd1",
+                To="to1",
+                Cost=1,
+                Conditions=[new ValueCondition("key1", 0,true),new ValueCondition("key2", 0,true)],
+            }],
+        };
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        mapDatabase.APITagRoom("room1", "tag1", 1);
+        Assert.False(updated);
+        mapDatabase.APITagRoom("room1", "", 1);
+        Assert.False(updated);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([room]);
+        updated = false;
+        mapDatabase.APITagRoom("room1", "tag1", 1);
+        var rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.NotEmpty(rooms[0].Tags);
+        Assert.Equal("tag1", rooms[0].Tags[0].Key);
+        Assert.Equal(1, rooms[0].Tags[0].Value);
+        Assert.False(updated);
+        mapDatabase.APITagRoom("room1", "tag1", 2);
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.NotEmpty(rooms[0].Tags);
+        Assert.Equal("tag1", rooms[0].Tags[0].Key);
+        Assert.Equal(2, rooms[0].Tags[0].Value);
+        Assert.True(updated);
+        updated = false;
+        mapDatabase.APITagRoom("roomnotfound", "tag1", 2);
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.NotEmpty(rooms[0].Tags);
+        Assert.Equal("tag1", rooms[0].Tags[0].Key);
+        Assert.Equal(2, rooms[0].Tags[0].Value);
+        Assert.False(updated);
+        updated = false;
+        mapDatabase.APITagRoom("room1", "tag1", 0);
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Single(rooms[0].Tags);
+        Assert.Equal("tag2", rooms[0].Tags[0].Key);
+        Assert.Equal(1, rooms[0].Tags[0].Value);
+        Assert.True(updated);
     }
 }
