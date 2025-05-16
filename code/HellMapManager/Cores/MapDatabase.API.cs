@@ -709,10 +709,10 @@ public partial class MapDatabase
             if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
             {
                 room.Tags.RemoveAll((t) => t.Key == tag);
-                var prev = room.ToString();
+                var prev = room.Encode();
                 room.Tags.Add(new ValueTag(tag, value));
                 room.Arrange();
-                if (room.ToString() != prev)
+                if (room.Encode() != prev)
                 {
                     Current.MarkAsModified();
                     RaiseMapFileUpdatedEvent(this);
@@ -727,10 +727,10 @@ public partial class MapDatabase
         {
             if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
             {
-                var prev = room.ToString();
+                var prev = room.Encode();
                 room.Tags.RemoveAll((t) => t.Key == tag);
                 room.Arrange();
-                if (room.ToString() != prev)
+                if (room.Encode() != prev)
                 {
                     Current.MarkAsModified();
                     RaiseMapFileUpdatedEvent(this);
@@ -745,11 +745,11 @@ public partial class MapDatabase
         {
             if (Current.Cache.Rooms.TryGetValue(roomkey, out Room? room))
             {
-                var prev = room.ToString();
+                var prev = room.Encode();
                 room.Data.RemoveAll((d) => d.Key == datakey);
                 room.Data.Add(new Data(datakey, datavalue));
                 room.Arrange();
-                if (room.ToString() != prev)
+                if (room.Encode() != prev)
                 {
                     Current.MarkAsModified();
                     RaiseMapFileUpdatedEvent(this);

@@ -2,6 +2,7 @@ using HellMapManager.Cores;
 using HellMapManager.Models;
 
 namespace TestProject;
+
 public class APITest
 {
     [Fact]
@@ -1287,5 +1288,97 @@ public class APITest
         Assert.Equal(2, shortcuts[0].Conditions.Count);
         Assert.Equal("key1", shortcuts[0].Conditions[0].Key);
         Assert.Equal("key2", shortcuts[0].Conditions[1].Key);
+    }
+    [Fact]
+    public void TestAPIGroupRoom()
+    {
+        bool updated = false;
+        var room = new Room()
+        {
+            Key = "room1",
+            Group = "group1",
+            Desc = "desc1",
+            Data = [new Data("key2", "value2"), new Data("key1", "value1")],
+            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
+            Exits = [new Exit(){
+                Command="cmd1",
+                To="to1",
+                Cost=1,
+                Conditions=[new ValueCondition("key1", 0,true),new ValueCondition("key2", 0,true)],
+            }],
+        };
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+
+        mapDatabase.APIGroupRoom("room1", "newgroup");
+        Assert.False(updated);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([room]);
+        updated = false;
+        mapDatabase.APIGroupRoom("room1", "group1");
+        var rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("group1", rooms[0].Group);
+        Assert.False(updated);
+        mapDatabase.APIGroupRoom("room1", "newgroup");
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("newgroup", rooms[0].Group);
+        Assert.True(updated);
+        updated = false;
+        mapDatabase.APIGroupRoom("roomnotfound", "newgroup");
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("newgroup", rooms[0].Group);
+        Assert.False(updated);
+    }
+    [Fact]
+    public void TestAPISetRoomData()
+    {
+        bool updated = false;
+        var room = new Room()
+        {
+            Key = "room1",
+            Group = "group1",
+            Desc = "desc1",
+            Data = [new Data("key2", "value2"), new Data("key1", "value1")],
+            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
+            Exits = [new Exit(){
+                Command="cmd1",
+                To="to1",
+                Cost=1,
+                Conditions=[new ValueCondition("key1", 0,true),new ValueCondition("key2", 0,true)],
+            }],
+        };
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        mapDatabase.APISetRoomData("room1", "key1", "newvalue");
+        Assert.False(updated);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([room]);
+        updated = false;
+        mapDatabase.APISetRoomData("room1", "key1", "value1");
+        var rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("value1", rooms[0].GetData("key1"));
+        Assert.False(updated);
+        mapDatabase.APISetRoomData("room1", "key1", "newdata");
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("newdata", rooms[0].GetData("key1"));
+        Assert.True(updated);
+        updated = false;
+        mapDatabase.APISetRoomData("roomnotfound", "key1", "newdata");
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("newdata", rooms[0].GetData("key1"));
+        Assert.False(updated);
+
     }
 }
