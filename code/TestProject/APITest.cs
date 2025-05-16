@@ -1539,6 +1539,39 @@ public class APITest
         Assert.NotNull(room);
         Assert.Equal("ctx2", room.Key);
         Assert.Equal("ctxroom", room.Group);
-
+    }
+    [Fact]
+    public void TestAPISnapshotALL()
+    {
+        bool updated = false;
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        mapDatabase.APIClearSnapshot(new SnapshotFilter(null, null, null));
+        Assert.False(updated);
+        mapDatabase.APITakeSnapshot("key1", "value1", "type1", "group1");
+        Assert.False(updated);
+        var snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        Assert.False(updated);
+        mapDatabase.NewMap();
+        mapDatabase.APITakeSnapshot("key1", "value1", "type1", "group1");
+        Assert.True(updated);
+        updated = false;
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        Assert.Single(snapshots);
+        Assert.Equal("key1", snapshots[0].Key);
+        Assert.Equal(1, snapshots[0].Sum);
+        mapDatabase.APITakeSnapshot("key1", "value1", "type1", "group1");
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        Assert.Single(snapshots);
+        Assert.Equal("key1", snapshots[0].Key);
+        Assert.Equal(2, snapshots[0].Sum);
+        mapDatabase.APIClearSnapshot(new SnapshotFilter(null, null, null));
+        Assert.True(updated);
+        updated = false;
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        Assert.Empty(snapshots);
     }
 }
