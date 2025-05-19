@@ -95,6 +95,7 @@ public class MapTest()
         ]);
         md.APIInsertShortcuts([
             new Shortcut(){
+                Key="shortcut1",
                 To="key1",
                 Command="A>1",
                 Cost=99,
@@ -106,7 +107,8 @@ public class MapTest()
         ctx.ClearTags().WithTags([]);
         ctx.ClearRoomConditions().WithRoomConditions([]);
         ctx.ClearRooms().WithRooms([
-                new Room(){Key="key6",
+                new Room(){
+                Key ="key6",
                 Tags=[],
                 Exits=[
                     new Exit(){
@@ -122,7 +124,7 @@ public class MapTest()
             new Shortcut(){
                 To="key6",
                 Command="A>6C",
-                Conditions=[new ValueCondition("noctxpath", 3,false)],
+                Conditions=[new ValueCondition("noctxpath", 1,true)],
                 Cost=1,
             },
         ]);
@@ -131,13 +133,13 @@ public class MapTest()
                 From="key5",
                 To="key6",
                 Command="5>6C",
-                Conditions=[new ValueCondition("noctxpath", 1,false)],
+                Conditions=[new ValueCondition("noctxpath", 1,true)],
                 Cost=1,
             },
             new Path(){
                 From="key1",
                 To="key2",
-                Conditions=[new ValueCondition("noctxpath", 1,false)],
+                Conditions=[new ValueCondition("noctxpath", 1,true)],
                 Command="1>2C",
                 Cost=1,
             },
@@ -159,6 +161,10 @@ public class MapTest()
         Assert.Null(qr);
         qr = mapDatabase.APIQueryPathOrdered("key1", ["key2"], ctx, opt);
         Assert.Null(qr);
+        var rooms = mapDatabase.APIDilate(["key1", "key6"], 2, ctx, opt);
+        Assert.Empty(rooms);
+        var exit = mapDatabase.APITrackExit("key1", "1>2", ctx, opt);
+        Assert.Equal("", exit);
         InitMapDatabase(mapDatabase);
         InitContext(ctx);
         qr = mapDatabase.APIQueryPathAll("key1", ["key2"], ctx, opt);
@@ -170,8 +176,19 @@ public class MapTest()
         qr = mapDatabase.APIQueryPathOrdered("key1", ["key2"], ctx, opt);
         Assert.NotNull(qr);
         Assert.Equal("1>2", Step.JoinCommands(";", qr.Steps));
-        var rooms = mapDatabase.APIDilate(["key1", "key6"], 2, ctx, opt);
+        rooms = mapDatabase.APIDilate(["key1", "key6"], 2, ctx, opt);
         rooms.Sort();
         Assert.Equal("key1;key2;key3;key4;key6", string.Join(";", rooms));
+        exit = mapDatabase.APITrackExit("key1", "1>2", ctx, opt);
+        Assert.Equal("key2", exit);
+        exit = mapDatabase.APITrackExit("notfound", "1>2", ctx, opt);
+        Assert.Equal("", exit);
+        exit = mapDatabase.APITrackExit("key1", "notfound", ctx, opt);
+        Assert.Equal("", exit);
+        //shortcut
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        Assert.Equal("key1", exit);
+        exit = mapDatabase.APITrackExit("key1", "A>6C", ctx, opt);
+        Assert.Equal("key6", exit);
     }
 }

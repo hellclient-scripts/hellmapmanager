@@ -591,9 +591,11 @@ public partial class MapDatabase
         if (Current != null)
         {
             var mapper = new Mapper(Current, context, options);
-            if (Current.Cache.Rooms.TryGetValue(start, out Room? room))
+            var room = mapper.GetRoom(start);
+            if (room is not null)
             {
-                foreach (var exit in room.Exits)
+                var exits = mapper.GetRoomExits(room);
+                foreach (var exit in exits)
                 {
                     if (exit.Command == command && mapper.ValidateExit(start, exit, mapper.GetExitCost(exit)))
                     {
