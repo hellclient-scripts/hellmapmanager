@@ -2,8 +2,6 @@ namespace TestProject;
 
 using HellMapManager.Models;
 using HellMapManager.Cores;
-using System.Reflection.Metadata;
-using HellMapManager.Views.Mapfile.Rooms;
 
 public class MapTest()
 {
@@ -190,5 +188,38 @@ public class MapTest()
         Assert.Equal("key1", exit);
         exit = mapDatabase.APITrackExit("key1", "A>6C", ctx, opt);
         Assert.Equal("key6", exit);
+        qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1;1>2", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1;1>2", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
+        rooms.Sort();
+        Assert.Equal("key1;key3;key6", string.Join(";", rooms));
+
+        opt.WithDisableShortcuts(true);
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        Assert.Equal("", exit);
+        exit = mapDatabase.APITrackExit("key1", "A>6C", ctx, opt);
+        Assert.Equal("", exit);
+        qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("6>3;3>1;1>2", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("6>3;3>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("6>3;3>1;1>2", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
+        rooms.Sort();
+        Assert.Equal("key3;key6", string.Join(";", rooms));
+
+        opt = new MapperOptions();
+
     }
 }
