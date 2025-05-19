@@ -137,12 +137,16 @@ public class Walking(Mapper mapper)
         List<WalkingStep> pending = [];
         foreach (var f in src)
         {
-            Walked[f] = new WalkingStep()
+            if (Mapper.GetRoom(f) is not null)
             {
-                From = "",
-                Command = "",
-            };
-            Mapper.AddRoomWalkingSteps(null, pending, f, 0);
+
+                Walked[f] = new WalkingStep()
+                {
+                    From = "",
+                    Command = "",
+                };
+                Mapper.AddRoomWalkingSteps(null, pending, f, 0);
+            }
         }
         var i = 0;
         while (pending.Count > 0 && i < iterations)

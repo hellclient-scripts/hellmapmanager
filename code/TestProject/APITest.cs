@@ -1605,9 +1605,11 @@ public class APITest
         ]);
         result = mapDatabase.APIFilterRooms(["key1", "key2", "key3"], new RoomFilter());
         Assert.Equal(3, result.Count);
+        result.Sort((a, b) => a.Key.CompareTo(b.Key));
         Assert.Equal("key1;key2;key3", string.Join(";", result.Select(r => r.Key)));
         result = mapDatabase.APIFilterRooms(["key3", "key2", "key2", "key5"], new RoomFilter());
         Assert.Equal(2, result.Count);
+        result.Sort((a, b) => a.Key.CompareTo(b.Key));
         Assert.Equal("key2;key3", string.Join(";", result.Select(r => r.Key)));
         var rf = new RoomFilter()
         {
@@ -1615,6 +1617,7 @@ public class APITest
         };
         result = mapDatabase.APISearchRooms(rf);
         Assert.Equal(3, result.Count);
+        result.Sort((a, b) => a.Key.CompareTo(b.Key));
         Assert.Equal("key1;key2;key3", string.Join(";", result.Select(r => r.Key)));
     }
     [Fact]
@@ -1705,7 +1708,6 @@ public class APITest
         Assert.Equal("key2", string.Join(";", result));
         result = mapDatabase.APIQueryRegionRooms("key5");
         Assert.Equal("key3", string.Join(";", result));
-
     }
 
 }

@@ -645,7 +645,6 @@ public partial class MapDatabase
                     result.Add(model);
                 }
             });
-            Room.Sort(result);
             return result;
         }
         return [];
@@ -667,7 +666,6 @@ public partial class MapDatabase
                     }
                 }
             });
-            Room.Sort(result);
             return result;
         }
         return [];

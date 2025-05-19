@@ -2,7 +2,8 @@ namespace TestProject;
 
 using HellMapManager.Models;
 using HellMapManager.Cores;
-
+using System.Reflection.Metadata;
+using HellMapManager.Views.Mapfile.Rooms;
 
 public class MapTest()
 {
@@ -85,7 +86,19 @@ public class MapTest()
                         Cost=1,
                     },
                 ],
+            },
+            new Room(){Key="key7",
+                Tags=[],
+                Exits=[
+                ],
             }
+        ]);
+        md.APIInsertShortcuts([
+            new Shortcut(){
+                To="key1",
+                Command="A>1",
+                Cost=99,
+            },
         ]);
     }
     private static void InitContext(Context ctx)
@@ -105,12 +118,27 @@ public class MapTest()
             }
 
         ]);
-        ctx.ClearShortcuts().WithShortcuts([]);
+        ctx.ClearShortcuts().WithShortcuts([
+            new Shortcut(){
+                To="key6",
+                Command="A>6C",
+                Conditions=[new ValueCondition("noctxpath", 3,false)],
+                Cost=1,
+            },
+        ]);
         ctx.ClearPaths().WithPaths([
             new Path(){
                 From="key5",
                 To="key6",
-                Command="5>6",
+                Command="5>6C",
+                Conditions=[new ValueCondition("noctxpath", 1,false)],
+                Cost=1,
+            },
+            new Path(){
+                From="key1",
+                To="key2",
+                Conditions=[new ValueCondition("noctxpath", 1,false)],
+                Command="1>2C",
                 Cost=1,
             },
         ]);
@@ -133,5 +161,17 @@ public class MapTest()
         Assert.Null(qr);
         InitMapDatabase(mapDatabase);
         InitContext(ctx);
+        qr = mapDatabase.APIQueryPathAll("key1", ["key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("1>2", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key1"], ["key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("1>2", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key1", ["key2"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("1>2", Step.JoinCommands(";", qr.Steps));
+        var rooms = mapDatabase.APIDilate(["key1", "key6"], 2, ctx, opt);
+        rooms.Sort();
+        Assert.Equal("key1;key2;key3;key4;key6", string.Join(";", rooms));
     }
 }
