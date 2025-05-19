@@ -1617,4 +1617,95 @@ public class APITest
         Assert.Equal(3, result.Count);
         Assert.Equal("key1;key2;key3", string.Join(";", result.Select(r => r.Key)));
     }
+    [Fact]
+    public void TestAPIQueryRegionRooms()
+    {
+        var mapDatabase = new MapDatabase();
+        var result = mapDatabase.APIQueryRegionRooms("key");
+        Assert.Empty(result);
+        Assert.Empty(result);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([
+            new Room()
+            {
+                Key = "key1",
+                Group = "group2",
+                Desc = "desc1",
+            },
+            new Room()
+            {
+                Key = "key2",
+                Group = "group2",
+                Desc = "desc2",
+            },
+            new Room()
+            {
+                Key = "key3",
+                Group = "group3",
+                Desc = "desc3",
+            },
+        ]);
+        mapDatabase.APIInsertRegions([
+            new Region()
+            {
+                Key = "key1",
+                Items = [
+                    new RegionItem(RegionItemType.Room, "key1",false),
+                    new RegionItem(RegionItemType.Zone, "group3",false),
+                ],
+            },
+            new Region()
+            {
+                Key = "key2",
+                Items = [
+                    new RegionItem(RegionItemType.Room, "notfoundkey",false),
+                    new RegionItem(RegionItemType.Zone, "notfoundzone",false),
+                ],
+            },
+            new Region()
+            {
+                Key = "key3",
+                Items = [
+                    new RegionItem(RegionItemType.Room, "key1",false),
+                    new RegionItem(RegionItemType.Room, "key2",false),
+                    new RegionItem(RegionItemType.Room, "key3",false),
+                    new RegionItem(RegionItemType.Zone, "group2",true),
+                ],
+            },
+            new Region()
+            {
+                Key = "key4",
+                Items = [
+                    new RegionItem(RegionItemType.Zone, "group2",false),
+                    new RegionItem(RegionItemType.Room, "key1",true),
+                ],
+            },
+            new Region()
+            {
+                Key = "key5",
+                Items = [
+                    new RegionItem(RegionItemType.Zone, "group2",false),
+                    new RegionItem(RegionItemType.Room, "key1",true),
+                    new RegionItem(RegionItemType.Zone, "group3",false),
+                    new RegionItem(RegionItemType.Room, "key2",true),
+                    new RegionItem(RegionItemType.Zone, "group2",true),
+                ],
+            },
+
+        ]);
+        result = mapDatabase.APIQueryRegionRooms("notfound");
+        Assert.Empty(result);
+        result = mapDatabase.APIQueryRegionRooms("key1");
+        Assert.Equal("key1;key3", string.Join(";", result));
+        result = mapDatabase.APIQueryRegionRooms("key2");
+        Assert.Empty(result);
+        result = mapDatabase.APIQueryRegionRooms("key3");
+        Assert.Equal("key3", string.Join(";", result));
+        result = mapDatabase.APIQueryRegionRooms("key4");
+        Assert.Equal("key2", string.Join(";", result));
+        result = mapDatabase.APIQueryRegionRooms("key5");
+        Assert.Equal("key3", string.Join(";", result));
+
+    }
+
 }

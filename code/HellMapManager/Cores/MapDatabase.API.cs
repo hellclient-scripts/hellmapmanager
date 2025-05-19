@@ -546,7 +546,10 @@ public partial class MapDatabase
                         }
                         else
                         {
-                            result[item.Value] = true;
+                            if (Current.Cache.Rooms.ContainsKey(item.Value))
+                            {
+                                result[item.Value] = true;
+                            }
                         }
                     }
                     else

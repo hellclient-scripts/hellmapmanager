@@ -647,7 +647,6 @@ public class MapperTest()
         Assert.Equal("key6", result.Unvisited[1]);
         result = new Walking(mapper).QueryPathOrdered("key1", ["key5", "key6"]);
         Assert.False(result.IsSuccess());
-
     }
 }
 
