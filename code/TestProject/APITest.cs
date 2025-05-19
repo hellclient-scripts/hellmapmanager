@@ -1687,7 +1687,7 @@ public class APITest
                     new RegionItem(RegionItemType.Zone, "group2",false),
                     new RegionItem(RegionItemType.Room, "key1",true),
                     new RegionItem(RegionItemType.Zone, "group3",false),
-                    new RegionItem(RegionItemType.Room, "key2",true),
+                    new RegionItem(RegionItemType.Room, "key2",false),
                     new RegionItem(RegionItemType.Zone, "group2",true),
                 ],
             },
