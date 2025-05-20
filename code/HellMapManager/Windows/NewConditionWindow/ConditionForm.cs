@@ -24,7 +24,7 @@ public partial class ConditionForm : ObservableObject
     public ValueCondition? Raw;
     public ExternalValidator ExternalValidator;
     public bool Not { get; set; } = false;
-    public int Value { get; set; } = 0;
+    public int Value { get; set; } = 1;
     public string Key { get; set; } = "";
     public string Validate()
     {
