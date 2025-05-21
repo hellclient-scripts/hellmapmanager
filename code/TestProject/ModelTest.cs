@@ -1492,9 +1492,9 @@ public class ModelTest
 
         Assert.Empty(ctx.CommandCosts);
         Assert.Equal(ctx, ctx.WithCommandCosts([
-            new CommandCost() { Command = "cmd1",To="to1", Cost = 1 },
-            new CommandCost() { Command = "cmd2",To="to1", Cost = 2 },
-            new CommandCost() { Command = "cmd1",To="to3", Cost = 3 },
+            new CommandCost("cmd1","to1",1),
+            new CommandCost("cmd2","to1",2),
+            new CommandCost("cmd1","to3",3),
         ]));
         Assert.Equal(2, ctx.CommandCosts.Count);
         Assert.Equal(1, ctx.CommandCosts["cmd1"]["to1"]);
@@ -1532,7 +1532,7 @@ public class ModelTest
             Shortcuts = [new RoomConditionExit() { Command = "cmd1", To = "to1" }, new RoomConditionExit() { Command = "cmd2", To = "to2" }],
             Paths = [new HellMapManager.Models.Path() { To = "to1", From = "from1", Command = "cmd1" }, new HellMapManager.Models.Path() { To = "to2", From = "from2", Command = "cmd2" }, new HellMapManager.Models.Path() { To = "to3", From = "from1", Command = "cmd3" }],
             BlockedLinks = [new Link("from1", "to1"), new Link("from2", "to2"), new Link("from1", "to3")],
-            CommandCosts = [new CommandCost() { Command = "cmd1", To = "to1", Cost = 1 }, new CommandCost() { Command = "cmd2", To = "to1", Cost = 2 }, new CommandCost() { Command = "cmd1", To = "to3", Cost = 3 }],
+            CommandCosts = [new CommandCost("cmd1", "to1", 1), new CommandCost("cmd2", "to1", 2), new CommandCost("cmd1", "to3", 3)],
         };
         var ctx = Context.FromEnvironment(env);
         Assert.Equal(2, ctx.Tags.Count);

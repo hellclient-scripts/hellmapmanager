@@ -2,6 +2,7 @@ namespace TestProject;
 
 using HellMapManager.Models;
 using HellMapManager.Cores;
+using HellMapManager.Utils.ControlCode;
 
 public class MapTest()
 {
@@ -392,5 +393,15 @@ public class MapTest()
         rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
         rooms.Sort();
         Assert.Equal("key3;key6", string.Join(";", rooms));
+
+        //CommandCosts
+        opt = new MapperOptions();
+        InitContext(ctx);
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        Assert.Equal("key1", exit);
+        ctx.WithCommandCosts([new CommandCost("key6", "key1", 99)]);
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        Assert.Equal("key1", exit);
+
     }
 }

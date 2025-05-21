@@ -44,16 +44,9 @@ public class MapperTest()
         var md = new MapDatabase();
         md.NewMap();
         var ctx = new Context();
-        ctx.WithCommandCosts([new CommandCost(){
-            Command = "cmd2",
-            To="to1",
-            Cost = 20,
-        },
-        new CommandCost(){
-            Command = "cmd2",
-            To="to2",
-            Cost = 20,
-        },
+        ctx.WithCommandCosts([
+            new CommandCost("cmd2", "to1", 20),
+            new CommandCost("cmd2", "to2", 20)
         ]);
         var mapper = new Mapper(md.Current!, ctx, new MapperOptions());
         var exit = new Exit()
@@ -172,12 +165,7 @@ public class MapperTest()
         ctx.ClearBlockedLinks();
         opt.MaxExitCost = 20;
         Assert.True(mapper.ValidatePath("key1", exit));
-        ctx.WithCommandCosts([new CommandCost()
-        {
-            Command = "cmd1",
-            To = "key2",
-            Cost = 50,
-        }]);
+        ctx.WithCommandCosts([new CommandCost("cmd1", "key2", 50)]);
         Assert.False(mapper.ValidatePath("key1", exit));
     }
     [Fact]

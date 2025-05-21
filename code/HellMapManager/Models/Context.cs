@@ -13,11 +13,11 @@ public class Link(string from, string to)
     public string From { get; set; } = from;
     public string To { get; set; } = to;
 }
-public class CommandCost
+public class CommandCost(string command, string to, int cost)
 {
-    public string Command { get; set; } = "";
-    public string To { get; set; } = "";
-    public int Cost { get; set; } = 1;
+    public string Command { get; set; } = command;
+    public string To { get; set; } = to;
+    public int Cost { get; set; } = cost;
 }
 public class Environment
 {
@@ -215,7 +215,7 @@ public class Context
         {
             foreach (var t in c.Value)
             {
-                env.CommandCosts.Add(new CommandCost() { Command = c.Key, To = t.Key, Cost = t.Value });
+                env.CommandCosts.Add(new CommandCost(c.Key, t.Key, t.Value));
             }
         }
         return env;
