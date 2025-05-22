@@ -1,5 +1,6 @@
 using HellMapManager.Models;
 using HellMapManager.Helpers.HMMEncoder;
+using System.Security.Cryptography.X509Certificates;
 
 namespace TestProject;
 
@@ -110,11 +111,112 @@ public class HMMTest
         Assert.Equal(mf.Map.Rooms[0].Key, mf2.Map.Rooms[0].Key);
         Assert.Equal(MapEncoding.GB18030, mf2.Map.Encoding);
 
-        mf2= HMMEncoder.Decode(Array.Empty<byte>());
+        mf2 = HMMEncoder.Decode(Array.Empty<byte>());
         Assert.Null(mf2);
-        var bytes= new byte[3]{ 0x01, 0x02, 0x03 };
-        mf2= HMMEncoder.Decode(bytes);
+        var bytes = new byte[3] { 0x01, 0x02, 0x03 };
+        mf2 = HMMEncoder.Decode(bytes);
         Assert.Null(mf2);
     }
-
+    private static Room? TestEncodeRoomHook(Room room)
+    {
+        if (room.Key == "empty")
+        {
+            return null;
+        }
+        var model = room.Clone();
+        model.Key = room.Key + "-encoded";
+        return model;
+    }
+    private static Shortcut? TestEncodeShortcutHook(Shortcut shortcut)
+    {
+        if (shortcut.Key == "empty")
+        {
+            return null;
+        }
+        var model = shortcut.Clone();
+        model.Key = shortcut.Key + "-encoded";
+        return model;
+    }
+    private static Room? TestDecodeRoomHook(Room room)
+    {
+        if (room.Key == "empty")
+        {
+            return null;
+        }
+        var model = room.Clone();
+        model.Key = room.Key + "-decoded";
+        return model;
+    }
+    private static Shortcut? TestDecodeShortcutHook(Shortcut shortcut)
+    {
+        if (shortcut.Key == "empty")
+        {
+            return null;
+        }
+        var model = shortcut.Clone();
+        model.Key = shortcut.Key + "-decoded";
+        return model;
+    }
+    [Fact]
+    public void TestHook()
+    {
+        var mf = MapFile.Create("testname", "testdesc");
+        var room = new Room()
+        {
+            Key = "empty",
+        };
+        var room2 = new Room()
+        {
+            Key = "key1",
+        };
+        var shortcut = new Shortcut()
+        {
+            Key = "empty",
+            Command = "to",
+        };
+        var shortcut2 = new Shortcut()
+        {
+            Key = "key1",
+            Command = "to2",
+        };
+        mf.InsertRoom(room);
+        mf.InsertRoom(room2);
+        mf.InsertShortcut(shortcut);
+        mf.InsertShortcut(shortcut2);
+        var rawdata = HMMEncoder.Encode(mf);
+        HMMEncoder.EncodeRoomHook = TestEncodeRoomHook;
+        HMMEncoder.EncodeShortcutHook = TestEncodeShortcutHook;
+        var data = HMMEncoder.Encode(mf);
+        var mf2 = HMMEncoder.Decode(data);
+        Assert.NotNull(mf2);
+        Assert.Single(mf2.Map.Rooms);
+        Assert.Equal("key1-encoded", mf2.Map.Rooms[0].Key);
+        Assert.Single(mf2.Map.Shortcuts);
+        Assert.Equal("key1-encoded", mf2.Map.Shortcuts[0].Key);
+        HMMEncoder.DecodeRoomHook = TestDecodeRoomHook;
+        HMMEncoder.DecodeShortcutHook = TestDecodeShortcutHook;
+        var mf3 = HMMEncoder.Decode(rawdata);
+        Assert.NotNull(mf3);
+        Assert.Single(mf3.Map.Rooms);
+        Assert.Equal("key1-decoded", mf3.Map.Rooms[0].Key);
+        Assert.Single(mf2.Map.Shortcuts);
+        Assert.Equal("key1-decoded", mf3.Map.Shortcuts[0].Key);
+        Assert.Equal(TestEncodeRoomHook, HMMEncoder.EncodeRoomHook);
+        Assert.Equal(TestEncodeShortcutHook, HMMEncoder.EncodeShortcutHook);
+        Assert.Equal(TestDecodeRoomHook, HMMEncoder.DecodeRoomHook);
+        Assert.Equal(TestDecodeShortcutHook, HMMEncoder.DecodeShortcutHook);
+        HMMEncoder.ResetHooks();
+        Assert.Equal(DefaultHmmEncoderHooks.RoomHook, HMMEncoder.EncodeRoomHook);
+        Assert.Equal(DefaultHmmEncoderHooks.ShortcutHook, HMMEncoder.EncodeShortcutHook);
+        Assert.Equal(DefaultHmmEncoderHooks.RoomHook, HMMEncoder.DecodeRoomHook);
+        Assert.Equal(DefaultHmmEncoderHooks.ShortcutHook, HMMEncoder.DecodeShortcutHook);
+        var mf4 = HMMEncoder.Decode(rawdata);
+        Assert.NotNull(mf4);
+        Assert.Equal(2, mf4.Map.Rooms.Count);
+        Assert.True(mf.Map.Rooms[0].Equal(mf4.Map.Rooms[0]));
+        Assert.True(mf.Map.Rooms[1].Equal(mf4.Map.Rooms[1]));
+        Assert.Equal(2, mf4.Map.Shortcuts.Count);
+        Assert.True(mf.Map.Shortcuts[0].Equal(mf4.Map.Shortcuts[0]));
+        Assert.True(mf.Map.Shortcuts[1].Equal(mf4.Map.Shortcuts[1]));
+    }
 }
