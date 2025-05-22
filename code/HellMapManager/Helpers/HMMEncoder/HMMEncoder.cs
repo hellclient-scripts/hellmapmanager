@@ -4,13 +4,28 @@ using System.Text;
 using HellMapManager.Models;
 
 namespace HellMapManager.Helpers.HMMEncoder;
+
+public class DefaultHmmEncoderHooks
+{
+    public static Room? RoomHook(Room model)
+    {
+        return model;
+    }
+    public static Shortcut? ShortcutHook(Shortcut model)
+    {
+        return model;
+    }
+}
+
+public delegate Room? RoomHook(Room model);
+public delegate Shortcut? ShortcutHook(Shortcut model);
+
 public class MapHeadData
 {
     public const string CurrentFormat = "HMM1.0";
 
     public string FileFormat = "";
     public MapEncoding Encoding { get; set; } = MapEncoding.Default;
-
     public bool Validated()
     {
         return FileFormat == CurrentFormat;
@@ -39,6 +54,18 @@ public class MapHeadData
 }
 public class HMMEncoder
 {
+    public static RoomHook DecodeRoomHook { get; set; } = DefaultHmmEncoderHooks.RoomHook;
+    public static RoomHook EncodeRoomHook { get; set; } = DefaultHmmEncoderHooks.RoomHook;
+    public static ShortcutHook DecodeShortcutHook { get; set; } = DefaultHmmEncoderHooks.ShortcutHook;
+    public static ShortcutHook EncodeShortcutHook { get; set; } = DefaultHmmEncoderHooks.ShortcutHook;
+    public static void ResetHooks()
+    {
+        DecodeRoomHook = DefaultHmmEncoderHooks.RoomHook;
+        EncodeRoomHook = DefaultHmmEncoderHooks.RoomHook;
+        DecodeShortcutHook = DefaultHmmEncoderHooks.ShortcutHook;
+        EncodeShortcutHook = DefaultHmmEncoderHooks.ShortcutHook;
+    }
+
     public static byte[] Encode(MapFile mf)
     {
         var head = new MapHeadData
@@ -50,14 +77,26 @@ public class HMMEncoder
             mf.Map.Info.Encode(),
         };
 
-        mf.Map.Rooms.ForEach(d => { results.Add(d.Encode()); });
+        mf.Map.Rooms.ForEach(d =>
+        {
+            if (EncodeRoomHook(d) is Room room)
+            {
+                results.Add(room.Encode());
+            }
+        });
         mf.Map.Markers.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Landmarks.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Variables.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Routes.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Regions.ForEach(r => { results.Add(r.Encode()); });
         mf.Map.Traces.ForEach(r => { results.Add(r.Encode()); });
-        mf.Map.Shortcuts.ForEach(r => { results.Add(r.Encode()); });
+        mf.Map.Shortcuts.ForEach(r =>
+        {
+            if (EncodeShortcutHook(r) is Shortcut shortcut)
+            {
+                results.Add(shortcut.Encode());
+            }
+        });
         mf.Map.Snapshots.ForEach(r => { results.Add(r.Encode()); });
 
         return GetEncoding(head.Encoding).GetBytes(HMMFormatter.Escaper.Pack(string.Join("\n", results)));
@@ -116,7 +155,13 @@ public class HMMEncoder
                 case Room.EncodeKey:
                     {
                         var model = Room.Decode(data);
-                        if (model.Validated()) { mf.InsertRoom(model); }
+                        if (model.Validated())
+                        {
+                            if (DecodeRoomHook(model) is Room room)
+                            {
+                                mf.InsertRoom(room);
+                            }
+                        }
                     }
                     break;
                 case Marker.EncodeKey:
@@ -158,7 +203,13 @@ public class HMMEncoder
                 case Shortcut.EncodeKey:
                     {
                         var model = Shortcut.Decode(data);
-                        if (model.Validated()) { mf.InsertShortcut(model); }
+                        if (model.Validated())
+                        {
+                            if (DecodeShortcutHook(model) is Shortcut shortcut)
+                            {
+                                mf.InsertShortcut(shortcut);
+                            }
+                        }
                     }
                     break;
                 case Snapshot.EncodeKey:
