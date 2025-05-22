@@ -106,26 +106,23 @@ public class Walking(Mapper mapper)
             pending = [];
             foreach (var step in current)
             {
-                if (targets.ContainsKey(step.To))
+                if (!Walked.ContainsKey(step.To))
                 {
-                    return BuildResult(step, target);
-                }
-                {
-                    if (!Walked.ContainsKey(step.To))
+                    if (step.Remain <= 1)
                     {
-                        if (step.Remain <= 1)
+                        if (targets.ContainsKey(step.To))
                         {
-                            Walked[step.To] = step;
-                            Mapper.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
+                            return BuildResult(step, target);
                         }
-                        else
-                        {
-                            step.Remain--;
-                            pending.Add(step);
-                        }
+                        Walked[step.To] = step;
+                        Mapper.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
+                    }
+                    else
+                    {
+                        step.Remain--;
+                        pending.Add(step);
                     }
                 }
-
             }
         }
         return QueryReuslt.Fail;

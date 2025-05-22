@@ -97,7 +97,7 @@ public class MapTest()
                 Key="shortcut1",
                 To="key1",
                 Command="A>1",
-                Cost=10,
+                Cost=2,
             },
         ]);
     }
@@ -113,7 +113,7 @@ public class MapTest()
                     new Exit(){
                         To ="key3",
                         Command ="6>3",
-                        Cost=2,
+                        Cost=1,
                     },
                 ],
             }
@@ -165,7 +165,7 @@ public class MapTest()
         var exit = mapDatabase.APITrackExit("key1", "1>2", ctx, opt);
         Assert.Equal("", exit);
         InitMapDatabase(mapDatabase);
-        InitContext(ctx);
+        InitContext(ctx);        
         qr = mapDatabase.APIQueryPathAll("key1", ["key2"], ctx, opt);
         Assert.NotNull(qr);
         Assert.Equal("1>2", Step.JoinCommands(";", qr.Steps));
@@ -402,11 +402,11 @@ public class MapTest()
         qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
         Assert.NotNull(qr);
         Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
-        Assert.Equal(13, qr.Cost);
+        Assert.Equal(5, qr.Cost);
         qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key5"], ctx, opt);
         Assert.NotNull(qr);
         Assert.Equal("A>1", Step.JoinCommands(";", qr.Steps));
-        Assert.Equal(10, qr.Cost);
+        Assert.Equal(2, qr.Cost);
         qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key5"], ctx, opt);
         Assert.NotNull(qr);
         Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
@@ -419,16 +419,16 @@ public class MapTest()
         Assert.Equal("key1", exit);
         qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
         Assert.NotNull(qr);
-        Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
-        Assert.Equal(102, qr.Cost);
+        Assert.Equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
+        Assert.Equal(5, qr.Cost);
         qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key5"], ctx, opt);
         Assert.NotNull(qr);
-        Assert.Equal(99, qr.Cost);
-        Assert.Equal("A>1", Step.JoinCommands(";", qr.Steps));
+        Assert.Equal(2, qr.Cost);
+        Assert.Equal("6>3;3>1", Step.JoinCommands(";", qr.Steps));
         qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key5"], ctx, opt);
         Assert.NotNull(qr);
-        Assert.Equal(102, qr.Cost);
-        Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
+        Assert.Equal(5, qr.Cost);
+        Assert.Equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
         rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
         rooms.Sort();
         Assert.Equal("key1;key3;key6", string.Join(";", rooms));
@@ -451,7 +451,7 @@ public class MapTest()
         rooms.Sort();
         Assert.Equal("key1;key3;key6", string.Join(";", rooms));
 
-        opt.MaxExitCost = 2;
+        opt.MaxExitCost = 1;
         exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
         Assert.Equal("", exit);
         qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
@@ -467,5 +467,37 @@ public class MapTest()
         rooms.Sort();
         Assert.Equal("key3;key6", string.Join(";", rooms));
 
+        //MaxTotalCost
+        opt = new MapperOptions();
+        InitContext(ctx);
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        Assert.Equal("key1", exit);
+        qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key5"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key5"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
+        rooms.Sort();
+        Assert.Equal("key1;key3;key6", string.Join(";", rooms));
+        opt.MaxTotalCost = 3;
+        exit = mapDatabase.APITrackExit("key6", "A>1", ctx, opt);
+        Assert.Equal("key1", exit);
+        qr = mapDatabase.APIQueryPathAll("key6", ["key1", "key5"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key6"], ["key1", "key5"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key6", ["key1", "key5"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>1", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
+        rooms.Sort();
+        Assert.Equal("key1;key3;key6", string.Join(";", rooms));
     }
 }
