@@ -636,5 +636,36 @@ public class MapperTest()
         result = new Walking(mapper).QueryPathOrdered("key1", ["key5", "key6"]);
         Assert.False(result.IsSuccess());
     }
+    [Fact]
+    public void TestShortestWay()
+    {
+        var md = new MapDatabase();
+        md.NewMap();
+        var ctx = new Context();
+        var opt = new MapperOptions();
+        var mapper = new Mapper(md.Current!, ctx, opt);
+        md.APIInsertRooms([
+            new Room() { Key = "key1" },
+            new Room() { Key = "key2" },
+            new Room() { Key = "key3" },
+        ]);
+        ctx.WithPaths([
+            new HellMapManager.Models.Path(){From = "key1",To = "key2",Command = "1>2",Cost=1},
+            new HellMapManager.Models.Path(){From = "key2",To = "key3",Command = "2>3",Cost=1},
+            new HellMapManager.Models.Path(){From = "key1",To = "key3",Command = "1>3",Cost=10},
+        ]);
+        var result = new Walking(mapper).QueryPathAny(["key1"], ["key3"], 0);
+        Assert.True(result.IsSuccess());
+        Assert.Equal(2, result.Steps.Count);
+        Assert.Equal("1>2;2>3", Step.JoinCommands(";", result.Steps));
+        ctx.WithPaths([
+                new HellMapManager.Models.Path(){From = "key1",To = "key3",Command = "1>3b",Cost=1},
+        ]);
+        result = new Walking(mapper).QueryPathAny(["key1"], ["key3"], 0);
+        Assert.True(result.IsSuccess());
+        Assert.Single(result.Steps);
+        Assert.Equal("1>3b", Step.JoinCommands(";", result.Steps));
+
+    }
 }
 
