@@ -36,7 +36,7 @@ public class Walking(Mapper mapper)
     private Dictionary<string, WalkingStep> Walked = new();
 
     public Mapper Mapper { get; } = mapper;
-    private static QueryReuslt BuildResult(WalkingStep last, List<string> Targets)
+    private static QueryReuslt BuildResult(WalkingStep last, List<string> targets)
     {
         var result = new QueryReuslt();
 
@@ -50,7 +50,7 @@ public class Walking(Mapper mapper)
         result.Steps.Reverse();
         result.From = current.From;
         result.To = last.To;
-        foreach (var target in Targets)
+        foreach (var target in targets)
         {
             if (target != result.To)
             {
