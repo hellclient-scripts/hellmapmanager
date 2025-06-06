@@ -120,29 +120,32 @@
           <Setter Property="Padding" Value="16" />
           <Setter Property="Background" Value="#FFFFF2C2" />
         </Style>
-        <Style Selector="Border.Level0 TextBlock">
+        <Style Selector="Border.Level0 SelectableTextBlock">
           <Setter Property="FontSize" Value="24" />
         </Style>
         <Style Selector="Border.Level1">
           <Setter Property="Padding" Value="10" />
           <Setter Property="Background" Value="#FFD9DFC6" />
         </Style>
-        <Style Selector="Border.Level1 TextBlock">
+        <Style Selector="Border.Level1 SelectableTextBlock">
           <Setter Property="FontSize" Value="20" />
         </Style>
         <Style Selector="Border.Level2">
           <Setter Property="Padding" Value="8" />
           <Setter Property="Background" Value="#FFEFF3EA" />
         </Style>
-        <Style Selector="Border.Level2 TextBlock">
+        <Style Selector="Border.Level2 SelectableTextBlock">
           <Setter Property="FontSize" Value="18" />
         </Style>
         <Style Selector="Border.LevelOther">
           <Setter Property="Padding" Value="6" />
           <Setter Property="Background" Value="White" />
         </Style>
-        <Style Selector="Border.LevelOther TextBlock">
+        <Style Selector="Border.LevelOther SelectableTextBlock">
           <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style Selector="TextBlock.tags">
+          <Setter Property="FontSize" Value="14" />
         </Style>
       </Panel.Styles>
       <Canvas x:Name="BGCanvas">
@@ -181,7 +184,7 @@
                   DoubleTapped="OnDoubleTapped">
                   <StackPanel>
                     <SelectableTextBlock Text="{Binding LabelWithKey}" />
-                    <TextBlock Text="{Binding Tags}" />
+                    <TextBlock Classes="tags" Text="{Binding Tags}" />
                   </StackPanel>
                 </Border>
               </DataTemplate>

@@ -235,7 +235,7 @@
               <ItemsControl Classes="RoomTags Content" ItemsSource="{Binding Item.Tags}">
                 <ItemsControl.ItemTemplate>
                   <DataTemplate>
-                    <TextBlock Padding="0,2" DataContext="{Binding .}" />
+                    <SelectableTextBlock Padding="0,2" Text="{Binding .}" />
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
