@@ -57,7 +57,7 @@ public class ModelTest
         Assert.False(tc.Equal(tc2));
         Assert.True(tc2.Validated());
 
-        var vt = new ValueTag("key", 0);
+        var vt = new ValueTag("key", 1);
         ValueTag vt2;
         vt2 = vt.Clone();
         Assert.True(vt.Equal(vt2));
@@ -74,14 +74,14 @@ public class ModelTest
         Assert.True(vt2.Validated());
         Assert.Equal("key:-1", vt2.ToString());
         vt2 = vt.Clone();
-        vt2.Value = 1;
+        vt2.Value = 2;
         vt2.Key = "key2";
         Assert.False(vt.Equal(vt2));
-        Assert.Equal("key2:1", vt2.ToString());
+        Assert.Equal("key2:2", vt2.ToString());
 
         Assert.True(vt.Match("key", 0));
         Assert.True(vt.Match("key", -1));
-        Assert.False(vt.Match("key", 1));
+        Assert.False(vt.Match("key", 2));
         Assert.False(vt.Match("key2", 0));
 
         var vc = new ValueCondition("key", 0, true);
@@ -334,7 +334,7 @@ public class ModelTest
             Name = "name",
             Group = "group",
             Desc = "desc",
-            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
+            Tags = [new ValueTag("tag1", 1), new ValueTag("tag2", 1)],
             Data = [new Data("dkey1", "dval1"), new Data("dkey2", "dval2")],
             Exits = [
                 new Exit(){

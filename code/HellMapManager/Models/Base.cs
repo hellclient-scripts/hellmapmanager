@@ -38,7 +38,7 @@ public class ValueTag(string key, int value)
     }
     public override string ToString()
     {
-        return Value == 0 ? Key : $"{Key}:{Value}";
+        return Value == 1 ? Key : $"{Key}:{Value}";
     }
     public bool Match(string key, int value)
     {
