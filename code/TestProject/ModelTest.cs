@@ -84,7 +84,7 @@ public class ModelTest
         Assert.False(vt.Match("key", 2));
         Assert.False(vt.Match("key2", 0));
 
-        var vc = new ValueCondition("key", 0, true);
+        var vc = new ValueCondition("key", 1, true);
         ValueCondition vc2;
         vc2 = vc.Clone();
         Assert.True(vc.Equal(vc2));
@@ -109,8 +109,8 @@ public class ModelTest
         vc2.Key = "key2";
         Assert.False(vc.Equal(vc2));
         Assert.True(vc2.Validated());
-        Assert.Equal("key2:1", vc2.ToString());
-        Assert.Equal("key2:1", vc2.KeyLabel);
+        Assert.Equal("key2", vc2.ToString());
+        Assert.Equal("key2", vc2.KeyLabel);
 
         List<ValueTag> tags = [
             new ("key1", 1),
@@ -241,7 +241,7 @@ public class ModelTest
             To = "to",
             Command = "cmd",
             Cost = 2,
-            Conditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)]
+            Conditions = [new ValueCondition("con1", 1, false), new ValueCondition("con2", 1, true)]
         };
         Exit exit2;
         exit2 = exit.Clone();
@@ -801,8 +801,8 @@ public class ModelTest
             Command = "command1",
             To = "to1",
             Cost = 2,
-            RoomConditions = [new ValueCondition("con1", 0, false), new ValueCondition("con2", 0, true)],
-            Conditions = [new ValueCondition("con3", 0, false), new ValueCondition("con4", 0, true)]
+            RoomConditions = [new ValueCondition("con1", 1, false), new ValueCondition("con2", 1, true)],
+            Conditions = [new ValueCondition("con3", 1, false), new ValueCondition("con4", 1, true)]
         };
         Assert.True(sc.Filter("key"));
         Assert.True(sc.Filter("command"));

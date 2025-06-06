@@ -119,7 +119,7 @@ public class RelationMapperTest
                 Name="name2",
                 Group="group2",
                 Desc="desc2",
-                Tags=[new ValueTag("tag1",0), new ValueTag("tag2",0)],
+                Tags=[new ValueTag("tag1",1), new ValueTag("tag2",1)],
                 Exits = [
                     new Exit() {
                     Command = "cmd",

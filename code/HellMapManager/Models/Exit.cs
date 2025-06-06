@@ -95,7 +95,7 @@ public class Exit
     }
     public string AllConditions
     {
-        get => string.Join(",", Conditions.ConvertAll(d => (d.Not ? "! " : "") + d.Key + (d.Value == 0 ? "" : ":" + d.Value)));
+        get => string.Join(",", Conditions.ConvertAll(d => (d.Not ? "! " : "") + d.Key + (d.Value == 1 ? "" : ":" + d.Value)));
     }
     public bool Equal(Exit model)
     {

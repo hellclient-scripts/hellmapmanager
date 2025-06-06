@@ -89,11 +89,11 @@ public class ValueCondition(string key, int value, bool not)
     public override string ToString()
     {
         var label = Not ? $"!{Key}" : Key;
-        return Value == 0 ? label : $"{label}:{Value}";
+        return Value == 1 ? label : $"{label}:{Value}";
     }
     public string KeyLabel
     {
-        get => Value == 0 ? Key : $"{Key}:{Value}";
+        get => Value == 1 ? Key : $"{Key}:{Value}";
     }
 }
 
