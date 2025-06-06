@@ -55,7 +55,7 @@
         Classes="Intro"
         DockPanel.Dock="Top">
         <StackPanel>
-          <TextBlock VerticalAlignment="Top" Classes="Title">Hell Map Manager</TextBlock>
+          <TextBlock VerticalAlignment="Top" Classes="Title">HellMapManager</TextBlock>
           <TextBlock VerticalAlignment="Bottom" Classes="Desc">聚焦Mud地图数据</TextBlock>
         </StackPanel>
       </Border>
