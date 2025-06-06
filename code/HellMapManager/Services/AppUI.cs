@@ -61,7 +61,7 @@ public class AppUI(MapDatabase mapDatabase)
 
         if (files.Count >= 1)
         {
-            return files[0].Path.AbsolutePath;
+            return files[0].Path.LocalPath;
         }
         return "";
     }
@@ -78,7 +78,7 @@ public class AppUI(MapDatabase mapDatabase)
 
         if (files.Count >= 1)
         {
-            return files[0].Path.AbsolutePath;
+            return files[0].Path.LocalPath;
         }
         return "";
     }
@@ -116,7 +116,7 @@ public class AppUI(MapDatabase mapDatabase)
             FileTypeChoices = new[] { HMMFileType, HMZFileType },
             ShowOverwritePrompt = true,
         });
-        return file == null ? "" : file.Path.AbsolutePath;
+        return file == null ? "" : file.Path.LocalPath;
     }
     public async Task<string> AskExportRoomsH()
     {
@@ -127,7 +127,7 @@ public class AppUI(MapDatabase mapDatabase)
             Title = "导出RoomsH文件",
             ShowOverwritePrompt = true,
         });
-        return file == null ? "" : file.Path.AbsolutePath;
+        return file == null ? "" : file.Path.LocalPath;
     }
     public async Task<bool> ConfirmModified()
     {
