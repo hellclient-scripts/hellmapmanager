@@ -94,11 +94,16 @@
                   SortMemberPath="RoomConditions.Count">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
-                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding RoomConditions.Count}" />
+                        <StackPanel
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Orientation="Horizontal">
+                           <TextBlock Text="×" />
+                           <SelectableTextBlock Text="{Binding RoomConditions.Count}" />
+                        </StackPanel>
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-
                <DataGridTemplateColumn
                   Width="100"
                   CanUserSort="true"
@@ -139,11 +144,16 @@
                   SortMemberPath="Conditions.Count">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
-                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Conditions.Count}" />
+                        <StackPanel
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Orientation="Horizontal">
+                           <TextBlock Text="×" />
+                           <SelectableTextBlock Text="{Binding Conditions.Count}" />
+                        </StackPanel>
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-
                <DataGridTemplateColumn
                   Width="80"
                   CanUserSort="true"

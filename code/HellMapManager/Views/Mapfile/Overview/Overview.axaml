@@ -151,7 +151,7 @@
                 <Image DockPanel.Dock="Left" Source="avares://HellMapManager/Assets/route.png" />
               </Panel>
               <DockPanel>
-                <TextBlock Classes="Label" DockPanel.Dock="Top">线路</TextBlock>
+                <TextBlock Classes="Label" DockPanel.Dock="Top">路线</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计&#160;<Run Text="{Binding GetMapRoutesCount}" /></TextBlock>
                 <TextBlock Classes="Desc" TextWrapping="Wrap">有顺序的房间ID列表，代表一条固定路线。</TextBlock>

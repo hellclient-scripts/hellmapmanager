@@ -121,7 +121,7 @@
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-               <DataGridTemplateColumn Width="*" Header="">
+               <DataGridTemplateColumn Width="*">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate />
                   </DataGridTemplateColumn.CellTemplate>

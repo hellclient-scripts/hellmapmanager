@@ -95,10 +95,17 @@
                   SortMemberPath="RoomsCount">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
-                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding RoomsCount}" />
+                        <StackPanel
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Orientation="Horizontal">
+                           <TextBlock Text="×" />
+                           <SelectableTextBlock Text="{Binding RoomsCount}" />
+                        </StackPanel>
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
+
                <DataGridTemplateColumn
                   Width="160"
                   CanUserSort="true"

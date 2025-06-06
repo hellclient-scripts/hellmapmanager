@@ -95,7 +95,13 @@
                   SortMemberPath="LocationsCount">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>
-                        <SelectableTextBlock VerticalAlignment="Center" Text="{Binding LocationsCount}" />
+                        <StackPanel
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Orientation="Horizontal">
+                           <TextBlock Text="×" />
+                           <SelectableTextBlock Text="{Binding LocationsCount}" />
+                        </StackPanel>
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>

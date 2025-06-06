@@ -24,14 +24,14 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if (AppKernel.MapDatabase.Current != null)
             {
-                var traces = AppKernel.MapDatabase.Current.Map.Landmarks;
+                var models = AppKernel.MapDatabase.Current.Map.Landmarks;
                 if (string.IsNullOrEmpty(LandmarksFilter))
                 {
-                    return new ObservableCollection<Landmark>(traces);
+                    return new ObservableCollection<Landmark>(models);
                 }
                 else
                 {
-                    return new ObservableCollection<Landmark>(traces.FindAll(r => r.Filter(LandmarksFilter)));
+                    return new ObservableCollection<Landmark>(models.FindAll(r => r.Filter(LandmarksFilter)));
                 }
             }
             return [];

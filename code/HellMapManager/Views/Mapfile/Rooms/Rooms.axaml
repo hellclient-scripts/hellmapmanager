@@ -57,9 +57,9 @@
                TextChanged="OnFilter"
                Watermark="过滤" />
             <WrapPanel
+               Margin="0,0,10,0"
                HorizontalAlignment="Right"
                VerticalAlignment="Center"
-               Margin="0 0 10 0"
                DockPanel.Dock="Right">
                <TextBlock Text="{Binding FilteredRooms.Count}" />
                <TextBlock Text="/" />
@@ -110,10 +110,20 @@
                      </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                </DataGridTemplateColumn>
-               <DataGridTextColumn
+               <DataGridTemplateColumn
                   Width="100"
-                  Binding="{Binding ExitsCount}"
-                  Header="出口数量" />
+                  Header="出口数量"
+                  SortMemberPath="ExitsCount">
+                  <DataTemplate>
+                     <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock Text="×" />
+                        <SelectableTextBlock Text="{Binding ExitsCount}" />
+                     </StackPanel>
+                  </DataTemplate>
+               </DataGridTemplateColumn>
                <DataGridTemplateColumn Width="*" Header="房间标签">
                   <DataGridTemplateColumn.CellTemplate>
                      <DataTemplate>

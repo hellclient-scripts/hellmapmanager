@@ -33,7 +33,7 @@
       <TabItem Header="标记">
         <markers:Markers HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
-      <TabItem Header="线路">
+      <TabItem Header="路线">
         <routes:Routes HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
       </TabItem>
       <TabItem Header="足迹">
