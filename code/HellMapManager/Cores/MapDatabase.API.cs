@@ -773,4 +773,18 @@ public partial class MapDatabase
             }
         }
     }
+    public List<Exit> APIGetRoomExits(string key, Context context, MapperOptions options)
+    {
+        if (Current != null)
+        {
+            var mapper = new Mapper(Current, context, options);
+            var room = mapper.GetRoom(key);
+            if (room is not null)
+            {
+                return mapper.GetRoomExits(room);
+            }
+        }
+        return [];
+    }
+
 }

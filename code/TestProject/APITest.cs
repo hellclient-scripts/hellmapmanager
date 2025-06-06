@@ -1,4 +1,5 @@
 using HellMapManager.Cores;
+using HellMapManager.Helpers;
 using HellMapManager.Models;
 
 namespace TestProject;
@@ -1626,7 +1627,6 @@ public class APITest
         var mapDatabase = new MapDatabase();
         var result = mapDatabase.APIQueryRegionRooms("key");
         Assert.Empty(result);
-        Assert.Empty(result);
         mapDatabase.NewMap();
         mapDatabase.APIInsertRooms([
             new Room()
@@ -1709,5 +1709,80 @@ public class APITest
         result = mapDatabase.APIQueryRegionRooms("key5");
         Assert.Equal("key3", string.Join(";", result));
     }
-
+    [Fact]
+    public void TestAPIGetRoomExits()
+    {
+        var mapDatabase = new MapDatabase();
+        var ctx = new Context();
+        var opt = new MapperOptions();
+        var result = mapDatabase.APIGetRoomExits("key", ctx, opt);
+        Assert.Empty(result);
+        mapDatabase.NewMap();
+        var exit1 = new Exit()
+        {
+            Command = "cmd1",
+            To = "key2",
+        };
+        var exit2 = new Exit()
+        {
+            Command = "cmd2",
+            To = "key2",
+        };
+        mapDatabase.APIInsertRooms([
+            new Room()
+            {
+                Key = "key1",
+                Exits = [exit1,exit2]
+            },
+            new Room()
+            {
+                Key = "key2",
+            },
+        ]);
+        result = mapDatabase.APIGetRoomExits("notfound", ctx, opt);
+        Assert.Empty(result);
+        result = mapDatabase.APIGetRoomExits("key1", ctx, opt);
+        Assert.Equal(2, result.Count);
+        Assert.Equal(exit1, result[0]);
+        Assert.Equal(exit2, result[1]);
+        var shortcut1 = new Shortcut()
+        {
+            Key = "shortcut1",
+            To = "key2",
+            Command = "sc1",
+        };
+        mapDatabase.APIInsertShortcuts([shortcut1]);
+        result = mapDatabase.APIGetRoomExits("key1", ctx, opt);
+        Assert.Equal(3, result.Count);
+        Assert.Equal(exit1, result[0]);
+        Assert.Equal(exit2, result[1]);
+        Assert.Equal(shortcut1, result[2]);
+        var path1 = new HellMapManager.Models.Path()
+        {
+            From = "key1",
+            Command = "cmdp1",
+            To = "key2",
+        };
+        var shortcut2 = new Shortcut()
+        {
+            Key = "shortcut2",
+            To = "key2",
+            Command = "sc2",
+        };
+        ctx.WithPaths([path1]);
+        ctx.WithShortcuts([shortcut2]);
+        result = mapDatabase.APIGetRoomExits("key1", ctx, opt);
+        Assert.Equal(5, result.Count);
+        Assert.Equal(exit1, result[0]);
+        Assert.Equal(exit2, result[1]);
+        Assert.Equal(path1, result[2]);
+        Assert.Equal(shortcut1, result[3]);
+        Assert.Equal(shortcut2, result[4]);
+        opt.WithDisableShortcuts(true);
+        result = mapDatabase.APIGetRoomExits("key1", ctx, opt);
+        Assert.Equal(3, result.Count);
+        Assert.Equal(exit1, result[0]);
+        Assert.Equal(exit2, result[1]);
+        Assert.Equal(path1, result[2]);
+    }
 }
