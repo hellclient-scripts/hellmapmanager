@@ -138,7 +138,7 @@ public class RoomFormatter
                     {
                         continue;
                     }
-                    var value = 0;
+                    var value = 1;
                     if (tagdata.Length > 1)
                     {
                         if (!int.TryParse(tagdata[1].Trim(), out value))
@@ -176,7 +176,7 @@ public class RoomFormatter
                     {
                         continue;
                     }
-                    var value = 0;
+                    var value = 1;
                     if (tagdata.Length > 1)
                     {
                         if (!int.TryParse(tagdata[1].Trim(), out value))
@@ -197,7 +197,7 @@ public class RoomFormatter
                     {
                         continue;
                     }
-                    var value = 0;
+                    var value = 1;
                     if (extagdata.Length > 1)
                     {
                         if (!int.TryParse(extagdata[1].Trim(), out value))

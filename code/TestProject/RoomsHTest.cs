@@ -32,13 +32,13 @@ public class RoomsHTest
         Assert.Equal(4, room.Exits[0].Conditions.Count);
         Assert.False(room.Exits[0].Conditions[0].Not);
         Assert.Equal("rcon1", room.Exits[0].Conditions[0].Key);
-        Assert.Equal(0, room.Exits[0].Conditions[0].Value);
+        Assert.Equal(1, room.Exits[0].Conditions[0].Value);
         Assert.False(room.Exits[0].Conditions[1].Not);
         Assert.Equal("rcon2", room.Exits[0].Conditions[1].Key);
         Assert.Equal(15, room.Exits[0].Conditions[1].Value);
         Assert.True(room.Exits[0].Conditions[2].Not);
         Assert.Equal("rcon3", room.Exits[0].Conditions[2].Key);
-        Assert.Equal(0, room.Exits[0].Conditions[2].Value);
+        Assert.Equal(1, room.Exits[0].Conditions[2].Value);
         Assert.True(room.Exits[0].Conditions[3].Not);
         Assert.Equal("rcon4", room.Exits[0].Conditions[3].Key);
         Assert.Equal(-1, room.Exits[0].Conditions[3].Value);
