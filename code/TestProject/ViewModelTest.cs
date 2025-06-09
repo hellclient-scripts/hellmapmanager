@@ -32,7 +32,7 @@ public class ViewModelTest
         {
             lastchanged = args.PropertyName;
         };
-        Assert.Equal("Hell Map Manager", vm.TitleInfo);
+        Assert.Equal("HellMapManager", vm.TitleInfo);
         Assert.Equal(3, MainWindowViewModel.HelpLinks.Count);
         Assert.True(vm.CanShowWelcome);
         Assert.False(vm.IsFileOpend);
@@ -102,11 +102,11 @@ public class ViewModelTest
         Assert.True(vm.IsMapPathEmpty);
         Assert.True(vm.IsMapDescEmpty);
 
-        Assert.Equal("* <未保存> Hell Map Manager", vm.TitleInfo);
+        Assert.Equal("* <未保存> HellMapManager", vm.TitleInfo);
         AppKernel.MapDatabase.Current!.Path = "/path";
-        Assert.Equal("* /path Hell Map Manager", vm.TitleInfo);
+        Assert.Equal("* /path HellMapManager", vm.TitleInfo);
         AppKernel.MapDatabase.Current.Modified = false;
-        Assert.Equal("/path Hell Map Manager", vm.TitleInfo);
+        Assert.Equal("/path HellMapManager", vm.TitleInfo);
         Assert.False(vm.CanShowWelcome);
         Assert.True(vm.IsFileOpend);
         Assert.Empty(vm.Recents);
