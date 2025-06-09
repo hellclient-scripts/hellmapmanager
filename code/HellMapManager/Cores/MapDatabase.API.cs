@@ -503,7 +503,7 @@ public partial class MapDatabase
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public QueryReuslt? APIQueryPathAny(List<string> from, List<string> target, Context context, MapperOptions options)
+    public QueryResult? APIQueryPathAny(List<string> from, List<string> target, Context context, MapperOptions options)
     {
         if (Current != null)
         {
@@ -512,7 +512,7 @@ public partial class MapDatabase
         return null;
     }
 
-    public QueryReuslt? APIQueryPathAll(string start, List<string> target, Context context, MapperOptions options)
+    public QueryResult? APIQueryPathAll(string start, List<string> target, Context context, MapperOptions options)
     {
         if (Current != null)
         {
@@ -520,7 +520,7 @@ public partial class MapDatabase
         }
         return null;
     }
-    public QueryReuslt? APIQueryPathOrdered(string start, List<string> target, Context context, MapperOptions options)
+    public QueryResult? APIQueryPathOrdered(string start, List<string> target, Context context, MapperOptions options)
     {
         if (Current != null)
         {

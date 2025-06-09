@@ -1667,7 +1667,7 @@ public class ModelTest
         Assert.Equal("cmd1", step.Command);
         Assert.Equal("to1", step.Target);
         Assert.Equal(5, step.Cost);
-        var result = new QueryReuslt();
+        var result = new QueryResult();
         Assert.Equal(0, result.Cost);
         Assert.Equal("", result.From);
         Assert.Equal("", result.To);
@@ -1686,7 +1686,7 @@ public class ModelTest
         result.From = "from1";
         Assert.True(result.IsSuccess());
         Assert.NotNull(result.SuccessOrNull());
-        var result2 = QueryReuslt.Fail;
+        var result2 = QueryResult.Fail;
         Assert.False(result2.IsSuccess());
         Assert.Null(result2.SuccessOrNull());
 

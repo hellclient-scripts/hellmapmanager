@@ -36,9 +36,9 @@ public class Walking(Mapper mapper)
     private Dictionary<string, WalkingStep> Walked = new();
 
     public Mapper Mapper { get; } = mapper;
-    private static QueryReuslt BuildResult(WalkingStep last, List<string> targets)
+    private static QueryResult BuildResult(WalkingStep last, List<string> targets)
     {
-        var result = new QueryReuslt();
+        var result = new QueryResult();
 
         WalkingStep current = last;
         while (current.Prev is not null)
@@ -60,13 +60,13 @@ public class Walking(Mapper mapper)
         result.Cost = last.TotalCost;
         return result;
     }
-    public QueryReuslt QueryPathAny(List<string> from, List<string> target, int initTotalCost)
+    public QueryResult QueryPathAny(List<string> from, List<string> target, int initTotalCost)
     {
         from.RemoveAll(x => x == "");
         target.RemoveAll(x => x == "");
         if (from.Count == 0 || target.Count == 0)
         {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
         Walked = new();
         var targets = new Dictionary<string, bool>();
@@ -80,7 +80,7 @@ public class Walking(Mapper mapper)
         {
             if (targets.ContainsKey(f))
             {
-                var result = new QueryReuslt();
+                var result = new QueryResult();
                 result.From = f;
                 result.To = f;
                 result.Cost = initTotalCost;
@@ -125,7 +125,7 @@ public class Walking(Mapper mapper)
                 }
             }
         }
-        return QueryReuslt.Fail;
+        return QueryResult.Fail;
     }
     public List<string> Dilate(List<string> src, int iterations)
     {
@@ -162,14 +162,14 @@ public class Walking(Mapper mapper)
         }
         return [.. Walked.Keys];
     }
-    public QueryReuslt QueryPathAll(string start, List<string> target)
+    public QueryResult QueryPathAll(string start, List<string> target)
     {
         target.RemoveAll(x => x == "");
         if (target.Count == 0 || start == "")
         {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
-        var result = new QueryReuslt
+        var result = new QueryResult
         {
             From = start,
             To = start,
@@ -194,18 +194,18 @@ public class Walking(Mapper mapper)
         }
         if (result.Steps.Count == 0)
         {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
         return result;
     }
-    public QueryReuslt QueryPathOrdered(string start, List<string> target)
+    public QueryResult QueryPathOrdered(string start, List<string> target)
     {
         target.RemoveAll(x => x == "");
         if (target.Count == 0 || start == "")
         {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
-        var result = new QueryReuslt
+        var result = new QueryResult
         {
             From = start,
             To = start,
@@ -226,7 +226,7 @@ public class Walking(Mapper mapper)
         }
         if (result.Steps.Count == 0)
         {
-            return QueryReuslt.Fail;
+            return QueryResult.Fail;
         }
         return result;
     }

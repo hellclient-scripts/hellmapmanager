@@ -13,7 +13,7 @@ public class Step(string command, string target, int cost)
     }
 }
 
-public class QueryReuslt
+public class QueryResult
 {
     public string From { get; set; } = "";
     public string To { get; set; } = "";
@@ -25,9 +25,9 @@ public class QueryReuslt
     {
         return From != "" && To != "";
     }
-    public static readonly QueryReuslt Fail = new();
+    public static readonly QueryResult Fail = new();
 
-    public QueryReuslt? SuccessOrNull()
+    public QueryResult? SuccessOrNull()
     {
         if (IsSuccess())
         {
