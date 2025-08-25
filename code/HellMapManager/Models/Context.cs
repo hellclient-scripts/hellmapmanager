@@ -19,6 +19,7 @@ public class CommandCost(string command, string to, int cost)
     public string To { get; set; } = to;
     public int Cost { get; set; } = cost;
 }
+//环境，易序列化的上下文
 public class Environment
 {
     public List<ValueTag> Tags = [];
@@ -33,17 +34,26 @@ public class Environment
 
 }
 
+//移动规划的上下文
 public class Context
 {
+    //标签列表
     public Dictionary<string, int> Tags = [];
+    //房间条件列表
     public List<ValueCondition> RoomConditions = [];
+    //临时房间
     public Dictionary<string, Room> Rooms = [];
+    //白名单，为空忽略
     public Dictionary<string, bool> Whitelist = [];
+    //黑名单
     public Dictionary<string, bool> Blacklist = [];
+    //临时捷径列表
     public List<RoomConditionExit> Shortcuts = [];
+    //临时出口列表
     public Dictionary<string, List<Path>> Paths = [];
+    //拦截路径列表
     public Dictionary<string, Dictionary<string, bool>> BlockedLinks = [];
-
+    //临时指令消耗列表
     public Dictionary<string, Dictionary<string, int>> CommandCosts = [];
     public Context ClearTags()
     {
