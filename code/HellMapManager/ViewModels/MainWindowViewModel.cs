@@ -98,7 +98,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     public string TitleInfo
     {
-        get => (AppKernel.MapDatabase.Current == null ? "" : (AppKernel.MapDatabase.Current.Modified ? "* " : "") + (AppKernel.MapDatabase.Current.Path != "" ? AppKernel.MapDatabase.Current.Path : "<未保存>") + " ") + "HellMapManager";
+        get => "HellMapManager"+(AppKernel.MapDatabase.Current == null ? "" : " "+ (AppKernel.MapDatabase.Current.Modified ? "* " : "") + (AppKernel.MapDatabase.Current.Path != "" ? AppKernel.MapDatabase.Current.Path : "<未保存>"));
     }
     public bool CanShowWelcome
     {

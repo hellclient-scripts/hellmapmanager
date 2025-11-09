@@ -102,11 +102,11 @@ public class ViewModelTest
         Assert.True(vm.IsMapPathEmpty);
         Assert.True(vm.IsMapDescEmpty);
 
-        Assert.Equal("* <未保存> HellMapManager", vm.TitleInfo);
+        Assert.Equal("HellMapManager * <未保存>", vm.TitleInfo);
         AppKernel.MapDatabase.Current!.Path = "/path";
-        Assert.Equal("* /path HellMapManager", vm.TitleInfo);
+        Assert.Equal("HellMapManager * /path", vm.TitleInfo);
         AppKernel.MapDatabase.Current.Modified = false;
-        Assert.Equal("/path HellMapManager", vm.TitleInfo);
+        Assert.Equal("HellMapManager /path", vm.TitleInfo);
         Assert.False(vm.CanShowWelcome);
         Assert.True(vm.IsFileOpend);
         Assert.Empty(vm.Recents);
