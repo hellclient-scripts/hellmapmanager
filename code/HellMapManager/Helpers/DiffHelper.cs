@@ -3,6 +3,7 @@ using System;
 
 
 using HellMapManager.Models;
+using System.Linq;
 
 namespace HellMapManager.Helpers;
 
@@ -24,7 +25,7 @@ public class DiffHelper
         DiffSnapshots(source, dest, result);
         return result;
     }
-
+    // 无法确定各元素是否最后依赖保持共性，所以不使用范型，方便调整
     private static void DiffRooms(Map source, Map dest, Diffs diffs)
     {
         var srcmodels = source.Rooms.GetRange(0, source.Rooms.Count);
@@ -358,6 +359,95 @@ public class DiffHelper
     public static Diffs Filter(Diffs diff, SelectedDiffs selected)
     {
         var result = new Diffs();
+        if (!selected.SkipRooms)
+        {
+            diff.Rooms.ForEach((d)
+            =>
+            {
+                if (selected.Rooms.ContainsKey(d.DiffKey)) { result.Rooms.Add(d); }
+            });
+        }
+        if (!selected.SkipMarkers)
+        {
+            diff.Markers.ForEach((d)
+            =>
+            {
+                if (selected.Markers.ContainsKey(d.DiffKey)) { result.Markers.Add(d); }
+            });
+        }
+        if (!selected.SkipRoutes)
+        {
+            diff.Routes.ForEach((d)
+            =>
+            {
+                if (selected.Routes.ContainsKey(d.DiffKey)) { result.Routes.Add(d); }
+            });
+        }
+        if (!selected.SkipTraces)
+        {
+            diff.Traces.ForEach((d)
+            =>
+            {
+                if (selected.Traces.ContainsKey(d.DiffKey)) { result.Traces.Add(d); }
+            });
+        }
+        if (!selected.SkipRegions)
+        {
+            diff.Regions.ForEach((d)
+            =>
+            {
+                if (selected.Regions.ContainsKey(d.DiffKey)) { result.Regions.Add(d); }
+            });
+        }
+        if (!selected.SkipRegions)
+        {
+            diff.Regions.ForEach((d)
+            =>
+            {
+                if (selected.Regions.ContainsKey(d.DiffKey)) { result.Regions.Add(d); }
+            });
+        }
+        if (!selected.SkipRegions)
+        {
+            diff.Regions.ForEach((d)
+            =>
+            {
+                if (selected.Regions.ContainsKey(d.DiffKey)) { result.Regions.Add(d); }
+            });
+        }
+        if (!selected.SkipLandmarks)
+        {
+            diff.Landmarks.ForEach((d)
+            =>
+            {
+                if (selected.Landmarks.ContainsKey(d.DiffKey)) { result.Landmarks.Add(d); }
+            });
+        }
+        if (!selected.SkipShortcuts)
+        {
+            diff.Shortcuts.ForEach((d)
+            =>
+            {
+                if (selected.Shortcuts.ContainsKey(d.DiffKey)) { result.Shortcuts.Add(d); }
+            });
+        }
+        if (!selected.SkipVariables)
+        {
+            diff.Variables.ForEach((d)
+            =>
+            {
+                if (selected.Variables.ContainsKey(d.DiffKey)) { result.Variables.Add(d); }
+            });
+        }
+        if (!selected.SkipSnapshots)
+        {
+            diff.Snapshots.ForEach((d)
+            =>
+            {
+                if (selected.Snapshots.ContainsKey(d.DiffKey)) { result.Snapshots.Add(d); }
+            });
+        }
+
         return result;
     }
     //将差异应用到源地图文件上

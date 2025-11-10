@@ -31,6 +31,16 @@ public enum DiffMode
 
 public class SelectedDiffs
 {
+    public bool SkipRooms = false;
+    public bool SkipMarkers = false;
+    public bool SkipRoutes = false;
+    public bool SkipTraces = false;
+    public bool SkipRegions = false;
+    public bool SkipLandmarks = false;
+    public bool SkipShortcuts = false;
+    public bool SkipVariables = false;
+    public bool SkipSnapshots = false;
+    
     public Dictionary<string, bool> Rooms = [];
     public Dictionary<string, bool> Markers = [];
     public Dictionary<string, bool> Routes = [];
