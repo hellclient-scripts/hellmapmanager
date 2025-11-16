@@ -481,6 +481,14 @@ public class ModelTest
         Assert.True(rf.Validate(room));
         rf.ContainsAnyKey = [];
         Assert.True(rf.Validate(room));
+
+        rf.HasAnyName = ["nam", "name2"];
+        Assert.False(rf.Validate(room));
+        rf.HasAnyName = ["name", "name2"];
+        Assert.True(rf.Validate(room));
+        rf.HasAnyName = [];
+        Assert.True(rf.Validate(room));
+
         rf.ContainsAnyName = ["name1", "name2"];
         Assert.False(rf.Validate(room));
         rf.ContainsAnyName = ["na", "name2"];

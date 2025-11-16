@@ -9,9 +9,25 @@ public class RoomFilter
     public List<ValueCondition> RoomConditions = [];
     public List<string> HasAnyExitTo = [];
     public List<Data> HasAnyData = [];
+    public List<string> HasAnyName = [];
     public List<Data> ContainsAnyData = [];
     public List<string> ContainsAnyName = [];
     public List<string> ContainsAnyKey = [];
+    private bool ValidateHasAnyName(Room room)
+    {
+        if (HasAnyName.Count > 0)
+        {
+            foreach (var data in HasAnyName)
+            {
+                if (room.Name == data)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
 
     private bool ValidateHasAnyData(Room room)
     {
@@ -111,6 +127,10 @@ public class RoomFilter
             return false;
         }
         if (!ValidateHasAnyData(room))
+        {
+            return false;
+        }
+        if (!ValidateHasAnyName(room))
         {
             return false;
         }
