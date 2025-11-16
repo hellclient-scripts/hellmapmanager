@@ -68,6 +68,10 @@ public class APIListOption
 }
 public partial class MapDatabase
 {
+    public int APIVersion()
+    {
+        return Version;
+    }
     public List<Landmark> APIListLandmarks(APIListOption option)
     {
         if (Current != null)

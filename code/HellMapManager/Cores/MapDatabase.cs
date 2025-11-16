@@ -5,6 +5,7 @@ namespace HellMapManager.Cores;
 
 public partial class MapDatabase()
 {
+    public const int Version= 1000;
     public MapFile? Current;
     public Settings Settings = new();
 

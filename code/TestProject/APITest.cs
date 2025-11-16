@@ -6,6 +6,12 @@ namespace TestProject;
 
 public class APITest
 {
+    [Fact] 
+    public void TestVersion()
+    {
+        var mapDatabase = new MapDatabase();
+        Assert.Equal(MapDatabase.Version,mapDatabase.APIVersion());
+    }
     [Fact]
     public void TestAPIListOption()
     {
