@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System;
 
 
 using HellMapManager.Models;
-using System.Linq;
 
 namespace HellMapManager.Helpers;
 
@@ -453,6 +450,75 @@ public class DiffHelper
     //将差异应用到源地图文件上
     public static void Apply(Diffs diffs, MapFile source)
     {
+        diffs.Rooms.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Markers.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Routes.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Traces.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Regions.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Landmarks.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Shortcuts.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Variables.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Snapshots.ForEach(d => ApplyRoomDiff(d, source));
         return;
+    }
+    private static void ApplyRoomDiff(IDiffItem diff, MapFile source)
+    {
+        switch (diff)
+        {
+            case RoomDiff md:
+                source.InsertRoom(md.Model);
+                break;
+            case RemovedRoomDiff rmd:
+                source.RemoveRoom(rmd.Key);
+                break;
+            case MarkerDiff md:
+                source.InsertMarker(md.Model);
+                break;
+            case RemovedMarkerDiff rmd:
+                source.RemoveMarker(rmd.Key);
+                break;
+            case RouteDiff md:
+                source.InsertRoute(md.Model);
+                break;
+            case RemovedRouteDiff rmd:
+                source.RemoveRoute(rmd.Key);
+                break;
+            case TraceDiff md:
+                source.InsertTrace(md.Model);
+                break;
+            case RemovedTraceDiff rmd:
+                source.RemoveTrace(rmd.Key);
+                break;
+            case RegionDiff md:
+                source.InsertRegion(md.Model);
+                break;
+            case RemovedRegionDiff rmd:
+                source.RemoveRegion(rmd.Key);
+                break;
+            case LandmarkDiff md:
+                source.InsertLandmark(md.Model);
+                break;
+            case RemovedLandmarkDiff rmd:
+                source.RemoveLandmark(new LandmarkKey(rmd.LandmarkKey, rmd.LandmarkType));
+                break;
+            case ShortcutDiff md:
+                source.InsertShortcut(md.Model);
+                break;
+            case RemovedShortcutDiff rmd:
+                source.RemoveShortcut(rmd.Key);
+                break;
+            case VariableDiff md:
+                source.InsertVariable(md.Model);
+                break;
+            case RemovedVariableDiff rmd:
+                source.RemoveVariable(rmd.Key);
+                break;
+            case SnapshotDiff md:
+                source.InsertSnapshot(md.Model);;
+                break;
+            case RemovedSnapshotDiff rmd:
+                source.RemoveSnapshot(new SnapshotKey(rmd.SnapshotKey, rmd.SnapshotType, rmd.SnapshotValue));
+                break;
+        }
     }
 }
