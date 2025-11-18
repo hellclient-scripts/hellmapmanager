@@ -8,4 +8,6 @@ public class AppPreset
 
     public const string SettingsFileName = "hellmapmanager.settings.json";
     public const string ZipEnityName = "map.hmm";
+
+    public const string ZipEnityPatchName = "patch";
 }

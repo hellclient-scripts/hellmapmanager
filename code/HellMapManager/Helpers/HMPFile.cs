@@ -14,7 +14,7 @@ public class HMPFile
         var result = HMPEncoder.HMPEncoder.Encode(df);
         using var zipToOpen = SystemAdapter.File.WriteStream(name);
         using ZipArchive archive = new(zipToOpen, ZipArchiveMode.Update);
-        ZipArchiveEntry hmmEntry = archive.CreateEntry(AppPreset.ZipEnityName);
+        ZipArchiveEntry hmmEntry = archive.CreateEntry(AppPreset.ZipEnityPatchName);
         using var memoryStream = new MemoryStream(result);
         memoryStream.CopyTo(hmmEntry.Open());
     }
@@ -23,7 +23,7 @@ public class HMPFile
         byte[] body;
         using var zipToOpen = SystemAdapter.File.ReadStream(name);
         using ZipArchive archive = new(zipToOpen, ZipArchiveMode.Read);
-        ZipArchiveEntry? hmmEntry = archive.GetEntry(AppPreset.ZipEnityName);
+        ZipArchiveEntry? hmmEntry = archive.GetEntry(AppPreset.ZipEnityPatchName);
         if (hmmEntry is null)
         {
             return null;
