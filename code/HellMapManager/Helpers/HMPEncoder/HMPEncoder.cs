@@ -71,7 +71,7 @@ public class HMPEncoder
                         case Room.EncodeKey:
                             {
                                 var room = Room.Decode(data);
-                                if (room is not null)
+                                if (room.Validated())
                                 {
                                     result.Rooms.Add(new RoomDiff(room));
                                 }
@@ -80,7 +80,7 @@ public class HMPEncoder
                         case Marker.EncodeKey:
                             {
                                 var marker = Marker.Decode(data);
-                                if (marker is not null)
+                                if (marker.Validated())
                                 {
                                     result.Markers.Add(new MarkerDiff(marker));
                                 }
@@ -89,7 +89,7 @@ public class HMPEncoder
                         case Route.EncodeKey:
                             {
                                 var route = Route.Decode(data);
-                                if (route is not null)
+                                if (route.Validated())
                                 {
                                     result.Routes.Add(new RouteDiff(route));
                                 }
@@ -98,7 +98,7 @@ public class HMPEncoder
                         case Trace.EncodeKey:
                             {
                                 var trace = Trace.Decode(data);
-                                if (trace is not null)
+                                if (trace.Validated())
                                 {
                                     result.Traces.Add(new TraceDiff(trace));
                                 }
@@ -107,7 +107,7 @@ public class HMPEncoder
                         case Region.EncodeKey:
                             {
                                 var region = Region.Decode(data);
-                                if (region is not null)
+                                if (region.Validated())
                                 {
                                     result.Regions.Add(new RegionDiff(region));
                                 }
@@ -116,7 +116,7 @@ public class HMPEncoder
                         case Landmark.EncodeKey:
                             {
                                 var landmark = Landmark.Decode(data);
-                                if (landmark is not null)
+                                if (landmark.Validated())
                                 {
                                     result.Landmarks.Add(new LandmarkDiff(landmark));
                                 }
@@ -125,7 +125,7 @@ public class HMPEncoder
                         case Shortcut.EncodeKey:
                             {
                                 var shortcut = Shortcut.Decode(data);
-                                if (shortcut is not null)
+                                if (shortcut.Validated())
                                 {
                                     result.Shortcuts.Add(new ShortcutDiff(shortcut));
                                 }
@@ -134,7 +134,7 @@ public class HMPEncoder
                         case Variable.EncodeKey:
                             {
                                 var variable = Variable.Decode(data);
-                                if (variable is not null)
+                                if (variable.Validated())
                                 {
                                     result.Variables.Add(new VariableDiff(variable));
                                 }
@@ -143,7 +143,7 @@ public class HMPEncoder
                         case Snapshot.EncodeKey:
                             {
                                 var snapshot = Snapshot.Decode(data);
-                                if (snapshot is not null)
+                                if (snapshot.Validated())
                                 {
                                     result.Snapshots.Add(new SnapshotDiff(snapshot));
                                 }
@@ -152,7 +152,7 @@ public class HMPEncoder
                         case RemovedRoomDiff.EncodeKey:
                             {
                                 var removedRoom = RemovedRoomDiff.Decode(data);
-                                if (removedRoom is not null)
+                                if (removedRoom.Validated())
                                 {
                                     result.Rooms.Add(removedRoom);
                                 }
@@ -161,7 +161,7 @@ public class HMPEncoder
                         case RemovedMarkerDiff.EncodeKey:
                             {
                                 var removedMarker = RemovedMarkerDiff.Decode(data);
-                                if (removedMarker is not null)
+                                if (removedMarker.Validated())
                                 {
                                     result.Markers.Add(removedMarker);
                                 }
@@ -170,7 +170,7 @@ public class HMPEncoder
                         case RemovedRouteDiff.EncodeKey:
                             {
                                 var removedRoute = RemovedRouteDiff.Decode(data);
-                                if (removedRoute is not null)
+                                if (removedRoute.Validated())
                                 {
                                     result.Routes.Add(removedRoute);
                                 }
@@ -179,7 +179,7 @@ public class HMPEncoder
                         case RemovedTraceDiff.EncodeKey:
                             {
                                 var removedTrace = RemovedTraceDiff.Decode(data);
-                                if (removedTrace is not null)
+                                if (removedTrace.Validated())
                                 {
                                     result.Traces.Add(removedTrace);
                                 }
@@ -188,7 +188,7 @@ public class HMPEncoder
                         case RemovedRegionDiff.EncodeKey:
                             {
                                 var removedRegion = RemovedRegionDiff.Decode(data);
-                                if (removedRegion is not null)
+                                if (removedRegion.Validated())
                                 {
                                     result.Regions.Add(removedRegion);
                                 }
@@ -197,7 +197,7 @@ public class HMPEncoder
                         case RemovedLandmarkDiff.EncodeKey:
                             {
                                 var removedLandmark = RemovedLandmarkDiff.Decode(data);
-                                if (removedLandmark is not null)
+                                if (removedLandmark.Validated())
                                 {
                                     result.Landmarks.Add(removedLandmark);
                                 }
@@ -206,7 +206,7 @@ public class HMPEncoder
                         case RemovedShortcutDiff.EncodeKey:
                             {
                                 var removedShortcut = RemovedShortcutDiff.Decode(data);
-                                if (removedShortcut is not null)
+                                if (removedShortcut.Validated())
                                 {
                                     result.Shortcuts.Add(removedShortcut);
                                 }
@@ -215,7 +215,7 @@ public class HMPEncoder
                         case RemovedVariableDiff.EncodeKey:
                             {
                                 var removedVariable = RemovedVariableDiff.Decode(data);
-                                if (removedVariable is not null)
+                                if (removedVariable.Validated())
                                 {
                                     result.Variables.Add(removedVariable);
                                 }
@@ -224,7 +224,7 @@ public class HMPEncoder
                         case RemovedSnapshotDiff.EncodeKey:
                             {
                                 var removedSnapshot = RemovedSnapshotDiff.Decode(data);
-                                if (removedSnapshot is not null)
+                                if (removedSnapshot.Validated())
                                 {
                                     result.Snapshots.Add(removedSnapshot);
                                 }

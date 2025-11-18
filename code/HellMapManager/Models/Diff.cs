@@ -40,7 +40,7 @@ public class SelectedDiffs
     public bool SkipShortcuts = false;
     public bool SkipVariables = false;
     public bool SkipSnapshots = false;
-    
+
     public Dictionary<string, bool> Rooms = [];
     public Dictionary<string, bool> Markers = [];
     public Dictionary<string, bool> Routes = [];
@@ -77,6 +77,7 @@ public interface IRoomDiff : IDiffItem
 {
     public string DiffKey { get; }
     public Room? Data { get; }
+    public string Key { get; }
 
 }
 public class RoomDiff(Room model) : IRoomDiff
@@ -84,8 +85,10 @@ public class RoomDiff(Room model) : IRoomDiff
     public string DiffKey { get => Model.Key; }
     public DiffType Type { get; } = DiffType.RoomDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Room Model { get; set; } = model;
+    public Room Model { get; } = model;
     public Room? Data { get => Model; }
+    public string Key { get => Model.Key; }
+
     public string Encode()
     {
         return Model.Encode();
@@ -103,7 +106,7 @@ public class RemovedRoomDiff(string key) : IRoomDiff
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedRoomDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string Key { get; set; } = key;
+    public string Key { get; } = key;
     public Room? Data { get => null; }
     public string Encode()
     {
@@ -124,6 +127,7 @@ public interface IMarkerDiff : IDiffItem
 {
     public string DiffKey { get; }
     public Marker? Data { get; }
+    public string Key { get; }
 
 }
 
@@ -132,8 +136,10 @@ public class MarkerDiff(Marker model) : IMarkerDiff
     public string DiffKey { get => Model.Key; }
     public DiffType Type { get; } = DiffType.MarkerDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Marker Model { get; set; } = model;
+    public Marker Model { get; } = model;
     public Marker? Data { get => Model; }
+    public string Key { get => Model.Key; }
+
     public string Encode()
     {
         return Model.Encode();
@@ -151,7 +157,7 @@ public class RemovedMarkerDiff(string key) : IMarkerDiff
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedMarkerDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string Key { get; set; } = key;
+    public string Key { get; } = key;
     public Marker? Data { get => null; }
     public string Encode()
     {
@@ -172,6 +178,7 @@ public interface IRouteDiff : IDiffItem
 {
     public string DiffKey { get; }
     public Route? Data { get; }
+    public string Key { get; }
 
 }
 public class RouteDiff(Route model) : IRouteDiff
@@ -179,8 +186,10 @@ public class RouteDiff(Route model) : IRouteDiff
     public string DiffKey { get => Model.Key; }
     public DiffType Type { get; } = DiffType.RouteDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Route Model { get; set; } = model;
+    public Route Model { get; } = model;
     public Route? Data { get => Model; }
+    public string Key { get => Model.Key; }
+
     public string Encode()
     {
         return Model.Encode();
@@ -198,7 +207,7 @@ public class RemovedRouteDiff(string key) : IRouteDiff
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedRouteDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string Key { get; set; } = key;
+    public string Key { get; } = key;
     public Route? Data { get => null; }
     public string Encode()
     {
@@ -219,6 +228,7 @@ public interface ITraceDiff : IDiffItem
 {
     public string DiffKey { get; }
     public Trace? Data { get; }
+    public string Key { get; }
 
 }
 public class TraceDiff(Trace model) : ITraceDiff
@@ -226,8 +236,9 @@ public class TraceDiff(Trace model) : ITraceDiff
     public string DiffKey { get => Model.Key; }
     public DiffType Type { get; } = DiffType.TraceDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Trace Model { get; set; } = model;
+    public Trace Model { get; } = model;
     public Trace? Data { get => Model; }
+    public string Key { get => Model.Key; }
     public string Encode()
     {
         return Model.Encode();
@@ -245,7 +256,7 @@ public class RemovedTraceDiff(string key) : ITraceDiff
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedTraceDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string Key { get; set; } = key;
+    public string Key { get; } = key;
     public Trace? Data { get => null; }
     public string Encode()
     {
@@ -266,6 +277,7 @@ public interface IRegionDiff : IDiffItem
 {
     public string DiffKey { get; }
     public Region? Data { get; }
+    public string Key { get; }
 
 }
 public class RegionDiff(Region model) : IRegionDiff
@@ -273,8 +285,10 @@ public class RegionDiff(Region model) : IRegionDiff
     public string DiffKey { get => Model.Key; }
     public DiffType Type { get; } = DiffType.RegionDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Region Model { get; set; } = model;
+    public Region Model { get; } = model;
     public Region? Data { get => Model; }
+    public string Key { get => Model.Key; }
+
     public string Encode()
     {
         return Model.Encode();
@@ -292,7 +306,7 @@ public class RemovedRegionDiff(string key) : IRegionDiff
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedRegionDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string Key { get; set; } = key;
+    public string Key { get; } = key;
     public Region? Data { get => null; }
     public string Encode()
     {
@@ -322,7 +336,7 @@ public class LandmarkDiff(Landmark model) : ILandmarkDiff
     public string DiffKey { get => Model.UniqueKey().ToString(); }
     public DiffType Type { get; } = DiffType.LandmarkDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Landmark Model { get; set; } = model;
+    public Landmark Model { get; } = model;
     public Landmark? Data { get => Model; }
     public string LandmarkKey { get => Model.Key; }
     public string LandmarkType { get => Model.Type; }
@@ -341,10 +355,10 @@ public class RemovedLandmarkDiff(string key, string type) : ILandmarkDiff
     public const string EncodeKey = "RemoveLandmark";
 
     public string DiffKey { get => new LandmarkKey(ModelKey, ModelType).ToString(); }
-    public DiffType Type { get; } = DiffType.RemovedRegionDiff;
+    public DiffType Type { get; } = DiffType.RemovedLandmarkDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string ModelKey { get; set; } = key;
-    public string ModelType { get; set; } = type;
+    public string ModelKey { get; } = key;
+    public string ModelType { get; } = type;
     public string LandmarkKey { get => ModelKey; }
     public string LandmarkType { get => ModelType; }
 
@@ -373,6 +387,7 @@ public interface IShortcutDiff : IDiffItem
 {
     public string DiffKey { get; }
     public Shortcut? Data { get; }
+    public string Key { get; }
 
 }
 public class ShortcutDiff(Shortcut model) : IShortcutDiff
@@ -380,8 +395,10 @@ public class ShortcutDiff(Shortcut model) : IShortcutDiff
     public string DiffKey { get => Model.Key; }
     public DiffType Type { get; } = DiffType.ShortcutDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Shortcut Model { get; set; } = model;
+    public Shortcut Model { get; } = model;
     public Shortcut? Data { get => Model; }
+    public string Key { get => Model.Key; }
+
     public string Encode()
     {
         return Model.Encode();
@@ -399,7 +416,7 @@ public class RemovedShortcutDiff(string key) : IShortcutDiff
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedShortcutDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string Key { get; set; } = key;
+    public string Key { get; } = key;
     public Shortcut? Data { get => null; }
     public string Encode()
     {
@@ -420,15 +437,17 @@ public interface IVariableDiff : IDiffItem
 {
     public string DiffKey { get; }
     public Variable? Data { get; }
-
+    public string Key { get; }
 }
 public class VariableDiff(Variable model) : IVariableDiff
 {
     public string DiffKey { get => Model.Key; }
     public DiffType Type { get; } = DiffType.VariableDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Variable Model { get; set; } = model;
+    public Variable Model { get; } = model;
     public Variable? Data { get => Model; }
+    public string Key { get => Model.Key; }
+
     public string Encode()
     {
         return Model.Encode();
@@ -446,7 +465,7 @@ public class RemovedVariableDiff(string key) : IVariableDiff
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedVariableDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string Key { get; set; } = key;
+    public string Key { get; } = key;
     public Variable? Data { get => null; }
     public string Encode()
     {
@@ -477,7 +496,7 @@ public class SnapshotDiff(Snapshot model) : ISnapshotDiff
     public string DiffKey { get => Model.UniqueKey().ToString(); }
     public DiffType Type { get; } = DiffType.SnapshotDiff;
     public DiffMode Mode { get; } = DiffMode.Normal;
-    public Snapshot Model { get; set; } = model;
+    public Snapshot Model { get; } = model;
     public Snapshot? Data { get => Model; }
     public string SnapshotKey { get => Model.Key; }
     public string SnapshotType { get => Model.Type; }
@@ -500,9 +519,9 @@ public class RemovedSnapshotDiff(string key, string type, string value) : ISnaps
     public string DiffKey { get => new SnapshotKey(ModelKey, ModelType, ModelValue).ToString(); }
     public DiffType Type { get; } = DiffType.RemovedSnapshotDiff;
     public DiffMode Mode { get; } = DiffMode.Removed;
-    public string ModelKey { get; set; } = key;
-    public string ModelType { get; set; } = type;
-    public string ModelValue { get; set; } = value;
+    public string ModelKey { get; } = key;
+    public string ModelType { get; } = type;
+    public string ModelValue { get; } = value;
     public string SnapshotKey { get => ModelKey; }
     public string SnapshotType { get => ModelType; }
     public string SnapshotValue { get => ModelValue; }
