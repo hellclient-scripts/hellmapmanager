@@ -98,7 +98,7 @@ public class RoomDiff(Room model) : IRoomDiff
 
 public class RemovedRoomDiff(string key) : IRoomDiff
 {
-    const string EncodeKey = "RemoveRoom";
+    public const string EncodeKey = "RemoveRoom";
 
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedRoomDiff;
@@ -146,7 +146,7 @@ public class MarkerDiff(Marker model) : IMarkerDiff
 
 public class RemovedMarkerDiff(string key) : IMarkerDiff
 {
-    const string EncodeKey = "RemoveMarker";
+    public const string EncodeKey = "RemoveMarker";
 
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedMarkerDiff;
@@ -193,7 +193,7 @@ public class RouteDiff(Route model) : IRouteDiff
 
 public class RemovedRouteDiff(string key) : IRouteDiff
 {
-    const string EncodeKey = "RemoveRoute";
+    public const string EncodeKey = "RemoveRoute";
 
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedRouteDiff;
@@ -240,7 +240,7 @@ public class TraceDiff(Trace model) : ITraceDiff
 
 public class RemovedTraceDiff(string key) : ITraceDiff
 {
-    const string EncodeKey = "RemoveTrace";
+    public const string EncodeKey = "RemoveTrace";
 
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedTraceDiff;
@@ -287,7 +287,7 @@ public class RegionDiff(Region model) : IRegionDiff
 
 public class RemovedRegionDiff(string key) : IRegionDiff
 {
-    const string EncodeKey = "RemoveRegion";
+    public const string EncodeKey = "RemoveRegion";
 
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedRegionDiff;
@@ -338,7 +338,7 @@ public class LandmarkDiff(Landmark model) : ILandmarkDiff
 
 public class RemovedLandmarkDiff(string key, string type) : ILandmarkDiff
 {
-    const string EncodeKey = "RemoveLandmark";
+    public const string EncodeKey = "RemoveLandmark";
 
     public string DiffKey { get => new LandmarkKey(ModelKey, ModelType).ToString(); }
     public DiffType Type { get; } = DiffType.RemovedRegionDiff;
@@ -394,7 +394,7 @@ public class ShortcutDiff(Shortcut model) : IShortcutDiff
 
 public class RemovedShortcutDiff(string key) : IShortcutDiff
 {
-    const string EncodeKey = "RemoveShortcut";
+    public const string EncodeKey = "RemoveShortcut";
 
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedShortcutDiff;
@@ -441,7 +441,7 @@ public class VariableDiff(Variable model) : IVariableDiff
 
 public class RemovedVariableDiff(string key) : IVariableDiff
 {
-    const string EncodeKey = "RemoveVariable";
+    public const string EncodeKey = "RemoveVariable";
 
     public string DiffKey { get => Key; }
     public DiffType Type { get; } = DiffType.RemovedVariableDiff;
@@ -495,7 +495,7 @@ public class SnapshotDiff(Snapshot model) : ISnapshotDiff
 
 public class RemovedSnapshotDiff(string key, string type, string value) : ISnapshotDiff
 {
-    const string EncodeKey = "RemoveSnapshot";
+    public const string EncodeKey = "RemoveSnapshot";
 
     public string DiffKey { get => new SnapshotKey(ModelKey, ModelType, ModelValue).ToString(); }
     public DiffType Type { get; } = DiffType.RemovedSnapshotDiff;
