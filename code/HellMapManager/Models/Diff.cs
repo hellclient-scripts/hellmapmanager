@@ -27,9 +27,18 @@ public enum DiffMode
 {
     Removed,
     Normal,
+    New,
 }
 
-public class SelectedDiffs
+public class PatchItem(IDiffItem display, IDiffItem raw, DiffMode mode, bool selected)
+{
+    public DiffMode Mode { get; } = mode;
+    public IDiffItem Raw { get; } = raw;
+    public IDiffItem Display { get; } = display;
+    public bool Selected { get; set; } = selected;
+}
+
+public class Patch
 {
     public bool SkipRooms = false;
     public bool SkipMarkers = false;
@@ -41,15 +50,110 @@ public class SelectedDiffs
     public bool SkipVariables = false;
     public bool SkipSnapshots = false;
 
-    public Dictionary<string, bool> Rooms = [];
-    public Dictionary<string, bool> Markers = [];
-    public Dictionary<string, bool> Routes = [];
-    public Dictionary<string, bool> Traces = [];
-    public Dictionary<string, bool> Regions = [];
-    public Dictionary<string, bool> Landmarks = [];
-    public Dictionary<string, bool> Shortcuts = [];
-    public Dictionary<string, bool> Variables = [];
-    public Dictionary<string, bool> Snapshots = [];
+    public List<PatchItem> Rooms = [];
+    public List<PatchItem> Markers = [];
+    public List<PatchItem> Routes = [];
+    public List<PatchItem> Traces = [];
+    public List<PatchItem> Regions = [];
+    public List<PatchItem> Landmarks = [];
+    public List<PatchItem> Shortcuts = [];
+    public List<PatchItem> Variables = [];
+    public List<PatchItem> Snapshots = [];
+    public void SelectAll(bool value)
+    {
+        foreach (var r in Rooms)
+        {
+            r.Selected = value;
+        }
+        foreach (var m in Markers)
+        {
+            m.Selected = value;
+        }
+        foreach (var r in Routes)
+        {
+            r.Selected = value;
+        }
+        foreach (var t in Traces)
+        {
+            t.Selected = value;
+        }
+        foreach (var r in Regions)
+        {
+            r.Selected = value;
+        }
+        foreach (var l in Landmarks)
+        {
+            l.Selected = value;
+        }
+        foreach (var s in Shortcuts)
+        {
+            s.Selected = value;
+        }
+        foreach (var v in Variables)
+        {
+            v.Selected = value;
+        }
+        foreach (var s in Snapshots)
+        {
+            s.Selected = value;
+        }
+    }
+
+    public void SelectByTypeAndMode(string type, DiffMode mode, bool selected)
+    {
+        List<PatchItem> items;
+        switch (type)
+        {
+            case "Room":
+                items = Rooms;
+                break;
+            case "Marker":
+                items = Markers;
+                break;
+            case "Route":
+                items = Routes;
+                break;
+            case "Trace":
+                items = Traces;
+                break;
+            case "Region":
+                items = Regions;
+                break;
+            case "Landmark":
+                items = Landmarks;
+                break;
+            case "Shortcut":
+                items = Shortcuts;
+                break;
+            case "Variable":
+                items = Variables;
+                break;
+            case "Snapshot":
+                items = Snapshots;
+                break;
+            default:
+                return;
+        }
+        foreach (var item in items)
+        {
+            if (item.Mode == mode)
+            {
+                item.Selected = selected;
+            }
+        }
+    }
+    public void Sort()
+    {
+        Rooms.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+        Markers.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+        Routes.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+        Traces.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+        Regions.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+        Landmarks.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+        Shortcuts.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+        Variables.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+        Snapshots.Sort((a, b) => a.Display.DiffKey.CompareTo(b.Display.DiffKey));
+    }
 }
 
 public class Diffs
@@ -63,10 +167,24 @@ public class Diffs
     public List<IShortcutDiff> Shortcuts = [];
     public List<IVariableDiff> Variables = [];
     public List<ISnapshotDiff> Snapshots = [];
-
+    public void Sort()
+    {
+        Rooms.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        Markers.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        Routes.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        Traces.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        Regions.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        Landmarks.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        Shortcuts.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        Variables.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        Snapshots.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+    }
 }
+
 public interface IDiffItem
 {
+    public string DiffKey { get; }
+
     public DiffType Type { get; }
     public DiffMode Mode { get; }
     public string Encode();
@@ -75,7 +193,6 @@ public interface IDiffItem
 }
 public interface IRoomDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Room? Data { get; }
     public string Key { get; }
 
@@ -125,7 +242,6 @@ public class RemovedRoomDiff(string key) : IRoomDiff
 
 public interface IMarkerDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Marker? Data { get; }
     public string Key { get; }
 
@@ -176,7 +292,6 @@ public class RemovedMarkerDiff(string key) : IMarkerDiff
 
 public interface IRouteDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Route? Data { get; }
     public string Key { get; }
 
@@ -226,7 +341,6 @@ public class RemovedRouteDiff(string key) : IRouteDiff
 
 public interface ITraceDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Trace? Data { get; }
     public string Key { get; }
 
@@ -275,7 +389,6 @@ public class RemovedTraceDiff(string key) : ITraceDiff
 
 public interface IRegionDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Region? Data { get; }
     public string Key { get; }
 
@@ -325,7 +438,6 @@ public class RemovedRegionDiff(string key) : IRegionDiff
 
 public interface ILandmarkDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Landmark? Data { get; }
     public string LandmarkKey { get; }
     public string LandmarkType { get; }
@@ -385,7 +497,6 @@ public class RemovedLandmarkDiff(string key, string type) : ILandmarkDiff
 
 public interface IShortcutDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Shortcut? Data { get; }
     public string Key { get; }
 
@@ -435,7 +546,6 @@ public class RemovedShortcutDiff(string key) : IShortcutDiff
 
 public interface IVariableDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Variable? Data { get; }
     public string Key { get; }
 }
@@ -484,7 +594,6 @@ public class RemovedVariableDiff(string key) : IVariableDiff
 
 public interface ISnapshotDiff : IDiffItem
 {
-    public string DiffKey { get; }
     public Snapshot? Data { get; }
     public string SnapshotKey { get; }
     public string SnapshotType { get; }
@@ -546,3 +655,5 @@ public class RemovedSnapshotDiff(string key, string type, string value) : ISnaps
         return ItemKey.Validate(ModelKey);
     }
 }
+
+

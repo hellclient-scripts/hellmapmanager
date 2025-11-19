@@ -353,115 +353,257 @@ public class DiffHelper
 
     //根据选择的差异过滤差异
     //实现用户选择性的应用差异
-    public static Diffs Filter(Diffs diff, SelectedDiffs selected)
+    public static Diffs ApplyPatch(Patch patch)
     {
         var result = new Diffs();
-        if (!selected.SkipRooms)
+        if (!patch.SkipRooms)
         {
-            diff.Rooms.ForEach((d)
-            =>
+            foreach (var i in patch.Rooms)
             {
-                if (selected.Rooms.ContainsKey(d.DiffKey)) { result.Rooms.Add(d); }
-            });
+                if (i.Selected) { result.Rooms.Add((i.Raw as IRoomDiff)!); }
+            }
         }
-        if (!selected.SkipMarkers)
+        if (!patch.SkipMarkers)
         {
-            diff.Markers.ForEach((d)
-            =>
+            foreach (var i in patch.Markers)
             {
-                if (selected.Markers.ContainsKey(d.DiffKey)) { result.Markers.Add(d); }
-            });
+                if (i.Selected) { result.Markers.Add((i.Raw as IMarkerDiff)!); }
+            }
         }
-        if (!selected.SkipRoutes)
+        if (!patch.SkipRoutes)
         {
-            diff.Routes.ForEach((d)
-            =>
+            foreach (var i in patch.Routes)
             {
-                if (selected.Routes.ContainsKey(d.DiffKey)) { result.Routes.Add(d); }
-            });
+                if (i.Selected) { result.Routes.Add((i.Raw as IRouteDiff)!); }
+            }
         }
-        if (!selected.SkipTraces)
+        if (!patch.SkipTraces)
         {
-            diff.Traces.ForEach((d)
-            =>
+            foreach (var i in patch.Traces)
             {
-                if (selected.Traces.ContainsKey(d.DiffKey)) { result.Traces.Add(d); }
-            });
+                if (i.Selected) { result.Traces.Add((i.Raw as ITraceDiff)!); }
+            }
         }
-        if (!selected.SkipRegions)
+        if (!patch.SkipRegions)
         {
-            diff.Regions.ForEach((d)
-            =>
+            foreach (var i in patch.Regions)
             {
-                if (selected.Regions.ContainsKey(d.DiffKey)) { result.Regions.Add(d); }
-            });
+                if (i.Selected) { result.Regions.Add((i.Raw as IRegionDiff)!); }
+            }
         }
-        if (!selected.SkipRegions)
+        if (!patch.SkipLandmarks)
         {
-            diff.Regions.ForEach((d)
-            =>
+            foreach (var i in patch.Landmarks)
             {
-                if (selected.Regions.ContainsKey(d.DiffKey)) { result.Regions.Add(d); }
-            });
+                if (i.Selected) { result.Landmarks.Add((i.Raw as ILandmarkDiff)!); }
+            }
         }
-        if (!selected.SkipRegions)
+        if (!patch.SkipShortcuts)
         {
-            diff.Regions.ForEach((d)
-            =>
+            foreach (var i in patch.Shortcuts)
             {
-                if (selected.Regions.ContainsKey(d.DiffKey)) { result.Regions.Add(d); }
-            });
+                if (i.Selected) { result.Shortcuts.Add((i.Raw as IShortcutDiff)!); }
+            }
         }
-        if (!selected.SkipLandmarks)
+        if (!patch.SkipVariables)
         {
-            diff.Landmarks.ForEach((d)
-            =>
+            foreach (var i in patch.Variables)
             {
-                if (selected.Landmarks.ContainsKey(d.DiffKey)) { result.Landmarks.Add(d); }
-            });
+                if (i.Selected) { result.Variables.Add((i.Raw as IVariableDiff)!); }
+            }
         }
-        if (!selected.SkipShortcuts)
+        if (!patch.SkipSnapshots)
         {
-            diff.Shortcuts.ForEach((d)
-            =>
+            foreach (var i in patch.Snapshots)
             {
-                if (selected.Shortcuts.ContainsKey(d.DiffKey)) { result.Shortcuts.Add(d); }
-            });
+                if (i.Selected) { result.Snapshots.Add((i.Raw as ISnapshotDiff)!); }
+            }
         }
-        if (!selected.SkipVariables)
-        {
-            diff.Variables.ForEach((d)
-            =>
-            {
-                if (selected.Variables.ContainsKey(d.DiffKey)) { result.Variables.Add(d); }
-            });
-        }
-        if (!selected.SkipSnapshots)
-        {
-            diff.Snapshots.ForEach((d)
-            =>
-            {
-                if (selected.Snapshots.ContainsKey(d.DiffKey)) { result.Snapshots.Add(d); }
-            });
-        }
-
         return result;
     }
+    public static Patch CreatePatch(MapFile mf, Diffs diffs, bool defaultSelected)
+    {
+        var patch = new Patch();
+        foreach (var model in diffs.Rooms)
+        {
+            if (mf.Cache.Rooms.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Rooms.Add(new PatchItem(new RoomDiff(mf.Cache.Rooms[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Rooms[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Rooms.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Rooms.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        foreach (var model in diffs.Markers)
+        {
+            if (mf.Cache.Markers.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Markers.Add(new PatchItem(new MarkerDiff(mf.Cache.Markers[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Markers[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Markers.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Markers.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        foreach (var model in diffs.Routes)
+        {
+            if (mf.Cache.Routes.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Routes.Add(new PatchItem(new RouteDiff(mf.Cache.Routes[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Routes[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Routes.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Routes.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        foreach (var model in diffs.Traces)
+        {
+            if (mf.Cache.Traces.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Traces.Add(new PatchItem(new TraceDiff(mf.Cache.Traces[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Traces[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Traces.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Traces.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        foreach (var model in diffs.Regions)
+        {
+            if (mf.Cache.Regions.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Regions.Add(new PatchItem(new RegionDiff(mf.Cache.Regions[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Regions[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Regions.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Regions.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        foreach (var model in diffs.Landmarks)
+        {
+            if (mf.Cache.Landmarks.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Landmarks.Add(new PatchItem(new LandmarkDiff(mf.Cache.Landmarks[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Landmarks[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Landmarks.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Landmarks.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        foreach (var model in diffs.Shortcuts)
+        {
+            if (mf.Cache.Shortcuts.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Shortcuts.Add(new PatchItem(new ShortcutDiff(mf.Cache.Shortcuts[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Shortcuts[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Shortcuts.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Shortcuts.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        foreach (var model in diffs.Variables)
+        {
+            if (mf.Cache.Variables.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Variables.Add(new PatchItem(new VariableDiff(mf.Cache.Variables[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Variables[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Variables.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Variables.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        foreach (var model in diffs.Snapshots)
+        {
+            if (mf.Cache.Snapshots.ContainsKey(model.DiffKey))
+            {
+                if (model.Data == null)
+                {
+                    patch.Snapshots.Add(new PatchItem(new SnapshotDiff(mf.Cache.Snapshots[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                }
+                else if (!mf.Cache.Snapshots[model.DiffKey].Equal(model.Data))
+                {
+                    patch.Snapshots.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                }
+            }
+            else if (model.Data is not null)
+            {
+                patch.Snapshots.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+            }
+        }
+        return patch;
+    }
+
     //将差异应用到源地图文件上
     public static void Apply(Diffs diffs, MapFile source)
     {
-        diffs.Rooms.ForEach(d => ApplyRoomDiff(d, source));
-        diffs.Markers.ForEach(d => ApplyRoomDiff(d, source));
-        diffs.Routes.ForEach(d => ApplyRoomDiff(d, source));
-        diffs.Traces.ForEach(d => ApplyRoomDiff(d, source));
-        diffs.Regions.ForEach(d => ApplyRoomDiff(d, source));
-        diffs.Landmarks.ForEach(d => ApplyRoomDiff(d, source));
-        diffs.Shortcuts.ForEach(d => ApplyRoomDiff(d, source));
-        diffs.Variables.ForEach(d => ApplyRoomDiff(d, source));
-        diffs.Snapshots.ForEach(d => ApplyRoomDiff(d, source));
+        diffs.Rooms.ForEach(d => ApplyDiff(d, source));
+        diffs.Markers.ForEach(d => ApplyDiff(d, source));
+        diffs.Routes.ForEach(d => ApplyDiff(d, source));
+        diffs.Traces.ForEach(d => ApplyDiff(d, source));
+        diffs.Regions.ForEach(d => ApplyDiff(d, source));
+        diffs.Landmarks.ForEach(d => ApplyDiff(d, source));
+        diffs.Shortcuts.ForEach(d => ApplyDiff(d, source));
+        diffs.Variables.ForEach(d => ApplyDiff(d, source));
+        diffs.Snapshots.ForEach(d => ApplyDiff(d, source));
         return;
     }
-    private static void ApplyRoomDiff(IDiffItem diff, MapFile source)
+    private static void ApplyDiff(IDiffItem diff, MapFile source)
     {
         switch (diff)
         {
@@ -514,7 +656,7 @@ public class DiffHelper
                 source.RemoveVariable(rmd.Key);
                 break;
             case SnapshotDiff md:
-                source.InsertSnapshot(md.Model);;
+                source.InsertSnapshot(md.Model); ;
                 break;
             case RemovedSnapshotDiff rmd:
                 source.RemoveSnapshot(new SnapshotKey(rmd.SnapshotKey, rmd.SnapshotType, rmd.SnapshotValue));

@@ -134,6 +134,7 @@ public class MapFile
         RemoveSnapshot(model.UniqueKey());
         model.Arrange();
         Map.Snapshots.Add(model);
+        Cache.Snapshots[model.UniqueKey().ToString()] = model;
     }
     public void TakeSnapshot(string key, string type, string value, string group)
     {
@@ -148,11 +149,13 @@ public class MapFile
             var model = Snapshot.Create(key, type, value, group);
             model.Arrange();
             Map.Snapshots.Add(model);
+            Cache.Snapshots[model.UniqueKey().ToString()] = model;
         }
     }
     public void RemoveSnapshot(SnapshotKey key)
     {
         Map.Snapshots.RemoveAll(r => r.UniqueKey().Equal(key));
+        Cache.Snapshots.Remove(key.ToString());
     }
     public MapSettings ToSettings()
     {
