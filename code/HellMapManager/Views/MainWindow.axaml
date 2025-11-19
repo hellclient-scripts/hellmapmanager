@@ -62,7 +62,10 @@
         <Separator />
         <MenuItem Command="{Binding OnExit}" Header="退出(_E)" />
       </MenuItem>
-      <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}" />
+      <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}" >
+        <MenuItem Click="OnDiffMapFile" Header="对比地图文件" />
+        <MenuItem Click="OnExportRoomsH" Header="加载补丁文件" />
+      </MenuItem>
 
       <MenuItem Header="导出(_X)" IsEnabled="{Binding IsFileOpend}">
         <MenuItem Click="OnExportRoomsH" Header="导出UTF8编码的RoomsH文件" />

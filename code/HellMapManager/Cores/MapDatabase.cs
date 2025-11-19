@@ -5,7 +5,7 @@ namespace HellMapManager.Cores;
 
 public partial class MapDatabase()
 {
-    public const int Version= 1000;
+    public const int Version = 1000;
     public MapFile? Current;
     public Settings Settings = new();
 
@@ -67,6 +67,18 @@ public partial class MapDatabase()
             Current.Path = file;
             AddRecent(Current.ToRecentFile());
             RaiseMapFileUpdatedEvent(this);
+        }
+    }
+    public void DiffFile(string file)
+    {
+        if (Current != null)
+        {
+            var mf = HMMFile.Open(file);
+            if (mf != null)
+            {
+                var diffs= DiffHelper.Diff(Current.Map, mf.Map);
+                
+            }
         }
     }
     public void Exit()

@@ -61,9 +61,9 @@ public class DiffHelper
     }
     private static void DiffMarkers(Map source, Map dest, Diffs diffs)
     {
-        var srcmodels = source.Markers.GetRange(0, source.Rooms.Count);
+        var srcmodels = source.Markers.GetRange(0, source.Markers.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var destmodels = dest.Markers.GetRange(0, dest.Rooms.Count);
+        var destmodels = dest.Markers.GetRange(0, dest.Markers.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var result = diffs.Markers;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
@@ -97,9 +97,9 @@ public class DiffHelper
     }
     private static void DiffRoutes(Map source, Map dest, Diffs diffs)
     {
-        var srcmodels = source.Routes.GetRange(0, source.Rooms.Count);
+        var srcmodels = source.Routes.GetRange(0, source.Routes.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var destmodels = dest.Routes.GetRange(0, dest.Rooms.Count);
+        var destmodels = dest.Routes.GetRange(0, dest.Routes.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var result = diffs.Routes;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
@@ -133,9 +133,9 @@ public class DiffHelper
     }
     private static void DiffTraces(Map source, Map dest, Diffs diffs)
     {
-        var srcmodels = source.Traces.GetRange(0, source.Rooms.Count);
+        var srcmodels = source.Traces.GetRange(0, source.Traces.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var destmodels = dest.Traces.GetRange(0, dest.Rooms.Count);
+        var destmodels = dest.Traces.GetRange(0, dest.Traces.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var result = diffs.Traces;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
@@ -169,9 +169,9 @@ public class DiffHelper
     }
     private static void DiffRegions(Map source, Map dest, Diffs diffs)
     {
-        var srcmodels = source.Regions.GetRange(0, source.Rooms.Count);
+        var srcmodels = source.Regions.GetRange(0, source.Regions.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var destmodels = dest.Regions.GetRange(0, dest.Rooms.Count);
+        var destmodels = dest.Regions.GetRange(0, dest.Regions.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var result = diffs.Regions;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
@@ -205,9 +205,9 @@ public class DiffHelper
     }
     private static void DiffLandmarks(Map source, Map dest, Diffs diffs)
     {
-        var srcmodels = source.Landmarks.GetRange(0, source.Rooms.Count);
+        var srcmodels = source.Landmarks.GetRange(0, source.Landmarks.Count);
         srcmodels.Sort((a, b) => a.UniqueKey().ToString().CompareTo(b.UniqueKey().ToString()));
-        var destmodels = dest.Landmarks.GetRange(0, dest.Rooms.Count);
+        var destmodels = dest.Landmarks.GetRange(0, dest.Landmarks.Count);
         destmodels.Sort((a, b) => a.UniqueKey().ToString().CompareTo(b.UniqueKey().ToString()));
         var result = diffs.Landmarks;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
@@ -242,9 +242,9 @@ public class DiffHelper
 
     private static void DiffShortcuts(Map source, Map dest, Diffs diffs)
     {
-        var srcmodels = source.Shortcuts.GetRange(0, source.Rooms.Count);
+        var srcmodels = source.Shortcuts.GetRange(0, source.Shortcuts.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var destmodels = dest.Shortcuts.GetRange(0, dest.Rooms.Count);
+        var destmodels = dest.Shortcuts.GetRange(0, dest.Shortcuts.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var result = diffs.Shortcuts;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
@@ -279,9 +279,9 @@ public class DiffHelper
 
     private static void DiffVariables(Map source, Map dest, Diffs diffs)
     {
-        var srcmodels = source.Variables.GetRange(0, source.Rooms.Count);
+        var srcmodels = source.Variables.GetRange(0, source.Variables.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var destmodels = dest.Variables.GetRange(0, dest.Rooms.Count);
+        var destmodels = dest.Variables.GetRange(0, dest.Variables.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var result = diffs.Variables;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
@@ -315,9 +315,9 @@ public class DiffHelper
     }
     private static void DiffSnapshots(Map source, Map dest, Diffs diffs)
     {
-        var srcmodels = source.Snapshots.GetRange(0, source.Rooms.Count);
+        var srcmodels = source.Snapshots.GetRange(0, source.Snapshots.Count);
         srcmodels.Sort((a, b) => a.UniqueKey().ToString().CompareTo(b.UniqueKey().ToString()));
-        var destmodels = dest.Snapshots.GetRange(0, dest.Rooms.Count);
+        var destmodels = dest.Snapshots.GetRange(0, dest.Snapshots.Count);
         destmodels.Sort((a, b) => a.UniqueKey().ToString().CompareTo(b.UniqueKey().ToString()));
         var result = diffs.Snapshots;
         while (srcmodels.Count > 0 && destmodels.Count > 0)

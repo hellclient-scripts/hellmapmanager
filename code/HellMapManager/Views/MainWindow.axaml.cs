@@ -46,5 +46,12 @@ public partial class MainWindow : Window
             }
         }
     }
-
+    public async void OnDiffMapFile(object? sender, RoutedEventArgs args)
+    {
+        if (AppKernel.MapDatabase.Current == null)
+        {
+            return;
+        }
+        await AppUI.Main.DiffMapFile();
+    }
 }

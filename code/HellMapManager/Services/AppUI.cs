@@ -65,6 +65,25 @@ public class AppUI(MapDatabase mapDatabase)
         }
         return "";
     }
+    public async Task<string> AskDiffMapFile()
+    {
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
+
+        // 启动异步操作以打开对话框。
+        var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "对比地图文件",
+            AllowMultiple = false,
+            FileTypeFilter = [HMMAllFileType],
+        });
+
+        if (files.Count >= 1)
+        {
+            return files[0].Path.LocalPath;
+        }
+        return "";
+    }
+
     public async Task<string> AskImportRoomsH()
     {
         var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
@@ -241,6 +260,23 @@ public class AppUI(MapDatabase mapDatabase)
 
         }
     }
+    public async Task DiffMapFile()
+    {
+        var file = await AskDiffMapFile();
+        if (file != "")
+        {
+            try
+            {
+                MapDatabase.DiffFile(file);
+            }
+            catch (Exception ex)
+            {
+                Alert("打开失败", ex.Message);
+            }
+
+        }
+    }
+
     public async void Revert()
     {
         if (await ConfirmModified())
