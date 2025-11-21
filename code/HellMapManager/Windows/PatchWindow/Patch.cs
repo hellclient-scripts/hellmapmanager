@@ -4,10 +4,11 @@ using HellMapManager.ViewModels;
 
 namespace HellMapManager.Windows.PatchWindow;
 
-public class PatchItem(IDiffItem display, IDiffItem raw, DiffMode mode, bool selected) : ViewModelBase
+public class PatchItem(IDiffItem display, IDiffItem raw, IDiffItem current, DiffMode mode, bool selected) : ViewModelBase
 {
     public DiffMode Mode { get; } = mode;
     public IDiffItem Raw { get; } = raw;
+    public IDiffItem Current { get; } = current;
     public IDiffItem Display { get; } = display;
     public bool Selected { get; set; } = selected;
     public void Update()
@@ -130,159 +131,168 @@ public class Patch
 
                     if (mf.Cache.Rooms.ContainsKey(model.DiffKey))
                     {
+                        var current = new RoomDiff(mf.Cache.Rooms[model.DiffKey]);
                         if (model.Data == null)
                         {
-                            patch.Rooms.Items.Add(new PatchItem(new RoomDiff(mf.Cache.Rooms[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Rooms.Items.Add(new PatchItem(current, model, current, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Rooms[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Rooms.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Rooms.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Rooms.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Rooms.Items.Add(new PatchItem(model, model, new RemovedRoomDiff(model.Key), DiffMode.New, defaultSelected));
                     }
                     break;
 
                 case IMarkerDiff model:
                     if (mf.Cache.Markers.ContainsKey(model.DiffKey))
                     {
+                        var current = new MarkerDiff(mf.Cache.Markers[model.DiffKey]);
                         if (model.Data == null)
                         {
-                            patch.Markers.Items.Add(new PatchItem(new MarkerDiff(mf.Cache.Markers[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Markers.Items.Add(new PatchItem(new MarkerDiff(mf.Cache.Markers[model.DiffKey]), model, current, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Markers[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Markers.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Markers.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Markers.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Markers.Items.Add(new PatchItem(model, model, new RemovedMarkerDiff(model.Key), DiffMode.New, defaultSelected));
                     }
                     break;
                 case IRouteDiff model:
 
                     if (mf.Cache.Routes.ContainsKey(model.DiffKey))
                     {
+                        var current = new RouteDiff(mf.Cache.Routes[model.DiffKey]);
                         if (model.Data == null)
                         {
-                            patch.Routes.Items.Add(new PatchItem(new RouteDiff(mf.Cache.Routes[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Routes.Items.Add(new PatchItem(new RouteDiff(mf.Cache.Routes[model.DiffKey]), model, current, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Routes[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Routes.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Routes.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Routes.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Routes.Items.Add(new PatchItem(model, model, new RemovedRouteDiff(model.Key), DiffMode.New, defaultSelected));
                     }
                     break;
                 case ITraceDiff model:
 
                     if (mf.Cache.Traces.ContainsKey(model.DiffKey))
                     {
+                        var current = new TraceDiff(mf.Cache.Traces[model.Key]);
                         if (model.Data == null)
                         {
-                            patch.Traces.Items.Add(new PatchItem(new TraceDiff(mf.Cache.Traces[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Traces.Items.Add(new PatchItem(new TraceDiff(mf.Cache.Traces[model.DiffKey]), model, current, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Traces[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Traces.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Traces.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Traces.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Traces.Items.Add(new PatchItem(model, model, new RemovedTraceDiff(model.Key), DiffMode.New, defaultSelected));
                     }
                     break;
                 case IRegionDiff model:
                     if (mf.Cache.Regions.ContainsKey(model.DiffKey))
                     {
+                        var current = new RegionDiff(mf.Cache.Regions[model.Key]);
                         if (model.Data == null)
                         {
-                            patch.Regions.Items.Add(new PatchItem(new RegionDiff(mf.Cache.Regions[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Regions.Items.Add(new PatchItem(new RegionDiff(mf.Cache.Regions[model.DiffKey]), model, current, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Regions[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Regions.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Regions.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Regions.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Regions.Items.Add(new PatchItem(model, model, new RemovedRegionDiff(model.Key), DiffMode.New, defaultSelected));
                     }
                     break;
                 case ILandmarkDiff model:
                     if (mf.Cache.Landmarks.ContainsKey(model.DiffKey))
                     {
+                        var current = new LandmarkDiff(mf.Cache.Landmarks[model.DiffKey]);
                         if (model.Data == null)
                         {
-                            patch.Landmarks.Items.Add(new PatchItem(new LandmarkDiff(mf.Cache.Landmarks[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Landmarks.Items.Add(new PatchItem(new LandmarkDiff(mf.Cache.Landmarks[model.DiffKey]), model, current, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Landmarks[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Landmarks.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Landmarks.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Landmarks.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Landmarks.Items.Add(new PatchItem(model, model, new RemovedLandmarkDiff(model.LandmarkKey, model.LandmarkType), DiffMode.New, defaultSelected));
                     }
                     break;
                 case IShortcutDiff model:
 
                     if (mf.Cache.Shortcuts.ContainsKey(model.DiffKey))
                     {
+                        var current = new ShortcutDiff(mf.Cache.Shortcuts[model.DiffKey]);
                         if (model.Data == null)
                         {
-                            patch.Shortcuts.Items.Add(new PatchItem(new ShortcutDiff(mf.Cache.Shortcuts[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Shortcuts.Items.Add(new PatchItem(new ShortcutDiff(mf.Cache.Shortcuts[model.DiffKey]), model, model, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Shortcuts[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Shortcuts.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Shortcuts.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Shortcuts.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Shortcuts.Items.Add(new PatchItem(model, model, new RemovedShortcutDiff(model.Key), DiffMode.New, defaultSelected));
                     }
                     break;
                 case IVariableDiff model:
                     if (mf.Cache.Variables.ContainsKey(model.DiffKey))
                     {
+                        var current = new VariableDiff(mf.Cache.Variables[model.DiffKey]);
                         if (model.Data == null)
                         {
-                            patch.Variables.Items.Add(new PatchItem(new VariableDiff(mf.Cache.Variables[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Variables.Items.Add(new PatchItem(new VariableDiff(mf.Cache.Variables[model.DiffKey]), model, current, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Variables[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Variables.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Variables.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Variables.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Variables.Items.Add(new PatchItem(model, model, new RemovedVariableDiff(model.Key), DiffMode.New, defaultSelected));
                     }
                     break;
                 case ISnapshotDiff model:
 
                     if (mf.Cache.Snapshots.ContainsKey(model.DiffKey))
                     {
+                        var current = new SnapshotDiff(mf.Cache.Snapshots[model.DiffKey]);
                         if (model.Data == null)
                         {
-                            patch.Snapshots.Items.Add(new PatchItem(new SnapshotDiff(mf.Cache.Snapshots[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
+                            patch.Snapshots.Items.Add(new PatchItem(new SnapshotDiff(mf.Cache.Snapshots[model.DiffKey]), model, current, DiffMode.Removed, defaultSelected));
                         }
                         else if (!mf.Cache.Snapshots[model.DiffKey].Equal(model.Data))
                         {
-                            patch.Snapshots.Items.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
+                            patch.Snapshots.Items.Add(new PatchItem(model, model, current, DiffMode.Normal, defaultSelected));
                         }
                     }
                     else if (model.Data is not null)
                     {
-                        patch.Snapshots.Items.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
+                        patch.Snapshots.Items.Add(new PatchItem(model, model, new RemovedSnapshotDiff(model.SnapshotKey, model.SnapshotType, model.SnapshotValue), DiffMode.New, defaultSelected));
                     }
                     break;
             }

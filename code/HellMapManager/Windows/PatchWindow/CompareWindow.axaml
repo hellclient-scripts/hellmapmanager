@@ -1,20 +1,39 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="HellMapManager.Windows.PatchWindow.CompareWindow"
-        Title="对比">
-<Grid ColumnDefinitions="*, *" >
-  <DockPanel Grid.Column="0" LastChildFill="True">
-    <TextBlock Text="原始数据" FontWeight="Bold" FontSize="16" Margin="0,0,0,2" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-    </ScrollViewer>
+<Window
+  x:Class="HellMapManager.Windows.PatchWindow.CompareWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.Windows.PatchWindow"
+  Title="对比"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:PatchItem"
+  mc:Ignorable="d">
+  <Grid ColumnDefinitions="*, *">
+    <DockPanel Grid.Column="0" LastChildFill="True">
+      <TextBlock
+        Margin="0,0,0,2"
+        HorizontalAlignment="Center"
+        DockPanel.Dock="Top"
+        FontSize="16"
+        FontWeight="Bold"
+        Text="当前数据" />
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <vm:ItemView DataContext="{Binding Current}" />
+      </ScrollViewer>
     </DockPanel>
-  <DockPanel Grid.Column="1" LastChildFill="True">
-    <TextBlock Text="目标数据" FontWeight="Bold" FontSize="16" Margin="0,0,0,2" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-    </ScrollViewer>
+    <DockPanel Grid.Column="1" LastChildFill="True">
+      <TextBlock
+        Margin="0,0,0,2"
+        HorizontalAlignment="Center"
+        DockPanel.Dock="Top"
+        FontSize="16"
+        FontWeight="Bold"
+        Text="目标数据" />
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <vm:ItemView DataContext="{Binding Raw}" />
+      </ScrollViewer>
     </DockPanel>
   </Grid>
 </Window>
