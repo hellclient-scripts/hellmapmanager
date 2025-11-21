@@ -2,10 +2,13 @@ using Avalonia.Controls;
 using HellMapManager.Services;
 using HellMapManager.Helpers;
 using HellMapManager.Models;
+using HellMapManager.Windows.PatchWindow;
 using HellMapManager.Windows.RoomsHExportWindow;
 using Avalonia.Interactivity;
 using System;
 using HellMapManager.Cores;
+using System.Threading.Tasks;
+
 namespace HellMapManager.Views;
 
 public partial class MainWindow : Window
@@ -52,6 +55,23 @@ public partial class MainWindow : Window
         {
             return;
         }
-        await AppUI.Main.DiffMapFile();
+        var diffs = await AppUI.Main.DiffMapFile();
+        if (diffs != null)
+        {
+            var patch = DiffHelper.CreatePatch(AppKernel.MapDatabase.Current, diffs, true);
+            var result = await ShowDiffWindow(diffs, patch);
+            if (result != null)
+            {
+                
+            }
+        }
     }
+    public async Task<Diffs?> ShowDiffWindow(Diffs diffs, Patch patch)
+    {
+        var window = new PatchWindow();
+        window.DataContext = new PatchWindowViewModel(diffs, patch);
+        var result = await window.ShowDialog<Diffs?>(this);
+        return result;
+    }
+
 }

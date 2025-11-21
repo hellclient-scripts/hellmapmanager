@@ -69,7 +69,7 @@ public partial class MapDatabase()
             RaiseMapFileUpdatedEvent(this);
         }
     }
-    public void DiffFile(string file)
+    public Diffs? DiffFile(string file)
     {
         if (Current != null)
         {
@@ -77,9 +77,10 @@ public partial class MapDatabase()
             if (mf != null)
             {
                 var diffs= DiffHelper.Diff(Current.Map, mf.Map);
-                
+                return diffs;
             }
         }
+        return null;
     }
     public void Exit()
     {

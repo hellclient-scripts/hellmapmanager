@@ -1,0 +1,99 @@
+<Window
+  x:Class="HellMapManager.Windows.PatchWindow.PatchWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.Windows.PatchWindow"
+  Title="对比结果"
+  Width="1200"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:PatchWindowViewModel"
+  mc:Ignorable="d">
+  <DockPanel LastChildFill="True">
+    <Border
+      x:Name="Toolbar"
+      BorderBrush="#cccccc"
+      BorderThickness="0,0,0,1"
+      DockPanel.Dock="Top"
+      Margin="0 0 0 2"
+      >
+
+      <StackPanel Orientation="Horizontal">
+        <Button
+          Height="32"
+          Margin="5"
+          Classes="accent">
+          <ToolTip.Tip>
+            <TextBlock Text="应用变更" />
+          </ToolTip.Tip>
+          <Image
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/merge.png" />
+        </Button>
+        <Button
+          Height="32"
+          Margin="5"
+          Classes="">
+          <ToolTip.Tip>
+            <TextBlock Text="导出补丁" />
+          </ToolTip.Tip>
+          <Image
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/download.png" />
+        </Button>
+        <SplitButton
+          Height="32"
+          Margin="5"
+          Command="{Binding OnSelectAll}">
+          <SplitButton.Flyout>
+            <MenuFlyout Placement="Bottom">
+              <MenuItem Command="{Binding OnSelectAll}" Header="全取消" />
+            </MenuFlyout>
+          </SplitButton.Flyout>
+          <ToolTip.Tip>
+            <TextBlock Text="全选" />
+          </ToolTip.Tip>
+          <Image
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/done_all.png" />
+        </SplitButton>
+      </StackPanel>
+    </Border>
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+      <TextBlock Margin="5" Text="{Binding StatusMessage}" />
+    </StackPanel>
+    <SplitView
+      VerticalAlignment="Stretch"
+      DisplayMode="CompactInline"
+      IsPaneOpen="True"
+      OpenPaneLength="300">
+      <SplitView.Pane>
+        <ListBox
+          ItemsSource="{Binding Tabs}"
+          SelectedItem="{Binding SelectedTab}"
+          SelectionChanged="OnSelectedTab">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <WrapPanel Margin="5" VerticalAlignment="Center">
+                <CheckBox VerticalAlignment="Center" IsChecked="True" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Label}" />
+              </WrapPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </SplitView.Pane>
+      <Grid>
+        <vm:Rooms
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          IsVisible="{Binding SelectedTab.IsRoom}" />
+      </Grid>
+    </SplitView>
+  </DockPanel>
+
+</Window>

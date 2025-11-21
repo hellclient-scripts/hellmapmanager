@@ -36,6 +36,20 @@ public class PatchItem(IDiffItem display, IDiffItem raw, DiffMode mode, bool sel
     public IDiffItem Raw { get; } = raw;
     public IDiffItem Display { get; } = display;
     public bool Selected { get; set; } = selected;
+
+    public string ModeName
+    {
+        get
+        {
+            return Mode switch
+            {
+                DiffMode.Removed => "删除",
+                DiffMode.New => "新增",
+                DiffMode.Normal => "修改",
+                _ => "未知",
+            };
+        }
+    }
 }
 
 public class Patch

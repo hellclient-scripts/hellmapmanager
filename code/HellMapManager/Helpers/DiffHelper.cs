@@ -43,7 +43,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new RoomDiff(srcmodel));
+                result.Add(new RoomDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 
@@ -79,7 +79,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new MarkerDiff(srcmodel));
+                result.Add(new MarkerDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 
@@ -115,7 +115,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new RouteDiff(srcmodel));
+                result.Add(new RouteDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 
@@ -151,7 +151,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new TraceDiff(srcmodel));
+                result.Add(new TraceDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 
@@ -187,7 +187,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new RegionDiff(srcmodel));
+                result.Add(new RegionDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 
@@ -223,7 +223,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new LandmarkDiff(srcmodel));
+                result.Add(new LandmarkDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 
@@ -260,7 +260,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new ShortcutDiff(srcmodel));
+                result.Add(new ShortcutDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 
@@ -297,7 +297,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new VariableDiff(srcmodel));
+                result.Add(new VariableDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 
@@ -333,7 +333,7 @@ public class DiffHelper
             }
             else if (delta > 0)
             {
-                result.Add(new SnapshotDiff(srcmodel));
+                result.Add(new SnapshotDiff(destmodel));
                 destmodels.RemoveAt(0);
                 continue;
 

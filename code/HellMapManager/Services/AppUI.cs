@@ -8,6 +8,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using HellMapManager.Cores;
 
 using System;
+using HellMapManager.Models;
 
 namespace HellMapManager.Services;
 
@@ -260,14 +261,14 @@ public class AppUI(MapDatabase mapDatabase)
 
         }
     }
-    public async Task DiffMapFile()
+    public async Task<Diffs?> DiffMapFile()
     {
         var file = await AskDiffMapFile();
         if (file != "")
         {
             try
             {
-                MapDatabase.DiffFile(file);
+                return MapDatabase.DiffFile(file);
             }
             catch (Exception ex)
             {
@@ -275,6 +276,7 @@ public class AppUI(MapDatabase mapDatabase)
             }
 
         }
+        return null;
     }
 
     public async void Revert()
@@ -349,5 +351,4 @@ public class AppUI(MapDatabase mapDatabase)
             }
         }
     }
-
 }
