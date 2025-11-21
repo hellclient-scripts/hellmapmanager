@@ -9,6 +9,7 @@ using HellMapManager.Cores;
 
 using System;
 using HellMapManager.Models;
+using HellMapManager.Helpers;
 
 namespace HellMapManager.Services;
 
@@ -84,6 +85,37 @@ public class AppUI(MapDatabase mapDatabase)
         }
         return "";
     }
+    public async Task<string> AskSavePatch()
+    {
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
+
+        // 启动异步操作以打开对话框。
+        var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "保存变更补丁文件",
+            DefaultExtension = "hmp",
+            FileTypeChoices = new[] { HMPFileType },
+            ShowOverwritePrompt = true,
+        });
+        return file == null ? "" : file.Path.LocalPath;
+    }
+    public async Task<string> AskOpenPatch()
+    {
+        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
+
+        // 启动异步操作以打开对话框。
+        var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "打开变更补丁文件",
+            FileTypeFilter = new[] { HMPFileType },
+            AllowMultiple=false
+        });
+        if (files.Count >= 1)
+        {
+            return files[0].Path.LocalPath;
+        }
+        return "";
+    }
 
     public async Task<string> AskImportRoomsH()
     {
@@ -110,6 +142,14 @@ public class AppUI(MapDatabase mapDatabase)
             Patterns = ["*.hmm"],
         };
     }
+    public static FilePickerFileType HMPFileType
+    {
+        get => new("地图补丁HMP文件")
+        {
+            Patterns = ["*.hmp"],
+        };
+    }
+
     public static FilePickerFileType HMZFileType
     {
         get => new("压缩地图HMZ文件")
@@ -278,7 +318,22 @@ public class AppUI(MapDatabase mapDatabase)
         }
         return null;
     }
+    public async void SavePatch(Diffs diffs)
+    {
+        var file = await AskSavePatch();
+        if (file != "")
+        {
+            try
+            {
+                HMPFile.Save(file, diffs);
+            }
+            catch (Exception ex)
+            {
+                Alert("保存失败", ex.Message);
+            }
 
+        }
+    }
     public async void Revert()
     {
         if (await ConfirmModified())

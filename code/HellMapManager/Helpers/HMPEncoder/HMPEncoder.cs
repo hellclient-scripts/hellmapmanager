@@ -224,6 +224,7 @@ public class HMPEncoder
                             }
                     }
                 }
+                result.Arrange();
                 return result;
             }
         }

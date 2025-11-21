@@ -8,6 +8,7 @@ using Avalonia.Interactivity;
 using System;
 using HellMapManager.Cores;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace HellMapManager.Views;
 
@@ -59,9 +60,11 @@ public partial class MainWindow : Window
         if (diffs != null)
         {
             var result = await ShowDiffWindow(AppKernel.MapDatabase.Current, diffs);
-            if (result != null)
+            if (result != null && result.Items.Count > 0)
             {
-
+                DiffHelper.Apply(result, AppKernel.MapDatabase.Current);
+                AppKernel.MapDatabase.Current.MarkAsModified();
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -72,5 +75,36 @@ public partial class MainWindow : Window
         var result = await window.ShowDialog<Diffs?>(this);
         return result;
     }
+    public async void OnOpenPatch(object? sender, RoutedEventArgs args)
+    {
+        if (AppKernel.MapDatabase.Current == null)
+        {
+            return;
+        }
+        var file = await AppUI.Main.AskOpenPatch();
+        if (file == null || file == "")
+        {
+            return;
+        }
+        try
+        {
+            var diffs = HMPFile.Open(file);
+            if (diffs != null)
+            {
+                var result = await ShowDiffWindow(AppKernel.MapDatabase.Current, diffs);
+                if (result != null && result.Items.Count > 0)
+                {
+                    DiffHelper.Apply(result, AppKernel.MapDatabase.Current);
+                    AppKernel.MapDatabase.Current.MarkAsModified();
+                    AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
+                }
 
+            }
+        }
+        catch (Exception ex)
+        {
+            AppUI.Alert("打开变更补丁文件失败", ex.Message);
+        }
+
+    }
 }

@@ -1,15 +1,19 @@
 using HellMapManager.Models;
 using System.Collections.Generic;
+using HellMapManager.ViewModels;
 
 namespace HellMapManager.Windows.PatchWindow;
 
-public class PatchItem(IDiffItem display, IDiffItem raw, DiffMode mode, bool selected)
+public class PatchItem(IDiffItem display, IDiffItem raw, DiffMode mode, bool selected) : ViewModelBase
 {
     public DiffMode Mode { get; } = mode;
     public IDiffItem Raw { get; } = raw;
     public IDiffItem Display { get; } = display;
     public bool Selected { get; set; } = selected;
-
+    public void Update()
+    {
+        OnPropertyChanged(nameof(Selected));
+    }
     public string ModeName
     {
         get
@@ -25,9 +29,9 @@ public class PatchItem(IDiffItem display, IDiffItem raw, DiffMode mode, bool sel
     }
 }
 
-public class PatchType
+public class PatchType : ViewModelBase
 {
-    public bool Skip = false;
+    public bool Skip { get; set; } = false;
     public List<PatchItem> Items = [];
     public void Arrange()
     {
@@ -35,7 +39,10 @@ public class PatchType
     }
     public void Apply(Diffs diffs)
     {
-        Items.ForEach(i => diffs.Items.Add(i.Raw));
+        if (!Skip)
+        {
+            Items.ForEach(i => diffs.Items.Add(i.Raw));
+        }
     }
     public void SelectByMode(DiffMode mode, bool selected)
     {
@@ -44,15 +51,19 @@ public class PatchType
             if (item.Mode == mode)
             {
                 item.Selected = selected;
+                item.Update();
             }
         }
+        OnPropertyChanged(nameof(Items));
     }
     public void SelectAll(bool selected)
     {
         foreach (var item in Items)
         {
             item.Selected = selected;
+            item.Update();
         }
+        OnPropertyChanged(nameof(Items));
     }
 }
 
@@ -108,6 +119,7 @@ public class Patch
     }
     public static Patch CreatePatch(MapFile mf, Diffs diffs, bool defaultSelected)
     {
+        diffs.Arrange();
         var patch = new Patch();
         foreach (var item in diffs.Items)
         {

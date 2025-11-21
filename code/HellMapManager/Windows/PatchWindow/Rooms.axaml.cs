@@ -25,7 +25,8 @@ public partial class Rooms : UserControl
         {
             if (sender is not null && sender is CheckBox bn && bn.DataContext is PatchItem item)
             {
-                vm.ReCount();
+                vm.SelectedTab.ReCount();
+                vm.ReCount(true);
             }
         }
     }

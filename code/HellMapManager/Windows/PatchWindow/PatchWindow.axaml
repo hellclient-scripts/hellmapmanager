@@ -14,17 +14,17 @@
   <DockPanel LastChildFill="True">
     <Border
       x:Name="Toolbar"
+      Margin="0,0,0,2"
       BorderBrush="#cccccc"
       BorderThickness="0,0,0,1"
-      DockPanel.Dock="Top"
-      Margin="0 0 0 2"
-      >
+      DockPanel.Dock="Top">
 
       <StackPanel Orientation="Horizontal">
         <Button
           Height="32"
           Margin="5"
-          Classes="accent">
+          Classes="accent"
+          Click="Apply">
           <ToolTip.Tip>
             <TextBlock Text="应用变更" />
           </ToolTip.Tip>
@@ -36,7 +36,8 @@
         <Button
           Height="32"
           Margin="5"
-          Classes="">
+          Classes=""
+          Click="Export">
           <ToolTip.Tip>
             <TextBlock Text="导出补丁" />
           </ToolTip.Tip>
@@ -48,10 +49,16 @@
         <SplitButton
           Height="32"
           Margin="5"
-          Command="{Binding OnSelectAll}">
+          Click="OnSelectAll">
           <SplitButton.Flyout>
             <MenuFlyout Placement="Bottom">
-              <MenuItem Command="{Binding OnSelectAll}" Header="全取消" />
+              <MenuItem Click="OnUnSelectAll" Header="全取消" />
+              <MenuItem Click="OnSelectNew" Header="全选新建" />
+              <MenuItem Click="OnUnSelectNew" Header="全取消新建" />
+              <MenuItem Click="OnSelectNormal" Header="全选修改" />
+              <MenuItem Click="OnUnSelectNormal" Header="全取消修改" />
+              <MenuItem Click="OnSelectRemoved" Header="全选删除" />
+              <MenuItem Click="OnUnSelectRemoved" Header="全取消删除" />
             </MenuFlyout>
           </SplitButton.Flyout>
           <ToolTip.Tip>
@@ -80,7 +87,7 @@
           <ListBox.ItemTemplate>
             <DataTemplate>
               <WrapPanel Margin="5" VerticalAlignment="Center">
-                <CheckBox VerticalAlignment="Center" IsChecked="True" />
+                <CheckBox VerticalAlignment="Center" IsChecked="{Binding !Type.Skip}" />
                 <TextBlock VerticalAlignment="Center" Text="{Binding Label}" />
               </WrapPanel>
             </DataTemplate>
@@ -88,10 +95,19 @@
         </ListBox>
       </SplitView.Pane>
       <Grid>
-        <vm:Rooms
-          HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch"
-          IsVisible="{Binding SelectedTab.IsRoom}" />
+        <ContentControl Content="{Binding SelectedTab}">
+          <ContentControl.DataTemplates>
+            <vm:PatchTabTemplate>
+              <DataTemplate x:Key="Room">
+                <vm:Rooms
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  DataContext="{Binding $parent[Window].DataContext}" />
+              </DataTemplate>
+            </vm:PatchTabTemplate>
+          </ContentControl.DataTemplates>
+        </ContentControl>
+
       </Grid>
     </SplitView>
   </DockPanel>

@@ -26,7 +26,6 @@ public class PatchTab(PatchType patchtype, string name, string key) : ViewModelB
         };
         return this;
     }
-    public bool IsRoom { get => Key == Room.EncodeKey; }
     public void ReCount()
     {
         Counts.Count(Type.Items);
@@ -81,9 +80,9 @@ public class PatchCounts : ViewModelBase
     {
         desc.CountAll += CountAll;
         desc.CountRemoved += CountRemoved;
-        desc.CountNormal += CountRemoved;
-        desc.CountNew += CountRemoved;
-        desc.Selected += CountRemoved;
+        desc.CountNormal += CountNormal;
+        desc.CountNew += CountNew;
+        desc.Selected += Selected;
     }
     public int CountAll { get; set; }
     public int CountRemoved { get; set; }
@@ -120,7 +119,7 @@ public partial class PatchWindowViewModel : ViewModelBase
     public PatchWindowViewModel(MapFile mf, Diffs diffs)
     {
 
-        Patch = Patch.CreatePatch(mf, diffs,true);
+        Patch = Patch.CreatePatch(mf, diffs, true);
         List<PatchTab> tabs =
         [
             new PatchTab(Patch.Rooms, "房间", Room.EncodeKey),
@@ -151,14 +150,17 @@ public partial class PatchWindowViewModel : ViewModelBase
     }
     public void Init()
     {
-        ReCount();
+        ReCount(false);
     }
-    public void ReCount()
+    public void ReCount(bool sumOnly)
     {
         CountAllTypes.Reset();
         foreach (var v in Tabs)
         {
-            v.ReCount();
+            if (!sumOnly)
+            {
+                v.ReCount();
+            }
             v.Counts.SumTo(CountAllTypes);
         }
         OnPropertyChanged(nameof(CountAllTypes));
@@ -186,8 +188,23 @@ public partial class PatchWindowViewModel : ViewModelBase
         OnPropertyChanged(nameof(SelectedTab));
         OnPropertyChanged(nameof(StatusMessage));
     }
-    public void OnSelectAll()
+    public void SelectAll(bool value)
     {
-
+        foreach (var tab in Tabs)
+        {
+            tab.Type.SelectAll(value);
+        }
+        ReCount(false);
+        OnPropertyChanged(nameof(SelectedTab));
     }
+    public void SelectByMode(DiffMode mode, bool value)
+    {
+        foreach (var tab in Tabs)
+        {
+            tab.Type.SelectByMode(mode, value);
+        }
+        ReCount(false);
+        OnPropertyChanged(nameof(SelectedTab));
+    }
+
 }
