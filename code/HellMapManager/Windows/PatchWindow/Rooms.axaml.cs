@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using HellMapManager.Models;
+
 
 
 namespace HellMapManager.Windows.PatchWindow;
@@ -30,12 +32,15 @@ public partial class Rooms : UserControl
             }
         }
     }
-    public void OnCompare(object sender, RoutedEventArgs args)
+    public async void OnCompare(object sender, RoutedEventArgs args)
     {
         if (DataContext is PatchWindowViewModel vm)
         {
-            if (sender is not null && sender is CheckBox bn && bn.DataContext is PatchItem item)
+            if (sender is not null && sender is Button bn && bn.DataContext is PatchItem item)
             {
+                var w = new CompareWindow();
+                w.DataContext = item;
+                await w.ShowDialog((TopLevel.GetTopLevel(this) as Window)!);
             }
         }
     }

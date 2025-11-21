@@ -1,0 +1,20 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="HellMapManager.Windows.PatchWindow.CompareWindow"
+        Title="对比">
+<Grid ColumnDefinitions="*, *" >
+  <DockPanel Grid.Column="0" LastChildFill="True">
+    <TextBlock Text="原始数据" FontWeight="Bold" FontSize="16" Margin="0,0,0,2" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    </ScrollViewer>
+    </DockPanel>
+  <DockPanel Grid.Column="1" LastChildFill="True">
+    <TextBlock Text="目标数据" FontWeight="Bold" FontSize="16" Margin="0,0,0,2" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    </ScrollViewer>
+    </DockPanel>
+  </Grid>
+</Window>
