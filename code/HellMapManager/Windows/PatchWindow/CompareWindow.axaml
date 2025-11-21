@@ -11,7 +11,7 @@
   x:DataType="vm:PatchItem"
   mc:Ignorable="d">
   <Grid ColumnDefinitions="*, *">
-    <DockPanel Grid.Column="0" LastChildFill="True">
+    <DockPanel Grid.Column="0" LastChildFill="True" Background="#fef3f3">
       <TextBlock
         Margin="0,0,0,2"
         HorizontalAlignment="Center"
@@ -20,10 +20,10 @@
         FontWeight="Bold"
         Text="当前数据" />
       <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <vm:ItemView DataContext="{Binding Current}" />
+        <vm:ItemView Margin="8" DataContext="{Binding Current}" />
       </ScrollViewer>
     </DockPanel>
-    <DockPanel Grid.Column="1" LastChildFill="True">
+    <DockPanel Grid.Column="1" LastChildFill="True" Background="#f7fbfd">
       <TextBlock
         Margin="0,0,0,2"
         HorizontalAlignment="Center"
@@ -32,7 +32,7 @@
         FontWeight="Bold"
         Text="目标数据" />
       <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <vm:ItemView DataContext="{Binding Raw}" />
+        <vm:ItemView Margin="8" DataContext="{Binding Raw}" />
       </ScrollViewer>
     </DockPanel>
   </Grid>

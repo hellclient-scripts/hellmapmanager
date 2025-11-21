@@ -158,7 +158,7 @@ public partial class Room
     //房间的区域，筛选用
     public string Group { get; set; } = "";
     //标签列表，筛选用
-    public List<ValueTag> Tags = [];
+    public List<ValueTag> Tags { get; set; } = [];
     //房间出口列表
     public List<Exit> Exits { get; set; } = [];
     public List<Data> Data { get; set; } = [];
