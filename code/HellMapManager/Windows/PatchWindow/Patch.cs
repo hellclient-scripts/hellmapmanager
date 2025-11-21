@@ -41,7 +41,7 @@ public class PatchType : ViewModelBase
     {
         if (!Skip)
         {
-            Items.ForEach(i => diffs.Items.Add(i.Raw));
+            Items.ForEach(i => { if (i.Selected) { diffs.Items.Add(i.Raw); } });
         }
     }
     public void SelectByMode(DiffMode mode, bool selected)
