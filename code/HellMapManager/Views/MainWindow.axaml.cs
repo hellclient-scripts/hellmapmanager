@@ -58,18 +58,17 @@ public partial class MainWindow : Window
         var diffs = await AppUI.Main.DiffMapFile();
         if (diffs != null)
         {
-            var patch = DiffHelper.CreatePatch(AppKernel.MapDatabase.Current, diffs, true);
-            var result = await ShowDiffWindow(diffs, patch);
+            var result = await ShowDiffWindow(AppKernel.MapDatabase.Current, diffs);
             if (result != null)
             {
-                
+
             }
         }
     }
-    public async Task<Diffs?> ShowDiffWindow(Diffs diffs, Patch patch)
+    public async Task<Diffs?> ShowDiffWindow(MapFile mf, Diffs diffs)
     {
         var window = new PatchWindow();
-        window.DataContext = new PatchWindowViewModel(diffs, patch);
+        window.DataContext = new PatchWindowViewModel(mf, diffs);
         var result = await window.ShowDialog<Diffs?>(this);
         return result;
     }

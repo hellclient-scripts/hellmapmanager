@@ -9,14 +9,14 @@ using System.Collections.ObjectModel;
 namespace HellMapManager.Windows.PatchWindow;
 
 
-public class PatchTab(Patch patch, string name, string key, PatchCounts counts) : ViewModelBase
+public class PatchTab(PatchType patchtype, string name, string key) : ViewModelBase
 {
     public string Name { get; } = name;
 
     public string Key { get; } = key;
 
-    public PatchCounts Counts { get; } = counts;
-    public Patch Patch { get; } = patch;
+    public PatchCounts Counts { get; } = new PatchCounts();
+    public PatchType Type { get; } = patchtype;
     public string Label { get => $"{Name}变更( {Counts.Selected} / {Counts.CountAll} )"; }
     public PatchTab BindCount()
     {
@@ -27,6 +27,11 @@ public class PatchTab(Patch patch, string name, string key, PatchCounts counts) 
         return this;
     }
     public bool IsRoom { get => Key == Room.EncodeKey; }
+    public void ReCount()
+    {
+        Counts.Count(Type.Items);
+        OnPropertyChanged(nameof(Label));
+    }
 
 }
 public class PatchCounts : ViewModelBase
@@ -64,6 +69,22 @@ public class PatchCounts : ViewModelBase
         OnPropertyChanged(nameof(CountNew));
         OnPropertyChanged(nameof(Selected));
     }
+    public void Reset()
+    {
+        CountAll = 0;
+        CountRemoved = 0;
+        CountNormal = 0;
+        CountNew = 0;
+        Selected = 0;
+    }
+    public void SumTo(PatchCounts desc)
+    {
+        desc.CountAll += CountAll;
+        desc.CountRemoved += CountRemoved;
+        desc.CountNormal += CountRemoved;
+        desc.CountNew += CountRemoved;
+        desc.Selected += CountRemoved;
+    }
     public int CountAll { get; set; }
     public int CountRemoved { get; set; }
     public int CountNormal { get; set; }
@@ -96,21 +117,21 @@ public partial class PatchWindowViewModel : ViewModelBase
                 break;
         }
     }
-    public PatchWindowViewModel(Diffs diffs, Patch patch)
+    public PatchWindowViewModel(MapFile mf, Diffs diffs)
     {
-        Diffs = diffs;
-        Patch = patch;
+
+        Patch = Patch.CreatePatch(mf, diffs,true);
         List<PatchTab> tabs =
         [
-            new PatchTab(patch, "房间", Room.EncodeKey, CountRooms),
-            new PatchTab(patch, "标记", Marker.EncodeKey, CountMarkers),
-            new PatchTab(patch, "路线", Route.EncodeKey, CountRoutes),
-            new PatchTab(patch, "足迹", Trace.EncodeKey, CountTraces),
-            new PatchTab(patch, "地区", Region.EncodeKey, CountRegions),
-            new PatchTab(patch, "定位", Landmark.EncodeKey, CountLandmarks),
-            new PatchTab(patch, "捷径", Shortcut.EncodeKey, CountShortcuts),
-            new PatchTab(patch, "变量", Variable.EncodeKey, CountVariables),
-            new PatchTab(patch, "快照", Snapshot.EncodeKey, CountSnapshots),
+            new PatchTab(Patch.Rooms, "房间", Room.EncodeKey),
+            new PatchTab(Patch.Markers, "标记", Marker.EncodeKey),
+            new PatchTab(Patch.Routes, "路线", Route.EncodeKey),
+            new PatchTab(Patch.Traces, "足迹", Trace.EncodeKey),
+            new PatchTab(Patch.Regions, "地区", Region.EncodeKey),
+            new PatchTab(Patch.Landmarks, "定位", Landmark.EncodeKey),
+            new PatchTab(Patch.Shortcuts, "捷径", Shortcut.EncodeKey),
+            new PatchTab(Patch.Variables, "变量", Variable.EncodeKey),
+            new PatchTab(Patch.Snapshots, "快照", Snapshot.EncodeKey),
         ];
         tabs.ForEach(t => Tabs.Add(t.BindCount()));
         SelectedTab = Tabs[0];
@@ -126,16 +147,6 @@ public partial class PatchWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(Tabs));
             OnPropertyChanged(nameof(StatusMessage));
             OnPropertyChanged(nameof(SelectedTab));
-            OnPropertyChanged(nameof(CountAllTypes));
-            OnPropertyChanged(nameof(CountRooms));
-            OnPropertyChanged(nameof(CountMarkers));
-            OnPropertyChanged(nameof(CountRoutes));
-            OnPropertyChanged(nameof(CountTraces));
-            OnPropertyChanged(nameof(CountRegions));
-            OnPropertyChanged(nameof(CountLandmarks));
-            OnPropertyChanged(nameof(CountShortcuts));
-            OnPropertyChanged(nameof(CountVariables));
-            OnPropertyChanged(nameof(CountSnapshots));
         };
     }
     public void Init()
@@ -144,35 +155,17 @@ public partial class PatchWindowViewModel : ViewModelBase
     }
     public void ReCount()
     {
-        CountRooms.Count(Patch.Rooms);
-        CountMarkers.Count(Patch.Markers);
-        CountRoutes.Count(Patch.Routes);
-        CountTraces.Count(Patch.Traces);
-        CountRegions.Count(Patch.Regions);
-        CountLandmarks.Count(Patch.Landmarks);
-        CountShortcuts.Count(Patch.Shortcuts);
-        CountVariables.Count(Patch.Variables);
-        CountSnapshots.Count(Patch.Snapshots);
-        CountAllTypes.CountAll = CountRooms.CountAll + CountMarkers.CountAll + CountRoutes.CountAll + CountTraces.CountAll + CountRegions.CountAll + CountLandmarks.CountAll + CountShortcuts.CountAll + CountVariables.CountAll + CountSnapshots.CountAll;
-        CountAllTypes.CountNew = CountRooms.CountNew + CountMarkers.CountNew + CountRoutes.CountNew + CountTraces.CountNew + CountRegions.CountNew + CountLandmarks.CountNew + CountShortcuts.CountNew + CountVariables.CountNew + CountSnapshots.CountNew;
-        CountAllTypes.CountRemoved = CountRooms.CountRemoved + CountMarkers.CountRemoved + CountRoutes.CountRemoved + CountTraces.CountRemoved + CountRegions.CountRemoved + CountLandmarks.CountRemoved + CountShortcuts.CountRemoved + CountVariables.CountRemoved + CountSnapshots.CountRemoved;
-        CountAllTypes.CountNormal = CountRooms.CountNormal + CountMarkers.CountNormal + CountRoutes.CountNormal + CountTraces.CountNormal + CountRegions.CountNormal + CountLandmarks.CountNormal + CountShortcuts.CountNormal + CountVariables.CountNormal;
-        CountAllTypes.Selected = CountRooms.Selected + CountMarkers.Selected + CountRoutes.Selected + CountTraces.Selected + CountRegions.Selected + CountLandmarks.Selected + CountShortcuts.Selected + CountVariables.Selected + CountSnapshots.Selected;
+        CountAllTypes.Reset();
+        foreach (var v in Tabs)
+        {
+            v.ReCount();
+            v.Counts.SumTo(CountAllTypes);
+        }
         OnPropertyChanged(nameof(CountAllTypes));
         OnPropertyChanged(nameof(StatusMessage));
     }
-    public Diffs Diffs { get; }
     public Patch Patch { get; }
     public PatchCounts CountAllTypes { get; set; } = new PatchCounts();
-    public PatchCounts CountRooms { get; set; } = new PatchCounts();
-    public PatchCounts CountMarkers { get; set; } = new PatchCounts();
-    public PatchCounts CountRoutes { get; set; } = new PatchCounts();
-    public PatchCounts CountTraces { get; set; } = new PatchCounts();
-    public PatchCounts CountRegions { get; set; } = new PatchCounts();
-    public PatchCounts CountLandmarks { get; set; } = new PatchCounts();
-    public PatchCounts CountShortcuts { get; set; } = new PatchCounts();
-    public PatchCounts CountVariables { get; set; } = new PatchCounts();
-    public PatchCounts CountSnapshots { get; set; } = new PatchCounts();
     public ObservableCollection<PatchTab> Tabs { get; } = new ObservableCollection<PatchTab>();
 
     public PatchTab SelectedTab { get; set; }
@@ -195,6 +188,6 @@ public partial class PatchWindowViewModel : ViewModelBase
     }
     public void OnSelectAll()
     {
-        
+
     }
 }

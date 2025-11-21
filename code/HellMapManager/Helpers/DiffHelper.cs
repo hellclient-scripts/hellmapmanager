@@ -1,5 +1,6 @@
 
 
+using System.Collections.Generic;
 using HellMapManager.Models;
 
 namespace HellMapManager.Helpers;
@@ -11,25 +12,24 @@ public class DiffHelper
     public static Diffs Diff(Map source, Map dest)
     {
         var result = new Diffs();
-        DiffRooms(source, dest, result);
-        DiffMarkers(source, dest, result);
-        DiffRoutes(source, dest, result);
-        DiffTraces(source, dest, result);
-        DiffRegions(source, dest, result);
-        DiffLandmarks(source, dest, result);
-        DiffShortcuts(source, dest, result);
-        DiffVariables(source, dest, result);
-        DiffSnapshots(source, dest, result);
+        DiffRooms(source, dest, result.Items);
+        DiffMarkers(source, dest, result.Items);
+        DiffRoutes(source, dest, result.Items);
+        DiffTraces(source, dest, result.Items);
+        DiffRegions(source, dest, result.Items);
+        DiffLandmarks(source, dest, result.Items);
+        DiffShortcuts(source, dest, result.Items);
+        DiffVariables(source, dest, result.Items);
+        DiffSnapshots(source, dest, result.Items);
         return result;
     }
     // 无法确定各元素是否最后依赖保持共性，所以不使用范型，方便调整
-    private static void DiffRooms(Map source, Map dest, Diffs diffs)
+    private static void DiffRooms(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Rooms.GetRange(0, source.Rooms.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var destmodels = dest.Rooms.GetRange(0, dest.Rooms.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var result = diffs.Rooms;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -57,15 +57,14 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedRoomDiff(r.Key)));
         destmodels.ForEach(r => result.Add(new RoomDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        
     }
-    private static void DiffMarkers(Map source, Map dest, Diffs diffs)
+    private static void DiffMarkers(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Markers.GetRange(0, source.Markers.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var destmodels = dest.Markers.GetRange(0, dest.Markers.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var result = diffs.Markers;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -93,15 +92,14 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedMarkerDiff(r.Key)));
         destmodels.ForEach(r => result.Add(new MarkerDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        
     }
-    private static void DiffRoutes(Map source, Map dest, Diffs diffs)
+    private static void DiffRoutes(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Routes.GetRange(0, source.Routes.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var destmodels = dest.Routes.GetRange(0, dest.Routes.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var result = diffs.Routes;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -129,15 +127,14 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedRouteDiff(r.Key)));
         destmodels.ForEach(r => result.Add(new RouteDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        
     }
-    private static void DiffTraces(Map source, Map dest, Diffs diffs)
+    private static void DiffTraces(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Traces.GetRange(0, source.Traces.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var destmodels = dest.Traces.GetRange(0, dest.Traces.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var result = diffs.Traces;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -165,15 +162,14 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedTraceDiff(r.Key)));
         destmodels.ForEach(r => result.Add(new TraceDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        
     }
-    private static void DiffRegions(Map source, Map dest, Diffs diffs)
+    private static void DiffRegions(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Regions.GetRange(0, source.Regions.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var destmodels = dest.Regions.GetRange(0, dest.Regions.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var result = diffs.Regions;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -201,15 +197,14 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedRegionDiff(r.Key)));
         destmodels.ForEach(r => result.Add(new RegionDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        
     }
-    private static void DiffLandmarks(Map source, Map dest, Diffs diffs)
+    private static void DiffLandmarks(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Landmarks.GetRange(0, source.Landmarks.Count);
         srcmodels.Sort((a, b) => a.UniqueKey().ToString().CompareTo(b.UniqueKey().ToString()));
         var destmodels = dest.Landmarks.GetRange(0, dest.Landmarks.Count);
         destmodels.Sort((a, b) => a.UniqueKey().ToString().CompareTo(b.UniqueKey().ToString()));
-        var result = diffs.Landmarks;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -237,16 +232,15 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedLandmarkDiff(r.Key, r.Type)));
         destmodels.ForEach(r => result.Add(new LandmarkDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        
     }
 
-    private static void DiffShortcuts(Map source, Map dest, Diffs diffs)
+    private static void DiffShortcuts(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Shortcuts.GetRange(0, source.Shortcuts.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var destmodels = dest.Shortcuts.GetRange(0, dest.Shortcuts.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var result = diffs.Shortcuts;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -274,16 +268,15 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedShortcutDiff(r.Key)));
         destmodels.ForEach(r => result.Add(new ShortcutDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        
     }
 
-    private static void DiffVariables(Map source, Map dest, Diffs diffs)
+    private static void DiffVariables(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Variables.GetRange(0, source.Variables.Count);
         srcmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
         var destmodels = dest.Variables.GetRange(0, dest.Variables.Count);
         destmodels.Sort((a, b) => a.Key.CompareTo(b.Key));
-        var result = diffs.Variables;
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -311,15 +304,15 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedVariableDiff(r.Key)));
         destmodels.ForEach(r => result.Add(new VariableDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
+        
     }
-    private static void DiffSnapshots(Map source, Map dest, Diffs diffs)
+    private static void DiffSnapshots(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Snapshots.GetRange(0, source.Snapshots.Count);
         srcmodels.Sort((a, b) => a.UniqueKey().ToString().CompareTo(b.UniqueKey().ToString()));
         var destmodels = dest.Snapshots.GetRange(0, dest.Snapshots.Count);
         destmodels.Sort((a, b) => a.UniqueKey().ToString().CompareTo(b.UniqueKey().ToString()));
-        var result = diffs.Snapshots;
+        
         while (srcmodels.Count > 0 && destmodels.Count > 0)
         {
             var srcmodel = srcmodels[0];
@@ -347,260 +340,13 @@ public class DiffHelper
         }
         srcmodels.ForEach(r => result.Add(new RemovedSnapshotDiff(r.Key, r.Type, r.Value)));
         destmodels.ForEach(r => result.Add(new SnapshotDiff(r)));
-        result.Sort((a, b) => a.DiffKey.CompareTo(b.DiffKey));
-    }
-
-
-    //根据选择的差异过滤差异
-    //实现用户选择性的应用差异
-    public static Diffs ApplyPatch(Patch patch)
-    {
-        var result = new Diffs();
-        if (!patch.SkipRooms)
-        {
-            foreach (var i in patch.Rooms)
-            {
-                if (i.Selected) { result.Rooms.Add((i.Raw as IRoomDiff)!); }
-            }
-        }
-        if (!patch.SkipMarkers)
-        {
-            foreach (var i in patch.Markers)
-            {
-                if (i.Selected) { result.Markers.Add((i.Raw as IMarkerDiff)!); }
-            }
-        }
-        if (!patch.SkipRoutes)
-        {
-            foreach (var i in patch.Routes)
-            {
-                if (i.Selected) { result.Routes.Add((i.Raw as IRouteDiff)!); }
-            }
-        }
-        if (!patch.SkipTraces)
-        {
-            foreach (var i in patch.Traces)
-            {
-                if (i.Selected) { result.Traces.Add((i.Raw as ITraceDiff)!); }
-            }
-        }
-        if (!patch.SkipRegions)
-        {
-            foreach (var i in patch.Regions)
-            {
-                if (i.Selected) { result.Regions.Add((i.Raw as IRegionDiff)!); }
-            }
-        }
-        if (!patch.SkipLandmarks)
-        {
-            foreach (var i in patch.Landmarks)
-            {
-                if (i.Selected) { result.Landmarks.Add((i.Raw as ILandmarkDiff)!); }
-            }
-        }
-        if (!patch.SkipShortcuts)
-        {
-            foreach (var i in patch.Shortcuts)
-            {
-                if (i.Selected) { result.Shortcuts.Add((i.Raw as IShortcutDiff)!); }
-            }
-        }
-        if (!patch.SkipVariables)
-        {
-            foreach (var i in patch.Variables)
-            {
-                if (i.Selected) { result.Variables.Add((i.Raw as IVariableDiff)!); }
-            }
-        }
-        if (!patch.SkipSnapshots)
-        {
-            foreach (var i in patch.Snapshots)
-            {
-                if (i.Selected) { result.Snapshots.Add((i.Raw as ISnapshotDiff)!); }
-            }
-        }
-        return result;
-    }
-    public static Patch CreatePatch(MapFile mf, Diffs diffs, bool defaultSelected)
-    {
-        var patch = new Patch();
-        foreach (var model in diffs.Rooms)
-        {
-            if (mf.Cache.Rooms.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Rooms.Add(new PatchItem(new RoomDiff(mf.Cache.Rooms[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Rooms[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Rooms.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Rooms.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        foreach (var model in diffs.Markers)
-        {
-            if (mf.Cache.Markers.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Markers.Add(new PatchItem(new MarkerDiff(mf.Cache.Markers[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Markers[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Markers.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Markers.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        foreach (var model in diffs.Routes)
-        {
-            if (mf.Cache.Routes.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Routes.Add(new PatchItem(new RouteDiff(mf.Cache.Routes[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Routes[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Routes.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Routes.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        foreach (var model in diffs.Traces)
-        {
-            if (mf.Cache.Traces.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Traces.Add(new PatchItem(new TraceDiff(mf.Cache.Traces[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Traces[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Traces.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Traces.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        foreach (var model in diffs.Regions)
-        {
-            if (mf.Cache.Regions.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Regions.Add(new PatchItem(new RegionDiff(mf.Cache.Regions[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Regions[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Regions.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Regions.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        foreach (var model in diffs.Landmarks)
-        {
-            if (mf.Cache.Landmarks.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Landmarks.Add(new PatchItem(new LandmarkDiff(mf.Cache.Landmarks[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Landmarks[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Landmarks.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Landmarks.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        foreach (var model in diffs.Shortcuts)
-        {
-            if (mf.Cache.Shortcuts.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Shortcuts.Add(new PatchItem(new ShortcutDiff(mf.Cache.Shortcuts[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Shortcuts[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Shortcuts.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Shortcuts.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        foreach (var model in diffs.Variables)
-        {
-            if (mf.Cache.Variables.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Variables.Add(new PatchItem(new VariableDiff(mf.Cache.Variables[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Variables[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Variables.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Variables.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        foreach (var model in diffs.Snapshots)
-        {
-            if (mf.Cache.Snapshots.ContainsKey(model.DiffKey))
-            {
-                if (model.Data == null)
-                {
-                    patch.Snapshots.Add(new PatchItem(new SnapshotDiff(mf.Cache.Snapshots[model.DiffKey]), model, DiffMode.Removed, defaultSelected));
-                }
-                else if (!mf.Cache.Snapshots[model.DiffKey].Equal(model.Data))
-                {
-                    patch.Snapshots.Add(new PatchItem(model, model, DiffMode.Normal, defaultSelected));
-                }
-            }
-            else if (model.Data is not null)
-            {
-                patch.Snapshots.Add(new PatchItem(model, model, DiffMode.New, defaultSelected));
-            }
-        }
-        return patch;
+        
     }
 
     //将差异应用到源地图文件上
     public static void Apply(Diffs diffs, MapFile source)
     {
-        diffs.Rooms.ForEach(d => ApplyDiff(d, source));
-        diffs.Markers.ForEach(d => ApplyDiff(d, source));
-        diffs.Routes.ForEach(d => ApplyDiff(d, source));
-        diffs.Traces.ForEach(d => ApplyDiff(d, source));
-        diffs.Regions.ForEach(d => ApplyDiff(d, source));
-        diffs.Landmarks.ForEach(d => ApplyDiff(d, source));
-        diffs.Shortcuts.ForEach(d => ApplyDiff(d, source));
-        diffs.Variables.ForEach(d => ApplyDiff(d, source));
-        diffs.Snapshots.ForEach(d => ApplyDiff(d, source));
+        diffs.Items.ForEach(d => ApplyDiff(d, source));
         return;
     }
     private static void ApplyDiff(IDiffItem diff, MapFile source)

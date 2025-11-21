@@ -22,7 +22,7 @@ public partial class PatchWindowViewModel : ViewModelBase
     {
         get
         {
-            var rooms = Patch.Rooms;
+            var rooms = Patch.Rooms.Items;
             if (string.IsNullOrEmpty(RoomsFilter))
             {
                 return new ObservableCollection<PatchItem>(rooms);

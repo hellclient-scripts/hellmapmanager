@@ -34,7 +34,7 @@
             DockPanel.Dock="Right">
             <TextBlock Text="{Binding FilteredRooms.Count}" />
             <TextBlock Text="/" />
-            <TextBlock Text="{Binding CountRooms.CountAll}" />
+            <TextBlock Text="{Binding SelectedTab.Counts.CountAll}" />
          </WrapPanel>
       </DockPanel>
       <DataGrid

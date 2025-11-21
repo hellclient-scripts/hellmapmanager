@@ -38,15 +38,7 @@ public class HMPEncoder
         var results = new List<string> {
             head.Encode(),
         };
-        diffs.Rooms.ForEach(r => { results.Add(r.Encode()); });
-        diffs.Markers.ForEach(r => { results.Add(r.Encode()); });
-        diffs.Routes.ForEach(r => { results.Add(r.Encode()); });
-        diffs.Traces.ForEach(r => { results.Add(r.Encode()); });
-        diffs.Regions.ForEach(r => { results.Add(r.Encode()); });
-        diffs.Landmarks.ForEach(r => { results.Add(r.Encode()); });
-        diffs.Shortcuts.ForEach(r => { results.Add(r.Encode()); });
-        diffs.Variables.ForEach(r => { results.Add(r.Encode()); });
-        diffs.Snapshots.ForEach(r => { results.Add(r.Encode()); });
+        diffs.Items.ForEach(r => { results.Add(r.Encode()); });
         return Encoding.UTF8.GetBytes(HMMFormatter.Escaper.Pack(string.Join("\n", results)));
     }
     public static Diffs? Decode(byte[] body)
@@ -73,7 +65,7 @@ public class HMPEncoder
                                 var room = Room.Decode(data);
                                 if (room.Validated())
                                 {
-                                    result.Rooms.Add(new RoomDiff(room));
+                                    result.Items.Add(new RoomDiff(room));
                                 }
                                 break;
                             }
@@ -82,7 +74,7 @@ public class HMPEncoder
                                 var marker = Marker.Decode(data);
                                 if (marker.Validated())
                                 {
-                                    result.Markers.Add(new MarkerDiff(marker));
+                                    result.Items.Add(new MarkerDiff(marker));
                                 }
                                 break;
                             }
@@ -91,7 +83,7 @@ public class HMPEncoder
                                 var route = Route.Decode(data);
                                 if (route.Validated())
                                 {
-                                    result.Routes.Add(new RouteDiff(route));
+                                    result.Items.Add(new RouteDiff(route));
                                 }
                                 break;
                             }
@@ -100,7 +92,7 @@ public class HMPEncoder
                                 var trace = Trace.Decode(data);
                                 if (trace.Validated())
                                 {
-                                    result.Traces.Add(new TraceDiff(trace));
+                                    result.Items.Add(new TraceDiff(trace));
                                 }
                                 break;
                             }
@@ -109,7 +101,7 @@ public class HMPEncoder
                                 var region = Region.Decode(data);
                                 if (region.Validated())
                                 {
-                                    result.Regions.Add(new RegionDiff(region));
+                                    result.Items.Add(new RegionDiff(region));
                                 }
                                 break;
                             }
@@ -118,7 +110,7 @@ public class HMPEncoder
                                 var landmark = Landmark.Decode(data);
                                 if (landmark.Validated())
                                 {
-                                    result.Landmarks.Add(new LandmarkDiff(landmark));
+                                    result.Items.Add(new LandmarkDiff(landmark));
                                 }
                                 break;
                             }
@@ -127,7 +119,7 @@ public class HMPEncoder
                                 var shortcut = Shortcut.Decode(data);
                                 if (shortcut.Validated())
                                 {
-                                    result.Shortcuts.Add(new ShortcutDiff(shortcut));
+                                    result.Items.Add(new ShortcutDiff(shortcut));
                                 }
                                 break;
                             }
@@ -136,7 +128,7 @@ public class HMPEncoder
                                 var variable = Variable.Decode(data);
                                 if (variable.Validated())
                                 {
-                                    result.Variables.Add(new VariableDiff(variable));
+                                    result.Items.Add(new VariableDiff(variable));
                                 }
                                 break;
                             }
@@ -145,7 +137,7 @@ public class HMPEncoder
                                 var snapshot = Snapshot.Decode(data);
                                 if (snapshot.Validated())
                                 {
-                                    result.Snapshots.Add(new SnapshotDiff(snapshot));
+                                    result.Items.Add(new SnapshotDiff(snapshot));
                                 }
                                 break;
                             }
@@ -154,7 +146,7 @@ public class HMPEncoder
                                 var removedRoom = RemovedRoomDiff.Decode(data);
                                 if (removedRoom.Validated())
                                 {
-                                    result.Rooms.Add(removedRoom);
+                                    result.Items.Add(removedRoom);
                                 }
                                 break;
                             }
@@ -163,7 +155,7 @@ public class HMPEncoder
                                 var removedMarker = RemovedMarkerDiff.Decode(data);
                                 if (removedMarker.Validated())
                                 {
-                                    result.Markers.Add(removedMarker);
+                                    result.Items.Add(removedMarker);
                                 }
                                 break;
                             }
@@ -172,7 +164,7 @@ public class HMPEncoder
                                 var removedRoute = RemovedRouteDiff.Decode(data);
                                 if (removedRoute.Validated())
                                 {
-                                    result.Routes.Add(removedRoute);
+                                    result.Items.Add(removedRoute);
                                 }
                                 break;
                             }
@@ -181,7 +173,7 @@ public class HMPEncoder
                                 var removedTrace = RemovedTraceDiff.Decode(data);
                                 if (removedTrace.Validated())
                                 {
-                                    result.Traces.Add(removedTrace);
+                                    result.Items.Add(removedTrace);
                                 }
                                 break;
                             }
@@ -190,7 +182,7 @@ public class HMPEncoder
                                 var removedRegion = RemovedRegionDiff.Decode(data);
                                 if (removedRegion.Validated())
                                 {
-                                    result.Regions.Add(removedRegion);
+                                    result.Items.Add(removedRegion);
                                 }
                                 break;
                             }
@@ -199,7 +191,7 @@ public class HMPEncoder
                                 var removedLandmark = RemovedLandmarkDiff.Decode(data);
                                 if (removedLandmark.Validated())
                                 {
-                                    result.Landmarks.Add(removedLandmark);
+                                    result.Items.Add(removedLandmark);
                                 }
                                 break;
                             }
@@ -208,7 +200,7 @@ public class HMPEncoder
                                 var removedShortcut = RemovedShortcutDiff.Decode(data);
                                 if (removedShortcut.Validated())
                                 {
-                                    result.Shortcuts.Add(removedShortcut);
+                                    result.Items.Add(removedShortcut);
                                 }
                                 break;
                             }
@@ -217,7 +209,7 @@ public class HMPEncoder
                                 var removedVariable = RemovedVariableDiff.Decode(data);
                                 if (removedVariable.Validated())
                                 {
-                                    result.Variables.Add(removedVariable);
+                                    result.Items.Add(removedVariable);
                                 }
                                 break;
                             }
@@ -226,7 +218,7 @@ public class HMPEncoder
                                 var removedSnapshot = RemovedSnapshotDiff.Decode(data);
                                 if (removedSnapshot.Validated())
                                 {
-                                    result.Snapshots.Add(removedSnapshot);
+                                    result.Items.Add(removedSnapshot);
                                 }
                                 break;
                             }
