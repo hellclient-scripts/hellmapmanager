@@ -98,6 +98,8 @@ public partial class PatchWindowViewModel : ViewModelBase
     public partial void InitTraces();
     public partial void InitRegions();
     public partial void InitLandmarks();
+
+    public partial void InitShortcuts();
     public event EventHandler? UpdatedEvent;
     public void RaiseUpdatedEvent(object? sender)
     {
@@ -146,6 +148,7 @@ public partial class PatchWindowViewModel : ViewModelBase
         InitTraces();
         InitRegions();
         InitLandmarks();
+        InitShortcuts();
         BindEvents();
         OnPropertyChanged(nameof(Tabs));
     }
