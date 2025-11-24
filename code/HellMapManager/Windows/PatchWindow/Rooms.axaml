@@ -75,43 +75,28 @@
                </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
 
-            <DataGridTemplateColumn
-               Width="160"
-               CanUserSort="true"
-               Header="房间主键"
-               SortMemberPath="Key">
+            <DataGridTemplateColumn Width="160" Header="房间主键">
                <DataGridTemplateColumn.CellTemplate>
                   <DataTemplate>
                      <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RoomDiff).Model.Key}" />
                   </DataTemplate>
                </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn
-               Width="160"
-               CanUserSort="true"
-               Header="房间名"
-               SortMemberPath="Name">
+            <DataGridTemplateColumn Width="160">
                <DataGridTemplateColumn.CellTemplate>
                   <DataTemplate>
                      <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RoomDiff).Model.Name}" />
                   </DataTemplate>
                </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn
-               Width="160"
-               CanUserSort="true"
-               Header="分组"
-               SortMemberPath="Group">
+            <DataGridTemplateColumn Width="160" Header="分组">
                <DataGridTemplateColumn.CellTemplate>
                   <DataTemplate>
                      <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RoomDiff).Model.Group}" />
                   </DataTemplate>
                </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTemplateColumn
-               Width="100"
-               Header="出口数量"
-               SortMemberPath="ExitsCount">
+            <DataGridTemplateColumn Width="100" Header="出口数量">
                <DataTemplate>
                   <StackPanel
                      HorizontalAlignment="Center"
@@ -143,7 +128,6 @@
                               Height="16"
                               Source="avares://HellMapManager/Assets/text_compare.png" />
                         </Button>
-
                      </WrapPanel>
                   </DataTemplate>
                </DataGridTemplateColumn.CellTemplate>

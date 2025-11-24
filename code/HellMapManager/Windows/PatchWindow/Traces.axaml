@@ -74,22 +74,14 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn
-          Width="160"
-          CanUserSort="true"
-          Header="足迹主键"
-          SortMemberPath="Key">
+        <DataGridTemplateColumn Width="160" Header="足迹主键">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:TraceDiff).Model.Key}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn
-          Width="160"
-          CanUserSort="true"
-          Header="足迹房间数量"
-          SortMemberPath="LocationsCount">
+        <DataGridTemplateColumn Width="160" Header="足迹房间数量">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel
@@ -102,11 +94,7 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn
-          Width="160"
-          CanUserSort="true"
-          Header="分组"
-          SortMemberPath="Group">
+        <DataGridTemplateColumn Width="160" Header="分组">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:TraceDiff).Model.Group}" />
@@ -133,7 +121,6 @@
                     Height="16"
                     Source="avares://HellMapManager/Assets/text_compare.png" />
                 </Button>
-
               </WrapPanel>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
@@ -141,5 +128,4 @@
       </DataGrid.Columns>
     </DataGrid>
   </DockPanel>
-
 </UserControl>

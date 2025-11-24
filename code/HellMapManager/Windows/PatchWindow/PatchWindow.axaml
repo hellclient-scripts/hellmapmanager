@@ -122,6 +122,12 @@
                   VerticalAlignment="Stretch"
                   DataContext="{Binding $parent[Window].DataContext}" />
               </DataTemplate>
+              <DataTemplate x:Key="Region">
+                <vm:Regions
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  DataContext="{Binding $parent[Window].DataContext}" />
+              </DataTemplate>
 
             </vm:PatchTabTemplate>
           </ContentControl.DataTemplates>

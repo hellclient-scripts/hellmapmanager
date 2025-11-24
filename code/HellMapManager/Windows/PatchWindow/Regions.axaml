@@ -1,5 +1,5 @@
 <UserControl
-  x:Class="HellMapManager.Windows.PatchWindow.Routes"
+  x:Class="HellMapManager.Windows.PatchWindow.Regions"
   xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -24,7 +24,7 @@
         Name="Filter"
         HorizontalAlignment="Right"
         DockPanel.Dock="Right"
-        Text="{Binding RoutesFilter}"
+        Text="{Binding RegionsFilter}"
         TextChanged="OnFilter"
         Watermark="过滤" />
       <WrapPanel
@@ -32,13 +32,13 @@
         HorizontalAlignment="Right"
         VerticalAlignment="Center"
         DockPanel.Dock="Right">
-        <TextBlock Text="{Binding FilteredRoutes.Count}" />
+        <TextBlock Text="{Binding FilteredRegions.Count}" />
         <TextBlock Text="/" />
         <TextBlock Text="{Binding SelectedTab.Counts.CountAll}" />
       </WrapPanel>
     </DockPanel>
     <DataGrid
-      x:Name="AllRoutes"
+      x:Name="AllRegions"
       Margin="5"
       BorderBrush="Gray"
       BorderThickness="1"
@@ -46,7 +46,7 @@
       CanUserSortColumns="True"
       GridLinesVisibility="All"
       IsReadOnly="True"
-      ItemsSource="{Binding FilteredRoutes}"
+      ItemsSource="{Binding FilteredRegions}"
       LoadingRow="OnDataGridLoadingRow">
       <DataGrid.Columns>
         <DataGridTemplateColumn
@@ -74,14 +74,27 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn Width="160" Header="路线主键">
+        <DataGridTemplateColumn
+          Width="160"
+          Header="地区主键">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RouteDiff).Model.Key}" />
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RegionDiff).Model.Key}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn Width="160" Header="路线房间数量">
+        <DataGridTemplateColumn
+          Width="160"
+          Header="分组">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RegionDiff).Model.Group}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          Width="160"
+          Header="元素数量">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <StackPanel
@@ -89,22 +102,15 @@
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <TextBlock Text="×" />
-                <SelectableTextBlock Text="{Binding Display.(models:RouteDiff).Model.RoomsCount}" />
+                <SelectableTextBlock Text="{Binding Display.(models:RegionDiff).Model.ItemsCount}" />
               </StackPanel>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
-        <DataGridTemplateColumn Width="160" Header="分组">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RouteDiff).Model.Group}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
         <DataGridTemplateColumn Width="*" Header="消息">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RouteDiff).Model.Message}" />
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:RegionDiff).Model.Message}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
@@ -121,6 +127,7 @@
                     Height="16"
                     Source="avares://HellMapManager/Assets/text_compare.png" />
                 </Button>
+
               </WrapPanel>
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>

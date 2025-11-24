@@ -75,11 +75,7 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn
-          Width="160"
-          CanUserSort="true"
-          Header="标记主键"
-          SortMemberPath="Key">
+        <DataGridTemplateColumn Width="160" Header="标记主键">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:MarkerDiff).Model.Key}" />
@@ -88,20 +84,14 @@
         </DataGridTemplateColumn>
         <DataGridTemplateColumn
           Width="160"
-          CanUserSort="true"
-          Header="标记值"
-          SortMemberPath="Value">
+          Header="标记值">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:MarkerDiff).Model.Value}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn
-          Width="160"
-          CanUserSort="true"
-          Header="分组"
-          SortMemberPath="Group">
+        <DataGridTemplateColumn Width="160" Header="分组">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:MarkerDiff).Model.Group}" />
