@@ -104,7 +104,16 @@
                   VerticalAlignment="Stretch"
                   DataContext="{Binding $parent[Window].DataContext}" />
               </DataTemplate>
+              <DataTemplate x:Key="Marker">
+                <vm:Markers
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  DataContext="{Binding $parent[Window].DataContext}" />
+              </DataTemplate>
             </vm:PatchTabTemplate>
+
+
+
           </ContentControl.DataTemplates>
         </ContentControl>
 

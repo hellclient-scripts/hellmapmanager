@@ -93,6 +93,7 @@ public class PatchCounts : ViewModelBase
 public partial class PatchWindowViewModel : ViewModelBase
 {
     public partial void InitRooms();
+    public partial void InitMarkers();
     public event EventHandler? UpdatedEvent;
     public void RaiseUpdatedEvent(object? sender)
     {
@@ -136,6 +137,7 @@ public partial class PatchWindowViewModel : ViewModelBase
         SelectedTab = Tabs[0];
         Init();
         InitRooms();
+        InitMarkers();
         BindEvents();
         OnPropertyChanged(nameof(Tabs));
     }
