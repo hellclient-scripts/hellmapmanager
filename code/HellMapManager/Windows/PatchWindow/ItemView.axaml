@@ -22,6 +22,10 @@
         <DataTemplate x:Key="Route">
           <vm:RouteView DataContext="{Binding (models:RouteDiff).Data}" />
         </DataTemplate>
+        <DataTemplate x:Key="Trace">
+          <vm:TraceView DataContext="{Binding (models:TraceDiff).Data}" />
+        </DataTemplate>
+
         <DataTemplate x:Key="">
           <TextBlock
             HorizontalAlignment="Center"

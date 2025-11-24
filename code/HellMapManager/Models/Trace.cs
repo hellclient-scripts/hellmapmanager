@@ -9,6 +9,7 @@ public partial class Trace
     public string Desc { get; set; } = "";
     public string Message { get; set; } = "";
 
+    public string LocationList { get => string.Join("\n", Locations); }
     public List<string> Locations { get; set; } = [];
     public Trace Clone()
     {
