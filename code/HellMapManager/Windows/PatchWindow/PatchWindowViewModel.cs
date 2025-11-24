@@ -97,6 +97,7 @@ public partial class PatchWindowViewModel : ViewModelBase
     public partial void InitRoutes();
     public partial void InitTraces();
     public partial void InitRegions();
+    public partial void InitLandmarks();
     public event EventHandler? UpdatedEvent;
     public void RaiseUpdatedEvent(object? sender)
     {
@@ -144,6 +145,7 @@ public partial class PatchWindowViewModel : ViewModelBase
         InitRoutes();
         InitTraces();
         InitRegions();
+        InitLandmarks();
         BindEvents();
         OnPropertyChanged(nameof(Tabs));
     }
