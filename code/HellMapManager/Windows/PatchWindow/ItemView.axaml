@@ -25,7 +25,9 @@
         <DataTemplate x:Key="Trace">
           <vm:TraceView DataContext="{Binding (models:TraceDiff).Data}" />
         </DataTemplate>
-
+        <DataTemplate x:Key="Region">
+          <vm:RegionView DataContext="{Binding (models:RegionDiff).Data}" />
+        </DataTemplate>
         <DataTemplate x:Key="">
           <TextBlock
             HorizontalAlignment="Center"

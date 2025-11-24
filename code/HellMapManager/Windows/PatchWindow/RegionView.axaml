@@ -1,0 +1,42 @@
+<UserControl
+  x:Class="HellMapManager.Windows.PatchWindow.RegionView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="using:HellMapManager.Models"
+  xmlns:regionitem="using:HellMapManager.Views.Components.RegionItem"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="models:Region"
+  mc:Ignorable="d">
+  <StackPanel>
+    <TextBlock Classes="Label" Text="主键:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Text="{Binding Key}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="分组:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Text="{Binding Group}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="元素:" />
+    <Panel Classes="Content">
+      <ItemsControl Classes="RegionItems Content" ItemsSource="{Binding Items}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <regionitem:RegionItem Padding="0,2" DataContext="{Binding .}" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </Panel>
+    <TextBlock Classes="Label" Text="描述:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Classes="TextArea" Text="{Binding Desc}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="消息:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Classes="TextArea" Text="{Binding Message}" />
+    </Panel>
+  </StackPanel>
+</UserControl>
