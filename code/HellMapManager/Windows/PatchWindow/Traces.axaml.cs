@@ -5,9 +5,9 @@ using Avalonia.Markup.Xaml;
 
 namespace HellMapManager.Windows.PatchWindow;
 
-public partial class Routes : UserControl
+public partial class Traces : UserControl
 {
-    public Routes()
+    public Traces()
     {
         InitializeComponent();
     }
@@ -15,7 +15,7 @@ public partial class Routes : UserControl
     {
         if (DataContext is PatchWindowViewModel vm)
         {
-            vm.FilterRoutes();
+            vm.FilterTraces();
         }
     }
     public void OnSelectUpdate(object sender, RoutedEventArgs args)

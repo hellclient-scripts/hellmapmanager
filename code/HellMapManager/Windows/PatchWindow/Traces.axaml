@@ -1,0 +1,145 @@
+<UserControl
+  x:Class="HellMapManager.Windows.PatchWindow.Traces"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="using:HellMapManager.Models"
+  xmlns:vm="using:HellMapManager.Windows.PatchWindow"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:PatchWindowViewModel"
+  mc:Ignorable="d">
+  <DockPanel>
+    <DockPanel.Styles>
+      <Style Selector="TextBox#Filter">
+        <Setter Property="Width" Value="200" />
+      </Style>
+      <Style Selector="DataGrid SelectableTextBlock">
+        <Setter Property="Padding" Value="10 0" />
+      </Style>
+    </DockPanel.Styles>
+    <DockPanel Margin="5,0" DockPanel.Dock="Top">
+      <TextBox
+        Name="Filter"
+        HorizontalAlignment="Right"
+        DockPanel.Dock="Right"
+        Text="{Binding TracesFilter}"
+        TextChanged="OnFilter"
+        Watermark="过滤" />
+      <WrapPanel
+        Margin="0,0,10,0"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Center"
+        DockPanel.Dock="Right">
+        <TextBlock Text="{Binding FilteredTraces.Count}" />
+        <TextBlock Text="/" />
+        <TextBlock Text="{Binding SelectedTab.Counts.CountAll}" />
+      </WrapPanel>
+    </DockPanel>
+    <DataGrid
+      x:Name="AllTraces"
+      Margin="5"
+      BorderBrush="Gray"
+      BorderThickness="1"
+      CanUserResizeColumns="True"
+      CanUserSortColumns="True"
+      GridLinesVisibility="All"
+      IsReadOnly="True"
+      ItemsSource="{Binding FilteredTraces}"
+      LoadingRow="OnDataGridLoadingRow">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn
+          Width="40"
+          Header=""
+          SortMemberPath="Selected">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <CheckBox
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="OnSelectUpdate"
+                IsChecked="{Binding Selected}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          Width="80"
+          CanUserSort="true"
+          Header="类型"
+          SortMemberPath="Mode">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding ModeName}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          Width="160"
+          CanUserSort="true"
+          Header="足迹主键"
+          SortMemberPath="Key">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:TraceDiff).Model.Key}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          Width="160"
+          CanUserSort="true"
+          Header="足迹房间数量"
+          SortMemberPath="LocationsCount">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock Text="×" />
+                <SelectableTextBlock Text="{Binding Display.(models:TraceDiff).Model.LocationsCount}" />
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn
+          Width="160"
+          CanUserSort="true"
+          Header="分组"
+          SortMemberPath="Group">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:TraceDiff).Model.Group}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Width="*" Header="消息">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:TraceDiff).Model.Message}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header="操作">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <WrapPanel Margin="10,0,20,0">
+                <Button Margin="10,2,2,2" Click="OnCompare">
+                  <ToolTip.Tip>
+                    <TextBlock>对比差异</TextBlock>
+                  </ToolTip.Tip>
+                  <Image
+                    Width="16"
+                    Height="16"
+                    Source="avares://HellMapManager/Assets/text_compare.png" />
+                </Button>
+
+              </WrapPanel>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </DockPanel>
+
+</UserControl>
