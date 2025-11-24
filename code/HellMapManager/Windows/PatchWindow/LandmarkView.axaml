@@ -1,0 +1,35 @@
+<UserControl
+  x:Class="HellMapManager.Windows.PatchWindow.LandmarkView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="using:HellMapManager.Models"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="models:Landmark"
+  mc:Ignorable="d">
+  <StackPanel>
+    <TextBlock Classes="Label" Text="主键:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Text="{Binding Key}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="类型:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Text="{Binding Type}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="值:" />
+    <Panel Classes="Content TextArea">
+      <SelectableTextBlock Text="{Binding Value}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="分组:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Text="{Binding Group}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="描述:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Classes="TextArea" Text="{Binding Desc}" />
+    </Panel>
+  </StackPanel>
+
+</UserControl>
