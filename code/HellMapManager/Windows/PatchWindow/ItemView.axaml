@@ -31,6 +31,9 @@
         <DataTemplate x:Key="Landmark">
           <vm:LandmarkView DataContext="{Binding (models:LandmarkDiff).Data}" />
         </DataTemplate>
+        <DataTemplate x:Key="Shortcut">
+          <vm:ShortcutView DataContext="{Binding (models:ShortcutDiff).Data}" />
+        </DataTemplate>
         <DataTemplate x:Key="">
           <TextBlock
             HorizontalAlignment="Center"
