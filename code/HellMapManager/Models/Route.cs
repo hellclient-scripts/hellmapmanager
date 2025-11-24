@@ -10,7 +10,7 @@ public partial class Route
     public string Desc { get; set; } = "";
     public string Group { get; set; } = "";
     public string Message { get; set; } = "";
-    public List<string> Rooms = [];
+    public List<string> Rooms { get; set; } = [];
     public bool Validated()
     {
         return ItemKey.Validate(Key);
@@ -73,6 +73,13 @@ public partial class Route
         get
         {
             return string.Join(";", Rooms);
+        }
+    }
+    public string RoomsList
+    {
+        get
+        {
+            return string.Join("\n", Rooms);
         }
     }
     public bool Filter(string val)

@@ -19,7 +19,9 @@
         <DataTemplate x:Key="Marker">
           <vm:MarkerView DataContext="{Binding (models:MarkerDiff).Data}" />
         </DataTemplate>
-
+        <DataTemplate x:Key="Route">
+          <vm:RouteView DataContext="{Binding (models:RouteDiff).Data}" />
+        </DataTemplate>
         <DataTemplate x:Key="">
           <TextBlock
             HorizontalAlignment="Center"
