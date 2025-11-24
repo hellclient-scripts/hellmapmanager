@@ -34,6 +34,9 @@
         <DataTemplate x:Key="Shortcut">
           <vm:ShortcutView DataContext="{Binding (models:ShortcutDiff).Data}" />
         </DataTemplate>
+        <DataTemplate x:Key="Variable">
+          <vm:VariableView DataContext="{Binding (models:VariableDiff).Data}" />
+        </DataTemplate>
         <DataTemplate x:Key="">
           <TextBlock
             HorizontalAlignment="Center"
