@@ -92,9 +92,7 @@
         </DataGridTemplateColumn>
         <DataGridTemplateColumn
           Width="100"
-          CanUserSort="true"
-          Header="重复次数"
-          SortMemberPath="Count">
+          Header="重复次数">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <SelectableTextBlock VerticalAlignment="Center" Text="{Binding Display.(models:SnapshotDiff).Model.Count}" />

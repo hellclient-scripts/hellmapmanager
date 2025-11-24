@@ -7,7 +7,6 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:models="using:HellMapManager.Models"
   xmlns:roompicker="using:HellMapManager.Views.Components.RoomPicker"
-  xmlns:vm="using:HellMapManager.Windows.EditShortcutWindow"
   d:DesignHeight="450"
   d:DesignWidth="800"
   x:DataType="models:Shortcut"

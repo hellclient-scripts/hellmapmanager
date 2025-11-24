@@ -37,6 +37,9 @@
         <DataTemplate x:Key="Variable">
           <vm:VariableView DataContext="{Binding (models:VariableDiff).Data}" />
         </DataTemplate>
+        <DataTemplate x:Key="Snapshot">
+          <vm:SnapshotView DataContext="{Binding (models:SnapshotDiff).Data}" />
+        </DataTemplate>
         <DataTemplate x:Key="">
           <TextBlock
             HorizontalAlignment="Center"
