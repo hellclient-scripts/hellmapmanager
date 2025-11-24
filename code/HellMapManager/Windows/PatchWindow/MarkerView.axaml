@@ -1,0 +1,58 @@
+<UserControl
+  x:Class="HellMapManager.Windows.PatchWindow.MarkerView"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:models="using:HellMapManager.Models"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="models:Marker"
+  mc:Ignorable="d">
+  <UserControl.Styles>
+    <Style Selector="Border#Main">
+      <Setter Property="Padding" Value="10" />
+    </Style>
+    <Style Selector="Button">
+      <Setter Property="Margin" Value="10 0 0 0" />
+      <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+    <Style Selector="TextBox.TextArea">
+      <Setter Property="Height" Value="200" />
+    </Style>
+    <Style Selector="SelectableTextBlock.TextArea">
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="TextBlock.Label">
+      <Setter Property="Margin" Value="0 5 0 5" />
+    </Style>
+    <Style Selector="Panel.Content">
+      <Setter Property="Margin" Value="5 0 5 0" />
+    </Style>
+    <Style Selector="StackPanel.Content">
+      <Setter Property="Margin" Value="5 0 5 0" />
+    </Style>
+  </UserControl.Styles>
+  <StackPanel>
+    <TextBlock Classes="Label" Text="主键:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Text="{Binding Key}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="值:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Text="{Binding Value}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="分组:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Text="{Binding Group}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="描述:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Classes="TextArea" Text="{Binding Desc}" />
+    </Panel>
+    <TextBlock Classes="Label" Text="消息:" />
+    <Panel Classes="Content">
+      <SelectableTextBlock Classes="TextArea" Text="{Binding Message}" />
+    </Panel>
+  </StackPanel>
+</UserControl>

@@ -13,12 +13,18 @@
   <ContentControl Content="{Binding .}">
     <ContentControl.DataTemplates>
       <vm:DiffItemTemplate>
-        <DataTemplate x:Key="Room" >
+        <DataTemplate x:Key="Room">
           <vm:RoomView DataContext="{Binding (models:RoomDiff).Data}" />
-          </DataTemplate>
+        </DataTemplate>
+        <DataTemplate x:Key="Marker">
+          <vm:MarkerView DataContext="{Binding (models:MarkerDiff).Data}" />
+        </DataTemplate>
+
         <DataTemplate x:Key="">
-          <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Text="(无数据)" />
-          
+          <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Text="(无数据)" />
         </DataTemplate>
       </vm:DiffItemTemplate>
     </ContentControl.DataTemplates>
