@@ -29,8 +29,8 @@
         <MenuItem
           Command="{Binding OnSave}"
           Header="保存(_S)"
-          InputGesture="Ctrl+S"
           HotKey="Ctrl+S"
+          InputGesture="Ctrl+S"
           IsEnabled="{Binding IsFileModified}" />
         <MenuItem
           Command="{Binding OnSaveAs}"
@@ -62,7 +62,7 @@
         <Separator />
         <MenuItem Command="{Binding OnExit}" Header="退出(_E)" />
       </MenuItem>
-      <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}" >
+      <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}">
         <MenuItem Click="OnDiffMapFile" Header="对比地图文件" />
         <MenuItem Click="OnOpenPatch" Header="加载补丁文件" />
       </MenuItem>
@@ -76,7 +76,7 @@
       </MenuItem>
 
       <MenuItem Header="帮助(_H)">
-        <MenuItem Header="关于(_A)" />
+        <MenuItem Click="OnAbout" Header="关于(_A)" />
       </MenuItem>
     </Menu>
     <Border

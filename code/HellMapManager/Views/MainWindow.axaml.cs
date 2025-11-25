@@ -3,12 +3,12 @@ using HellMapManager.Services;
 using HellMapManager.Helpers;
 using HellMapManager.Models;
 using HellMapManager.Windows.PatchWindow;
+using HellMapManager.Windows.AboutWindow;
 using HellMapManager.Windows.RoomsHExportWindow;
 using Avalonia.Interactivity;
 using System;
 using HellMapManager.Cores;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace HellMapManager.Views;
 
@@ -105,6 +105,12 @@ public partial class MainWindow : Window
         {
             AppUI.Alert("打开变更补丁文件失败", ex.Message);
         }
-
     }
+    public void OnAbout(object? sender, RoutedEventArgs args)
+    {
+        var w = new AboutWindow();
+        w.DataContext = new AboutWindowViewModel();
+        w.Show();
+    }
+
 }

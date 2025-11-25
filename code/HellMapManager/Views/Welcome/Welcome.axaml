@@ -96,7 +96,6 @@
         <StackPanel />
         <StackPanel>
           <TextBlock Classes="CommandLabel">入门</TextBlock>
-
           <ItemsControl ItemsSource="{Binding HelpLinks}">
             <ItemsControl.ItemTemplate>
               <DataTemplate>

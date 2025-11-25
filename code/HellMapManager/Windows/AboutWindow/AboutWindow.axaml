@@ -1,0 +1,45 @@
+<Window
+  x:Class="HellMapManager.Windows.AboutWindow.AboutWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.Windows.AboutWindow"
+  Title="关于HellMapManager"
+  Width="450"
+  x:DataType="vm:AboutWindowViewModel"
+  SizeToContent="Height"
+  mc:Ignorable="d">
+  <Window.Styles>
+    <Style Selector="SelectableTextBlock.name">
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Height" Value="40" />
+    </Style>
+    <Style Selector="SelectableTextBlock.version">
+      <Setter Property="Height" Value="40" />
+    </Style>
+    <Style Selector="SelectableTextBlock.url">
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Foreground" Value="#ff115ea3" />
+    </Style>
+  </Window.Styles>
+  <DockPanel Margin="20">
+    <Image
+      Width="180"
+      Margin="10"
+      DockPanel.Dock="Top"
+      Source="avares://HellMapManager/Assets/app.ico" />
+    <StackPanel Margin="10">
+      <SelectableTextBlock HorizontalAlignment="Center" Classes="name">HellMapManager</SelectableTextBlock>
+      <SelectableTextBlock
+        HorizontalAlignment="Center"
+        Classes="version"
+        Text="{Binding Version}" />
+      <SelectableTextBlock
+        HorizontalAlignment="Center"
+        Classes="url"
+        Tapped="OnOpenLink"
+        Text="{Binding URL}" />
+    </StackPanel>
+  </DockPanel>
+</Window>

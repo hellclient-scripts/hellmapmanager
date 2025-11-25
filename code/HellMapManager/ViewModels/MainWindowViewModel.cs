@@ -3,7 +3,7 @@ using HellMapManager.Cores;
 using System.Collections.ObjectModel;
 using HellMapManager.Models;
 using HellMapManager.Services;
-using HellMapManager.Helpers;
+using HellMapManager.Misc;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -97,10 +97,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         AppUI.Main.Revert();
     }
-
     public string TitleInfo
     {
-        get => "HellMapManager" + (AppKernel.MapDatabase.Current == null ? "" : " " + (AppKernel.MapDatabase.Current.Modified ? "* " : "") + (AppKernel.MapDatabase.Current.Path != "" ? AppKernel.MapDatabase.Current.Path : "<未保存>"));
+        get => "HellMapManager " + (AppKernel.MapDatabase.Current == null ? "" : " " + (AppKernel.MapDatabase.Current.Modified ? "* " : "") + (AppKernel.MapDatabase.Current.Path != "" ? AppKernel.MapDatabase.Current.Path : "<未保存>"));
     }
     public bool CanShowWelcome
     {
