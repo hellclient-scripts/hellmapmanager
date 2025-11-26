@@ -11,7 +11,6 @@ public class HMPFile
 {
     public static void Save(string name, Diffs df)
     {
-        df.Arrange();
         var result = HMPEncoder.HMPEncoder.Encode(df);
         using var zipToOpen = SystemAdapter.File.WriteStream(name);
         using ZipArchive archive = new(zipToOpen, ZipArchiveMode.Update);

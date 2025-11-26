@@ -31,6 +31,7 @@ public class HMPEncoder
 {
     public static byte[] Encode(Diffs diffs)
     {
+        diffs.Arrange();
         var head = new MapPatchHeadData
         {
             FileFormat = MapPatchHeadData.CurrentFormat,
