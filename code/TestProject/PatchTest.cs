@@ -2,6 +2,7 @@ using HellMapManager.Models;
 using HellMapManager.Helpers;
 using HellMapManager.Helpers.HMMEncoder;
 using System.Text;
+using HellMapManager.Helpers.HMPEncoder;
 namespace TestProject;
 
 public class PatchTest
@@ -885,5 +886,16 @@ public class PatchTest
         Assert.Equal(HMMEncoder.Encode(mf), mf2data);
         DiffHelper.Apply(diffs2, mf2);
         Assert.Equal(HMMEncoder.Encode(mf2), mfdata);
+
+        var diffs3=HMPEncoder.Decode(HMPEncoder.Encode(diffs));
+        Assert.Equal(diffs.Items.Count, diffs3!.Items.Count);
+        for(var i=0;i<diffs.Items.Count;i++)
+        {
+            Assert.Equal(diffs.Items[i].Type, diffs3.Items[i].Type);
+            Assert.Equal(diffs.Items[i].DiffKey, diffs3.Items[i].DiffKey);
+            Assert.Equal(diffs.Items[i].Mode, diffs3.Items[i].Mode);
+            Assert.Equal(diffs.Items[i].Encode(), diffs3.Items[i].Encode());
+        }
+        Assert.Null(HMPEncoder.Decode([]));
     }
 }
