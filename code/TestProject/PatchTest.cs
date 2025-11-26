@@ -370,4 +370,21 @@ public class PatchTest
         Assert.Equal(Snapshot.EncodeKey, rmodel.Target);
         Assert.Equal(Snapshot.EncodeKey, model.Target);
     }
+    [Fact]
+    public void TestDiffsArrange()
+    {
+        var diffs = new Diffs();
+        diffs.Items.Add(new RemovedRoomDiff("r2"));
+        diffs.Items.Add(new RemovedRoomDiff("r1"));
+        diffs.Items.Add(new RemovedMarkerDiff("r0"));
+
+        Assert.Equal(3, diffs.Items.Count);
+        Assert.Equal("r2", diffs.Items[0].DiffKey);
+        Assert.Equal("r1", diffs.Items[1].DiffKey);
+        Assert.Equal("r0", diffs.Items[2].DiffKey);
+        diffs.Arrange();
+        Assert.Equal("r0", diffs.Items[0].DiffKey);
+        Assert.Equal("r1", diffs.Items[1].DiffKey);
+        Assert.Equal("r2", diffs.Items[2].DiffKey);
+    }
 }
