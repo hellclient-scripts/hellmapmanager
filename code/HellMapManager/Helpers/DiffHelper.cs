@@ -21,6 +21,7 @@ public class DiffHelper
         DiffShortcuts(source, dest, result.Items);
         DiffVariables(source, dest, result.Items);
         DiffSnapshots(source, dest, result.Items);
+        result.Arrange();
         return result;
     }
     // 无法确定各元素是否最后依然保持共性，所以不使用范型，方便调整

@@ -395,6 +395,7 @@ public class PatchTest
     {
         var mf = new MapFile();
         var mf2 = HMMEncoder.Decode(HMMEncoder.Encode(mf));
+        Assert.NotNull(mf2);
         var room = new Room()
         {
             Key = "r",
@@ -674,7 +675,6 @@ public class PatchTest
         Assert.Equal(HMMEncoder.Encode(mf2), mf2data);
         var diffs = DiffHelper.Diff(mf.Map, mf2.Map);
         Assert.Equal(27, diffs.Items.Count);
-        diffs.Arrange();
         {
             var i = 0;
             Assert.True(diffs.Items[i] is RemovedLandmarkDiff);
@@ -779,7 +779,6 @@ public class PatchTest
         }
         var diffs2 = DiffHelper.Diff(mf2.Map, mf.Map);
         Assert.Equal(27, diffs2.Items.Count);
-        diffs2.Arrange();
         {
             var i = 0;
             Assert.True(diffs2.Items[i] is LandmarkDiff);
