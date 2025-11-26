@@ -7,5 +7,5 @@ namespace HellMapManager.Windows.AboutWindow;
 public class AboutWindowViewModel : ObservableObject
 {
     public string Version { get => AppVersion.Current.ToString(); }
-    public string URL { get => "https://github.com/hellclient-scripts/hellmapmanager"; }
+    public string URL { get => Links.Homepage; }
 }

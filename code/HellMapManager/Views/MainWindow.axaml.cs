@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using HellMapManager.Services;
 using HellMapManager.Helpers;
 using HellMapManager.Models;
+using HellMapManager.Misc;
 using HellMapManager.Windows.PatchWindow;
 using HellMapManager.Windows.AboutWindow;
 using HellMapManager.Windows.RoomsHExportWindow;
@@ -111,6 +112,18 @@ public partial class MainWindow : Window
         var w = new AboutWindow();
         w.DataContext = new AboutWindowViewModel();
         w.Show();
+    }
+    public void OpenURLHomepage(object? sender, RoutedEventArgs args)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.Homepage));
+    }
+    public void OpenURLTerm(object? sender, RoutedEventArgs args)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.Term));
+    }
+    public void OpenURLScriptIntro(object? sender, RoutedEventArgs args)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.ScriptInro));
     }
 
 }

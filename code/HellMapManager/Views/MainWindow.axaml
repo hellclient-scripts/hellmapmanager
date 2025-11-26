@@ -76,9 +76,9 @@
 
 
       <MenuItem Header="帮助(_H)">
-        <MenuItem Click="OnAbout" Header="项目首页" />
-        <MenuItem Click="OnAbout" Header="基本概念" />
-        <MenuItem Click="OnAbout" Header="脚本支持" />
+        <MenuItem Click="OpenURLHomepage" Header="项目首页" />
+        <MenuItem Click="OpenURLTerm" Header="基本概念" />
+        <MenuItem Click="OpenURLScriptIntro" Header="脚本支持" />
         <Separator />
         <MenuItem Click="OnAbout" Header="关于(_A)" />
       </MenuItem>
