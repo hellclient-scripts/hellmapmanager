@@ -76,7 +76,7 @@ public class HMMEncoder
             head.Encode(),
             mf.Map.Info.Encode(),
         };
-
+        mf.Map.Arrange();
         mf.Map.Rooms.ForEach(d =>
         {
             if (EncodeRoomHook(d) is Room room)

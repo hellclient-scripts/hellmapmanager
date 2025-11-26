@@ -23,7 +23,7 @@ public class DiffHelper
         DiffSnapshots(source, dest, result.Items);
         return result;
     }
-    // 无法确定各元素是否最后依赖保持共性，所以不使用范型，方便调整
+    // 无法确定各元素是否最后依然保持共性，所以不使用范型，方便调整
     private static void DiffRooms(Map source, Map dest, List<IDiffItem> result)
     {
         var srcmodels = source.Rooms.GetRange(0, source.Rooms.Count);
@@ -346,6 +346,7 @@ public class DiffHelper
     //将差异应用到源地图文件上
     public static void Apply(Diffs diffs, MapFile source)
     {
+        diffs.Arrange();
         diffs.Items.ForEach(d => ApplyDiff(d, source));
         return;
     }
