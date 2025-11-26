@@ -40,6 +40,9 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(model.Validated());
         Assert.False(new RoomDiff(new Room()).Validated());
+        Assert.Equal(Room.EncodeKey, rmodel.Target);
+        Assert.Equal(Room.EncodeKey, model.Target);
+
     }
     [Fact]
     public void TestMarkderDiff()
@@ -75,6 +78,8 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(model.Validated());
         Assert.False(new MarkerDiff(new Marker()).Validated());
+        Assert.Equal(Marker.EncodeKey, rmodel.Target);
+        Assert.Equal(Marker.EncodeKey, model.Target);
     }
     [Fact]
     public void TestRoute()
@@ -110,7 +115,8 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(rmodel.Validated());
         Assert.False(new RouteDiff(new Route()).Validated());
-
+        Assert.Equal(Route.EncodeKey, rmodel.Target);
+        Assert.Equal(Route.EncodeKey, model.Target);
     }
     [Fact]
     public void TestTrace()
@@ -146,6 +152,8 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(model.Validated());
         Assert.False(new TraceDiff(new Trace()).Validated());
+        Assert.Equal(Trace.EncodeKey, rmodel.Target);
+        Assert.Equal(Trace.EncodeKey, model.Target);
     }
     [Fact]
     public void TestRegion()
@@ -181,6 +189,8 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(model.Validated());
         Assert.False(new RegionDiff(new Region()).Validated());
+        Assert.Equal(Region.EncodeKey, rmodel.Target);
+        Assert.Equal(Region.EncodeKey, model.Target);
     }
     [Fact]
     public void TestLandmark()
@@ -228,6 +238,8 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(model.Validated());
         Assert.False(new LandmarkDiff(new Landmark()).Validated());
+        Assert.Equal(Landmark.EncodeKey, rmodel.Target);
+        Assert.Equal(Landmark.EncodeKey, model.Target);
     }
     [Fact]
     public void TestShortcut()
@@ -265,6 +277,8 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(model.Validated());
         Assert.False(new RegionDiff(new Region()).Validated());
+        Assert.Equal(Shortcut.EncodeKey, rmodel.Target);
+        Assert.Equal(Shortcut.EncodeKey, model.Target);
     }
     [Fact]
     public void TestVariable()
@@ -300,6 +314,8 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(model.Validated());
         Assert.False(new VariableDiff(new Variable()).Validated());
+        Assert.Equal(Variable.EncodeKey, rmodel.Target);
+        Assert.Equal(Variable.EncodeKey, model.Target);
     }
     [Fact]
     public void TestSnapshot()
@@ -351,5 +367,7 @@ public class PatchTest
         Assert.NotEqual(model.DiffKey, model2.DiffKey);
         Assert.True(model.Validated());
         Assert.False(new SnapshotDiff(new Snapshot()).Validated());
+        Assert.Equal(Snapshot.EncodeKey, rmodel.Target);
+        Assert.Equal(Snapshot.EncodeKey, model.Target);
     }
 }
