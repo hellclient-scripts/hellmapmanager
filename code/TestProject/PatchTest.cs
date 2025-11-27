@@ -896,5 +896,6 @@ public class PatchTest
             Assert.Equal(diffs.Items[i].Encode(), diffs3.Items[i].Encode());
         }
         Assert.Null(HMPEncoder.Decode([]));
+        
     }
 }

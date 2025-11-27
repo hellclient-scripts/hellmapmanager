@@ -298,13 +298,14 @@ public class Patch
             }
 
         }
-
+        patch.Arrange();
         return patch;
     }
     //根据选择的差异过滤差异
     //实现用户选择性的应用差异
     public Diffs Apply()
     {
+        Arrange();
         var result = new Diffs();
         Rooms.Apply(result);
         Markers.Apply(result);

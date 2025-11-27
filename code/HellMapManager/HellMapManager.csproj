@@ -8,6 +8,10 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <PublishAot>true</PublishAot> 
     <IsTrimmable>true</IsTrimmable>
+    <TrimMode>full</TrimMode>
+		<PublishTrimmed>true</PublishTrimmed>
+		<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+
     <ApplicationIcon>Assets/app.ico</ApplicationIcon>
   </PropertyGroup>
 
