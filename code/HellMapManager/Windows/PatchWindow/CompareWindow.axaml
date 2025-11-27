@@ -8,8 +8,12 @@
   Title="对比"
   d:DesignHeight="450"
   d:DesignWidth="800"
+  Focusable="True"
   x:DataType="vm:PatchItem"
+  KeyDown="OnWindowKeyDown"
   mc:Ignorable="d">
+
+
   <Window.Styles>
     <Style Selector="SelectableTextBlock.TextArea">
       <Setter Property="TextWrapping" Value="Wrap" />
