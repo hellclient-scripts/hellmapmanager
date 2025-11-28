@@ -46,6 +46,8 @@ HMM包含有对以下数据结构的支持
 
 HMM使用基于CSV变种的HMM格式文件，便于阅读，以行为单位，也能在GIT等代码软件里很容易的观察出变动内容。
 
+![源文件对比](doc/images/diffsource.png)
+
 对于空间敏感型场合，也提供了基于zip的打包2进制格式.hmz
 
 文件格式参考[这个链接](doc/format/hmm.md)
