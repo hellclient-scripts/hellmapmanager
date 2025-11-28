@@ -1,0 +1,3 @@
+#!/bin/bash
+export HELLMAPMANAGER_PROCESS_PATH="$APPIMAGE"
+exec "$APPDIR/usr/bin/HellMapManager"

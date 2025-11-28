@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
+using System;
 using System.Linq;
 using Avalonia.Markup.Xaml;
 using HellMapManager.ViewModels;
@@ -22,7 +23,18 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        var path = Path.GetDirectoryName(System.Environment.ProcessPath);
+        string process;
+        string path;
+        if (Environment.GetEnvironmentVariable(AppPreset.ProcessPathEnvName) is string envPath && !string.IsNullOrEmpty(envPath))
+        {
+            process = envPath;
+        }
+        else
+        {
+            process = Environment.ProcessPath ?? "";
+        }
+        path = Path.GetDirectoryName(process ?? "") ?? "";
+
         var settingspath = System.IO.Path.Join([path, AppPreset.SettingsFileName]);
         var settingsHelper = new SettingsHelper(settingspath);
         var settings = settingsHelper.Load();
