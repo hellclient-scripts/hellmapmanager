@@ -89,9 +89,4 @@ public partial class App : Application
             BindingPlugins.DataValidators.Remove(plugin);
         }
     }
-
-    public void AboutMenuItem_OnClick(object? sender, RoutedEventArgs args)
-    {
-        
-    }
 }
