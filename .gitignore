@@ -57,3 +57,7 @@ nunit-*.xml
 .DirIcon
 *.AppImage
 *.settings.json
+
+.DS_STORE
+
+deploy/HellMapManager.app/Contents/MacOS/*

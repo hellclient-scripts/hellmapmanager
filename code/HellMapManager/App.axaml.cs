@@ -12,6 +12,7 @@ using HellMapManager.Services;
 
 using HellMapManager.Helpers;
 using System.IO;
+using Avalonia.Interactivity;
 namespace HellMapManager;
 
 public partial class App : Application
@@ -87,5 +88,10 @@ public partial class App : Application
         {
             BindingPlugins.DataValidators.Remove(plugin);
         }
+    }
+
+    public void AboutMenuItem_OnClick(object? sender, RoutedEventArgs args)
+    {
+        
     }
 }

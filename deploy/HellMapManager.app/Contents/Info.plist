@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIconFile</key>
+    <string>icon.icns</string>
+	<key>LSBundleContainsCoreMLmlmodelc</key>
+	<false/>
+	<key>CFBundleExecutable</key>
+	<string>HellMapManager</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.jarlyyn.HellMapManager</string>
+	<key>CFBundleName</key>
+	<string>HellMapManager</string>
+
+</dict>
+</plist>
