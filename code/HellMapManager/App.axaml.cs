@@ -9,10 +9,10 @@ using HellMapManager.Views;
 using HellMapManager.Cores;
 using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Services;
+using HellMapManager.Windows.AboutWindow;
 
 using HellMapManager.Helpers;
 using System.IO;
-using Avalonia.Interactivity;
 namespace HellMapManager;
 
 public partial class App : Application
@@ -88,5 +88,11 @@ public partial class App : Application
         {
             BindingPlugins.DataValidators.Remove(plugin);
         }
+    }
+    public void ShowAbout(object? sender, EventArgs args)
+    {
+        var w = new AboutWindow();
+        w.DataContext = new AboutWindowViewModel();
+        w.Show();
     }
 }

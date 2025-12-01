@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="HellMapManager.App"
+             Name="HellMapManager"
              xmlns:local="using:HellMapManager"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -8,7 +9,12 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-  
+    <NativeMenu.Menu>
+     <NativeMenu>
+         <NativeMenuItem Header="关于HellMapManager" Click="ShowAbout"/>
+     </NativeMenu>
+ </NativeMenu.Menu>
+
     <Application.Styles>
         <FluentTheme />
             <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
