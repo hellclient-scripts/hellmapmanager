@@ -61,3 +61,4 @@ nunit-*.xml
 .DS_STORE
 
 deploy/HellMapManager.app/Contents/MacOS/*
+macsign.sh
