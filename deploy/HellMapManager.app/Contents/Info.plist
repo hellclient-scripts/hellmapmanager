@@ -12,6 +12,7 @@
 	<string>com.jarlyyn.HellMapManager</string>
 	<key>CFBundleName</key>
 	<string>HellMapManager</string>
-
+	<key>Name</key>
+	<string>HellMapManager</string>
 </dict>
 </plist>

@@ -91,8 +91,10 @@ public partial class App : Application
     }
     public void ShowAbout(object? sender, EventArgs args)
     {
-        var w = new AboutWindow();
-        w.DataContext = new AboutWindowViewModel();
-        w.Show();
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop){
+            var w = new AboutWindow();
+            w.DataContext = new AboutWindowViewModel();
+            w.ShowDialog(desktop.MainWindow!);
+        }
     }
 }
