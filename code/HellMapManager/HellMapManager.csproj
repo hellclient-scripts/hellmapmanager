@@ -11,7 +11,7 @@
     <TrimMode>full</TrimMode>
 		<PublishTrimmed>true</PublishTrimmed>
 		<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
-
+    <UseAppHost>true</UseAppHost>
     <ApplicationIcon>Assets/app.ico</ApplicationIcon>
   </PropertyGroup>
 
