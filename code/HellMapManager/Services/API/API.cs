@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Msagl.Layout.Incremental;
+using System.IO;
 
 namespace HellMapManager.Services.API;
 
@@ -21,6 +22,11 @@ public partial class APIServer
     {
         ctx.Response.Headers["Server"] = "HellMapManager";
         await next(ctx);
+    }
+    private async Task<string> LoadBody(HttpContext ctx)
+    {
+        using var reader = new StreamReader(ctx.Request.Body, Encoding.UTF8);
+        return await reader.ReadToEndAsync();
     }
     private async Task WriteJSON(HttpContext ctx, object? obj, int statusCode = 200)
     {
@@ -48,5 +54,26 @@ public partial class APIServer
     {
         ctx.Response.StatusCode = 404;
         await ctx.Response.WriteAsync("Not Found");
+    }
+    public async Task InvalidJSONRequest(HttpContext ctx)
+    {
+        await BadRequest(ctx, "Invalid JSON");
+    }
+
+    public async Task BadRequest(HttpContext ctx, string msg)
+    {
+        ctx.Response.StatusCode = 400;
+        await ctx.Response.WriteAsync(msg == "" ? "Bad Request" : msg);
+    }
+    public async Task APIListRooms(HttpContext ctx)
+    {
+        var option = InputListOption.FromJSON(await LoadBody(ctx));
+        if (option is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var rooms = Database.APIListRooms(option!.To());
+        await WriteJSON(ctx, RoomModel.FromList(rooms));
     }
 }

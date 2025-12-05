@@ -44,7 +44,8 @@ public partial class APIServer
         App.MapGet("/api/version", APIVersion);
         App.Map("{*url}", NotFound);
         var DBAPI=App.MapGroup("/api/db");
-        DBAPI.MapGet("/info", APIInfo);
+        DBAPI.Map("/info", APIInfo);
+        DBAPI.MapPost("/listrooms", APIListRooms);
     }
 
 }
