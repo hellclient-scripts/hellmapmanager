@@ -10,9 +10,10 @@ using HellMapManager.Cores;
 using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Services;
 using HellMapManager.Windows.AboutWindow;
-
+using HellMapManager.Services.API;
 using HellMapManager.Helpers;
 using System.IO;
+using System.Text;
 namespace HellMapManager;
 
 public partial class App : Application
@@ -73,6 +74,9 @@ public partial class App : Application
             }
         ;
         }
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        APIServer.Instance.BindMapDatabase(AppKernel.MapDatabase);
+        APIServer.Instance.Start();
         base.OnFrameworkInitializationCompleted();
     }
 
@@ -91,7 +95,8 @@ public partial class App : Application
     }
     public void ShowAbout(object? sender, EventArgs args)
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop){
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
             var w = new AboutWindow();
             w.DataContext = new AboutWindowViewModel();
             w.ShowDialog(desktop.MainWindow!);

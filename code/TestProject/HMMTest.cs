@@ -1,6 +1,7 @@
 using HellMapManager.Models;
 using HellMapManager.Helpers.HMMEncoder;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace TestProject;
 
@@ -9,6 +10,7 @@ public class HMMTest
     [Fact]
     public void TestEncoder()
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var mf = MapFile.Create("testname", "testdesc");
         var room = new Room()
         {

@@ -72,34 +72,46 @@ public partial class MapDatabase
     {
         return Version;
     }
-    public List<Landmark> APIListLandmarks(APIListOption option)
+    public MapInfo? APIInfo()
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
-                if (option.IsEmpty())
-                {
-                    return Current.Map.Landmarks;
-                }
-                var list = new List<Landmark>() { };
-                Current.Map.Landmarks.ForEach((model) =>
-                {
-                    if (option.Validate(model.Key, model.Group))
-                    {
-                        list.Add(model);
-                    }
-                });
-                return list;
+
+                return Current.Map.Info;
             }
         }
+        return null;
+    }
+    public List<Landmark> APIListLandmarks(APIListOption option)
+    {
+        lock (_lock)
+            if (Current != null)
+            {
+                {
+                    if (option.IsEmpty())
+                    {
+                        return Current.Map.Landmarks;
+                    }
+                    var list = new List<Landmark>() { };
+                    Current.Map.Landmarks.ForEach((model) =>
+                    {
+                        if (option.Validate(model.Key, model.Group))
+                        {
+                            list.Add(model);
+                        }
+                    });
+                    return list;
+                }
+            }
         return [];
     }
     public void APIInsertLandmarks(List<Landmark> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -110,30 +122,30 @@ public partial class MapDatabase
                 }
                 Landmark.Sort(Current.Map.Landmarks);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void APIRemoveLandmarks(List<LandmarkKey> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var key in keys)
                 {
                     Current.RemoveLandmark(key);
                 }
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<Marker> APIListMarkers(APIListOption option)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (option.IsEmpty())
                 {
@@ -154,9 +166,9 @@ public partial class MapDatabase
     }
     public void APIInsertMarkers(List<Marker> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -167,30 +179,30 @@ public partial class MapDatabase
                 }
                 Marker.Sort(Current.Map.Markers);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void APIRemoveMarkers(List<string> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var key in keys)
                 {
                     Current.RemoveMarker(key);
                 }
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<Region> APIListRegions(APIListOption option)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (option.IsEmpty())
                 {
@@ -211,9 +223,9 @@ public partial class MapDatabase
     }
     public void APIInsertRegions(List<Region> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -224,30 +236,30 @@ public partial class MapDatabase
                 }
                 Region.Sort(Current.Map.Regions);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void APIRemoveRegions(List<string> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var key in keys)
                 {
                     Current.RemoveRegion(key);
                 }
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<Room> APIListRooms(APIListOption option)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (option.IsEmpty())
                 {
@@ -268,9 +280,9 @@ public partial class MapDatabase
     }
     public void APIInsertRooms(List<Room> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -281,30 +293,30 @@ public partial class MapDatabase
                 }
                 Room.Sort(Current.Map.Rooms);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void APIRemoveRooms(List<string> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var key in keys)
                 {
                     Current.RemoveRoom(key);
                 }
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void APIInsertRoutes(List<Route> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -315,15 +327,15 @@ public partial class MapDatabase
                 }
                 Route.Sort(Current.Map.Routes);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<Route> APIListRoutes(APIListOption option)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (option.IsEmpty())
                 {
@@ -344,24 +356,24 @@ public partial class MapDatabase
     }
     public void APIRemoveRoutes(List<string> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var key in keys)
                 {
                     Current.RemoveRoute(key);
                 }
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void APIInsertShortcuts(List<Shortcut> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -372,15 +384,15 @@ public partial class MapDatabase
                 }
                 Shortcut.Sort(Current.Map.Shortcuts);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<Shortcut> APIListShortcuts(APIListOption option)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (option.IsEmpty())
                 {
@@ -401,24 +413,25 @@ public partial class MapDatabase
     }
     public void APIRemoveShortcuts(List<string> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var key in keys)
                 {
                     Current.RemoveShortcut(key);
                 }
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void APIInsertSnapshots(List<Snapshot> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -429,15 +442,15 @@ public partial class MapDatabase
                 }
                 Snapshot.Sort(Current.Map.Snapshots);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<Snapshot> APIListSnapshots(APIListOption option)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (option.IsEmpty())
                 {
@@ -458,9 +471,9 @@ public partial class MapDatabase
     }
     public void APIRemoveSnapshots(List<SnapshotKey> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var k in keys)
                 {
@@ -468,15 +481,15 @@ public partial class MapDatabase
                 }
                 Snapshot.Sort(Current.Map.Snapshots);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public void APIInsertTraces(List<Trace> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -487,31 +500,31 @@ public partial class MapDatabase
                 }
                 Trace.Sort(Current.Map.Traces);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
 
     public void APIRemoveTraces(List<string> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var key in keys)
                 {
                     Current.RemoveTrace(key);
                 }
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<Trace> APIListTraces(APIListOption option)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (option.IsEmpty())
                 {
@@ -532,9 +545,9 @@ public partial class MapDatabase
     }
     public void APIInsertVariables(List<Variable> models)
     {
-        if (Current != null && models.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && models.Count > 0)
             {
                 foreach (var model in models)
                 {
@@ -545,15 +558,15 @@ public partial class MapDatabase
                 }
                 Variable.Sort(Current.Map.Variables);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<Variable> APIListVariables(APIListOption option)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (option.IsEmpty())
                 {
@@ -574,24 +587,24 @@ public partial class MapDatabase
     }
     public void APIRemoveVariables(List<string> keys)
     {
-        if (Current != null && keys.Count > 0)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null && keys.Count > 0)
             {
                 foreach (var key in keys)
                 {
                     Current.RemoveVariable(key);
                 }
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public QueryResult? APIQueryPathAny(List<string> from, List<string> target, Context context, MapperOptions options)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 return new Walking(new Mapper(Current, context, options)).QueryPathAny(from, target, 0).SuccessOrNull();
             }
@@ -601,9 +614,9 @@ public partial class MapDatabase
 
     public QueryResult? APIQueryPathAll(string start, List<string> target, Context context, MapperOptions options)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 return new Walking(new Mapper(Current, context, options)).QueryPathAll(start, target).SuccessOrNull();
             }
@@ -612,9 +625,9 @@ public partial class MapDatabase
     }
     public QueryResult? APIQueryPathOrdered(string start, List<string> target, Context context, MapperOptions options)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 return new Walking(new Mapper(Current, context, options)).QueryPathOrdered(start, target).SuccessOrNull();
             }
@@ -624,9 +637,9 @@ public partial class MapDatabase
     //不考虑context
     public List<string> APIQueryRegionRooms(string key)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (Current.Cache.Regions.TryGetValue(key, out Region? region))
                 {
@@ -676,9 +689,9 @@ public partial class MapDatabase
 
     public List<string> APIDilate(List<string> src, int iterations, Context context, MapperOptions options)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 return new Walking(new Mapper(Current, context, options)).Dilate(src, iterations);
             }
@@ -687,9 +700,9 @@ public partial class MapDatabase
     }
     public string APITrackExit(string start, string command, Context context, MapperOptions options)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 var mapper = new Mapper(Current, context, options);
                 var room = mapper.GetRoom(start);
@@ -710,9 +723,9 @@ public partial class MapDatabase
     }
     public string APIGetVariable(string key)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (Current.Cache.Variables.TryGetValue(key, out Variable? variable))
                 {
@@ -724,9 +737,9 @@ public partial class MapDatabase
     }
     public Room? APIGetRoom(string key, Context context, MapperOptions options)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 return new Mapper(Current, context, options).GetRoom(key);
             }
@@ -735,9 +748,9 @@ public partial class MapDatabase
     }
     public void APIClearSnapshot(SnapshotFilter filter)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 Current.Map.Snapshots.RemoveAll((s) => filter.Validate(s));
                 Snapshot.Sort(Current.Map.Snapshots);
@@ -748,9 +761,9 @@ public partial class MapDatabase
     }
     public List<Room> APISearchRooms(RoomFilter filter)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 var result = new List<Room>() { };
                 Current.Map.Rooms.ForEach((model) =>
@@ -768,9 +781,9 @@ public partial class MapDatabase
 
     public List<Room> APIFilterRooms(List<string> src, RoomFilter filter)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 var result = new List<Room>() { };
                 src = [.. src.Distinct()];
@@ -791,22 +804,22 @@ public partial class MapDatabase
     }
     public void APITakeSnapshot(string key, string type, string value, string group)
     {
-
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+
+            if (Current != null)
             {
                 Current.TakeSnapshot(key, type, value, group);
                 Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
             }
-            RaiseMapFileUpdatedEvent(this);
         }
     }
     public List<SnapshotSearchResult> APISearchSnapshots(SnapshotSearch search)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 return SnapshotHelper.Search(search, Current.Map.Snapshots);
             }
@@ -815,9 +828,9 @@ public partial class MapDatabase
     }
     public void APITraceLocation(string key, string location)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (Current.Cache.Traces.TryGetValue(key, out Trace? trace))
                 {
@@ -840,9 +853,9 @@ public partial class MapDatabase
     }
     public void APITagRoom(string key, string tag, int value)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (tag != "")
                 {
@@ -868,9 +881,9 @@ public partial class MapDatabase
     }
     public void APISetRoomData(string roomkey, string datakey, string datavalue)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (Current.Cache.Rooms.TryGetValue(roomkey, out Room? room))
                 {
@@ -890,9 +903,9 @@ public partial class MapDatabase
     }
     public void APIGroupRoom(string key, string group)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
                 {
@@ -910,9 +923,9 @@ public partial class MapDatabase
     }
     public List<Exit> APIGetRoomExits(string key, Context context, MapperOptions options)
     {
-        if (Current != null)
+        lock (_lock)
         {
-            lock (_lock)
+            if (Current != null)
             {
                 var mapper = new Mapper(Current, context, options);
                 var room = mapper.GetRoom(key);

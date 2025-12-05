@@ -11,4 +11,5 @@ public class Settings
     public string APIUserName { get; set; } = "";
     public string APIPassWord { get; set; } = "";
     public bool APIEnabled { get; set; } = false;
+    public string BuildURL()=> $"http://localhost:{BindPort}/";
 }
