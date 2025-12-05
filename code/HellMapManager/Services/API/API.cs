@@ -17,6 +17,11 @@ public partial class APIServer
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
     });
     private readonly Encoding gb18030Encoding = System.Text.Encoding.GetEncoding("GB18030");
+    private async Task MiddlewareSetHeaderServer(HttpContext ctx, RequestDelegate next)
+    {
+        ctx.Response.Headers["Server"] = "HellMapManager";
+        await next(ctx);
+    }
     private async Task WriteJSON(HttpContext ctx, object? obj, int statusCode = 200)
     {
         ctx.Response.ContentType = "application/json";
