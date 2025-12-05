@@ -33,7 +33,7 @@ public class ViewModelTest
             lastchanged = args.PropertyName;
         };
         Assert.Equal("HellMapManager", vm.TitleInfo);
-        Assert.Equal(2, MainWindowViewModel.HelpLinks.Count);
+        Assert.Equal(3, MainWindowViewModel.HelpLinks.Count);
         Assert.True(vm.CanShowWelcome);
         Assert.False(vm.IsFileOpend);
         Assert.Empty(vm.FilteredRooms);

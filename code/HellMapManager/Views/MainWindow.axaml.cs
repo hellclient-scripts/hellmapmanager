@@ -125,5 +125,20 @@ public partial class MainWindow : Window
     {
         TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.ScriptInro));
     }
+    public void OpenURLAPI(object? sender, RoutedEventArgs args)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.API));
+    }
+
+
+    public void StartServer(object? sender, RoutedEventArgs args)
+    {
+    }
+    public void StopServer(object? sender, RoutedEventArgs args)
+    {
+    }
+    public void ConfigServer(object? sender, RoutedEventArgs args)
+    {
+    }
 
 }

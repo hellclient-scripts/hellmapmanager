@@ -73,12 +73,17 @@
         <MenuItem Click="OnDiffMapFile" Header="对比地图文件" />
         <MenuItem Click="OnOpenPatch" Header="加载补丁文件" />
       </MenuItem>
-
-
+      <MenuItem Header="接口(_A)">
+        <MenuItem Click="StartServer" Header="启动" />
+        <MenuItem Click="StopServer" Header="停止" />
+        <Separator />
+        <MenuItem Click="ConfigServer" Header="设置" />
+      </MenuItem>
       <MenuItem Header="帮助(_H)">
         <MenuItem Click="OpenURLHomepage" Header="项目首页" />
         <MenuItem Click="OpenURLTerm" Header="基本概念" />
         <MenuItem Click="OpenURLScriptIntro" Header="脚本支持" />
+        <MenuItem Click="OpenURLAPI" Header="接口文档" />
         <Separator />
         <MenuItem Click="OnAbout" Header="关于(_A)" />
       </MenuItem>

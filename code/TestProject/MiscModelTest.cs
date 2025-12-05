@@ -17,7 +17,7 @@ public class MiscModelTest
         Assert.Equal("1.0", Settings.CurrentVersion);
         var settings = new Settings();
         Assert.False(settings.APIEnabled);
-        Assert.Equal("8466", settings.BindPort);
+        Assert.Equal(8466, settings.APIPort);
         Assert.Equal("", settings.APIUserName);
         Assert.Equal("", settings.APIPassWord);
         Assert.Empty(settings.Recents);
