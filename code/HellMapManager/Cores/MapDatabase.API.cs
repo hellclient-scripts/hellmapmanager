@@ -76,20 +76,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Landmarks;
-            }
-            var list = new List<Landmark>() { };
-            Current.Map.Landmarks.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Landmarks;
                 }
-            });
-            return list;
+                var list = new List<Landmark>() { };
+                Current.Map.Landmarks.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -97,15 +99,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertLandmark(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertLandmark(model);
+                    }
                 }
+                Landmark.Sort(Current.Map.Landmarks);
+                Current.MarkAsModified();
             }
-            Landmark.Sort(Current.Map.Landmarks);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -113,11 +118,14 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var key in keys)
+            lock (_lock)
             {
-                Current.RemoveLandmark(key);
+                foreach (var key in keys)
+                {
+                    Current.RemoveLandmark(key);
+                }
+                Current.MarkAsModified();
             }
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -125,19 +133,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Markers;
-            }
-            var list = new List<Marker>() { };
-            Current.Map.Markers.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Markers;
                 }
-            });
-            return list;
+                var list = new List<Marker>() { };
+                Current.Map.Markers.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -145,15 +156,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertMarker(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertMarker(model);
+                    }
                 }
+                Marker.Sort(Current.Map.Markers);
+                Current.MarkAsModified();
             }
-            Marker.Sort(Current.Map.Markers);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -161,11 +175,14 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var key in keys)
+            lock (_lock)
             {
-                Current.RemoveMarker(key);
+                foreach (var key in keys)
+                {
+                    Current.RemoveMarker(key);
+                }
+                Current.MarkAsModified();
             }
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -173,19 +190,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Regions;
-            }
-            var list = new List<Region>() { };
-            Current.Map.Regions.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Regions;
                 }
-            });
-            return list;
+                var list = new List<Region>() { };
+                Current.Map.Regions.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -193,15 +213,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertRegion(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertRegion(model);
+                    }
                 }
+                Region.Sort(Current.Map.Regions);
+                Current.MarkAsModified();
             }
-            Region.Sort(Current.Map.Regions);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -209,11 +232,14 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var key in keys)
+            lock (_lock)
             {
-                Current.RemoveRegion(key);
+                foreach (var key in keys)
+                {
+                    Current.RemoveRegion(key);
+                }
+                Current.MarkAsModified();
             }
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -221,19 +247,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Rooms;
-            }
-            var list = new List<Room>() { };
-            Current.Map.Rooms.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Rooms;
                 }
-            });
-            return list;
+                var list = new List<Room>() { };
+                Current.Map.Rooms.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -241,15 +270,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertRoom(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertRoom(model);
+                    }
                 }
+                Room.Sort(Current.Map.Rooms);
+                Current.MarkAsModified();
             }
-            Room.Sort(Current.Map.Rooms);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -257,11 +289,14 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var key in keys)
+            lock (_lock)
             {
-                Current.RemoveRoom(key);
+                foreach (var key in keys)
+                {
+                    Current.RemoveRoom(key);
+                }
+                Current.MarkAsModified();
             }
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -269,15 +304,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertRoute(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertRoute(model);
+                    }
                 }
+                Route.Sort(Current.Map.Routes);
+                Current.MarkAsModified();
             }
-            Route.Sort(Current.Map.Routes);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -285,19 +323,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Routes;
-            }
-            var list = new List<Route>() { };
-            Current.Map.Routes.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Routes;
                 }
-            });
-            return list;
+                var list = new List<Route>() { };
+                Current.Map.Routes.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -305,11 +346,14 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var key in keys)
+            lock (_lock)
             {
-                Current.RemoveRoute(key);
+                foreach (var key in keys)
+                {
+                    Current.RemoveRoute(key);
+                }
+                Current.MarkAsModified();
             }
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -317,15 +361,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertShortcut(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertShortcut(model);
+                    }
                 }
+                Shortcut.Sort(Current.Map.Shortcuts);
+                Current.MarkAsModified();
             }
-            Shortcut.Sort(Current.Map.Shortcuts);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -333,19 +380,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Shortcuts;
-            }
-            var list = new List<Shortcut>() { };
-            Current.Map.Shortcuts.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Shortcuts;
                 }
-            });
-            return list;
+                var list = new List<Shortcut>() { };
+                Current.Map.Shortcuts.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -353,11 +403,14 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var key in keys)
+            lock (_lock)
             {
-                Current.RemoveShortcut(key);
+                foreach (var key in keys)
+                {
+                    Current.RemoveShortcut(key);
+                }
+                Current.MarkAsModified();
             }
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -365,15 +418,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertSnapshot(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertSnapshot(model);
+                    }
                 }
+                Snapshot.Sort(Current.Map.Snapshots);
+                Current.MarkAsModified();
             }
-            Snapshot.Sort(Current.Map.Snapshots);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -381,19 +437,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Snapshots;
-            }
-            var list = new List<Snapshot>() { };
-            Current.Map.Snapshots.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Snapshots;
                 }
-            });
-            return list;
+                var list = new List<Snapshot>() { };
+                Current.Map.Snapshots.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -401,12 +460,15 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var k in keys)
+            lock (_lock)
             {
-                Current.RemoveSnapshot(k);
+                foreach (var k in keys)
+                {
+                    Current.RemoveSnapshot(k);
+                }
+                Snapshot.Sort(Current.Map.Snapshots);
+                Current.MarkAsModified();
             }
-            Snapshot.Sort(Current.Map.Snapshots);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -414,15 +476,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertTrace(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertTrace(model);
+                    }
                 }
+                Trace.Sort(Current.Map.Traces);
+                Current.MarkAsModified();
             }
-            Trace.Sort(Current.Map.Traces);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -431,11 +496,14 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var key in keys)
+            lock (_lock)
             {
-                Current.RemoveTrace(key);
+                foreach (var key in keys)
+                {
+                    Current.RemoveTrace(key);
+                }
+                Current.MarkAsModified();
             }
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -443,19 +511,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Traces;
-            }
-            var list = new List<Trace>() { };
-            Current.Map.Traces.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Traces;
                 }
-            });
-            return list;
+                var list = new List<Trace>() { };
+                Current.Map.Traces.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -463,15 +534,18 @@ public partial class MapDatabase
     {
         if (Current != null && models.Count > 0)
         {
-            foreach (var model in models)
+            lock (_lock)
             {
-                if (model.Validated())
+                foreach (var model in models)
                 {
-                    Current.InsertVariable(model);
+                    if (model.Validated())
+                    {
+                        Current.InsertVariable(model);
+                    }
                 }
+                Variable.Sort(Current.Map.Variables);
+                Current.MarkAsModified();
             }
-            Variable.Sort(Current.Map.Variables);
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -479,19 +553,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (option.IsEmpty())
+            lock (_lock)
             {
-                return Current.Map.Variables;
-            }
-            var list = new List<Variable>() { };
-            Current.Map.Variables.ForEach((model) =>
-            {
-                if (option.Validate(model.Key, model.Group))
+                if (option.IsEmpty())
                 {
-                    list.Add(model);
+                    return Current.Map.Variables;
                 }
-            });
-            return list;
+                var list = new List<Variable>() { };
+                Current.Map.Variables.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
+            }
         }
         return [];
     }
@@ -499,11 +576,14 @@ public partial class MapDatabase
     {
         if (Current != null && keys.Count > 0)
         {
-            foreach (var key in keys)
+            lock (_lock)
             {
-                Current.RemoveVariable(key);
+                foreach (var key in keys)
+                {
+                    Current.RemoveVariable(key);
+                }
+                Current.MarkAsModified();
             }
-            Current.MarkAsModified();
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -511,7 +591,10 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            return new Walking(new Mapper(Current, context, options)).QueryPathAny(from, target, 0).SuccessOrNull();
+            lock (_lock)
+            {
+                return new Walking(new Mapper(Current, context, options)).QueryPathAny(from, target, 0).SuccessOrNull();
+            }
         }
         return null;
     }
@@ -520,7 +603,10 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            return new Walking(new Mapper(Current, context, options)).QueryPathAll(start, target).SuccessOrNull();
+            lock (_lock)
+            {
+                return new Walking(new Mapper(Current, context, options)).QueryPathAll(start, target).SuccessOrNull();
+            }
         }
         return null;
     }
@@ -528,7 +614,10 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            return new Walking(new Mapper(Current, context, options)).QueryPathOrdered(start, target).SuccessOrNull();
+            lock (_lock)
+            {
+                return new Walking(new Mapper(Current, context, options)).QueryPathOrdered(start, target).SuccessOrNull();
+            }
         }
         return null;
     }
@@ -537,46 +626,49 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (Current.Cache.Regions.TryGetValue(key, out Region? region))
+            lock (_lock)
             {
-                var result = new Dictionary<string, bool>();
-                foreach (var item in region.Items)
+                if (Current.Cache.Regions.TryGetValue(key, out Region? region))
                 {
-                    if (item.Type == RegionItemType.Room)
+                    var result = new Dictionary<string, bool>();
+                    foreach (var item in region.Items)
                     {
-                        if (item.Not)
+                        if (item.Type == RegionItemType.Room)
                         {
-                            result.Remove(item.Value);
+                            if (item.Not)
+                            {
+                                result.Remove(item.Value);
+                            }
+                            else
+                            {
+                                if (Current.Cache.Rooms.ContainsKey(item.Value))
+                                {
+                                    result[item.Value] = true;
+                                }
+                            }
                         }
                         else
                         {
-                            if (Current.Cache.Rooms.ContainsKey(item.Value))
+                            foreach (var room in Current.Map.Rooms)
                             {
-                                result[item.Value] = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var room in Current.Map.Rooms)
-                        {
-                            if (room.Group == item.Value)
-                            {
-                                if (item.Not)
+                                if (room.Group == item.Value)
                                 {
-                                    result.Remove(room.Key);
-                                }
-                                else
-                                {
-                                    result[room.Key] = true;
+                                    if (item.Not)
+                                    {
+                                        result.Remove(room.Key);
+                                    }
+                                    else
+                                    {
+                                        result[room.Key] = true;
+                                    }
                                 }
                             }
                         }
                     }
+                    var list = result.Keys.ToList();
+                    list.Sort();
+                    return list;
                 }
-                var list = result.Keys.ToList();
-                list.Sort();
-                return list;
             }
         }
         return [];
@@ -586,7 +678,10 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            return new Walking(new Mapper(Current, context, options)).Dilate(src, iterations);
+            lock (_lock)
+            {
+                return new Walking(new Mapper(Current, context, options)).Dilate(src, iterations);
+            }
         }
         return [];
     }
@@ -594,16 +689,19 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            var mapper = new Mapper(Current, context, options);
-            var room = mapper.GetRoom(start);
-            if (room is not null)
+            lock (_lock)
             {
-                var exits = mapper.GetRoomExits(room);
-                foreach (var exit in exits)
+                var mapper = new Mapper(Current, context, options);
+                var room = mapper.GetRoom(start);
+                if (room is not null)
                 {
-                    if (exit.Command == command && mapper.ValidateExit(start, exit, mapper.GetExitCost(exit)))
+                    var exits = mapper.GetRoomExits(room);
+                    foreach (var exit in exits)
                     {
-                        return exit.To;
+                        if (exit.Command == command && mapper.ValidateExit(start, exit, mapper.GetExitCost(exit)))
+                        {
+                            return exit.To;
+                        }
                     }
                 }
             }
@@ -614,9 +712,12 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (Current.Cache.Variables.TryGetValue(key, out Variable? variable))
+            lock (_lock)
             {
-                return variable.Value;
+                if (Current.Cache.Variables.TryGetValue(key, out Variable? variable))
+                {
+                    return variable.Value;
+                }
             }
         }
         return "";
@@ -625,7 +726,10 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            return new Mapper(Current, context, options).GetRoom(key);
+            lock (_lock)
+            {
+                return new Mapper(Current, context, options).GetRoom(key);
+            }
         }
         return null;
     }
@@ -633,25 +737,31 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            Current.Map.Snapshots.RemoveAll((s) => filter.Validate(s));
-            Snapshot.Sort(Current.Map.Snapshots);
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
+            lock (_lock)
+            {
+                Current.Map.Snapshots.RemoveAll((s) => filter.Validate(s));
+                Snapshot.Sort(Current.Map.Snapshots);
+                Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
+            }
         }
     }
     public List<Room> APISearchRooms(RoomFilter filter)
     {
         if (Current != null)
         {
-            var result = new List<Room>() { };
-            Current.Map.Rooms.ForEach((model) =>
+            lock (_lock)
             {
-                if (filter.Validate(model))
+                var result = new List<Room>() { };
+                Current.Map.Rooms.ForEach((model) =>
                 {
-                    result.Add(model);
-                }
-            });
-            return result;
+                    if (filter.Validate(model))
+                    {
+                        result.Add(model);
+                    }
+                });
+                return result;
+            }
         }
         return [];
     }
@@ -660,19 +770,22 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            var result = new List<Room>() { };
-            src = [.. src.Distinct()];
-            src.ForEach((key) =>
+            lock (_lock)
             {
-                if (Current.Cache.Rooms.TryGetValue(key, out Room? model))
+                var result = new List<Room>() { };
+                src = [.. src.Distinct()];
+                src.ForEach((key) =>
                 {
-                    if (filter.Validate(model))
+                    if (Current.Cache.Rooms.TryGetValue(key, out Room? model))
                     {
-                        result.Add(model);
+                        if (filter.Validate(model))
+                        {
+                            result.Add(model);
+                        }
                     }
-                }
-            });
-            return result;
+                });
+                return result;
+            }
         }
         return [];
     }
@@ -681,8 +794,11 @@ public partial class MapDatabase
 
         if (Current != null)
         {
-            Current.TakeSnapshot(key, type, value, group);
-            Current.MarkAsModified();
+            lock (_lock)
+            {
+                Current.TakeSnapshot(key, type, value, group);
+                Current.MarkAsModified();
+            }
             RaiseMapFileUpdatedEvent(this);
         }
     }
@@ -690,7 +806,10 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            return SnapshotHelper.Search(search, Current.Map.Snapshots);
+            lock (_lock)
+            {
+                return SnapshotHelper.Search(search, Current.Map.Snapshots);
+            }
         }
         return [];
     }
@@ -698,20 +817,23 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (Current.Cache.Traces.TryGetValue(key, out Trace? trace))
+            lock (_lock)
             {
-                var prev = trace.Clone();
+                if (Current.Cache.Traces.TryGetValue(key, out Trace? trace))
+                {
+                    var prev = trace.Clone();
 
-                if (trace.Locations.Contains(location))
-                {
-                    return;
-                }
-                trace.AddLocations(new List<string>() { location });
-                trace.Arrange();
-                if (!trace.Equal(prev))
-                {
-                    Current.MarkAsModified();
-                    RaiseMapFileUpdatedEvent(this);
+                    if (trace.Locations.Contains(location))
+                    {
+                        return;
+                    }
+                    trace.AddLocations(new List<string>() { location });
+                    trace.Arrange();
+                    if (!trace.Equal(prev))
+                    {
+                        Current.MarkAsModified();
+                        RaiseMapFileUpdatedEvent(this);
+                    }
                 }
             }
         }
@@ -720,16 +842,41 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            if (tag != "")
+            lock (_lock)
             {
-                if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
+                if (tag != "")
+                {
+                    if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
+                    {
+                        var prev = room.Clone();
+                        room.Tags.RemoveAll((t) => t.Key == tag);
+                        if (value != 0)
+                        {
+                            room.Tags.Add(new ValueTag(tag, value));
+                        }
+                        room.Arrange();
+                        if (!room.Equal(prev))
+                        {
+                            Current.MarkAsModified();
+                            RaiseMapFileUpdatedEvent(this);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    public void APISetRoomData(string roomkey, string datakey, string datavalue)
+    {
+        if (Current != null)
+        {
+            lock (_lock)
+            {
+                if (Current.Cache.Rooms.TryGetValue(roomkey, out Room? room))
                 {
                     var prev = room.Clone();
-                    room.Tags.RemoveAll((t) => t.Key == tag);
-                    if (value != 0)
-                    {
-                        room.Tags.Add(new ValueTag(tag, value));
-                    }
+                    room.Data.RemoveAll((d) => d.Key == datakey);
+                    room.Data.Add(new Data(datakey, datavalue));
                     room.Arrange();
                     if (!room.Equal(prev))
                     {
@@ -741,39 +888,23 @@ public partial class MapDatabase
             }
         }
     }
-    public void APISetRoomData(string roomkey, string datakey, string datavalue)
-    {
-        if (Current != null)
-        {
-            if (Current.Cache.Rooms.TryGetValue(roomkey, out Room? room))
-            {
-                var prev = room.Clone();
-                room.Data.RemoveAll((d) => d.Key == datakey);
-                room.Data.Add(new Data(datakey, datavalue));
-                room.Arrange();
-                if (!room.Equal(prev))
-                {
-                    Current.MarkAsModified();
-                    RaiseMapFileUpdatedEvent(this);
-                }
-                return;
-            }
-        }
-    }
     public void APIGroupRoom(string key, string group)
     {
         if (Current != null)
         {
-            if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
+            lock (_lock)
             {
-                if (room.Group == group)
+                if (Current.Cache.Rooms.TryGetValue(key, out Room? room))
                 {
-                    return;
+                    if (room.Group == group)
+                    {
+                        return;
+                    }
+                    room.Group = group;
+                    Room.Sort(Current.Map.Rooms);
+                    Current.MarkAsModified();
+                    RaiseMapFileUpdatedEvent(this);
                 }
-                room.Group = group;
-                Room.Sort(Current.Map.Rooms);
-                Current.MarkAsModified();
-                RaiseMapFileUpdatedEvent(this);
             }
         }
     }
@@ -781,11 +912,14 @@ public partial class MapDatabase
     {
         if (Current != null)
         {
-            var mapper = new Mapper(Current, context, options);
-            var room = mapper.GetRoom(key);
-            if (room is not null)
+            lock (_lock)
             {
-                return mapper.GetRoomExits(room);
+                var mapper = new Mapper(Current, context, options);
+                var room = mapper.GetRoom(key);
+                if (room is not null)
+                {
+                    return mapper.GetRoomExits(room);
+                }
             }
         }
         return [];
