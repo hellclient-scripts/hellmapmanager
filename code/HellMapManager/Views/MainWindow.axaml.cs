@@ -6,11 +6,13 @@ using HellMapManager.Misc;
 using HellMapManager.Windows.PatchWindow;
 using HellMapManager.Windows.AboutWindow;
 using HellMapManager.Windows.RoomsHExportWindow;
+using HellMapManager.Windows.APIConfigWindow;
 using Avalonia.Interactivity;
 using System;
 using HellMapManager.Cores;
 using System.Threading.Tasks;
 using HellMapManager.Services.API;
+using Microsoft.AspNetCore.Authentication;
 
 namespace HellMapManager.Views;
 
@@ -140,8 +142,16 @@ public partial class MainWindow : Window
     {
         APIServer.Instance.Stop();
     }
-    public void ConfigServer(object? sender, RoutedEventArgs args)
+    public async void ConfigServer(object? sender, RoutedEventArgs args)
     {
+        var w = new APIConfigWindow();
+        w.DataContext = new APIConfigWindowViewModel(APIConfig.From(AppKernel.MapDatabase.Settings));
+        var result = await w.ShowDialog<APIConfig>(this);
+        if (result is not null)
+        {
+            result.Apply(AppKernel.MapDatabase.Settings);
+            AppKernel.MapDatabase.RaiseSettingsUpdatedEvent(this);
+        }
     }
 
 }

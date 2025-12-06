@@ -47,7 +47,7 @@ public partial class APIServer
     public int Port { get; set; } = Settings.DefaultAPIPort;
     public void Start()
     {
-        if (Running)
+        if (App is not null)
         {
             return;
         }
@@ -59,7 +59,7 @@ public partial class APIServer
     }
     public void Stop()
     {
-        if (!Running)
+        if (App is null)
         {
             return;
         }
