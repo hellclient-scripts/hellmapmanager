@@ -25,6 +25,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         string process;
         string path;
         if (Environment.GetEnvironmentVariable(AppPreset.ProcessPathEnvName) is string envPath && !string.IsNullOrEmpty(envPath))
@@ -74,9 +75,11 @@ public partial class App : Application
             }
         ;
         }
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         APIServer.Instance.BindMapDatabase(AppKernel.MapDatabase);
-        APIServer.Instance.Start();
+        if (AppKernel.MapDatabase.Settings.APIEnabled)
+        {
+            APIServer.Instance.Start();
+        }
         base.OnFrameworkInitializationCompleted();
     }
 

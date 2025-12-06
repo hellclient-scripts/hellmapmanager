@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using HellMapManager.Models;
 using HellMapManager.Services;
 using HellMapManager.Misc;
+using HellMapManager.Services.API;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -29,6 +30,7 @@ public partial class MainWindowViewModel : ViewModelBase
         InitShortcuts();
         InitVariables();
         InitSnapshots();
+        InitServer();
     }
 
     public partial void InitOverview();
@@ -41,6 +43,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public partial void InitShortcuts();
     public partial void InitVariables();
     public partial void InitSnapshots();
+    public partial void InitServer();
 
     public string Greeting { get; } = "您还没有打开地图文件。";
     public async void OnOpen()

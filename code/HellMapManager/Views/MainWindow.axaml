@@ -74,8 +74,8 @@
         <MenuItem Click="OnOpenPatch" Header="加载补丁文件" />
       </MenuItem>
       <MenuItem Header="接口(_A)">
-        <MenuItem Click="StartServer" Header="启动" />
-        <MenuItem Click="StopServer" Header="停止" />
+        <MenuItem IsEnabled="{Binding !IsServerRunning}" Click="StartServer" Header="启动" />
+        <MenuItem IsEnabled="{Binding IsServerRunning}" Click="StopServer" Header="停止" />
         <Separator />
         <MenuItem Click="ConfigServer" Header="设置" />
       </MenuItem>

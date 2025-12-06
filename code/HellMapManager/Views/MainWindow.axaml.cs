@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using System;
 using HellMapManager.Cores;
 using System.Threading.Tasks;
+using HellMapManager.Services.API;
 
 namespace HellMapManager.Views;
 
@@ -133,9 +134,11 @@ public partial class MainWindow : Window
 
     public void StartServer(object? sender, RoutedEventArgs args)
     {
+        APIServer.Instance.Start();
     }
     public void StopServer(object? sender, RoutedEventArgs args)
     {
+        APIServer.Instance.Stop();
     }
     public void ConfigServer(object? sender, RoutedEventArgs args)
     {

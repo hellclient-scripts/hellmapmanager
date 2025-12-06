@@ -1,15 +1,14 @@
+using System;
 using System.IO;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using HellMapManager.Cores;
 using HellMapManager.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 namespace HellMapManager.Services.API;
 
 public partial class APIServer
@@ -17,40 +16,62 @@ public partial class APIServer
 
     public static APIServer Instance { get; } = new APIServer();
     private MapDatabase Database = new();
-    private WebApplication App;
-    public bool Running { get; set; } = false;
+    private WebApplication? App;
+    public bool Running { get => App is not null; }
     public void BindMapDatabase(MapDatabase db)
     {
         Database = db;
     }
     public APIServer()
     {
+    }
+    private WebApplication buildApp()
+    {
         var builder = WebApplication.CreateSlimBuilder();
         var app = builder.Build();
-        App = app;
         app.Use(MiddlewareSetHeaderServer);
-        app.Lifetime.ApplicationStarted.Register(() => { Running = true; });
-        app.Lifetime.ApplicationStopped.Register(() => { Running = false; });
-        ConfigureRoutes();
+        app.Lifetime.ApplicationStarted.Register(() =>
+        {
+            App = app;
+            RaiseUpdatedEvent(this);
+        });
+        app.Lifetime.ApplicationStopped.Register(() =>
+        {
+            App = null;
+            RaiseUpdatedEvent(this);
+        });
+        ConfigureRoutes(app);
+        return app;
+
     }
     public int Port { get; set; } = Settings.DefaultAPIPort;
     public void Start()
     {
-        App.Urls.Clear();
+        if (Running)
+        {
+            return;
+        }
+        var app = buildApp();
+        app.Urls.Clear();
         Port = Database.Settings.GetPort();
-        App.Urls.Add(Database.Settings.BuildURL());
-        App.RunAsync();
+        app.Urls.Add(Database.Settings.BuildURL());
+        app.RunAsync();
     }
     public void Stop()
     {
+        if (!Running)
+        {
+            return;
+        }
         App.StopAsync();
     }
 
-    private void ConfigureRoutes()
+    private void ConfigureRoutes(WebApplication app)
     {
-        App.MapGet("/api/version", APIVersion);
-        App.Map("{*url}", NotFound);
-        var DBAPI = App.MapGroup("/api/db");
+
+        app.MapGet("/api/version", APIVersion);
+        app.Map("{*url}", NotFound);
+        var DBAPI = app.MapGroup("/api/db");
         DBAPI.Map("/info", APIInfo);
         DBAPI.MapPost("/listrooms", APIListRooms);
     }
@@ -102,6 +123,12 @@ public partial class APIServer
         ctx.Response.StatusCode = 400;
         await ctx.Response.WriteAsync(msg == "" ? "Bad Request" : msg);
     }
+    public event EventHandler? UpdatedEvent;
+    public void RaiseUpdatedEvent(object? sender)
+    {
+        UpdatedEvent?.Invoke(sender, EventArgs.Empty);
+    }
+
 }
 
 
