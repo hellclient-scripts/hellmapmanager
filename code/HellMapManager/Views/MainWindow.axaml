@@ -74,8 +74,14 @@
         <MenuItem Click="OnOpenPatch" Header="加载补丁文件" />
       </MenuItem>
       <MenuItem Header="接口(_A)">
-        <MenuItem IsEnabled="{Binding !IsServerRunning}" Click="StartServer" Header="启动" />
-        <MenuItem IsEnabled="{Binding IsServerRunning}" Click="StopServer" Header="停止" />
+        <MenuItem
+          Click="StartServer"
+          Header="启动"
+          IsEnabled="{Binding !IsServerRunning}" />
+        <MenuItem
+          Click="StopServer"
+          Header="停止"
+          IsEnabled="{Binding IsServerRunning}" />
         <Separator />
         <MenuItem Click="ConfigServer" Header="设置" />
       </MenuItem>
@@ -89,10 +95,16 @@
       </MenuItem>
     </Menu>
     <Border
-      Height="20"
+      Height="24"
       BorderBrush="#FFeeeeee"
       BorderThickness="0,1,0,0"
-      DockPanel.Dock="Bottom" />
+      DockPanel.Dock="Bottom">
+      <TextBlock
+        Margin="5,0,0,0"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Center"
+        Text="{Binding ServerStatusText}" />
+    </Border>
     <Panel>
       <welcome:Welcome IsVisible="{Binding CanShowWelcome}" />
       <mapfile:MapFile

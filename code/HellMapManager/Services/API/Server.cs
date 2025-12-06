@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -30,6 +32,7 @@ public partial class APIServer
         var builder = WebApplication.CreateSlimBuilder();
         var app = builder.Build();
         app.Use(MiddlewareSetHeaderServer);
+        app.Use(MiddlewareBasicauth);
         app.Lifetime.ApplicationStarted.Register(() =>
         {
             App = app;
@@ -45,6 +48,8 @@ public partial class APIServer
 
     }
     public int Port { get; set; } = Settings.DefaultAPIPort;
+    public string UserName { get; set; } = "";
+    public string PassWord { get; set; } = "";
     public void Start()
     {
         if (App is not null)
@@ -54,6 +59,8 @@ public partial class APIServer
         var app = buildApp();
         app.Urls.Clear();
         Port = Database.Settings.GetPort();
+        UserName = Database.Settings.APIUserName;
+        PassWord = Database.Settings.APIPassWord;
         app.Urls.Add(Database.Settings.BuildURL());
         app.RunAsync();
     }
@@ -85,6 +92,33 @@ public partial class APIServer
         ctx.Response.Headers["Server"] = "HellMapManager";
         await next(ctx);
     }
+    private async Task MiddlewareBasicauth(HttpContext ctx, RequestDelegate next)
+    {
+        if (UserName != "" && PassWord != "")
+        {
+            var header = ctx.Request.Headers.Authorization.FirstOrDefault();
+            try
+            {
+                var authHeader = AuthenticationHeaderValue.Parse(header ?? "");
+                var credentialBytes = Convert.FromBase64String(authHeader.Parameter ?? "");
+                var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
+                var requsername = credentials[0];
+                var reqpassword = credentials[1];
+                if (requsername != UserName || reqpassword != PassWord)
+                {
+                    await Unauthorized(ctx);
+                    return;
+                }
+            }
+            catch
+            {
+                await Unauthorized(ctx);
+                return;
+
+            }
+        }
+        await next(ctx);
+    }
     private async Task<string> LoadBody(HttpContext ctx)
     {
         var enc = Encoding.UTF8;
@@ -107,6 +141,11 @@ public partial class APIServer
         }
 
         await ctx.Response.WriteAsync(json, enc);
+    }
+    public async Task Unauthorized(HttpContext ctx)
+    {
+        ctx.Response.StatusCode = 401;
+        await ctx.Response.WriteAsync("Unauthorized");
     }
     public async Task NotFound(HttpContext ctx)
     {
