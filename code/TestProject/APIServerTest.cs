@@ -6,6 +6,7 @@ using HellMapManager.Helpers;
 using HellMapManager.Models;
 using Tmds.DBus.Protocol;
 using Microsoft.Msagl.Layout.Layered;
+using HellMapManager.Views.Mapfile.Rooms;
 
 namespace TestProject;
 
@@ -49,13 +50,143 @@ public class APIServerTest
         var resp = await Post($"http://localhost:{server.Port}" + "/api/db/info", "");
         var result = JsonSerializer.Deserialize(resp, typeof(APIResultInfo), APIJsonSerializerContext.Default);
         Assert.Null(result);
-        mapDatabase.SetCurrent(HellMapManager.Models.MapFile.Create("name","desc"));
+        mapDatabase.SetCurrent(HellMapManager.Models.MapFile.Create("name", "desc"));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/info", "");
         var result2 = (JsonSerializer.Deserialize(resp, typeof(APIResultInfo), APIJsonSerializerContext.Default) as APIResultInfo);
         Assert.NotNull(result2);
         Assert.Equal("name", result2.Name);
         Assert.Equal("desc", result2.Desc);
         server.Stop();
+    }
+    [Fact]
+    public async Task TestRoomAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        List<Room> rooms = new List<Room>();
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+
+        var room1 = new Room()
+        {
+            Key = "key1",
+            Group = "group1",
+        };
+        var room2 = new Room()
+        {
+            Key = "key2",
+            Group = "",
+        };
+        var newroom2 = new Room()
+        {
+            Key = "key2",
+            Group = "group2",
+        };
+        var room3 = new Room()
+        {
+            Key = "key3",
+            Group = "group1",
+        };
+        var room4 = new Room()
+        {
+            Key = "key4",
+            Group = "group2",
+        };
+        var badroom = new Room()
+        {
+            Key = "",
+            Group = "group1",
+        };
+        var opt = new APIListOption();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertrooms", new InputRooms() { Rooms = RoomModel.FromList([room1, room2, room3]) });
+        Assert.Equal("\"success\"", resp);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removerooms", new KeyList() { Keys = ["key1"] });
+        Assert.Equal("\"success\"", resp);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertrooms", new InputRooms() { Rooms = RoomModel.FromList([room1, room2, room3]) });
+        Assert.Equal("\"success\"", resp);
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(room2.Equal(result[0].ToRoom()));
+        Assert.True(room1.Equal(result[1].ToRoom()));
+        Assert.True(room3.Equal(result[2].ToRoom()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Single(result!);
+        Assert.True(room2.Equal(result![0].ToRoom()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(room1.Equal(result![0].ToRoom()));
+        Assert.True(room3.Equal(result![1].ToRoom()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Single(result!);
+        Assert.True(room2.Equal(result![0].ToRoom()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Single(result!);
+        Assert.True(room1.Equal(result![0].ToRoom()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertrooms", new InputRooms() { Rooms = RoomModel.FromList([]) });
+        Assert.Equal("\"success\"", resp);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertrooms", new InputRooms() { Rooms = RoomModel.FromList([newroom2, room4]) });
+        Assert.Equal("\"success\"", resp);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(room1.Equal(result![0].ToRoom()));
+        Assert.True(room3.Equal(result![1].ToRoom()));
+        Assert.True(newroom2.Equal(result![2].ToRoom()));
+        Assert.True(room4.Equal(result![3].ToRoom()));
+        Assert.False(badroom.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertrooms", new InputRooms() { Rooms = RoomModel.FromList([badroom]) });
+        Assert.Equal("\"success\"", resp);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Equal(4, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removerooms", new KeyList() { Keys = [] });
+        Assert.Equal("\"success\"", resp);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removerooms", new KeyList() { Keys = ["key1"] });
+        Assert.Equal("\"success\"", resp);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(room3.Equal(result![0].ToRoom()));
+        Assert.True(newroom2.Equal(result![1].ToRoom()));
+        Assert.True(room4.Equal(result![2].ToRoom()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removerooms", new KeyList() { Keys = ["key1","key2", "key4"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Single(result!);
+        Assert.True(room3.Equal(result![0].ToRoom()));
+
+        server.Stop();
+        return;
     }
 
 }

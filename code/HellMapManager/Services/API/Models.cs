@@ -31,6 +31,14 @@ public class KeyList
 }
 public class InputListOption
 {
+    public static InputListOption From(APIListOption option)
+    {
+        return new InputListOption()
+        {
+            Keys = option.Keys(),
+            Groups = option.Groups(),
+        };
+    }
     public APIListOption To()
     {
         return new APIListOption().WithKeys(Keys ?? []).WithGroups(Groups ?? []);
@@ -243,18 +251,18 @@ public class RoomModel
         rm.Data = DataModel.FromList(room.Data);
         return rm;
     }
-    public static Room ToRoom(RoomModel model)
+    public Room ToRoom()
     {
         var room = new Room()
         {
-            Key = model.Key,
-            Name = model.Name,
-            Desc = model.Desc,
-            Group = model.Group,
+            Key = Key,
+            Name = Name,
+            Desc = Desc,
+            Group = Group,
         };
-        room.Tags = ValueTagModel.ToValueTagList(model.Tags);
-        room.Exits = ExitModel.ToExitList(model.Exits);
-        room.Data = DataModel.ToDataList(model.Data);
+        room.Tags = ValueTagModel.ToValueTagList(Tags);
+        room.Exits = ExitModel.ToExitList(Exits);
+        room.Data = DataModel.ToDataList(Data);
         return room;
     }
     public static List<RoomModel> FromList(List<Room> rooms)
@@ -271,7 +279,7 @@ public class RoomModel
         var list = new List<Room>();
         foreach (var roomModel in roomModels)
         {
-            list.Add(ToRoom(roomModel));
+            list.Add(roomModel.ToRoom());
         }
         return list;
     }
@@ -319,5 +327,6 @@ public class InputRooms()
 [JsonSerializable(typeof(ExitModel))]
 [JsonSerializable(typeof(List<ExitModel>))]
 [JsonSerializable(typeof(KeyList))]
+[JsonSerializable(typeof(InputRooms))]
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }
