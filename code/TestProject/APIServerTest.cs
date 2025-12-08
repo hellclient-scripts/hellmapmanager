@@ -2,11 +2,7 @@ using System.Text;
 using System.Text.Json;
 using HellMapManager.Cores;
 using HellMapManager.Services.API;
-using HellMapManager.Helpers;
 using HellMapManager.Models;
-using Tmds.DBus.Protocol;
-using Microsoft.Msagl.Layout.Layered;
-using HellMapManager.Views.Mapfile.Rooms;
 
 namespace TestProject;
 
@@ -179,7 +175,7 @@ public class APIServerTest
         Assert.True(room3.Equal(result![0].ToRoom()));
         Assert.True(newroom2.Equal(result![1].ToRoom()));
         Assert.True(room4.Equal(result![2].ToRoom()));
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removerooms", new KeyList() { Keys = ["key1","key2", "key4"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removerooms", new KeyList() { Keys = ["key1", "key2", "key4"] });
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/listrooms", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
         Assert.Single(result!);
