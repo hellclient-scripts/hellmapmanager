@@ -78,7 +78,7 @@ public partial class APIServer
     private void ConfigureRoutes(WebApplication app)
     {
 
-        app.MapGet("/api/version", APIVersion);
+        app.Map("/api/version", APIVersion);
         app.Map("{*url}", NotFound);
         var DBAPI = app.MapGroup("/api/db");
         DBAPI.Map("/info", APIInfo);
