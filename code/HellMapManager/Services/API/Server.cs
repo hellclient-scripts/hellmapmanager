@@ -11,6 +11,7 @@ using HellMapManager.Cores;
 using HellMapManager.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 namespace HellMapManager.Services.API;
 
 public partial class APIServer
@@ -30,6 +31,7 @@ public partial class APIServer
     private WebApplication buildApp()
     {
         var builder = WebApplication.CreateSlimBuilder();
+        builder.Logging.ClearProviders();
         var app = builder.Build();
         app.Use(MiddlewareSetHeaderServer);
         app.Use(MiddlewareBasicauth);
@@ -81,6 +83,7 @@ public partial class APIServer
         var DBAPI = app.MapGroup("/api/db");
         DBAPI.Map("/info", APIInfo);
         DBAPI.MapPost("/listrooms", APIListRooms);
+        DBAPI.MapPost("/removerooms", APIRemoveRooms);
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {
@@ -141,6 +144,10 @@ public partial class APIServer
         }
 
         await ctx.Response.WriteAsync(json, enc);
+    }
+    public async Task Success(HttpContext ctx)
+    {
+        await WriteJSON(ctx, "success", 200);
     }
     public async Task Unauthorized(HttpContext ctx)
     {

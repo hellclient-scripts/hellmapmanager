@@ -4,9 +4,31 @@ using System.Text.Json.Serialization;
 using HellMapManager.Models;
 using System;
 using System.Threading.Tasks;
+using Avalonia.Input;
 
 namespace HellMapManager.Services.API;
 
+public class KeyList
+{
+    public static KeyList? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(KeyList), APIJsonSerializerContext.Default) is KeyList list)
+            {
+                return list;
+            }
+            return null;
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
+    public List<string> Keys { get; set; } = [];
+
+}
 public class InputListOption
 {
     public APIListOption To()
@@ -197,5 +219,6 @@ public class RoomModel
 [JsonSerializable(typeof(List<ValueConditionModel>))]
 [JsonSerializable(typeof(ExitModel))]
 [JsonSerializable(typeof(List<ExitModel>))]
+[JsonSerializable(typeof(KeyList))]
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

@@ -33,4 +33,15 @@ public partial class APIServer
         var rooms = Database.APIListRooms(option!.To());
         await WriteJSON(ctx, RoomModel.FromList(rooms));
     }
+    public async Task APIRemoveRooms(HttpContext ctx)
+    {
+        var list = KeyList.FromJSON(await LoadBody(ctx));
+        if (list is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIRemoveRooms(list.Keys);
+        await Success(ctx);
+    }
 }
