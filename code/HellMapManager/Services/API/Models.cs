@@ -2,9 +2,6 @@ using System.Collections.Generic;
 using HellMapManager.Cores;
 using System.Text.Json.Serialization;
 using HellMapManager.Models;
-using System;
-using System.Threading.Tasks;
-using Avalonia.Input;
 
 namespace HellMapManager.Services.API;
 
@@ -292,7 +289,6 @@ public class RoomModel
     public List<DataModel> Data { get; set; } = [];
 
 }
-
 public class InputRooms()
 {
     public static InputRooms? FromJSON(string data)
@@ -311,6 +307,75 @@ public class InputRooms()
     }
     public List<RoomModel> Rooms { get; set; } = [];
 }
+
+public class MarkerModel()
+{
+    public static MarkerModel From(Marker marker)
+    {
+        return new MarkerModel()
+        {
+            Key = marker.Key,
+            Value = marker.Value,
+            Group = marker.Group,
+            Desc = marker.Desc,
+            Message = marker.Message,
+        };
+
+    }
+    public Marker ToMarker()
+    {
+        return new Marker()
+        {
+            Key = Key,
+            Value = Value,
+            Group = Group,
+            Desc = Desc,
+            Message = Message,
+        };
+    }
+    public static List<MarkerModel> FromList(List<Marker> markers)
+    {
+        var list = new List<MarkerModel>();
+        foreach (var marker in markers)
+        {
+            list.Add(From(marker));
+        }
+        return list;
+    }
+    public static List<Marker> ToMarkerList(List<MarkerModel> markerModels)
+    {
+        var list = new List<Marker>();
+        foreach (var markerModel in markerModels)
+        {
+            list.Add(markerModel.ToMarker());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+    public string Value { get; set; } = "";
+    public string Group { get; set; } = "";
+    public string Desc { get; set; } = "";
+    public string Message { get; set; } = "";
+}
+public class InputMarkers()
+{
+    public static InputMarkers? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputMarkers), APIJsonSerializerContext.Default) is InputMarkers markers)
+            {
+                return markers;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<MarkerModel> Markers { get; set; } = [];
+}
+
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -320,6 +385,7 @@ public class InputRooms()
 [JsonSerializable(typeof(ValueTagModel))]
 [JsonSerializable(typeof(RoomModel))]
 [JsonSerializable(typeof(List<RoomModel>))]
+[JsonSerializable(typeof(InputRooms))]
 [JsonSerializable(typeof(DataModel))]
 [JsonSerializable(typeof(List<DataModel>))]
 [JsonSerializable(typeof(ValueConditionModel))]
@@ -327,6 +393,8 @@ public class InputRooms()
 [JsonSerializable(typeof(ExitModel))]
 [JsonSerializable(typeof(List<ExitModel>))]
 [JsonSerializable(typeof(KeyList))]
-[JsonSerializable(typeof(InputRooms))]
+[JsonSerializable(typeof(MarkerModel))]
+[JsonSerializable(typeof(List<MarkerModel>))]
+[JsonSerializable(typeof(InputMarkers))]
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

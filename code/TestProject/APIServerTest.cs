@@ -58,7 +58,6 @@ public class APIServerTest
     public async Task TestRoomAPI()
     {
         var mapDatabase = new MapDatabase();
-        List<Room> rooms = new List<Room>();
         var server = new HellMapManager.Services.API.APIServer();
         server.BindMapDatabase(mapDatabase);
         server.Start();
@@ -181,6 +180,130 @@ public class APIServerTest
         Assert.Single(result!);
         Assert.True(room3.Equal(result![0].ToRoom()));
 
+        server.Stop();
+    }
+    [Fact]
+    public async Task TestMarkerAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        List<Marker> markers = new List<Marker>();
+        var marker1 = new Marker()
+        {
+            Key = "key1",
+            Value = "value1",
+            Group = "group1",
+        };
+        var marker2 = new Marker()
+        {
+            Key = "key2",
+            Value = "value2",
+            Group = "",
+        };
+        var newmarker2 = new Marker()
+        {
+            Key = "key2",
+            Value = "value2",
+            Group = "group2",
+        };
+        var marker3 = new Marker()
+        {
+            Key = "key3",
+            Value = "value3",
+            Group = "group1",
+        };
+        var marker4 = new Marker()
+        {
+            Key = "key4",
+            Value = "value4",
+            Group = "group2",
+        };
+        var badmarker = new Marker()
+        {
+            Key = "badkey",
+            Value = "",
+            Group = "group1",
+        };
+        var opt = new APIListOption();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputMarkers() { Markers = MarkerModel.FromList([marker1, marker2, marker3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removemarkers", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputMarkers() { Markers = MarkerModel.FromList([marker1, marker2, marker3]) });
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(marker2.Equal(result[0].ToMarker()));
+        Assert.True(marker1.Equal(result[1].ToMarker()));
+        Assert.True(marker3.Equal(result[2].ToMarker()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Single(result!);
+        Assert.True(marker2.Equal(result![0].ToMarker()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(marker1.Equal(result![0].ToMarker()));
+        Assert.True(marker3.Equal(result![1].ToMarker()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Single(result!);
+        Assert.True(marker2.Equal(result![0].ToMarker()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Single(result!);
+        Assert.True(marker1.Equal(result![0].ToMarker()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputMarkers() { Markers = MarkerModel.FromList([]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputMarkers() { Markers = MarkerModel.FromList([newmarker2, marker4]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(marker1.Equal(result![0].ToMarker()));
+        Assert.True(marker3.Equal(result![1].ToMarker()));
+        Assert.True(newmarker2.Equal(result![2].ToMarker()));
+        Assert.True(marker4.Equal(result![3].ToMarker()));
+        Assert.False(badmarker.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputMarkers() { Markers = MarkerModel.FromList([badmarker]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Equal(4, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removemarkers", new KeyList() { Keys = [] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removemarkers", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(marker3.Equal(result![0].ToMarker()));
+        Assert.True(newmarker2.Equal(result![1].ToMarker()));
+        Assert.True(marker4.Equal(result![2].ToMarker()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removemarkers", new KeyList() { Keys = ["key1", "key2", "key4"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
+        Assert.Single(result!);
+        Assert.True(marker3.Equal(result![0].ToMarker()));
         server.Stop();
         return;
     }
