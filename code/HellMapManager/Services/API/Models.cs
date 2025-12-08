@@ -90,6 +90,19 @@ public class ValueTagModel
         }
         return list;
     }
+    public ValueTag ToValueTag()
+    {
+        return new ValueTag(Key, Value);
+    }
+    public static List<ValueTag> ToValueTagList(List<ValueTagModel> tagModels)
+    {
+        var list = new List<ValueTag>();
+        foreach (var tagModel in tagModels)
+        {
+            list.Add(tagModel.ToValueTag());
+        }
+        return list;
+    }
     public string Key { get; set; } = "";
     public int Value { get; set; } = 0;
 
@@ -104,12 +117,25 @@ public class DataModel
             Value = data.Value,
         };
     }
+    public Data ToData()
+    {
+        return new Data(Key, Value);
+    }
     public static List<DataModel> FromList(List<Data> datas)
     {
         var list = new List<DataModel>();
         foreach (var data in datas)
         {
             list.Add(From(data));
+        }
+        return list;
+    }
+    public static List<Data> ToDataList(List<DataModel> dataModels)
+    {
+        var list = new List<Data>();
+        foreach (var dataModel in dataModels)
+        {
+            list.Add(dataModel.ToData());
         }
         return list;
     }
@@ -130,12 +156,31 @@ public class ExitModel
             Cost = exit.Cost,
         };
     }
+    public Exit ToExit()
+    {
+        return new Exit()
+        {
+            Command = Command,
+            To = To,
+            Conditions = ValueConditionModel.ToValueConditionList(Conditions),
+            Cost = Cost,
+        };
+    }
     public static List<ExitModel> FromList(List<Exit> exits)
     {
         var list = new List<ExitModel>();
         foreach (var exit in exits)
         {
             list.Add(From(exit));
+        }
+        return list;
+    }
+    public static List<Exit> ToExitList(List<ExitModel> exitModels)
+    {
+        var list = new List<Exit>();
+        foreach (var exitModel in exitModels)
+        {
+            list.Add(exitModel.ToExit());
         }
         return list;
     }
@@ -156,12 +201,25 @@ public class ValueConditionModel
             Value = condition.Value,
         };
     }
+    public ValueCondition ToValueCondition()
+    {
+        return new ValueCondition(Key, Value, Not);
+    }
     public static List<ValueConditionModel> FromList(List<ValueCondition> conditions)
     {
         var list = new List<ValueConditionModel>();
         foreach (var condition in conditions)
         {
             list.Add(From(condition));
+        }
+        return list;
+    }
+    public static List<ValueCondition> ToValueConditionList(List<ValueConditionModel> conditionModels)
+    {
+        var list = new List<ValueCondition>();
+        foreach (var conditionModel in conditionModels)
+        {
+            list.Add(conditionModel.ToValueCondition());
         }
         return list;
     }
@@ -185,12 +243,35 @@ public class RoomModel
         rm.Data = DataModel.FromList(room.Data);
         return rm;
     }
+    public static Room ToRoom(RoomModel model)
+    {
+        var room = new Room()
+        {
+            Key = model.Key,
+            Name = model.Name,
+            Desc = model.Desc,
+            Group = model.Group,
+        };
+        room.Tags = ValueTagModel.ToValueTagList(model.Tags);
+        room.Exits = ExitModel.ToExitList(model.Exits);
+        room.Data = DataModel.ToDataList(model.Data);
+        return room;
+    }
     public static List<RoomModel> FromList(List<Room> rooms)
     {
         var list = new List<RoomModel>();
         foreach (var room in rooms)
         {
             list.Add(From(room));
+        }
+        return list;
+    }
+    public static List<Room> ToRoomList(List<RoomModel> roomModels)
+    {
+        var list = new List<Room>();
+        foreach (var roomModel in roomModels)
+        {
+            list.Add(ToRoom(roomModel));
         }
         return list;
     }
@@ -204,6 +285,24 @@ public class RoomModel
 
 }
 
+public class InputRooms()
+{
+    public static InputRooms? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputRooms), APIJsonSerializerContext.Default) is InputRooms rooms)
+            {
+                return rooms;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<RoomModel> Rooms { get; set; } = [];
+}
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]

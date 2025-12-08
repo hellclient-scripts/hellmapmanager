@@ -84,6 +84,8 @@ public partial class APIServer
         DBAPI.Map("/info", APIInfo);
         DBAPI.MapPost("/listrooms", APIListRooms);
         DBAPI.MapPost("/removerooms", APIRemoveRooms);
+        DBAPI.MapPost("/insertrooms", APIInsertRooms);
+
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {

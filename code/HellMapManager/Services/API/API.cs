@@ -1,13 +1,6 @@
 
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Unicode;
-using System.Text;
-
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Msagl.Layout.Incremental;
-using System.IO;
 
 namespace HellMapManager.Services.API;
 
@@ -42,6 +35,18 @@ public partial class APIServer
             return;
         }
         Database.APIRemoveRooms(list.Keys);
+        await Success(ctx);
+    }
+    public async Task APIInsertRooms(HttpContext ctx)
+    {
+        var rooms = InputRooms.FromJSON(await LoadBody(ctx));
+        if (rooms is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var roomlist = RoomModel.ToRoomList(rooms.Rooms);
+        Database.APIInsertRooms(roomlist);
         await Success(ctx);
     }
 }
