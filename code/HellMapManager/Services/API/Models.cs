@@ -376,6 +376,72 @@ public class InputMarkers()
     public List<MarkerModel> Markers { get; set; } = [];
 }
 
+public class RouteModel
+{
+    public static RouteModel From(Route route)
+    {
+        return new RouteModel()
+        {
+            Key = route.Key,
+            Desc = route.Desc,
+            Group = route.Group,
+            Message = route.Message,
+            Rooms = route.Rooms,
+        };
+    }
+    public Route ToRoute()
+    {
+        return new Route()
+        {
+            Key = Key,
+            Desc = Desc,
+            Group = Group,
+            Message = Message,
+            Rooms = Rooms,
+        };
+    }
+    public static List<RouteModel> FromList(List<Route> routes)
+    {
+        var list = new List<RouteModel>();
+        foreach (var route in routes)
+        {
+            list.Add(From(route));
+        }
+        return list;
+    }
+    public static List<Route> ToRouteList(List<RouteModel> routeModels)
+    {
+        var list = new List<Route>();
+        foreach (var routeModel in routeModels)
+        {
+            list.Add(routeModel.ToRoute());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+    public string Desc { get; set; } = "";
+    public string Group { get; set; } = "";
+    public string Message { get; set; } = "";
+    public List<string> Rooms { get; set; } = [];
+}
+public class InputRoutes()
+{
+    public static InputRoutes? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputRoutes), APIJsonSerializerContext.Default) is InputRoutes routes)
+            {
+                return routes;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<RouteModel> Routes { get; set; } = [];
+}
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]

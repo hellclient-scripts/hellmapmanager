@@ -189,7 +189,6 @@ public class APIServerTest
         var server = new HellMapManager.Services.API.APIServer();
         server.BindMapDatabase(mapDatabase);
         server.Start();
-        List<Marker> markers = new List<Marker>();
         var marker1 = new Marker()
         {
             Key = "key1",
@@ -304,6 +303,145 @@ public class APIServerTest
         result = JsonSerializer.Deserialize(resp, typeof(List<MarkerModel>), APIJsonSerializerContext.Default) as List<MarkerModel>;
         Assert.Single(result!);
         Assert.True(marker3.Equal(result![0].ToMarker()));
+        server.Stop();
+        return;
+    }
+    [Fact]
+    public async Task TestRouteAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        var route1 = new Route()
+        {
+            Key = "key1",
+            Group = "group1",
+            Desc = "desc1",
+            Message = "message1",
+            Rooms = ["key1", "key2"],
+        };
+        var route2 = new Route()
+        {
+            Key = "key2",
+            Group = "",
+            Desc = "desc2",
+            Message = "message2",
+            Rooms = ["key3"],
+        };
+        var newroute2 = new Route()
+        {
+            Key = "key2",
+            Group = "group2",
+            Desc = "desc2",
+            Message = "message2",
+            Rooms = ["key3"],
+        };
+        var route3 = new Route()
+        {
+            Key = "key3",
+            Group = "group1",
+            Desc = "desc3",
+            Message = "message3",
+            Rooms = ["key4"],
+        };
+        var route4 = new Route()
+        {
+            Key = "key4",
+            Group = "group2",
+            Desc = "desc4",
+            Message = "message4",
+            Rooms = ["key5"],
+        };
+        var badroute1 = new Route()
+        {
+            Key = "",
+            Group = "",
+            Desc = "",
+            Message = "",
+            Rooms = [],
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var opt = new APIListOption();
+
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputRoutes() { Routes = RouteModel.FromList([route1, route2, route3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removemarkers", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputRoutes() { Routes = RouteModel.FromList([route1, route2, route3]) });
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(route2.Equal(result[0].ToRoute()));
+        Assert.True(route1.Equal(result[1].ToRoute()));
+        Assert.True(route3.Equal(result[2].ToRoute()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Single(result!);
+        Assert.True(route2.Equal(result![0].ToRoute()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(route1.Equal(result![0].ToRoute()));
+        Assert.True(route3.Equal(result![1].ToRoute()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Single(result!);
+        Assert.True(route2.Equal(result![0].ToRoute()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Single(result!);
+        Assert.True(route1.Equal(result![0].ToRoute()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertroutes", new InputRoutes() { Routes = RouteModel.FromList([]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertroutes", new InputRoutes() { Routes = RouteModel.FromList([newroute2, route4]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(route1.Equal(result![0].ToRoute()));
+        Assert.True(route3.Equal(result![1].ToRoute()));
+        Assert.True(newroute2.Equal(result![2].ToRoute()));
+        Assert.True(route4.Equal(result![3].ToRoute()));
+        Assert.False(badroute1.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertroutes", new InputRoutes() { Routes = RouteModel.FromList([badroute1]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Equal(4, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeroutes", new KeyList() { Keys = [] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeroutes", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(route3.Equal(result![0].ToRoute()));
+        Assert.True(newroute2.Equal(result![1].ToRoute()));
+        Assert.True(route4.Equal(result![2].ToRoute()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeroutes", new KeyList() { Keys = ["key1", "key2", "key4"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
+        Assert.Single(result!);
+        Assert.True(route3.Equal(result![0].ToRoute()));
+
         server.Stop();
         return;
     }

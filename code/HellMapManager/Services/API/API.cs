@@ -83,4 +83,38 @@ public partial class APIServer
         Database.APIRemoveMarkers(list.Keys);
         await Success(ctx);
     }
+    public async Task APIListRoutes(HttpContext ctx)
+    {
+        var option = InputListOption.FromJSON(await LoadBody(ctx));
+        if (option is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var routes = Database.APIListRoutes(option!.To());
+        await WriteJSON(ctx, RouteModel.FromList(routes));
+    }
+    public async Task APIRemoveRoutes(HttpContext ctx)
+    {
+        var list = KeyList.FromJSON(await LoadBody(ctx));
+        if (list is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIRemoveRoutes(list.Keys);
+        await Success(ctx);
+    }
+    public async Task APIInsertRoutes(HttpContext ctx)
+    {
+        var routes = InputRoutes.FromJSON(await LoadBody(ctx));
+        if (routes is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var routelist = RouteModel.ToRouteList(routes.Routes);
+        Database.APIInsertRoutes(routelist);
+        await Success(ctx);
+    }
 }
