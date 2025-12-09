@@ -97,6 +97,9 @@ public partial class APIServer
         DBAPI.MapPost("/listregions", APIListRegions);
         DBAPI.MapPost("/removeregions", APIRemoveRegions);
         DBAPI.MapPost("/insertregions", APIInsertRegions);
+        DBAPI.MapPost("/listshortcuts", APIListShortcuts);
+        DBAPI.MapPost("/removeshortcuts", APIRemoveShortcuts);
+        DBAPI.MapPost("/insertshortcuts", APIInsertShortcuts);
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {

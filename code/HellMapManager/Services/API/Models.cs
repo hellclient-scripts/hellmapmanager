@@ -618,6 +618,82 @@ public class InputRegions()
     }
     public List<RegionModel> Regions { get; set; } = [];
 }
+public class ShortcutModel()
+{
+    public static ShortcutModel From(Shortcut shortcut)
+    {
+        return new ShortcutModel()
+        {
+            Key = shortcut.Key,
+            Command = shortcut.Command,
+            To = shortcut.To,
+            RoomConditions = ValueConditionModel.FromList(shortcut.RoomConditions),
+            Conditions = ValueConditionModel.FromList(shortcut.Conditions),
+            Cost = shortcut.Cost,
+            Group = shortcut.Group,
+            Desc = shortcut.Desc,
+        };
+    }
+    public Shortcut ToShortcut()
+    {
+        return new Shortcut()
+        {
+            Key = Key,
+            Command = Command,
+            To = To,
+            RoomConditions = ValueConditionModel.ToValueConditionList(RoomConditions),
+            Conditions = ValueConditionModel.ToValueConditionList(Conditions),
+            Cost = Cost,
+            Group = Group,
+            Desc = Desc,
+        };
+    }
+    public static List<ShortcutModel> FromList(List<Shortcut> shortcuts)
+    {
+        var list = new List<ShortcutModel>();
+        foreach (var shortcut in shortcuts)
+        {
+            list.Add(From(shortcut));
+        }
+        return list;
+    }
+    public static List<Shortcut> ToShortcutList(List<ShortcutModel> shortcutModels)
+    {
+        var list = new List<Shortcut>();
+        foreach (var shortcutModel in shortcutModels)
+        {
+            list.Add(shortcutModel.ToShortcut());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+    public string Command { get; set; } = "";
+    public string To { get; set; } = "";
+    public List<ValueConditionModel> RoomConditions { get; set; } = [];
+    public List<ValueConditionModel> Conditions { get; set; } = [];
+    public int Cost { get; set; } = 0;
+    public string Group { get; set; } = "";
+    public string Desc { get; set; } = "";
+}
+
+public class InputShortcuts()
+{
+    public static InputShortcuts? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputShortcuts), APIJsonSerializerContext.Default) is InputShortcuts shortcuts)
+            {
+                return shortcuts;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<ShortcutModel> Shortcuts { get; set; } = [];
+}
 
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
@@ -650,6 +726,9 @@ public class InputRegions()
 [JsonSerializable(typeof(RegionModel))]
 [JsonSerializable(typeof(List<RegionModel>))]
 [JsonSerializable(typeof(InputRegions))]
+[JsonSerializable(typeof(ShortcutModel))]
+[JsonSerializable(typeof(List<ShortcutModel>))]
+[JsonSerializable(typeof(InputShortcuts))]
 
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

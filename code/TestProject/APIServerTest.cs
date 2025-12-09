@@ -579,7 +579,6 @@ public class APIServerTest
     public async Task TestRegionAPI()
     {
         var mapDatabase = new MapDatabase();
-        List<Region> regions = new List<Region>();
         var region1 = new Region()
         {
             Key = "key1",
@@ -638,7 +637,7 @@ public class APIServerTest
         result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
         Assert.Empty(result!);
         mapDatabase.NewMap();
-        opt=new APIListOption();
+        opt = new APIListOption();
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
         Assert.Empty(result!);
@@ -710,6 +709,135 @@ public class APIServerTest
         server.Stop();
         return;
 
+    }
+    [Fact]
+    public async Task TestShortcutAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        var shortcut1 = new Shortcut()
+        {
+            Key = "key1",
+            Command = "cmd1",
+            Group = "group1",
+            Desc = "desc1",
+        };
+        var shortcut2 = new Shortcut()
+        {
+            Key = "key2",
+            Command = "cmd2",
+            Group = "",
+            Desc = "desc2",
+        };
+        var newshortcut2 = new Shortcut()
+        {
+            Key = "key2",
+            Command = "cmd2",
+            Group = "group2",
+            Desc = "desc2",
+        };
+        var shortcut3 = new Shortcut()
+        {
+            Key = "key3",
+            Command = "cmd3",
+            Group = "group1",
+            Desc = "desc3",
+        };
+        var shortcut4 = new Shortcut()
+        {
+            Key = "key4",
+            Command = "cmd4",
+            Group = "group2",
+            Desc = "desc4",
+        };
+        var badshortcut1 = new Shortcut()
+        {
+            Key = "",
+            Group = "",
+            Desc = "",
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var opt = new APIListOption();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertshortcuts", new InputShortcuts() { Shortcuts = ShortcutModel.FromList([shortcut1, shortcut2, shortcut3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeshortcuts", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertshortcuts", new InputShortcuts() { Shortcuts = ShortcutModel.FromList([shortcut1, shortcut2, shortcut3]) });
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(shortcut2.Equal(result[0].ToShortcut()));
+        Assert.True(shortcut1.Equal(result[1].ToShortcut()));
+        Assert.True(shortcut3.Equal(result[2].ToShortcut()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Single(result!);
+        Assert.True(shortcut2.Equal(result![0].ToShortcut()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(shortcut1.Equal(result![0].ToShortcut()));
+        Assert.True(shortcut3.Equal(result![1].ToShortcut()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Single(result!);
+        Assert.True(shortcut2.Equal(result![0].ToShortcut()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Single(result!);
+        Assert.True(shortcut1.Equal(result![0].ToShortcut()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertshortcuts", new InputShortcuts() { Shortcuts = ShortcutModel.FromList([]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertshortcuts", new InputShortcuts() { Shortcuts = ShortcutModel.FromList([newshortcut2, shortcut4]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp,   typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(shortcut1.Equal(result![0].ToShortcut()));
+        Assert.True(shortcut3.Equal(result![1].ToShortcut()));
+        Assert.True(newshortcut2.Equal(result![2].ToShortcut()));
+        Assert.True(shortcut4.Equal(result![3].ToShortcut()));
+        Assert.False(badshortcut1.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertshortcuts", new InputShortcuts() { Shortcuts = ShortcutModel.FromList([badshortcut1]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Equal(4, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeshortcuts", new KeyList() { Keys = [] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeshortcuts", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(shortcut3.Equal(result![0].ToShortcut()));
+        Assert.True(newshortcut2.Equal(result![1].ToShortcut()));
+        Assert.True(shortcut4.Equal(result![2].ToShortcut()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeshortcuts", new KeyList() { Keys = ["key1", "key2", "key4"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        Assert.Single(result!);
+        Assert.True(shortcut3.Equal(result![0].ToShortcut()));
+        server.Stop();
+        return;
     }
 
 }

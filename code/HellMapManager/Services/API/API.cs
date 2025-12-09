@@ -185,4 +185,38 @@ public partial class APIServer
         Database.APIInsertRegions(regionlist);
         await Success(ctx);
     }
+    public async Task APIListShortcuts(HttpContext ctx)
+    {
+        var option = InputListOption.FromJSON(await LoadBody(ctx));
+        if (option is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var shortcuts = Database.APIListShortcuts(option!.To());
+        await WriteJSON(ctx, ShortcutModel.FromList(shortcuts));
+    }   
+    public async Task APIRemoveShortcuts(HttpContext ctx)
+    {
+        var list = KeyList.FromJSON(await LoadBody(ctx));
+        if (list is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIRemoveShortcuts(list.Keys);
+        await Success(ctx);
+    }
+    public async Task APIInsertShortcuts(HttpContext ctx)
+    {
+        var shortcuts = InputShortcuts.FromJSON(await LoadBody(ctx));
+        if (shortcuts is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var shortcutlist = ShortcutModel.ToShortcutList(shortcuts.Shortcuts);
+        Database.APIInsertShortcuts(shortcutlist);
+        await Success(ctx);
+    }
 }
