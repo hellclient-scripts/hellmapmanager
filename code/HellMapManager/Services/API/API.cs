@@ -253,4 +253,38 @@ public partial class APIServer
         Database.APIInsertVariables(variablelist);
         await Success(ctx);
     }
+    public async Task APIListLandmarks(HttpContext ctx)
+    {
+        var option = InputListOption.FromJSON(await LoadBody(ctx));
+        if (option is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var landmarks = Database.APIListLandmarks(option!.To());
+        await WriteJSON(ctx, LandmarkModel.FromList(landmarks));
+    }
+    public async Task APIRemoveLandmarks(HttpContext ctx)
+    {
+        var list = LandmarkKeyList.FromJSON(await LoadBody(ctx));
+        if (list is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIRemoveLandmarks(KeyType.ToLandmarkKeyList(list.LandmarkKeys));
+        await Success(ctx);
+    }
+    public async Task APIInsertLandmarks(HttpContext ctx)
+    {
+        var landmarks = InputLandmarks.FromJSON(await LoadBody(ctx));
+        if (landmarks is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var landmarklist = LandmarkModel.ToLandmarkList(landmarks.Landmarks);
+        Database.APIInsertLandmarks(landmarklist);
+        await Success(ctx);
+    }
 }

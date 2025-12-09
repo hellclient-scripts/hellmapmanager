@@ -916,7 +916,7 @@ public class APIServerTest
         Assert.True(variable2.Equal(result![0].ToVariable()));
         opt.Clear().WithGroups(["group1"]);
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
-        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel >), APIJsonSerializerContext.Default) as List<VariableModel>;
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
         Assert.Equal(2, result!.Count);
         Assert.True(variable1.Equal(result![0].ToVariable()));
         Assert.True(variable3.Equal(result![1].ToVariable()));
@@ -969,5 +969,146 @@ public class APIServerTest
         server.Stop();
         return;
     }
-
+    [Fact]
+    public async Task TestLandmarkAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        List<Landmark> landmarks = new List<Landmark>();
+        var landmark1 = new Landmark()
+        {
+            Key = "key1",
+            Type = "type1",
+            Group = "group1",
+            Desc = "desc1",
+        };
+        var landmark1t2 = new Landmark()
+        {
+            Key = "key1",
+            Type = "type2",
+            Group = "group1",
+            Desc = "desc1",
+        };
+        var landmark2 = new Landmark()
+        {
+            Key = "key2",
+            Type = "type2",
+            Group = "",
+            Desc = "desc2",
+        };
+        var newlandmark2 = new Landmark()
+        {
+            Key = "key2",
+            Type = "type2",
+            Group = "group2",
+            Desc = "desc2",
+        };
+        var landmark3 = new Landmark()
+        {
+            Key = "key3",
+            Type = "type1",
+            Group = "group1",
+            Desc = "desc3",
+        };
+        var landmark4 = new Landmark()
+        {
+            Key = "key4",
+            Type = "type1",
+            Group = "group2",
+            Desc = "desc4",
+        };
+        var badlandmark1 = new Landmark()
+        {
+            Key = "",
+            Group = "",
+            Desc = "",
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var opt = new APIListOption();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertlandmarks", new InputLandmarks() { Landmarks = LandmarkModel.FromList([landmark1, landmark2, landmark3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removelandmarks", new LandmarkKeyList() { LandmarkKeys = [KeyType.FromLandmarkKey(landmark1.UniqueKey())] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertlandmarks", new InputLandmarks() { Landmarks = LandmarkModel.FromList([landmark1, landmark1t2, landmark2, landmark3]) });
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(landmark2.Equal(result![0].ToLandmark()));
+        Assert.True(landmark1.Equal(result![1].ToLandmark()));
+        Assert.True(landmark1t2.Equal(result![2].ToLandmark()));
+        Assert.True(landmark3.Equal(result![3].ToLandmark()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Single(result!);
+        Assert.True(landmark2.Equal(result![0].ToLandmark()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(landmark1.Equal(result![0].ToLandmark()));
+        Assert.True(landmark1t2.Equal(result![1].ToLandmark()));
+        Assert.True(landmark3.Equal(result![2].ToLandmark()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Single(result!);
+        Assert.True(landmark2.Equal(result![0].ToLandmark()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(landmark1.Equal(result![0].ToLandmark()));
+        Assert.True(landmark1t2.Equal(result![1].ToLandmark()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertlandmarks", new InputLandmarks() { Landmarks = LandmarkModel.FromList([]) });;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertlandmarks", new InputLandmarks() { Landmarks = LandmarkModel.FromList([newlandmark2, landmark4]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Equal(5, result!.Count);
+        Assert.True(landmark1.Equal(result![0].ToLandmark()));
+        Assert.True(landmark1t2.Equal(result![1].ToLandmark()));
+        Assert.True(landmark3.Equal(result![2].ToLandmark()));
+        Assert.True(newlandmark2.Equal(result![3].ToLandmark()));
+        Assert.True(landmark4.Equal(result![4].ToLandmark()));
+        Assert.False(badlandmark1.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertlandmarks", new InputLandmarks() { Landmarks = LandmarkModel.FromList([badlandmark1]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Equal(5, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removelandmarks", new LandmarkKeyList() { LandmarkKeys = [] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removelandmarks", new LandmarkKeyList() { LandmarkKeys = [KeyType.FromLandmarkKey(landmark1.UniqueKey())] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(landmark1t2.Equal(result![0].ToLandmark()));
+        Assert.True(landmark3.Equal(result![1].ToLandmark()));
+        Assert.True(newlandmark2.Equal(result![2].ToLandmark()));
+        Assert.True(landmark4.Equal(result![3].ToLandmark()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removelandmarks", new LandmarkKeyList() { LandmarkKeys = [KeyType.FromLandmarkKey(landmark1.UniqueKey()), KeyType.FromLandmarkKey(landmark1t2.UniqueKey()), KeyType.FromLandmarkKey(landmark2.UniqueKey()), KeyType.FromLandmarkKey(landmark4.UniqueKey())] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
+        Assert.Single(result!); 
+        Assert.True(landmark3.Equal(result![0].ToLandmark()));
+        server.Stop();
+        return;
+    }
 }

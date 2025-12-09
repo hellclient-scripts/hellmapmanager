@@ -5,6 +5,62 @@ using HellMapManager.Models;
 
 namespace HellMapManager.Services.API;
 
+public class KeyType
+{
+    public static KeyType FromLandmarkKey(LandmarkKey key)
+    {
+        return new KeyType()
+        {
+            Key = key.Key,
+            Type = key.Type,
+        };
+    }
+    public LandmarkKey ToLandmarkKey()
+    {
+        return new LandmarkKey(Key, Type);
+    }
+    public static List<KeyType> FromLandmarkKeyList(List<LandmarkKey> keys)
+    {
+        var list = new List<KeyType>();
+        foreach (var key in keys)
+        {
+            list.Add(FromLandmarkKey(key));
+        }
+        return list;
+    }
+    public static List<LandmarkKey> ToLandmarkKeyList(List<KeyType> keyTypes)
+    {
+        var list = new List<LandmarkKey>();
+        foreach (var keyType in keyTypes)
+        {
+            list.Add(keyType.ToLandmarkKey());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+    public string Type { get; set; } = "";
+}
+
+public class LandmarkKeyList()
+{
+    public static LandmarkKeyList? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(LandmarkKeyList), APIJsonSerializerContext.Default) is LandmarkKeyList list)
+            {
+                return list;
+            }
+            return null;
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
+    public List<KeyType> LandmarkKeys { get; set; } = [];
+}
 public class KeyList
 {
     public static KeyList? FromJSON(string data)
@@ -761,6 +817,75 @@ public class InputVariables()
     public List<VariableModel> Variables { get; set; } = [];
 }
 
+public class LandmarkModel()
+{
+    public static LandmarkModel From(Landmark landmark)
+    {
+        return new LandmarkModel()
+        {
+            Key = landmark.Key,
+            Type = landmark.Type,
+            Value = landmark.Value,
+            Group = landmark.Group,
+            Desc = landmark.Desc,
+        };
+    }
+    public Landmark ToLandmark()
+    {
+        return new Landmark()
+        {
+            Key = Key,
+            Type = Type,
+            Value = Value,
+            Group = Group,
+            Desc = Desc,
+        };
+    }
+    public static List<LandmarkModel> FromList(List<Landmark> landmarks)
+    {
+        var list = new List<LandmarkModel>();
+        foreach (var landmark in landmarks)
+        {
+            list.Add(From(landmark));
+        }
+        return list;
+    }
+    public static List<Landmark> ToLandmarkList(List<LandmarkModel> landmarkModels)
+    {
+        var list = new List<Landmark>();
+        foreach (var landmarkModel in landmarkModels)
+        {
+            list.Add(landmarkModel.ToLandmark());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+    public string Type { get; set; } = "";
+    public string Value { get; set; } = "";
+    public string Group { get; set; } = "";
+    public string Desc { get; set; } = "";
+
+}
+
+public class InputLandmarks()
+{
+    public static InputLandmarks? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputLandmarks), APIJsonSerializerContext.Default) is InputLandmarks landmarks)
+            {
+                return landmarks;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<LandmarkModel> Landmarks { get; set; } = [];
+}
+
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -775,6 +900,9 @@ public class InputVariables()
 [JsonSerializable(typeof(ExitModel))]
 [JsonSerializable(typeof(List<ExitModel>))]
 [JsonSerializable(typeof(KeyList))]
+[JsonSerializable(typeof(KeyType))]
+[JsonSerializable(typeof(List<KeyType>))]
+[JsonSerializable(typeof(LandmarkKeyList))]
 [JsonSerializable(typeof(RoomModel))]
 [JsonSerializable(typeof(RegionItemModel))]
 [JsonSerializable(typeof(List<RegionItemModel>))]
@@ -798,6 +926,8 @@ public class InputVariables()
 [JsonSerializable(typeof(VariableModel))]
 [JsonSerializable(typeof(List<VariableModel>))]
 [JsonSerializable(typeof(InputVariables))]
-
+[JsonSerializable(typeof(LandmarkModel))]
+[JsonSerializable(typeof(List<LandmarkModel>))]
+[JsonSerializable(typeof(InputLandmarks))]
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }
