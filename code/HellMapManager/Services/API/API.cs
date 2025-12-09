@@ -287,4 +287,38 @@ public partial class APIServer
         Database.APIInsertLandmarks(landmarklist);
         await Success(ctx);
     }
+    public async Task APIListSnapshots(HttpContext ctx)
+    {
+        var option = InputListOption.FromJSON(await LoadBody(ctx));
+        if (option is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var snapshots = Database.APIListSnapshots(option!.To());
+        await WriteJSON(ctx, SnapshotModel.FromList(snapshots));
+    }
+    public async Task APIRemoveSnapshots(HttpContext ctx)
+    {
+        var list = SnapshotKeyList.FromJSON(await LoadBody(ctx));
+        if (list is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIRemoveSnapshots(KeyTypeValue.ToSnapshotKeyList(list.Keys));
+        await Success(ctx);
+    }
+    public async Task APIInsertSnapshots(HttpContext ctx)
+    {
+        var snapshots = InputSnapshots.FromJSON(await LoadBody(ctx));
+        if (snapshots is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var snapshotlist = SnapshotModel.ToSnapshotList(snapshots.Snapshots);
+        Database.APIInsertSnapshots(snapshotlist);
+        await Success(ctx);
+    }
 }

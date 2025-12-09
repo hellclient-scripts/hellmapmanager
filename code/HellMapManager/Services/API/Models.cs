@@ -5,6 +5,64 @@ using HellMapManager.Models;
 
 namespace HellMapManager.Services.API;
 
+public class KeyTypeValue()
+{
+    public static KeyTypeValue FromSnapshotKey(SnapshotKey key)
+    {
+        return new KeyTypeValue()
+        {
+            Key = key.Key,
+            Type = key.Type,
+            Value = key.Value,
+        };
+    }
+    public SnapshotKey ToSnapshotKey()
+    {
+        return new SnapshotKey(Key, Type, Value);
+    }
+    public static List<KeyTypeValue> FromSnapshotKeyList(List<SnapshotKey> keys)
+    {
+        var list = new List<KeyTypeValue>();
+        foreach (var key in keys)
+        {
+            list.Add(FromSnapshotKey(key));
+        }
+        return list;
+    }
+    public static List<SnapshotKey> ToSnapshotKeyList(List<KeyTypeValue> keyTypes)
+    {
+        var list = new List<SnapshotKey>();
+        foreach (var keyType in keyTypes)
+        {
+            list.Add(keyType.ToSnapshotKey());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+    public string Type { get; set; } = "";
+    public string Value { get; set; } = "";
+}
+
+public class SnapshotKeyList()
+{
+    public static SnapshotKeyList? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(SnapshotKeyList), APIJsonSerializerContext.Default) is SnapshotKeyList list)
+            {
+                return list;
+            }
+            return null;
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
+    public List<KeyTypeValue> Keys { get; set; } = [];
+}
 public class KeyType
 {
     public static KeyType FromLandmarkKey(LandmarkKey key)
@@ -885,6 +943,76 @@ public class InputLandmarks()
     }
     public List<LandmarkModel> Landmarks { get; set; } = [];
 }
+public class SnapshotModel()
+{
+    public static SnapshotModel From(Snapshot snapshot)
+    {
+        return new SnapshotModel()
+        {
+            Key = snapshot.Key,
+            Timestamp = snapshot.Timestamp,
+            Group = snapshot.Group,
+            Type = snapshot.Type,
+            Count = snapshot.Count,
+            Value = snapshot.Value,
+        };
+    }
+    public Snapshot ToSnapshot()
+    {
+        return new Snapshot()
+        {
+            Key = Key,
+            Timestamp = Timestamp,
+            Group = Group,
+            Type = Type,
+            Count = Count,
+            Value = Value,
+        };
+    }
+    public static List<SnapshotModel> FromList(List<Snapshot> snapshots)
+    {
+        var list = new List<SnapshotModel>();
+        foreach (var snapshot in snapshots)
+        {
+            list.Add(From(snapshot));
+        }
+        return list;
+    }
+    public static List<Snapshot> ToSnapshotList(List<SnapshotModel> snapshotModels)
+    {
+        var list = new List<Snapshot>();
+        foreach (var snapshotModel in snapshotModels)
+        {
+            list.Add(snapshotModel.ToSnapshot());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+    public int Timestamp { get; set; } = 0;
+    public string Group { get; set; } = "";
+    public string Type { get; set; } = "";
+    public int Count { get; set; } = 1;
+    public string Value { get; set; } = "";
+}
+
+public class InputSnapshots()
+{
+    public static InputSnapshots? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputSnapshots), APIJsonSerializerContext.Default) is InputSnapshots snapshots)
+            {
+                return snapshots;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<SnapshotModel> Snapshots { get; set; } = [];
+}
 
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
@@ -903,6 +1031,9 @@ public class InputLandmarks()
 [JsonSerializable(typeof(KeyType))]
 [JsonSerializable(typeof(List<KeyType>))]
 [JsonSerializable(typeof(LandmarkKeyList))]
+[JsonSerializable(typeof(KeyTypeValue))]
+[JsonSerializable(typeof(List<KeyTypeValue>))]
+[JsonSerializable(typeof(SnapshotKeyList))]
 [JsonSerializable(typeof(RoomModel))]
 [JsonSerializable(typeof(RegionItemModel))]
 [JsonSerializable(typeof(List<RegionItemModel>))]
@@ -929,5 +1060,8 @@ public class InputLandmarks()
 [JsonSerializable(typeof(LandmarkModel))]
 [JsonSerializable(typeof(List<LandmarkModel>))]
 [JsonSerializable(typeof(InputLandmarks))]
+[JsonSerializable(typeof(SnapshotModel))]
+[JsonSerializable(typeof(List<SnapshotModel>))]
+[JsonSerializable(typeof(InputSnapshots))]
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

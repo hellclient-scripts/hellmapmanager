@@ -973,7 +973,6 @@ public class APIServerTest
     public async Task TestLandmarkAPI()
     {
         var mapDatabase = new MapDatabase();
-        List<Landmark> landmarks = new List<Landmark>();
         var landmark1 = new Landmark()
         {
             Key = "key1",
@@ -1079,7 +1078,7 @@ public class APIServerTest
         Assert.True(landmark1.Equal(result![0].ToLandmark()));
         Assert.True(landmark1t2.Equal(result![1].ToLandmark()));
         opt = new APIListOption();
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertlandmarks", new InputLandmarks() { Landmarks = LandmarkModel.FromList([]) });;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertlandmarks", new InputLandmarks() { Landmarks = LandmarkModel.FromList([]) }); ;
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertlandmarks", new InputLandmarks() { Landmarks = LandmarkModel.FromList([newlandmark2, landmark4]) });
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
@@ -1106,8 +1105,155 @@ public class APIServerTest
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/removelandmarks", new LandmarkKeyList() { LandmarkKeys = [KeyType.FromLandmarkKey(landmark1.UniqueKey()), KeyType.FromLandmarkKey(landmark1t2.UniqueKey()), KeyType.FromLandmarkKey(landmark2.UniqueKey()), KeyType.FromLandmarkKey(landmark4.UniqueKey())] });
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/listlandmarks", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<LandmarkModel>), APIJsonSerializerContext.Default) as List<LandmarkModel>;
-        Assert.Single(result!); 
+        Assert.Single(result!);
         Assert.True(landmark3.Equal(result![0].ToLandmark()));
+        server.Stop();
+        return;
+    }
+    [Fact]
+    public async Task TestSnapshotAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        var snapshot1 = new Snapshot()
+        {
+            Key = "key1",
+            Value = "Value1",
+            Type = "type1",
+            Group = "group1",
+            Timestamp = 1234567890,
+        };
+        var snapshot1t2 = new Snapshot()
+        {
+            Key = "key1",
+            Value = "Value1",
+            Type = "type2",
+            Group = "group1",
+            Timestamp = 1234567890,
+        };
+        var snapshot2 = new Snapshot()
+        {
+            Key = "key2",
+            Value = "Value2",
+            Type = "type2",
+            Group = "",
+            Timestamp = 1234567890,
+        };
+        var newsnapshot2 = new Snapshot()
+        {
+            Key = "key2",
+            Value = "Value2",
+            Type = "type2",
+            Group = "group2",
+            Timestamp = 1234567890,
+        };
+        var snapshot3 = new Snapshot()
+        {
+            Key = "key3",
+            Value = "Value3",
+            Type = "type1",
+            Group = "group1",
+            Timestamp = 1234567890,
+        };
+        var snapshot4 = new Snapshot()
+        {
+            Key = "key4",
+            Value = "Value4",
+            Type = "type1",
+            Group = "group2",
+            Timestamp = 1234567890,
+        };
+        var badsnapshot1 = new Snapshot()
+        {
+            Key = "",
+            Group = "",
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var opt = new APIListOption();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertsnapshots", new InputSnapshots() { Snapshots = SnapshotModel.FromList([snapshot1, snapshot2, snapshot3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removesnapshots", new SnapshotKeyList() { Keys = KeyTypeValue.FromSnapshotKeyList([snapshot1.UniqueKey()]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertsnapshots", new InputSnapshots() { Snapshots = SnapshotModel.FromList([snapshot1, snapshot1t2, snapshot2, snapshot3]) });
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(snapshot2.Equal(result![0].ToSnapshot()));
+        Assert.True(snapshot1.Equal(result[1].ToSnapshot()));
+        Assert.True(snapshot1t2.Equal(result[2].ToSnapshot()));
+        Assert.True(snapshot3.Equal(result[3].ToSnapshot()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Single(result!);
+        Assert.True(snapshot2.Equal(result![0].ToSnapshot()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(snapshot1.Equal(result![0].ToSnapshot()));
+        Assert.True(snapshot1t2.Equal(result![1].ToSnapshot()));
+        Assert.True(snapshot3.Equal(result![2].ToSnapshot()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Single(result!);
+        Assert.True(snapshot2.Equal(result![0].ToSnapshot()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(snapshot1.Equal(result![0].ToSnapshot()));
+        Assert.True(snapshot1t2.Equal(result![1].ToSnapshot()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertsnapshots", new InputSnapshots() { Snapshots = SnapshotModel.FromList([]) }); ;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertsnapshots", new InputSnapshots() { Snapshots = SnapshotModel.FromList([newsnapshot2, snapshot4]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Equal(5, result!.Count);
+        Assert.True(snapshot1.Equal(result![0].ToSnapshot()));
+        Assert.True(snapshot1t2.Equal(result![1].ToSnapshot()));
+        Assert.True(snapshot3.Equal(result![2].ToSnapshot()));
+        Assert.True(newsnapshot2.Equal(result![3].ToSnapshot()));
+        Assert.True(snapshot4.Equal(result![4].ToSnapshot()));
+        Assert.False(badsnapshot1.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertsnapshots", new InputSnapshots() { Snapshots = SnapshotModel.FromList([badsnapshot1]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Equal(5, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removesnapshots", new SnapshotKeyList() { Keys = [] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removesnapshots", new SnapshotKeyList() { Keys = KeyTypeValue.FromSnapshotKeyList([snapshot1.UniqueKey()]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(snapshot1t2.Equal(result![0].ToSnapshot()));
+        Assert.True(snapshot3.Equal(result![1].ToSnapshot()));
+        Assert.True(newsnapshot2.Equal(result![2].ToSnapshot()));
+        Assert.True(snapshot4.Equal(result![3].ToSnapshot()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removesnapshots", new SnapshotKeyList() { Keys = KeyTypeValue.FromSnapshotKeyList([snapshot1.UniqueKey(), snapshot1t2.UniqueKey(), snapshot2.UniqueKey(), snapshot4.UniqueKey()]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listsnapshots", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<SnapshotModel>), APIJsonSerializerContext.Default) as List<SnapshotModel>;
+        Assert.Single(result!);
+        Assert.True(snapshot3.Equal(result![0].ToSnapshot()));  
         server.Stop();
         return;
     }
