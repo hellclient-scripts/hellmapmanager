@@ -1,5 +1,6 @@
 
 using System.Threading.Tasks;
+using HellMapManager.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace HellMapManager.Services.API;
@@ -320,5 +321,60 @@ public partial class APIServer
         var snapshotlist = SnapshotModel.ToSnapshotList(snapshots.Snapshots);
         Database.APIInsertSnapshots(snapshotlist);
         await Success(ctx);
+    }
+    public async Task APIQueryPathAny(HttpContext ctx)
+    {
+        var query = InputQueryPathAny.FromJSON(await LoadBody(ctx));
+        if (query is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var result = Database.APIQueryPathAny(query.From, query.Target, Context.FromEnvironment(query.Environment.ToEnvironment()), query.Options.ToMapperOptions());
+        await WriteJSON(ctx, QueryResultModel.FromQueryResult(result));
+    }
+    public async Task APIQueryPathAll(HttpContext ctx)
+    {
+        var query = InputQueryPath.FromJSON(await LoadBody(ctx));
+        if (query is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var result = Database.APIQueryPathAll(query.Start, query.Target, Context.FromEnvironment(query.Environment.ToEnvironment()), query.Options.ToMapperOptions());
+        await WriteJSON(ctx, QueryResultModel.FromQueryResult(result));
+    }
+    public async Task APIQueryPathOrdered(HttpContext ctx)
+    {
+        var query = InputQueryPath.FromJSON(await LoadBody(ctx));
+        if (query is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var result = Database.APIQueryPathOrdered(query.Start, query.Target, Context.FromEnvironment(query.Environment.ToEnvironment()), query.Options.ToMapperOptions());
+        await WriteJSON(ctx, QueryResultModel.FromQueryResult(result));
+    }
+    public async Task APIDilate(HttpContext ctx)
+    {
+        var input = InputDilate.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var output = Database.APIDilate(input.Src, input.Iterations, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        await WriteJSON(ctx, output);
+    }
+    public async Task APITrackExit(HttpContext ctx)
+    {
+        var input = InputTrackExit.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var output = Database.APITrackExit(input.Start, input.Command, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        await WriteJSON(ctx, output);
     }
 }

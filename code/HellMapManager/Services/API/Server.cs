@@ -109,6 +109,12 @@ public partial class APIServer
         DBAPI.MapPost("/listsnapshots", APIListSnapshots);
         DBAPI.MapPost("/removesnapshots", APIRemoveSnapshots);
         DBAPI.MapPost("/insertsnapshots", APIInsertSnapshots);
+
+        DBAPI.MapPost("/querypathany", APIQueryPathAny);
+        DBAPI.MapPost("/querypathall", APIQueryPathAll);
+        DBAPI.MapPost("/querypathordered", APIQueryPathOrdered);
+        DBAPI.MapPost("/dilate", APIDilate);
+        DBAPI.MapPost("/trackexit", APITrackExit);
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {

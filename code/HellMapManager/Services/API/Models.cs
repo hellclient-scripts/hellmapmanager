@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using HellMapManager.Cores;
 using System.Text.Json.Serialization;
 using HellMapManager.Models;
+using System.Data;
+using System.Security.Cryptography;
+using Microsoft.Extensions.Options;
 
 namespace HellMapManager.Services.API;
 
@@ -1014,6 +1017,409 @@ public class InputSnapshots()
     public List<SnapshotModel> Snapshots { get; set; } = [];
 }
 
+
+public class StepModel()
+{
+    public string Command { get; set; } = "";
+    public string Target { get; set; } = "";
+    public int Cost { get; set; } = 0;
+    public static StepModel From(Step step)
+    {
+        return new StepModel()
+        {
+            Command = step.Command,
+            Target = step.Target,
+            Cost = step.Cost,
+        };
+    }
+    public Step ToStep()
+    {
+        return new Step(Command, Target, Cost);
+    }
+    public static List<StepModel> FromList(List<Step> steps)
+    {
+        var list = new List<StepModel>();
+        foreach (var step in steps)
+        {
+            list.Add(From(step));
+        }
+        return list;
+    }
+    public static List<Step> ToStepList(List<StepModel> stepModels)
+    {
+        var list = new List<Step>();
+        foreach (var stepModel in stepModels)
+        {
+            list.Add(stepModel.ToStep());
+        }
+        return list;
+    }
+}
+
+public class QueryResultModel()
+{
+    public string From { get; set; } = "";
+    public string To { get; set; } = "";
+    public int Cost { get; set; } = 0;
+    public List<StepModel> Steps { get; set; } = [];
+    public List<string> Unvisited { get; set; } = [];
+    public static QueryResultModel? FromQueryResult(QueryResult? result)
+    {
+        if (result == null)
+        {
+            return null;
+        }
+        return new QueryResultModel()
+        {
+            From = result.From,
+            To = result.To,
+            Cost = result.Cost,
+            Steps = StepModel.FromList(result.Steps),
+            Unvisited = [.. result.Unvisited],
+        };
+    }
+    public QueryResult ToQueryResult()
+    {
+        return new QueryResult()
+        {
+            From = From,
+            To = To,
+            Cost = Cost,
+            Steps = StepModel.ToStepList(Steps),
+            Unvisited = [.. Unvisited],
+        };
+    }
+}
+
+
+public class PathModel()
+{
+    public static PathModel FromPath(Path path)
+    {
+        return new PathModel()
+        {
+            From = path.From,
+            Command = path.Command,
+            To = path.To,
+            Conditions = ValueConditionModel.FromList(path.Conditions),
+            Cost = path.Cost,
+        };
+    }
+    public Path ToPath()
+    {
+        return new Path()
+        {
+            From = From,
+            Command = Command,
+            To = To,
+            Conditions = ValueConditionModel.ToValueConditionList(Conditions),
+            Cost = Cost,
+        };
+    }
+    public static List<PathModel> FromPathList(List<Path> paths)
+    {
+        var list = new List<PathModel>();
+        foreach (var path in paths)
+        {
+            list.Add(FromPath(path));
+        }
+        return list;
+    }
+    public static List<Path> ToPathList(List<PathModel> pathModels)
+    {
+        var list = new List<Path>();
+        foreach (var pathModel in pathModels)
+        {
+            list.Add(pathModel.ToPath());
+        }
+        return list;
+    }
+    public string From { get; set; } = "";
+    public string Command { get; set; } = "";
+    public string To { get; set; } = "";
+    public List<ValueConditionModel> Conditions { get; set; } = [];
+    public int Cost { get; set; } = 1;
+
+}
+public class RoomConditionExitModel()
+{
+    public static RoomConditionExitModel From(RoomConditionExit exit)
+    {
+        return new RoomConditionExitModel()
+        {
+            RoomConditions = ValueConditionModel.FromList(exit.RoomConditions),
+            Command = exit.Command,
+            To = exit.To,
+            Conditions = ValueConditionModel.FromList(exit.Conditions),
+            Cost = exit.Cost,
+        };
+    }
+    public RoomConditionExit ToRoomConditionExit()
+    {
+        return new RoomConditionExit()
+        {
+            RoomConditions = ValueConditionModel.ToValueConditionList(RoomConditions),
+            Command = Command,
+            To = To,
+            Conditions = ValueConditionModel.ToValueConditionList(Conditions),
+            Cost = Cost,
+        };
+    }
+    public static List<RoomConditionExitModel> FromRoomConditionExitList(List<RoomConditionExit> exits)
+    {
+        var list = new List<RoomConditionExitModel>();
+        foreach (var exit in exits)
+        {
+            list.Add(From(exit));
+        }
+        return list;
+    }
+    public static List<RoomConditionExit> ToRoomConditionExitList(List<RoomConditionExitModel> exitModels)
+    {
+        var list = new List<RoomConditionExit>();
+        foreach (var exitModel in exitModels)
+        {
+            list.Add(exitModel.ToRoomConditionExit());
+        }
+        return list;
+    }
+    public List<ValueConditionModel> RoomConditions { get; set; } = [];
+    public string Command { get; set; } = "";
+    public string To { get; set; } = "";
+    public List<ValueConditionModel> Conditions { get; set; } = [];
+    public int Cost { get; set; } = 1;
+}
+public class LinkModel()
+{
+
+    public static LinkModel FromLink(Link link)
+    {
+        return new LinkModel()
+        {
+            From = link.From,
+            To = link.To,
+        };
+    }
+    public Link ToLink()
+    {
+        return new Link(From, To);
+    }
+    public static List<LinkModel> FromLinkList(List<Link> links)
+    {
+        var list = new List<LinkModel>();
+        foreach (var link in links)
+        {
+            list.Add(FromLink(link));
+        }
+        return list;
+    }
+    public static List<Link> ToLinkList(List<LinkModel> linkModels)
+    {
+        var list = new List<Link>();
+        foreach (var linkModel in linkModels)
+        {
+            list.Add(linkModel.ToLink());
+        }
+        return list;
+    }
+    public string From { get; set; } = "";
+    public string To { get; set; } = "";
+}
+public class CommandCostModel()
+{
+    public static CommandCostModel From(CommandCost commandCost)
+    {
+        return new CommandCostModel()
+        {
+            Command = commandCost.Command,
+            To = commandCost.To,
+            Cost = commandCost.Cost,
+        };
+    }
+    public CommandCost ToCommandCost()
+    {
+        return new CommandCost(Command, To, Cost);
+    }
+    public static List<CommandCostModel> FromCommandCostList(List<CommandCost> commandCosts)
+    {
+        var list = new List<CommandCostModel>();
+        foreach (var commandCost in commandCosts)
+        {
+            list.Add(From(commandCost));
+        }
+        return list;
+    }
+    public static List<CommandCost> ToCommandCostList(List<CommandCostModel> commandCostModels)
+    {
+        var list = new List<CommandCost>();
+        foreach (var commandCostModel in commandCostModels)
+        {
+            list.Add(commandCostModel.ToCommandCost());
+        }
+        return list;
+    }
+    public string Command { get; set; } = "";
+    public string To { get; set; } = "";
+    public int Cost { get; set; } = 0;
+
+}
+public class EnvironmentModel()
+{
+    public static EnvironmentModel From(Environment data)
+    {
+        return new EnvironmentModel()
+        {
+            Tags = ValueTagModel.FromList(data.Tags),
+            RoomConditions = ValueConditionModel.FromList(data.RoomConditions),
+            Rooms = RoomModel.FromList(data.Rooms),
+            Paths = PathModel.FromPathList(data.Paths),
+            Shortcuts = RoomConditionExitModel.FromRoomConditionExitList(data.Shortcuts),
+            Whitelist = [.. data.Whitelist],
+            Blacklist = [.. data.Blacklist],
+            BlockedLinks = LinkModel.FromLinkList(data.BlockedLinks),
+            CommandCosts = CommandCostModel.FromCommandCostList(data.CommandCosts),
+        };
+    }
+    public Environment ToEnvironment()
+    {
+        return new Environment()
+        {
+            Tags = ValueTagModel.ToValueTagList(Tags ?? []),
+            RoomConditions = ValueConditionModel.ToValueConditionList(RoomConditions ?? []),
+            Rooms = RoomModel.ToRoomList(Rooms ?? []),
+            Paths = PathModel.ToPathList(Paths ?? []),
+            Shortcuts = RoomConditionExitModel.ToRoomConditionExitList(Shortcuts ?? []),
+            Whitelist = [.. Whitelist ?? []],
+            Blacklist = [.. Blacklist ?? []],
+            BlockedLinks = LinkModel.ToLinkList(BlockedLinks ?? []),
+            CommandCosts = CommandCostModel.ToCommandCostList(CommandCosts ?? []),
+        };
+    }
+    public List<ValueTagModel>? Tags { get; set; } = [];
+    public List<ValueConditionModel>? RoomConditions { get; set; } = [];
+    public List<RoomModel>? Rooms { get; set; } = [];
+    public List<PathModel>? Paths { get; set; } = [];
+    public List<RoomConditionExitModel>? Shortcuts { get; set; } = [];
+    public List<string>? Whitelist { get; set; } = [];
+    public List<string>? Blacklist { get; set; } = [];
+    public List<LinkModel>? BlockedLinks { get; set; } = [];
+    public List<CommandCostModel>? CommandCosts { get; set; } = [];
+
+}
+public class MapperOptionsModel
+{
+    public static MapperOptionsModel From(MapperOptions options)
+    {
+        return new MapperOptionsModel()
+        {
+            MaxExitCost = options.MaxExitCost,
+            MaxTotalCost = options.MaxTotalCost,
+            DisableShortcuts = options.DisableShortcuts,
+        };
+    }
+    public MapperOptions ToMapperOptions()
+    {
+        return new MapperOptions()
+        {
+            MaxExitCost = MaxExitCost ?? 0,
+            MaxTotalCost = MaxTotalCost ?? 0,
+            DisableShortcuts = DisableShortcuts ?? false,
+        };
+    }
+    public int? MaxExitCost { get; set; } = 0;
+    public int? MaxTotalCost { get; set; } = 0;
+    public bool? DisableShortcuts { get; set; } = false;
+}
+
+public class InputQueryPathAny()
+{
+
+    public static InputQueryPathAny? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputQueryPathAny), APIJsonSerializerContext.Default) is InputQueryPathAny query)
+            {
+                return query;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<string> From { get; set; } = [];
+    public List<string> Target { get; set; } = [];
+    public EnvironmentModel Environment { get; set; } = new();
+    public MapperOptionsModel Options { get; set; } = new();
+}
+
+public class InputQueryPath()
+{
+
+    public static InputQueryPath? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputQueryPath), APIJsonSerializerContext.Default) is InputQueryPath query)
+            {
+                return query;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Start { get; set; } = "";
+    public List<string> Target { get; set; } = [];
+    public EnvironmentModel Environment { get; set; } = new();
+    public MapperOptionsModel Options { get; set; } = new();
+}
+
+public class InputDilate()
+{
+    public static InputDilate? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputDilate), APIJsonSerializerContext.Default) is InputDilate dilate)
+            {
+                return dilate;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<string> Src { get; set; } = [];
+    public int Iterations { get; set; } = 1;
+    public EnvironmentModel Environment { get; set; } = new();
+    public MapperOptionsModel Options { get; set; } = new();
+}
+public class InputTrackExit()
+{
+    public static InputTrackExit? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputTrackExit), APIJsonSerializerContext.Default) is InputTrackExit track)
+            {
+                return track;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Start { get; set; } = "";
+    public string Command { get; set; } = "";
+    public EnvironmentModel Environment { get; set; } = new();
+    public MapperOptionsModel Options { get; set; } = new();
+
+}
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -1063,5 +1469,21 @@ public class InputSnapshots()
 [JsonSerializable(typeof(SnapshotModel))]
 [JsonSerializable(typeof(List<SnapshotModel>))]
 [JsonSerializable(typeof(InputSnapshots))]
-
+[JsonSerializable(typeof(StepModel))]
+[JsonSerializable(typeof(List<StepModel>))]
+[JsonSerializable(typeof(QueryResultModel))]
+[JsonSerializable(typeof(PathModel))]
+[JsonSerializable(typeof(List<PathModel>))]
+[JsonSerializable(typeof(RoomConditionExitModel))]
+[JsonSerializable(typeof(List<RoomConditionExitModel>))]
+[JsonSerializable(typeof(LinkModel))]
+[JsonSerializable(typeof(List<LinkModel>))]
+[JsonSerializable(typeof(CommandCostModel))]
+[JsonSerializable(typeof(List<CommandCostModel>))]
+[JsonSerializable(typeof(EnvironmentModel))]
+[JsonSerializable(typeof(MapperOptionsModel))]
+[JsonSerializable(typeof(InputQueryPathAny))]
+[JsonSerializable(typeof(InputQueryPath))]
+[JsonSerializable(typeof(InputDilate))]
+[JsonSerializable(typeof(InputTrackExit))]
 public partial class APIJsonSerializerContext : JsonSerializerContext { }
