@@ -151,4 +151,38 @@ public partial class APIServer
         Database.APIInsertTraces(tracelist);
         await Success(ctx);
     }
+    public async Task APIListRegions(HttpContext ctx)
+    {
+        var option = InputListOption.FromJSON(await LoadBody(ctx));
+        if (option is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var regions = Database.APIListRegions(option!.To());
+        await WriteJSON(ctx, RegionModel.FromList(regions));
+    }
+    public async Task APIRemoveRegions(HttpContext ctx)
+    {
+        var list = KeyList.FromJSON(await LoadBody(ctx));
+        if (list is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIRemoveRegions(list.Keys);
+        await Success(ctx);
+    }
+    public async Task APIInsertRegions(HttpContext ctx)
+    {
+        var regions = InputRegions.FromJSON(await LoadBody(ctx));
+        if (regions is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var regionlist = RegionModel.ToRegionList(regions.Regions);
+        Database.APIInsertRegions(regionlist);
+        await Success(ctx);
+    }
 }

@@ -511,6 +511,114 @@ public class InputTraces()
     public List<TraceModel> Traces { get; set; } = [];
 }
 
+public class RegionItemModel
+{
+    public static RegionItemModel From(RegionItem item)
+    {
+        return new RegionItemModel()
+        {
+            Not = item.Not,
+            Type = item.Type == RegionItemType.Room ? "Room" : "Zone",
+            Value = item.Value,
+        };
+    }
+    public RegionItem ToRegionItem()
+    {
+        return new RegionItem(Type == "Room" ? RegionItemType.Room : RegionItemType.Zone, Value, Not);
+    }
+    public static List<RegionItemModel> FromList(List<RegionItem> items)
+    {
+        var list = new List<RegionItemModel>();
+        foreach (var item in items)
+        {
+            list.Add(From(item));
+        }
+        return list;
+    }
+    public static List<RegionItem> ToRegionItemList(List<RegionItemModel> itemModels)
+    {
+        var list = new List<RegionItem>();
+        foreach (var itemModel in itemModels)
+        {
+            list.Add(itemModel.ToRegionItem());
+        }
+        return list;
+    }
+    public bool Not { get; set; } = false;
+    public string Type { get; set; } = "";
+    public string Value { get; set; } = "";
+}
+
+public class RegionModel()
+{
+    public static RegionModel From(Region region)
+    {
+        return new RegionModel()
+        {
+            Key = region.Key,
+            Group = region.Group,
+            Desc = region.Desc,
+            Message = region.Message,
+            Items = RegionItemModel.FromList(region.Items),
+        };
+    }
+    public Region ToRegion()
+    {
+        return new Region()
+        {
+            Key = Key,
+            Group = Group,
+            Desc = Desc,
+            Message = Message,
+            Items = RegionItemModel.ToRegionItemList(Items),
+        };
+    }
+    public static List<RegionModel> FromList(List<Region> regions)
+    {
+        var list = new List<RegionModel>();
+        foreach (var region in regions)
+        {
+            list.Add(From(region));
+        }
+        return list;
+    }
+    public static List<Region> ToRegionList(List<RegionModel> regionModels)
+    {
+        var list = new List<Region>();
+        foreach (var regionModel in regionModels)
+        {
+            list.Add(regionModel.ToRegion());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+
+    public string Group { get; set; } = "";
+    public string Desc { get; set; } = "";
+
+    public string Message { get; set; } = "";
+    public List<RegionItemModel> Items { get; set; } = [];
+}
+
+public class InputRegions()
+{
+    public static InputRegions? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputRegions), APIJsonSerializerContext.Default) is InputRegions regions)
+            {
+                return regions;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<RegionModel> Regions { get; set; } = [];
+}
+
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -526,6 +634,8 @@ public class InputTraces()
 [JsonSerializable(typeof(List<ExitModel>))]
 [JsonSerializable(typeof(KeyList))]
 [JsonSerializable(typeof(RoomModel))]
+[JsonSerializable(typeof(RegionItemModel))]
+[JsonSerializable(typeof(List<RegionItemModel>))]
 [JsonSerializable(typeof(List<RoomModel>))]
 [JsonSerializable(typeof(InputRooms))]
 [JsonSerializable(typeof(MarkerModel))]
@@ -537,6 +647,9 @@ public class InputTraces()
 [JsonSerializable(typeof(TraceModel))]
 [JsonSerializable(typeof(List<TraceModel>))]
 [JsonSerializable(typeof(InputTraces))]
+[JsonSerializable(typeof(RegionModel))]
+[JsonSerializable(typeof(List<RegionModel>))]
+[JsonSerializable(typeof(InputRegions))]
 
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

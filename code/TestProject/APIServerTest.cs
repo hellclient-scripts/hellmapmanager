@@ -498,12 +498,12 @@ public class APIServerTest
         var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
         var result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
         Assert.Empty(result!);
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputTraces() { Traces = TraceModel.FromList([trace1, trace2, trace3]) });
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/inserttraces", new InputTraces() { Traces = TraceModel.FromList([trace1, trace2, trace3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
         Assert.Empty(result!);
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removemarkers", new KeyList() { Keys = ["key1"] });
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removetraces", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
         Assert.Empty(result!);
         mapDatabase.NewMap();
@@ -511,7 +511,7 @@ public class APIServerTest
         opt = new APIListOption();
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
-        Assert.Equal(3  , result!.Count);
+        Assert.Equal(3, result!.Count);
         Assert.True(trace2.Equal(result[0].ToTrace()));
         Assert.True(trace1.Equal(result[1].ToTrace()));
         Assert.True(trace3.Equal(result[2].ToTrace()));
@@ -574,6 +574,142 @@ public class APIServerTest
         Assert.True(trace3.Equal(result![0].ToTrace()));
         server.Stop();
         return;
+    }
+    [Fact]
+    public async Task TestRegionAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        List<Region> regions = new List<Region>();
+        var region1 = new Region()
+        {
+            Key = "key1",
+            Group = "group1",
+            Desc = "desc1",
+            Message = "message1",
+        };
+        var region2 = new Region()
+        {
+            Key = "key2",
+            Group = "",
+            Desc = "desc2",
+            Message = "message2",
+        };
+        var newregion2 = new Region()
+        {
+            Key = "key2",
+            Group = "group2",
+            Desc = "desc2",
+            Message = "message2",
+        };
+        var region3 = new Region()
+        {
+            Key = "key3",
+            Group = "group1",
+            Desc = "desc3",
+            Message = "message3",
+        };
+        var region4 = new Region()
+        {
+            Key = "key4",
+            Group = "group2",
+            Desc = "desc4",
+            Message = "message4",
+        };
+        var badregion1 = new Region()
+        {
+            Key = "",
+            Group = "",
+            Desc = "",
+            Message = "",
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var opt = new APIListOption();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertregions", new InputRegions() { Regions = RegionModel.FromList([region1, region2, region3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeregions", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        opt=new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertregions", new InputRegions() { Regions = RegionModel.FromList([region1, region2, region3]) });
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(region2.Equal(result[0].ToRegion()));
+        Assert.True(region1.Equal(result[1].ToRegion()));
+        Assert.True(region3.Equal(result[2].ToRegion()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Single(result!);
+        Assert.True(region2.Equal(result![0].ToRegion()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(region1.Equal(result![0].ToRegion()));
+        Assert.True(region3.Equal(result![1].ToRegion()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Single(result!);
+        Assert.True(region2.Equal(result![0].ToRegion()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Single(result!);
+        Assert.True(region1.Equal(result![0].ToRegion()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertregions", new InputRegions() { Regions = RegionModel.FromList([]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertregions", new InputRegions() { Regions = RegionModel.FromList([newregion2, region4]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(region1.Equal(result![0].ToRegion()));
+        Assert.True(region3.Equal(result![1].ToRegion()));
+        Assert.True(newregion2.Equal(result![2].ToRegion()));
+        Assert.True(region4.Equal(result![3].ToRegion()));
+        Assert.False(badregion1.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertregions", new InputRegions() { Regions = RegionModel.FromList([badregion1]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Equal(4, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeregions", new KeyList() { Keys = [] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeregions", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(region3.Equal(result![0].ToRegion()));
+        Assert.True(newregion2.Equal(result![1].ToRegion()));
+        Assert.True(region4.Equal(result![2].ToRegion()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeregions", new KeyList() { Keys = ["key1", "key2", "key4"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listregions", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<RegionModel>), APIJsonSerializerContext.Default) as List<RegionModel>;
+        Assert.Single(result!);
+        Assert.True(region3.Equal(result![0].ToRegion()));
+        server.Stop();
+        return;
+
     }
 
 }
