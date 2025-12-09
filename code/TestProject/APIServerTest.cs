@@ -366,17 +366,17 @@ public class APIServerTest
         var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
         var result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
         Assert.Empty(result!);
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputRoutes() { Routes = RouteModel.FromList([route1, route2, route3]) });
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertroutes", new InputRoutes() { Routes = RouteModel.FromList([route1, route2, route3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
         Assert.Empty(result!);
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removemarkers", new KeyList() { Keys = ["key1"] });
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removeroutes", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
         Assert.Empty(result!);
         mapDatabase.NewMap();
 
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputRoutes() { Routes = RouteModel.FromList([route1, route2, route3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertroutes", new InputRoutes() { Routes = RouteModel.FromList([route1, route2, route3]) });
         opt = new APIListOption();
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/listroutes", InputListOption.From(opt));
         result = JsonSerializer.Deserialize(resp, typeof(List<RouteModel>), APIJsonSerializerContext.Default) as List<RouteModel>;
@@ -442,6 +442,136 @@ public class APIServerTest
         Assert.Single(result!);
         Assert.True(route3.Equal(result![0].ToRoute()));
 
+        server.Stop();
+        return;
+    }
+    [Fact]
+    public async Task TestTraceAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        var trace1 = new Trace()
+        {
+            Key = "key1",
+            Group = "group1",
+            Desc = "desc1",
+            Message = "message1",
+        };
+        var trace2 = new Trace()
+        {
+            Key = "key2",
+            Group = "",
+            Desc = "desc2",
+            Message = "message2",
+        };
+        var newtrace2 = new Trace()
+        {
+            Key = "key2",
+            Group = "group2",
+            Desc = "desc2",
+            Message = "message2",
+        };
+        var trace3 = new Trace()
+        {
+            Key = "key3",
+            Group = "group1",
+            Desc = "desc3",
+            Message = "message3",
+        };
+        var trace4 = new Trace()
+        {
+            Key = "key4",
+            Group = "group2",
+            Desc = "desc4",
+            Message = "message4",
+        };
+        var badtrace1 = new Trace()
+        {
+            Key = "",
+            Group = "",
+            Desc = "",
+            Message = "",
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var opt = new APIListOption();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertmarkers", new InputTraces() { Traces = TraceModel.FromList([trace1, trace2, trace3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removemarkers", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listmarkers", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/inserttraces", new InputTraces() { Traces = TraceModel.FromList([trace1, trace2, trace3]) });
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Equal(3  , result!.Count);
+        Assert.True(trace2.Equal(result[0].ToTrace()));
+        Assert.True(trace1.Equal(result[1].ToTrace()));
+        Assert.True(trace3.Equal(result[2].ToTrace()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Single(result!);
+        Assert.True(trace2.Equal(result![0].ToTrace()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(trace1.Equal(result![0].ToTrace()));
+        Assert.True(trace3.Equal(result![1].ToTrace()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Single(result!);
+        Assert.True(trace2.Equal(result![0].ToTrace()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Single(result!);
+        Assert.True(trace1.Equal(result![0].ToTrace()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/inserttraces", new InputTraces() { Traces = TraceModel.FromList([]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/inserttraces", new InputTraces() { Traces = TraceModel.FromList([newtrace2, trace4]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(trace1.Equal(result![0].ToTrace()));
+        Assert.True(trace3.Equal(result![1].ToTrace()));
+        Assert.True(newtrace2.Equal(result![2].ToTrace()));
+        Assert.True(trace4.Equal(result![3].ToTrace()));
+        Assert.False(badtrace1.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/inserttraces", new InputTraces() { Traces = TraceModel.FromList([badtrace1]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Equal(4, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removetraces", new KeyList() { Keys = [] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removetraces", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(trace3.Equal(result![0].ToTrace()));
+        Assert.True(newtrace2.Equal(result![1].ToTrace()));
+        Assert.True(trace4.Equal(result![2].ToTrace()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removetraces", new KeyList() { Keys = ["key1", "key2", "key4"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listtraces", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<TraceModel>), APIJsonSerializerContext.Default) as List<TraceModel>;
+        Assert.Single(result!);
+        Assert.True(trace3.Equal(result![0].ToTrace()));
         server.Stop();
         return;
     }

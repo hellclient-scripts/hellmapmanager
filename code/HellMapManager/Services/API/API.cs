@@ -117,4 +117,38 @@ public partial class APIServer
         Database.APIInsertRoutes(routelist);
         await Success(ctx);
     }
+    public async Task APIListTraces(HttpContext ctx)
+    {
+        var option = InputListOption.FromJSON(await LoadBody(ctx));
+        if (option is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var traces = Database.APIListTraces(option!.To());
+        await WriteJSON(ctx, TraceModel.FromList(traces));
+    }
+    public async Task APIRemoveTraces(HttpContext ctx)
+    {
+        var list = KeyList.FromJSON(await LoadBody(ctx));
+        if (list is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIRemoveTraces(list.Keys);
+        await Success(ctx);
+    }
+    public async Task APIInsertTraces(HttpContext ctx)
+    {
+        var traces = InputTraces.FromJSON(await LoadBody(ctx));
+        if (traces is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var tracelist = TraceModel.ToTraceList(traces.Traces);
+        Database.APIInsertTraces(tracelist);
+        await Success(ctx);
+    }
 }

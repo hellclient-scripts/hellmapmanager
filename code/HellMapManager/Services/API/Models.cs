@@ -442,6 +442,75 @@ public class InputRoutes()
     }
     public List<RouteModel> Routes { get; set; } = [];
 }
+
+public class TraceModel()
+{
+    public static TraceModel From(Trace trace)
+    {
+        return new TraceModel()
+        {
+            Key = trace.Key,
+            Group = trace.Group,
+            Desc = trace.Desc,
+            Message = trace.Message,
+            Locations = [.. trace.Locations],
+        };
+    }
+    public Trace ToTrace()
+    {
+        return new Trace()
+        {
+            Key = Key,
+            Group = Group,
+            Desc = Desc,
+            Message = Message,
+            Locations = [.. Locations],
+        };
+    }
+    public static List<TraceModel> FromList(List<Trace> traces)
+    {
+        var list = new List<TraceModel>();
+        foreach (var trace in traces)
+        {
+            list.Add(From(trace));
+        }
+        return list;
+    }
+    public static List<Trace> ToTraceList(List<TraceModel> traceModels)
+    {
+        var list = new List<Trace>();
+        foreach (var traceModel in traceModels)
+        {
+            list.Add(traceModel.ToTrace());
+        }
+        return list;
+    }
+
+    public string Key { get; set; } = "";
+    public string Group { get; set; } = "";
+    public string Desc { get; set; } = "";
+    public string Message { get; set; } = "";
+    public List<string> Locations { get; set; } = [];
+}
+public class InputTraces()
+{
+    public static InputTraces? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputTraces), APIJsonSerializerContext.Default) is InputTraces traces)
+            {
+                return traces;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<TraceModel> Traces { get; set; } = [];
+}
+
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -449,9 +518,6 @@ public class InputRoutes()
 [JsonSerializable(typeof(APIResultInfo))]
 [JsonSerializable(typeof(InputListOption))]
 [JsonSerializable(typeof(ValueTagModel))]
-[JsonSerializable(typeof(RoomModel))]
-[JsonSerializable(typeof(List<RoomModel>))]
-[JsonSerializable(typeof(InputRooms))]
 [JsonSerializable(typeof(DataModel))]
 [JsonSerializable(typeof(List<DataModel>))]
 [JsonSerializable(typeof(ValueConditionModel))]
@@ -459,8 +525,18 @@ public class InputRoutes()
 [JsonSerializable(typeof(ExitModel))]
 [JsonSerializable(typeof(List<ExitModel>))]
 [JsonSerializable(typeof(KeyList))]
+[JsonSerializable(typeof(RoomModel))]
+[JsonSerializable(typeof(List<RoomModel>))]
+[JsonSerializable(typeof(InputRooms))]
 [JsonSerializable(typeof(MarkerModel))]
 [JsonSerializable(typeof(List<MarkerModel>))]
 [JsonSerializable(typeof(InputMarkers))]
+[JsonSerializable(typeof(RouteModel))]
+[JsonSerializable(typeof(List<RouteModel>))]
+[JsonSerializable(typeof(InputRoutes))]
+[JsonSerializable(typeof(TraceModel))]
+[JsonSerializable(typeof(List<TraceModel>))]
+[JsonSerializable(typeof(InputTraces))]
+
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

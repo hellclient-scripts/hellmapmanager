@@ -91,6 +91,10 @@ public partial class APIServer
         DBAPI.MapPost("/listroutes", APIListRoutes);
         DBAPI.MapPost("/removeroutes", APIRemoveRoutes);
         DBAPI.MapPost("/insertroutes", APIInsertRoutes);
+        DBAPI.MapPost("/listtraces", APIListTraces);
+        DBAPI.MapPost("/removetraces", APIRemoveTraces);
+        DBAPI.MapPost("/inserttraces", APIInsertTraces);
+
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {
