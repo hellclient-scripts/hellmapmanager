@@ -812,7 +812,7 @@ public class APIServerTest
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertshortcuts", new InputShortcuts() { Shortcuts = ShortcutModel.FromList([]) });
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertshortcuts", new InputShortcuts() { Shortcuts = ShortcutModel.FromList([newshortcut2, shortcut4]) });
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/listshortcuts", InputListOption.From(opt));
-        result = JsonSerializer.Deserialize(resp,   typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
+        result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
         Assert.Equal(4, result!.Count);
         Assert.True(shortcut1.Equal(result![0].ToShortcut()));
         Assert.True(shortcut3.Equal(result![1].ToShortcut()));
@@ -836,6 +836,136 @@ public class APIServerTest
         result = JsonSerializer.Deserialize(resp, typeof(List<ShortcutModel>), APIJsonSerializerContext.Default) as List<ShortcutModel>;
         Assert.Single(result!);
         Assert.True(shortcut3.Equal(result![0].ToShortcut()));
+        server.Stop();
+        return;
+    }
+    [Fact]
+    public async Task TestVariableAPI()
+    {
+        var mapDatabase = new MapDatabase();
+        var variable1 = new Variable()
+        {
+            Key = "key1",
+            Value = "value1",
+            Group = "group1",
+            Desc = "desc1",
+        };
+        var variable2 = new Variable()
+        {
+            Key = "key2",
+            Value = "value2",
+            Group = "",
+            Desc = "desc2",
+        };
+        var newvariable2 = new Variable()
+        {
+            Key = "key2",
+            Value = "value2",
+            Group = "group2",
+            Desc = "desc2",
+        };
+        var variable3 = new Variable()
+        {
+            Key = "key3",
+            Value = "value3",
+            Group = "group1",
+            Desc = "desc3",
+        };
+        var variable4 = new Variable()
+        {
+            Key = "key4",
+            Value = "value4",
+            Group = "group2",
+            Desc = "desc4",
+        };
+        var badvariable1 = new Variable()
+        {
+            Key = "",
+            Group = "",
+            Desc = "",
+            Value = "",
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var opt = new APIListOption();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        var result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertvariables", new InputVariables() { Variables = VariableModel.FromList([variable1, variable2, variable3]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removevariables", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertvariables", new InputVariables() { Variables = VariableModel.FromList([variable1, variable2, variable3]) });
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(variable2.Equal(result[0].ToVariable()));
+        Assert.True(variable1.Equal(result[1].ToVariable()));
+        Assert.True(variable3.Equal(result[2].ToVariable()));
+        opt.Clear().WithGroups([""]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Single(result!);
+        Assert.True(variable2.Equal(result![0].ToVariable()));
+        opt.Clear().WithGroups(["group1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel >), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(variable1.Equal(result![0].ToVariable()));
+        Assert.True(variable3.Equal(result![1].ToVariable()));
+        opt.Clear().WithGroups(["notfound"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Single(result!);
+        Assert.True(variable2.Equal(result![0].ToVariable()));
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key2"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Empty(result!);
+        opt.Clear().WithGroups(["group1"]).WithKeys(["key1"]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Single(result!);
+        Assert.True(variable1.Equal(result![0].ToVariable()));
+        opt = new APIListOption();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertvariables", new InputVariables() { Variables = VariableModel.FromList([]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertvariables", new InputVariables() { Variables = VariableModel.FromList([newvariable2, variable4]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Equal(4, result!.Count);
+        Assert.True(variable1.Equal(result![0].ToVariable()));
+        Assert.True(variable3.Equal(result![1].ToVariable()));
+        Assert.True(newvariable2.Equal(result![2].ToVariable()));
+        Assert.True(variable4.Equal(result![3].ToVariable()));
+        Assert.False(badvariable1.Validated());
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/insertvariables", new InputVariables() { Variables = VariableModel.FromList([badvariable1]) });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Equal(4, result!.Count);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removevariables", new KeyList() { Keys = [] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removevariables", new KeyList() { Keys = ["key1"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(variable3.Equal(result![0].ToVariable()));
+        Assert.True(newvariable2.Equal(result![1].ToVariable()));
+        Assert.True(variable4.Equal(result![2].ToVariable()));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/removevariables", new KeyList() { Keys = ["key1", "key2", "key4"] });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/listvariables", InputListOption.From(opt));
+        result = JsonSerializer.Deserialize(resp, typeof(List<VariableModel>), APIJsonSerializerContext.Default) as List<VariableModel>;
+        Assert.Single(result!);
+        Assert.True(variable3.Equal(result![0].ToVariable()));
         server.Stop();
         return;
     }

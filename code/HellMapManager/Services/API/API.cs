@@ -195,7 +195,7 @@ public partial class APIServer
         }
         var shortcuts = Database.APIListShortcuts(option!.To());
         await WriteJSON(ctx, ShortcutModel.FromList(shortcuts));
-    }   
+    }
     public async Task APIRemoveShortcuts(HttpContext ctx)
     {
         var list = KeyList.FromJSON(await LoadBody(ctx));
@@ -217,6 +217,40 @@ public partial class APIServer
         }
         var shortcutlist = ShortcutModel.ToShortcutList(shortcuts.Shortcuts);
         Database.APIInsertShortcuts(shortcutlist);
+        await Success(ctx);
+    }
+    public async Task APIListVariables(HttpContext ctx)
+    {
+        var option = InputListOption.FromJSON(await LoadBody(ctx));
+        if (option is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var variables = Database.APIListVariables(option!.To());
+        await WriteJSON(ctx, VariableModel.FromList(variables));
+    }
+    public async Task APIRemoveVariables(HttpContext ctx)
+    {
+        var list = KeyList.FromJSON(await LoadBody(ctx));
+        if (list is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIRemoveVariables(list.Keys);
+        await Success(ctx);
+    }
+    public async Task APIInsertVariables(HttpContext ctx)
+    {
+        var variables = InputVariables.FromJSON(await LoadBody(ctx));
+        if (variables is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var variablelist = VariableModel.ToVariableList(variables.Variables);
+        Database.APIInsertVariables(variablelist);
         await Success(ctx);
     }
 }

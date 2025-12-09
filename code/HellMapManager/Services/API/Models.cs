@@ -695,6 +695,72 @@ public class InputShortcuts()
     public List<ShortcutModel> Shortcuts { get; set; } = [];
 }
 
+public class VariableModel()
+{
+    public static VariableModel From(Variable variable)
+    {
+        return new VariableModel()
+        {
+            Key = variable.Key,
+            Value = variable.Value,
+            Group = variable.Group,
+            Desc = variable.Desc,
+        };
+    }
+    public Variable ToVariable()
+    {
+        return new Variable()
+        {
+            Key = Key,
+            Value = Value,
+            Group = Group,
+            Desc = Desc,
+        };
+    }
+    public static List<VariableModel> FromList(List<Variable> variables)
+    {
+        var list = new List<VariableModel>();
+        foreach (var variable in variables)
+        {
+            list.Add(From(variable));
+        }
+        return list;
+    }
+    public static List<Variable> ToVariableList(List<VariableModel> variableModels)
+    {
+        var list = new List<Variable>();
+        foreach (var variableModel in variableModels)
+        {
+            list.Add(variableModel.ToVariable());
+        }
+        return list;
+    }
+    public string Key { get; set; } = "";
+    public string Value { get; set; } = "";
+    public string Group { get; set; } = "";
+    public string Desc { get; set; } = "";
+
+}
+
+public class InputVariables()
+{
+    public static InputVariables? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputVariables), APIJsonSerializerContext.Default) is InputVariables variables)
+            {
+                return variables;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public List<VariableModel> Variables { get; set; } = [];
+}
+
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -729,6 +795,9 @@ public class InputShortcuts()
 [JsonSerializable(typeof(ShortcutModel))]
 [JsonSerializable(typeof(List<ShortcutModel>))]
 [JsonSerializable(typeof(InputShortcuts))]
+[JsonSerializable(typeof(VariableModel))]
+[JsonSerializable(typeof(List<VariableModel>))]
+[JsonSerializable(typeof(InputVariables))]
 
 
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

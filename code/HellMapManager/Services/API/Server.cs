@@ -100,6 +100,9 @@ public partial class APIServer
         DBAPI.MapPost("/listshortcuts", APIListShortcuts);
         DBAPI.MapPost("/removeshortcuts", APIRemoveShortcuts);
         DBAPI.MapPost("/insertshortcuts", APIInsertShortcuts);
+        DBAPI.MapPost("/listvariables", APIListVariables);
+        DBAPI.MapPost("/removevariables", APIRemoveVariables);
+        DBAPI.MapPost("/insertvariables", APIInsertVariables);
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {
