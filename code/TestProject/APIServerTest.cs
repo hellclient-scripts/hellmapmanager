@@ -2926,8 +2926,126 @@ public class APIServerTest
         Assert.Single(rooms[0].Tags);
         Assert.Equal("tag2", rooms[0].Tags[0].Key);
         Assert.Equal(1, rooms[0].Tags[0].Value);
-        Assert.True(updated);    
+        Assert.True(updated);
         server.Stop();
         return;
     }
+    [Fact]
+    public async Task TestAPIQueryRegionRooms()
+    {
+        var mapDatabase = new MapDatabase();
+        var result = mapDatabase.APIQueryRegionRooms("key");
+        Assert.Empty(result);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([
+            new Room()
+            {
+                Key = "key1",
+                Group = "group2",
+                Desc = "desc1",
+            },
+            new Room()
+            {
+                Key = "key2",
+                Group = "group2",
+                Desc = "desc2",
+            },
+            new Room()
+            {
+                Key = "key3",
+                Group = "group3",
+                Desc = "desc3",
+            },
+        ]);
+        mapDatabase.APIInsertRegions([
+            new Region()
+            {
+                Key = "key1",
+                Items = [
+                    new RegionItem(RegionItemType.Room, "key1",false),
+                    new RegionItem(RegionItemType.Zone, "group3",false),
+                ],
+            },
+            new Region()
+            {
+                Key = "key2",
+                Items = [
+                    new RegionItem(RegionItemType.Room, "notfoundkey",false),
+                    new RegionItem(RegionItemType.Zone, "notfoundzone",false),
+                ],
+            },
+            new Region()
+            {
+                Key = "key3",
+                Items = [
+                    new RegionItem(RegionItemType.Room, "key1",false),
+                    new RegionItem(RegionItemType.Room, "key2",false),
+                    new RegionItem(RegionItemType.Room, "key3",false),
+                    new RegionItem(RegionItemType.Zone, "group2",true),
+                ],
+            },
+            new Region()
+            {
+                Key = "key4",
+                Items = [
+                    new RegionItem(RegionItemType.Zone, "group2",false),
+                    new RegionItem(RegionItemType.Room, "key1",true),
+                ],
+            },
+            new Region()
+            {
+                Key = "key5",
+                Items = [
+                    new RegionItem(RegionItemType.Zone, "group2",false),
+                    new RegionItem(RegionItemType.Room, "key1",true),
+                    new RegionItem(RegionItemType.Zone, "group3",false),
+                    new RegionItem(RegionItemType.Room, "key2",false),
+                    new RegionItem(RegionItemType.Zone, "group2",true),
+                ],
+            },
+
+        ]);
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/queryregionrooms", new InputKey
+        {
+            Key = "notfound",
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
+        Assert.Empty(result);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/queryregionrooms", new InputKey
+        {
+            Key = "key1",
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
+        Assert.Equal("key1;key3", string.Join(";", result));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/queryregionrooms", new InputKey
+        {
+            Key = "key2",
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
+        Assert.Empty(result);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/queryregionrooms", new InputKey
+        {
+            Key = "key3",
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
+        Assert.Equal("key3", string.Join(";", result));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/queryregionrooms", new InputKey
+        {
+            Key = "key4",
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
+        Assert.Equal("key2", string.Join(";", result));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/queryregionrooms", new InputKey
+        {
+            Key = "key5",
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
+        Assert.Equal("key3", string.Join(";", result));
+        server.Stop();
+        return;
+    }
+
 }
