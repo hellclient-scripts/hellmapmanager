@@ -106,7 +106,6 @@ public class HMMEncoder
         switch (me)
         {
             case MapEncoding.GB18030:
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 return Encoding.GetEncoding("GB18030");
 
             default:

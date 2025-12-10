@@ -5,6 +5,7 @@ namespace HellMapManager.Cores;
 
 public partial class MapDatabase()
 {
+    private object _lock = new();
     public const int Version = 1000;
     public MapFile? Current;
     public Settings Settings = new();
@@ -50,34 +51,45 @@ public partial class MapDatabase()
         var mf = HMMFile.Open(file);
         if (mf != null)
         {
-            Current = mf;
-            Current.Modified = false;
-            Current.Path = file;
-            AddRecent(Current.ToRecentFile());
-            RaiseMapFileUpdatedEvent(this);
+            lock (_lock)
+            {
+                Current = mf;
+                Current.Modified = false;
+                Current.Path = file;
+                AddRecent(Current.ToRecentFile());
+                RaiseMapFileUpdatedEvent(this);
+            }
         }
     }
     public void SaveFile(string file)
     {
         if (Current != null)
         {
-            Current.Map.Arrange();
-            HMMFile.Save(file, Current);
-            Current.Modified = false;
-            Current.Path = file;
-            AddRecent(Current.ToRecentFile());
-            RaiseMapFileUpdatedEvent(this);
+            lock (_lock)
+            {
+
+                Current.Map.Arrange();
+                HMMFile.Save(file, Current);
+                Current.Modified = false;
+                Current.Path = file;
+                AddRecent(Current.ToRecentFile());
+                RaiseMapFileUpdatedEvent(this);
+            }
         }
     }
     public Diffs? DiffFile(string file)
     {
         if (Current != null)
         {
-            var mf = HMMFile.Open(file);
-            if (mf != null)
+            lock (_lock)
             {
-                var diffs= DiffHelper.Diff(Current.Map, mf.Map);
-                return diffs;
+
+                var mf = HMMFile.Open(file);
+                if (mf != null)
+                {
+                    var diffs = DiffHelper.Diff(Current.Map, mf.Map);
+                    return diffs;
+                }
             }
         }
         return null;
@@ -89,28 +101,40 @@ public partial class MapDatabase()
 
     public void NewMap()
     {
-        var mapfile = MapFile.Create("", "");
-        SetCurrent(mapfile);
+        lock (_lock)
+        {
+            var mapfile = MapFile.Create("", "");
+            SetCurrent(mapfile);
+        }
     }
     public void SetCurrent(MapFile mapfile)
     {
-        Current = mapfile;
+        lock (_lock)
+        {
+            Current = mapfile;
+        }
         RaiseMapFileUpdatedEvent(this);
     }
     public void CloseCurrent()
     {
-        Current = null;
+        lock (_lock)
+        {
+            Current = null;
+        }
         RaiseMapFileUpdatedEvent(this);
     }
     public void UpdateMapSettings(MapSettings s)
     {
         if (Current != null)
         {
-            Current.Map.Encoding = s.Encoding;
-            Current.Map.Info.Name = s.Name;
-            Current.Map.Info.Desc = s.Desc;
-            Current.MarkAsModified();
-            RaiseMapFileUpdatedEvent(this);
+            lock (_lock)
+            {
+                Current.Map.Encoding = s.Encoding;
+                Current.Map.Info.Name = s.Name;
+                Current.Map.Info.Desc = s.Desc;
+                Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
+            }
         }
     }
     public void ImportRoomsHFile(string file)

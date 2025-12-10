@@ -1,0 +1,70 @@
+<Window
+  x:Class="HellMapManager.Windows.APIConfigWindow.APIConfigWindow"
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="using:HellMapManager.Windows.APIConfigWindow"
+  Title="接口设置"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:DataType="vm:APIConfigWindowViewModel"
+  SizeToContent="WidthAndHeight"
+  mc:Ignorable="d">
+  <Window.Styles>
+    <Style Selector="Border#Main">
+      <Setter Property="Padding" Value="10" />
+    </Style>
+    <Style Selector="Button">
+      <Setter Property="Margin" Value="10 0 0 0" />
+      <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+    <Style Selector="TextBox.TextArea">
+      <Setter Property="Height" Value="200" />
+    </Style>
+    <Style Selector="SelectableTextBlock.TextArea">
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="TextBlock.Label">
+      <Setter Property="Margin" Value="0 5 0 5" />
+    </Style>
+    <Style Selector="Panel.Content">
+      <Setter Property="Margin" Value="5 0 5 0" />
+    </Style>
+    <Style Selector="StackPanel.Content">
+      <Setter Property="Margin" Value="5 0 5 0" />
+    </Style>
+  </Window.Styles>
+  <Border Name="Main">
+
+    <DockPanel>
+      <Panel HorizontalAlignment="Right" DockPanel.Dock="Bottom">
+        <WrapPanel Classes="Bottons">
+          <Button
+            Classes="accent"
+            Click="OnSave"
+            IsDefault="True">
+            <ToolTip.Tip>
+              <TextBlock Text="下次启动接口服务时生效" />
+            </ToolTip.Tip>
+            保存
+          </Button>
+          <Button Click="OnClose" IsCancel="True">
+            取消
+          </Button>
+        </WrapPanel>
+      </Panel>
+      <Border Width="400">
+        <StackPanel>
+          <TextBlock Classes="Label" Text="服务端口:" />
+          <NumericUpDown Increment="1" Value="{Binding Config.APIPort}" />
+          <TextBlock Classes="Label" Text="用户名:" />
+          <TextBox Text="{Binding Config.APIUserName}" Watermark="接口用户名,留空则无检验" />
+          <TextBlock Classes="Label" Text="用户密码:" />
+          <TextBox Text="{Binding Config.APIPassWord}" Watermark="接口密码,留空则无检验" />
+          <CheckBox IsChecked="{Binding Config.APIEnabled}" IsThreeState="False">打开程序时自动启动服务</CheckBox>
+        </StackPanel>
+      </Border>
+    </DockPanel>
+  </Border>
+</Window>

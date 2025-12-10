@@ -10,9 +10,11 @@ using HellMapManager.Cores;
 using System.Diagnostics.CodeAnalysis;
 using HellMapManager.Services;
 using HellMapManager.Windows.AboutWindow;
-
+using HellMapManager.Services.API;
 using HellMapManager.Helpers;
 using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 namespace HellMapManager;
 
 public partial class App : Application
@@ -22,8 +24,9 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         string process;
         string path;
         if (Environment.GetEnvironmentVariable(AppPreset.ProcessPathEnvName) is string envPath && !string.IsNullOrEmpty(envPath))
@@ -73,6 +76,11 @@ public partial class App : Application
             }
         ;
         }
+        APIServer.Instance.BindMapDatabase(AppKernel.MapDatabase);
+        if (AppKernel.MapDatabase.Settings.APIEnabled)
+        {
+            APIServer.Instance.Start();
+        }
         base.OnFrameworkInitializationCompleted();
     }
 
@@ -91,7 +99,8 @@ public partial class App : Application
     }
     public void ShowAbout(object? sender, EventArgs args)
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop){
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
             var w = new AboutWindow();
             w.DataContext = new AboutWindowViewModel();
             w.ShowDialog(desktop.MainWindow!);
