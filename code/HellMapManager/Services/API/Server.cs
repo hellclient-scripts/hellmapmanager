@@ -115,6 +115,9 @@ public partial class APIServer
         DBAPI.MapPost("/querypathordered", APIQueryPathOrdered);
         DBAPI.MapPost("/dilate", APIDilate);
         DBAPI.MapPost("/trackexit", APITrackExit);
+
+        DBAPI.MapPost("/getvariable", APIGetVariable);
+        DBAPI.MapPost("/getroom", APIGetRoom);
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {

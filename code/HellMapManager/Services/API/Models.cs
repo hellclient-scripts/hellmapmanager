@@ -1418,8 +1418,49 @@ public class InputTrackExit()
     public string Command { get; set; } = "";
     public EnvironmentModel Environment { get; set; } = new();
     public MapperOptionsModel Options { get; set; } = new();
+}
+public class InputKey()
+{
+    public static InputKey? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputKey), APIJsonSerializerContext.Default) is InputKey key)
+            {
+                return key;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Key { get; set; } = "";
+}
+
+public class InputGetRoom()
+{
+    public static InputGetRoom? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputGetRoom), APIJsonSerializerContext.Default) is InputGetRoom getRoom)
+            {
+                return getRoom;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Key { get; set; } = "";
+    public EnvironmentModel Environment { get; set; } = new();
+    public MapperOptionsModel Options { get; set; } = new();
 
 }
+
+
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -1486,4 +1527,6 @@ public class InputTrackExit()
 [JsonSerializable(typeof(InputQueryPath))]
 [JsonSerializable(typeof(InputDilate))]
 [JsonSerializable(typeof(InputTrackExit))]
+[JsonSerializable(typeof(InputKey))]
+[JsonSerializable(typeof(InputGetRoom))]
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

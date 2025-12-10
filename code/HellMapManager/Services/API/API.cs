@@ -377,4 +377,26 @@ public partial class APIServer
         var output = Database.APITrackExit(input.Start, input.Command, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
         await WriteJSON(ctx, output);
     }
+    public async Task APIGetVariable(HttpContext ctx)
+    {
+        var input = InputKey.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var variable = Database.APIGetVariable(input.Key);
+        await WriteJSON(ctx, variable);
+    }
+    public async Task APIGetRoom(HttpContext ctx)
+    {
+        var input = InputGetRoom.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var room = Database.APIGetRoom(input.Key, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        await WriteJSON(ctx, room);
+    }
 }

@@ -3,7 +3,6 @@ using System.Text.Json;
 using HellMapManager.Models;
 using HellMapManager.Cores;
 using HellMapManager.Services.API;
-using HellMapManager.Models;
 
 namespace TestProject;
 
@@ -1980,7 +1979,7 @@ public class APIServerTest
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/querypathany", new InputQueryPathAny()
         {
             From = ["key4"],
-            Target = ["key6", "key3"],  
+            Target = ["key6", "key3"],
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
         });
@@ -2032,7 +2031,7 @@ public class APIServerTest
             From = ["key4"],
             Target = ["key6", "key3"],
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
-            Options = MapperOptionsModel.From(opt), 
+            Options = MapperOptionsModel.From(opt),
         });
         queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
         Assert.NotNull(queryresult);
@@ -2212,7 +2211,7 @@ public class APIServerTest
         rooms = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
         rooms.Sort();
         Assert.Equal("key1;key3;key6", string.Join(";", rooms));
-        ctx.WithCommandCosts([new CommandCost("A>1", "key1",    99)]);
+        ctx.WithCommandCosts([new CommandCost("A>1", "key1", 99)]);
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/trackexit", new InputTrackExit()
         {
             Start = "key6",
@@ -2302,7 +2301,7 @@ public class APIServerTest
             Options = MapperOptionsModel.From(opt),
         });
         queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
-        Assert.NotNull(queryresult);    
+        Assert.NotNull(queryresult);
         Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", new InputDilate()
         {
@@ -2331,9 +2330,9 @@ public class APIServerTest
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
         });
-        queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default   ) as QueryResultModel;
+        queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
         Assert.NotNull(queryresult);
-        Assert.Equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));  
+        Assert.Equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/querypathany", new InputQueryPathAny()
         {
             From = ["key6"],
@@ -2467,6 +2466,93 @@ public class APIServerTest
         rooms = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
         rooms.Sort();
         Assert.Equal("key1;key3;key6", string.Join(";", rooms));
+        server.Stop();
+        return;
+    }
+    [Fact]
+    public async Task TestGetVariable()
+    {
+        var mapDatabase = new MapDatabase();
+        mapDatabase.NewMap();
+        var variable = mapDatabase.APIGetVariable("key1");
+        Assert.Equal("", variable);
+        mapDatabase.APIInsertVariables([new (){
+            Key = "key1",
+            Value = "value1",
+            Group = "group1",
+            Desc = "desc1",
+        }]);
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/getvariable", new InputKey() { Key = "key1" });
+        var result = JsonSerializer.Deserialize(resp, typeof(string), APIJsonSerializerContext.Default) as string ?? "";
+        Assert.Equal("value1", result);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/getvariable", new InputKey() { Key = "keynotfound" });
+        result = JsonSerializer.Deserialize(resp, typeof(string), APIJsonSerializerContext.Default) as string ?? "";
+        Assert.Equal("", result);
+        server.Stop();
+    }
+    [Fact]
+    public async Task TestAPIGetRoom()
+    {
+        var mapDatabase = new MapDatabase();
+        var ctx = new Context().WithRooms([
+            new Room()
+            {
+                Key = "ctx1",
+                Group="ctxroom",
+            },
+            new Room()
+            {
+                Key = "ctx2",
+                Group="ctxroom",
+            },
+        ]);
+        var opt = new MapperOptions();
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroom", new InputGetRoom()
+        {
+            Key = "key1",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        var result = JsonSerializer.Deserialize(resp, typeof(RoomModel), APIJsonSerializerContext.Default) as RoomModel;
+        Assert.Null(result);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([
+            new Room()
+            {
+                Key = "key1"
+            },
+            new Room()
+            {
+                Key = "ctx2"
+            },
+        ]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroom", new InputGetRoom()
+        {
+            Key = "ctx1",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(RoomModel), APIJsonSerializerContext.Default) as RoomModel;
+        Assert.NotNull(result);
+        Assert.Equal("ctx1", result!.Key);
+        Assert.Equal("ctxroom", result.Group);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroom", new InputGetRoom()
+        {
+            Key = "ctx2",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(RoomModel), APIJsonSerializerContext.Default) as RoomModel;
+        Assert.NotNull(result);
+        Assert.Equal("ctx2", result!.Key);
+        Assert.Equal("ctxroom", result.Group);
         server.Stop();
         return;
     }
