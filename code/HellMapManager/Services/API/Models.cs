@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using HellMapManager.Cores;
 using System.Text.Json.Serialization;
 using HellMapManager.Models;
-using System.Data;
-using System.Security.Cryptography;
-using Microsoft.Extensions.Options;
+using System;
 
 namespace HellMapManager.Services.API;
 
@@ -1265,7 +1263,7 @@ public class CommandCostModel()
 }
 public class EnvironmentModel()
 {
-    public static EnvironmentModel From(Environment data)
+    public static EnvironmentModel From(Models.Environment data)
     {
         return new EnvironmentModel()
         {
@@ -1280,9 +1278,9 @@ public class EnvironmentModel()
             CommandCosts = CommandCostModel.FromCommandCostList(data.CommandCosts),
         };
     }
-    public Environment ToEnvironment()
+    public Models.Environment ToEnvironment()
     {
-        return new Environment()
+        return new Models.Environment()
         {
             Tags = ValueTagModel.ToValueTagList(Tags ?? []),
             RoomConditions = ValueConditionModel.ToValueConditionList(RoomConditions ?? []),
@@ -1460,7 +1458,227 @@ public class InputGetRoom()
 
 }
 
+public class InputSnapshotFilter()
+{
+    public static InputSnapshotFilter? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputSnapshotFilter), APIJsonSerializerContext.Default) is InputSnapshotFilter search)
+            {
+                return search;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public static InputSnapshotFilter From(SnapshotFilter filter)
+    {
+        return new InputSnapshotFilter()
+        {
+            Key = filter.Key,
+            Type = filter.Type,
+            Group = filter.Group,
+        };
+    }
+    public SnapshotFilter ToSnapshotFilter()
+    {
+        return new SnapshotFilter(Key, Type, Group);
+    }
+    public string? Key { get; set; } = null;
+    public string? Type { get; set; } = null;
+    public string? Group { get; set; } = null;
 
+}
+public class InputTakeSnapshot()
+{
+    public static InputTakeSnapshot? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputTakeSnapshot), APIJsonSerializerContext.Default) is InputTakeSnapshot snapshot)
+            {
+                return snapshot;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Key { get; set; } = "";
+    public string Type { get; set; } = "";
+    public string Value { get; set; } = "";
+    public string Group { get; set; } = "";
+}
+
+public class SnapshotSearchModel()
+{
+    public static SnapshotSearchModel? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(SnapshotSearchModel), APIJsonSerializerContext.Default) is SnapshotSearchModel search)
+            {
+                return search;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public static SnapshotSearchModel From(SnapshotSearch search)
+    {
+        return new SnapshotSearchModel()
+        {
+            Type = search.Type,
+            Group = search.Group,
+            Keywords = [.. search.Keywords],
+            PartialMatch = search.PartialMatch,
+            Any = search.Any,
+        };
+    }
+    public SnapshotSearch ToSnapshotSearch()
+    {
+        return new SnapshotSearch()
+        {
+            Type = Type,
+            Group = Group,
+            Keywords = Keywords ?? [],
+            PartialMatch = PartialMatch ?? true,
+            Any = Any ?? false,
+        };
+    }
+    public string? Type { get; set; }
+    public string? Group { get; set; }
+    public List<string>? Keywords { get; set; } = [];
+    public bool? PartialMatch { get; set; } = true;
+    public bool? Any { get; set; } = false;
+}
+
+public class SnapshotSearchResultModel
+{
+    public static List<SnapshotSearchResultModel> FromList(List<SnapshotSearchResult> results)
+    {
+        var list = new List<SnapshotSearchResultModel>();
+        foreach (var result in results)
+        {
+            list.Add(From(result));
+        }
+        return list;
+    }
+    public static List<SnapshotSearchResult> ToResultList(List<SnapshotSearchResultModel> resultModels)
+    {
+        var list = new List<SnapshotSearchResult>();
+        foreach (var resultModel in resultModels)
+        {
+            list.Add(resultModel.ToResult());
+        }
+        return list;
+    }
+    public SnapshotSearchResult ToResult()
+    {
+        return new SnapshotSearchResult()
+        {
+            Key = Key,
+            Sum = Sum,
+            Count = Count,
+            Items = SnapshotModel.ToSnapshotList(Items),
+        };
+    }
+    public static SnapshotSearchResultModel From(SnapshotSearchResult result)
+    {
+        return new SnapshotSearchResultModel()
+        {
+            Key = result.Key,
+            Sum = result.Sum,
+            Count = result.Count,
+            Items = SnapshotModel.FromList(result.Items),
+        };
+    }
+    public string Key { get; set; } = "";
+    public int Sum { get; set; } = 0;
+    public int Count { get; set; } = 0;
+    public List<SnapshotModel> Items { get; set; } = [];
+}
+public class RoomFilterModel
+{
+    public static RoomFilterModel From(RoomFilter filter)
+    {
+        return new RoomFilterModel()
+        {
+            RoomConditions = ValueConditionModel.FromList(filter.RoomConditions),
+            HasAnyExitTo = [.. filter.HasAnyExitTo],
+            HasAnyData = DataModel.FromList(filter.HasAnyData),
+            HasAnyName = [.. filter.HasAnyName],
+            ContainsAnyData = DataModel.FromList(filter.ContainsAnyData),
+            ContainsAnyName = [.. filter.ContainsAnyName],
+            ContainsAnyKey = [.. filter.ContainsAnyKey],
+        };
+    }
+    public RoomFilter ToRoomFilter()
+    {
+        return new RoomFilter()
+        {
+            RoomConditions = ValueConditionModel.ToValueConditionList(RoomConditions ?? []),
+            HasAnyExitTo = [.. HasAnyExitTo ?? []],
+            HasAnyData = DataModel.ToDataList(HasAnyData ?? []),
+            HasAnyName = [.. HasAnyName ?? []],
+            ContainsAnyData = DataModel.ToDataList(ContainsAnyData ?? []),
+            ContainsAnyName = [.. ContainsAnyName ?? []],
+            ContainsAnyKey = [.. ContainsAnyKey ?? []],
+        };
+    }
+    public List<ValueConditionModel>? RoomConditions = [];
+    public List<string>? HasAnyExitTo = [];
+    public List<DataModel>? HasAnyData = [];
+    public List<string>? HasAnyName = [];
+    public List<DataModel>? ContainsAnyData = [];
+    public List<string>? ContainsAnyName = [];
+    public List<string>? ContainsAnyKey = [];
+}
+
+public class InputSearchRooms
+{
+    public static InputSearchRooms? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputSearchRooms), APIJsonSerializerContext.Default) is InputSearchRooms search)
+            {
+                return search;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public RoomFilterModel Filter { get; set; } = new RoomFilterModel();
+}
+
+public class InputFilterRooms
+{
+    public static InputFilterRooms? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputFilterRooms), APIJsonSerializerContext.Default) is InputFilterRooms filter)
+            {
+                return filter;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public RoomFilterModel Filter { get; set; } = new RoomFilterModel();
+    public List<string> Source = [];
+}
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -1529,4 +1747,12 @@ public class InputGetRoom()
 [JsonSerializable(typeof(InputTrackExit))]
 [JsonSerializable(typeof(InputKey))]
 [JsonSerializable(typeof(InputGetRoom))]
+[JsonSerializable(typeof(InputSnapshotFilter))]
+[JsonSerializable(typeof(InputTakeSnapshot))]
+[JsonSerializable(typeof(SnapshotSearchModel))]
+[JsonSerializable(typeof(SnapshotSearchResultModel))]
+[JsonSerializable(typeof(List<SnapshotSearchResultModel>))]
+[JsonSerializable(typeof(RoomFilterModel))]
+[JsonSerializable(typeof(InputSearchRooms))]
+[JsonSerializable(typeof(InputFilterRooms))]
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

@@ -116,8 +116,15 @@ public partial class APIServer
         DBAPI.MapPost("/dilate", APIDilate);
         DBAPI.MapPost("/trackexit", APITrackExit);
 
+        DBAPI.MapPost("/apiqueryregionrooms", APIQueryRegionRooms);
         DBAPI.MapPost("/getvariable", APIGetVariable);
         DBAPI.MapPost("/getroom", APIGetRoom);
+
+        DBAPI.MapPost("/clearsnapshot", APIClearSnapshot);
+        DBAPI.MapPost("/takesnapshot", APITakeSnapshot);
+        DBAPI.MapPost("/searchsnapshots", APISearchSnapshots);
+
+
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {

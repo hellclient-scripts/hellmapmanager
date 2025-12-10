@@ -19,6 +19,10 @@ public class APIServerTest
         var client = new HttpClient();
         using var content = new StringContent(JsonSerializer.Serialize(data), System.Text.Encoding.UTF8, "application/json");
         using var response = await client.PostAsync(url, content);
+        if (response.StatusCode != System.Net.HttpStatusCode.OK)
+        {
+            throw new Exception($"HTTP POST failed: {response.StatusCode}");
+        }
         var responseString = await response.Content.ReadAsStringAsync();
         return responseString ?? "";
     }
@@ -2556,4 +2560,140 @@ public class APIServerTest
         server.Stop();
         return;
     }
+    [Fact]
+    public async Task TestAPISnapshotALL()
+    {
+        bool updated = false;
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshot", InputSnapshotFilter.From(new SnapshotFilter(null, null, null)));
+        Assert.False(updated);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/takesnapshot", new InputTakeSnapshot()
+        {
+            Key = "key1",
+            Value = "value1",
+            Type = "type1",
+            Group = "group1",
+        });
+        Assert.False(updated);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchsnapshots", SnapshotSearchModel.From(new SnapshotSearch()));
+        Assert.False(updated);
+        mapDatabase.NewMap();
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/takesnapshot", new InputTakeSnapshot()
+        {
+            Key = "key1",
+            Value = "value1",
+            Type = "type1",
+            Group = "group1",
+        });
+        Assert.True(updated);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchsnapshots", SnapshotSearchModel.From(new SnapshotSearch()));
+        var snapshots = JsonSerializer.Deserialize(resp, typeof(List<SnapshotSearchResultModel>), APIJsonSerializerContext.Default) as List<SnapshotSearchResultModel>;
+        Assert.Single(snapshots!);
+        Assert.Equal("key1", snapshots![0].Key);
+        Assert.Equal(1, snapshots![0].Sum);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/takesnapshot", new InputTakeSnapshot()
+        {
+            Key = "key1",
+            Value = "value1",
+            Type = "type1",
+            Group = "group1",
+        });
+        Assert.True(updated);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchsnapshots", SnapshotSearchModel.From(new SnapshotSearch()));
+        snapshots = JsonSerializer.Deserialize(resp, typeof(List<SnapshotSearchResultModel>), APIJsonSerializerContext.Default) as List<SnapshotSearchResultModel>;
+        Assert.Single(snapshots!);
+        Assert.Equal("key1", snapshots![0].Key);
+        Assert.Equal(2, snapshots![0].Sum);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshot", InputSnapshotFilter.From(new SnapshotFilter(null, null, null)));
+        Assert.True(updated);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchsnapshots", SnapshotSearchModel.From(new SnapshotSearch()));
+        snapshots = JsonSerializer.Deserialize(resp, typeof(List<SnapshotSearchResultModel>), APIJsonSerializerContext.Default) as List<SnapshotSearchResultModel>;
+        Assert.Empty(snapshots!);
+        server.Stop();
+        return;
+    }
+    public async Task TestAPIRoomsAll()
+    {
+        var mapDatabase = new MapDatabase();
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchrooms", new InputSearchRooms()
+        {
+            Filter = RoomFilterModel.From(new RoomFilter()),
+        });
+        var result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Empty(result);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/filterrooms", new InputFilterRooms()
+        {
+            Source = ["key1", "key2", "key3"],
+            Filter = RoomFilterModel.From(new RoomFilter()),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Empty(result);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([
+            new Room()
+            {
+                Key = "key1",
+                Group = "group1",
+                Desc = "desc1",
+            },
+            new Room()
+            {
+                Key = "key2",
+                Group = "group2",
+                Desc = "desc2",
+            },
+            new Room()
+            {
+                Key = "key3",
+                Group = "group3",
+                Desc = "desc3",
+            },
+        ]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/filterrooms", new InputFilterRooms()
+        {
+            Source = ["key1", "key2", "key3"],
+            Filter = RoomFilterModel.From(new RoomFilter()),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Equal(3, result!.Count);
+        result.Sort((a, b) => a.Key.CompareTo(b.Key));
+        Assert.Equal("key1;key2;key3", string.Join(";", result.Select(r => r.Key)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/filterrooms", new InputFilterRooms()
+        {
+            Source = ["key3", "key2", "key2", "key5"],
+            Filter = RoomFilterModel.From(new RoomFilter()),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Equal(2, result!.Count);
+        result.Sort((a, b) => a.Key.CompareTo(b.Key));
+        Assert.Equal("key2;key3", string.Join(";", result.Select(r => r.Key)));
+        var rf = new RoomFilter()
+        {
+            ContainsAnyKey = ["key1", "key2", "key3"],
+        };
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchrooms", new InputSearchRooms()
+        {
+            Filter = RoomFilterModel.From(rf),  
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
+        Assert.Equal(3, result!.Count);
+        result.Sort((a, b) => a.Key.CompareTo(b.Key));
+        Assert.Equal("key1;key2;key3", string.Join(";", result.Select(r => r.Key)));
+        server.Stop();
+        return;
+    }
+
 }

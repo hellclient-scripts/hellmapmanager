@@ -1,4 +1,5 @@
 
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using HellMapManager.Models;
 using Microsoft.AspNetCore.Http;
@@ -388,6 +389,17 @@ public partial class APIServer
         var variable = Database.APIGetVariable(input.Key);
         await WriteJSON(ctx, variable);
     }
+    public async Task APIQueryRegionRooms(HttpContext ctx)
+    {
+        var input = InputKey.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var rooms = Database.APIQueryRegionRooms(input.Key);
+        await WriteJSON(ctx, rooms);
+    }
     public async Task APIGetRoom(HttpContext ctx)
     {
         var input = InputGetRoom.FromJSON(await LoadBody(ctx));
@@ -398,5 +410,62 @@ public partial class APIServer
         }
         var room = Database.APIGetRoom(input.Key, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
         await WriteJSON(ctx, room);
+    }
+    public async Task APIClearSnapshot(HttpContext ctx)
+    {
+
+        var input = InputSnapshotFilter.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIClearSnapshot(input.ToSnapshotFilter());
+        await Success(ctx);
+    }
+    public async Task APITakeSnapshot(HttpContext ctx)
+    {
+
+        var input = InputTakeSnapshot.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APITakeSnapshot(input.Key, input.Type, input.Value, input.Group);
+        await Success(ctx);
+    }
+    public async Task APISearchSnapshots(HttpContext ctx)
+    {
+        var input = SnapshotSearchModel.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var snapshots = Database.APISearchSnapshots(input.ToSnapshotSearch());
+        await WriteJSON(ctx, SnapshotSearchResultModel.FromList(snapshots));
+    }
+    public async Task APISearchRooms(HttpContext ctx)
+    {
+        var input = InputSearchRooms.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var rooms = Database.APISearchRooms(input.Filter.ToRoomFilter());
+        await WriteJSON(ctx, RoomModel.FromList(rooms));
+    }
+    public async Task APIFilterRooms(HttpContext ctx)
+    {
+        var input = InputFilterRooms.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var rooms = Database.APIFilterRooms(input.Source, input.Filter.ToRoomFilter());
+        await WriteJSON(ctx, RoomModel.FromList(rooms));
     }
 }
