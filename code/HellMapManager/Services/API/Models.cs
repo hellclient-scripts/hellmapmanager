@@ -1679,6 +1679,66 @@ public class InputFilterRooms
     public RoomFilterModel Filter { get; set; } = new RoomFilterModel();
     public List<string> Source = [];
 }
+
+public class InputGroupRoom
+{
+    public static InputGroupRoom? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputGroupRoom), APIJsonSerializerContext.Default) is InputGroupRoom group)
+            {
+                return group;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Room { get; set; } = "";
+    public string Group { get; set; } = "";
+}
+public class InputTagRoom
+{
+    public static InputTagRoom? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputTagRoom), APIJsonSerializerContext.Default) is InputTagRoom tag)
+            {
+                return tag;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Room { get; set; } = "";
+    public string Tag { get; set; } = "";
+    public int Value { get; set; } = 0;
+}
+public class InputSetRoomData
+{
+    public static InputSetRoomData? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputSetRoomData), APIJsonSerializerContext.Default) is InputSetRoomData setData)
+            {
+                return setData;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Room { get; set; } = "";
+    public string Key { get; set; } = "";
+    public string Value { get; set; } = "";
+}
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -1755,4 +1815,7 @@ public class InputFilterRooms
 [JsonSerializable(typeof(RoomFilterModel))]
 [JsonSerializable(typeof(InputSearchRooms))]
 [JsonSerializable(typeof(InputFilterRooms))]
+[JsonSerializable(typeof(InputGroupRoom))]
+[JsonSerializable(typeof(InputTagRoom))]
+[JsonSerializable(typeof(InputSetRoomData))]
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

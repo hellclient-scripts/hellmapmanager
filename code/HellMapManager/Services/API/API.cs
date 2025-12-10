@@ -468,4 +468,41 @@ public partial class APIServer
         var rooms = Database.APIFilterRooms(input.Source, input.Filter.ToRoomFilter());
         await WriteJSON(ctx, RoomModel.FromList(rooms));
     }
+    public async Task APIGroupRoom(HttpContext ctx)
+    {
+
+        var input = InputGroupRoom.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APIGroupRoom(input.Room, input.Group);
+        await Success(ctx);
+    }
+    public async Task APITagRoom(HttpContext ctx)
+    {
+
+        var input = InputTagRoom.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APITagRoom(input.Room, input.Tag, input.Value);
+        await Success(ctx);
+    }
+    public async Task APISetRoomData(HttpContext ctx)
+    {
+
+        var input = InputSetRoomData.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APISetRoomData(input.Room, input.Key, input.Value);
+        await Success(ctx);
+    }
+
 }

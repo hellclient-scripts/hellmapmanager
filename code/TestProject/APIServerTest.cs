@@ -2622,6 +2622,7 @@ public class APIServerTest
         server.Stop();
         return;
     }
+    [Fact]
     public async Task TestAPIRoomsAll()
     {
         var mapDatabase = new MapDatabase();
@@ -2633,14 +2634,14 @@ public class APIServerTest
             Filter = RoomFilterModel.From(new RoomFilter()),
         });
         var result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
-        Assert.Empty(result);
+        Assert.Empty(result!);
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/filterrooms", new InputFilterRooms()
         {
             Source = ["key1", "key2", "key3"],
             Filter = RoomFilterModel.From(new RoomFilter()),
         });
         result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
-        Assert.Empty(result);
+        Assert.Empty(result!);
         mapDatabase.NewMap();
         mapDatabase.APIInsertRooms([
             new Room()
@@ -2686,7 +2687,7 @@ public class APIServerTest
         };
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchrooms", new InputSearchRooms()
         {
-            Filter = RoomFilterModel.From(rf),  
+            Filter = RoomFilterModel.From(rf),
         });
         result = JsonSerializer.Deserialize(resp, typeof(List<RoomModel>), APIJsonSerializerContext.Default) as List<RoomModel>;
         Assert.Equal(3, result!.Count);
@@ -2695,5 +2696,238 @@ public class APIServerTest
         server.Stop();
         return;
     }
+    [Fact]
+    public async Task TestAPIGroupRoom()
+    {
+        bool updated = false;
+        var room = new Room()
+        {
+            Key = "room1",
+            Group = "group1",
+            Desc = "desc1",
+            Data = [new Data("key2", "value2"), new Data("key1", "value1")],
+            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
+            Exits = [new Exit(){
+                Command="cmd1",
+                To="to1",
+                Cost=1,
+                Conditions=[new ValueCondition("key1", 0,true),new ValueCondition("key2", 0,true)],
+            }],
+        };
+        var mapDatabase = new MapDatabase();
 
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/grouproom", new InputGroupRoom()
+        {
+            Room = "room1",
+            Group = "newgroup",
+        });
+        Assert.False(updated);
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([room]);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/grouproom", new InputGroupRoom()
+        {
+            Room = "room1",
+            Group = "group1",
+        });
+        var rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("group1", rooms[0].Group);
+        Assert.False(updated);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/grouproom", new InputGroupRoom()
+        {
+            Room = "room1",
+            Group = "newgroup",
+        });
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("newgroup", rooms[0].Group);
+        Assert.True(updated);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/grouproom", new InputGroupRoom()
+        {
+            Room = "roomnotfound",
+            Group = "newgroup",
+        });
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1", "roomnotfound"]));
+        Assert.Single(rooms);
+        Assert.Equal("newgroup", rooms[0].Group);
+        Assert.False(updated);
+        server.Stop();
+        return;
+    }
+    [Fact]
+    public async Task TestAPISetRoomData()
+    {
+        bool updated = false;
+        var room = new Room()
+        {
+            Key = "room1",
+            Group = "group1",
+            Desc = "desc1",
+            Data = [new Data("key2", "value2"), new Data("key1", "value1")],
+            Tags = [new ValueTag("tag1", 0), new ValueTag("tag2", 0)],
+            Exits = [new Exit(){
+                Command="cmd1",
+                To="to1",
+                Cost=1,
+                Conditions=[new ValueCondition("key1", 0,true),new ValueCondition("key2", 0,true)],
+            }],
+        };
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/setroomdata", new InputSetRoomData()
+        {
+            Room = "room1",
+            Key = "key1",
+            Value = "newvalue",
+        });
+        Assert.False(updated);
+        server.Stop();
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([room]);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/setroomdata", new InputSetRoomData()
+        {
+            Room = "room1",
+            Key = "key1",
+            Value = "value1",
+        });
+        var rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("value1", rooms[0].GetData("key1"));
+        Assert.False(updated);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/setroomdata", new InputSetRoomData()
+        {
+            Room = "room1",
+            Key = "key1",
+            Value = "newdata",
+        });
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Equal("newdata", rooms[0].GetData("key1"));
+        Assert.True(updated);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/setroomdata", new InputSetRoomData()
+        {
+            Room = "roomnotfound",
+            Key = "key1",
+            Value = "newdata",
+        });
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1", "roomnotfound"]));
+        Assert.Single(rooms);
+        Assert.Equal("newdata", rooms[0].GetData("key1"));
+        Assert.False(updated);
+        server.Stop();
+        return;
+    }
+
+    [Fact]
+    public async Task TestAPITagRoom()
+    {
+        bool updated = false;
+        var room = new Room()
+        {
+            Key = "room1",
+            Group = "group1",
+            Desc = "desc1",
+            Data = [new Data("key2", "value2"), new Data("key1", "value1")],
+            Tags = [new ValueTag("tag1", 1), new ValueTag("tag2", 1)],
+            Exits = [new Exit(){
+                Command="cmd1",
+                To="to1",
+                Cost=1,
+                Conditions=[new ValueCondition("key1", 0,true),new ValueCondition("key2", 0,true)],
+            }],
+        };
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/tagroom", new InputTagRoom()
+        {
+            Room = "room1",
+            Tag = "tag1",
+            Value = 1,
+        });
+        Assert.False(updated);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/tagroom", new InputTagRoom()
+        {
+            Room = "room1",
+            Tag = "",
+            Value = 1,
+        });
+        mapDatabase.NewMap();
+        mapDatabase.APIInsertRooms([room]);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/tagroom", new InputTagRoom()
+        {
+            Room = "room1",
+            Tag = "tag1",
+            Value = 1,
+        });
+        var rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.NotEmpty(rooms[0].Tags);
+        Assert.Equal("tag1", rooms[0].Tags[0].Key);
+        Assert.Equal(1, rooms[0].Tags[0].Value);
+        Assert.False(updated);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/tagroom", new InputTagRoom()
+        {
+            Room = "room1",
+            Tag = "tag1",
+            Value = 2,
+        });
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.NotEmpty(rooms[0].Tags);
+        Assert.Equal("tag1", rooms[0].Tags[0].Key);
+        Assert.Equal(2, rooms[0].Tags[0].Value);
+        Assert.True(updated);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/tagroom", new InputTagRoom()
+        {
+            Room = "roomnotfound",
+            Tag = "tag1",
+            Value = 2,
+        });
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1", "roomnotfound"]));
+        Assert.Single(rooms);
+        Assert.NotEmpty(rooms[0].Tags);
+        Assert.Equal("tag1", rooms[0].Tags[0].Key);
+        Assert.Equal(2, rooms[0].Tags[0].Value);
+        Assert.False(updated);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/tagroom", new InputTagRoom()
+        {
+            Room = "room1",
+            Tag = "tag1",
+            Value = 0,
+        });
+        rooms = mapDatabase.APIListRooms(new APIListOption().WithKeys(["room1"]));
+        Assert.Single(rooms);
+        Assert.Single(rooms[0].Tags);
+        Assert.Equal("tag2", rooms[0].Tags[0].Key);
+        Assert.Equal(1, rooms[0].Tags[0].Value);
+        Assert.True(updated);    
+        server.Stop();
+        return;
+    }
 }

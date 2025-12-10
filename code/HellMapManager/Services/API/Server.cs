@@ -124,7 +124,9 @@ public partial class APIServer
         DBAPI.MapPost("/takesnapshot", APITakeSnapshot);
         DBAPI.MapPost("/searchsnapshots", APISearchSnapshots);
 
-
+        DBAPI.MapPost("/grouproom", APIGroupRoom);
+        DBAPI.MapPost("/tagroom", APITagRoom);
+        DBAPI.MapPost("/setroomdata", APISetRoomData);
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {
