@@ -1739,6 +1739,25 @@ public class InputSetRoomData
     public string Key { get; set; } = "";
     public string Value { get; set; } = "";
 }
+public class InputTraceLocation
+{
+    public static InputTraceLocation? FromJSON(string data)
+    {
+        try
+        {
+            if (System.Text.Json.JsonSerializer.Deserialize(data, typeof(InputTraceLocation), APIJsonSerializerContext.Default) is InputTraceLocation location)
+            {
+                return location;
+            }
+        }
+        catch
+        {
+        }
+        return null;
+    }
+    public string Key { get; set; } = "";
+    public string Location { get; set; } = "";
+}
 [JsonSerializable(typeof(bool))]
 [JsonSerializable(typeof(int))]
 [JsonSerializable(typeof(string))]
@@ -1818,4 +1837,6 @@ public class InputSetRoomData
 [JsonSerializable(typeof(InputGroupRoom))]
 [JsonSerializable(typeof(InputTagRoom))]
 [JsonSerializable(typeof(InputSetRoomData))]
+[JsonSerializable(typeof(InputTraceLocation))]
+
 public partial class APIJsonSerializerContext : JsonSerializerContext { }

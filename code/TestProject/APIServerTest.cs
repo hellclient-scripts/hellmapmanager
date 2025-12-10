@@ -3047,5 +3047,65 @@ public class APIServerTest
         server.Stop();
         return;
     }
+    [Fact]
+    public async Task TestAPITraceLocation()
+    {
+        bool updated = false;
+        var mapDatabase = new MapDatabase();
+        mapDatabase.MapFileUpdatedEvent += (sender, e) =>
+        {
+            updated = true;
+        };
+        var trace = new Trace()
+        {
+            Key = "trace1",
+            Group = "group1",
+            Desc = "desc1",
+            Locations = ["1", "2"],
+            Message = "message1",
+        };
+                var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/tracelocation", new InputTraceLocation()
+        {
+            Key = "trace1",
+            Location = "3",
+        });
+        Assert.False(updated);
+        server.Stop();
+                mapDatabase.NewMap();
+        mapDatabase.APIInsertTraces([trace]);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/tracelocation", new InputTraceLocation()
+        {
+            Key = "trace1",
+            Location = "1",
+        });
+        var traces = mapDatabase.APIListTraces(new APIListOption().WithKeys(["trace1"]));
+        Assert.Single(traces);
+        Assert.Equal("1;2", string.Join(";", traces[0].Locations));
+        Assert.False(updated);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/tracelocation", new InputTraceLocation()
+        {
+            Key = "trace1",
+            Location = "3",
+        });
+        traces = mapDatabase.APIListTraces(new APIListOption().WithKeys(["trace1"]));
+        Assert.Single(traces);
+        Assert.Equal("1;2;3", string.Join(";", traces[0].Locations));
+        Assert.True(updated);
+        updated = false;
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/tracelocation", new InputTraceLocation()
+        {            Key = "traceNotfound",
+            Location = "3",
+        });
+        traces = mapDatabase.APIListTraces(new APIListOption().WithKeys(["trace1", "traceNotfound"]));
+        Assert.Single(traces);
+        Assert.Equal("1;2;3", string.Join(";", traces[0].Locations));
+        Assert.False(updated);
+        server.Stop();
+        return;
+    }
 
 }

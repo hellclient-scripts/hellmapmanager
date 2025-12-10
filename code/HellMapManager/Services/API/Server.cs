@@ -127,6 +127,7 @@ public partial class APIServer
         DBAPI.MapPost("/grouproom", APIGroupRoom);
         DBAPI.MapPost("/tagroom", APITagRoom);
         DBAPI.MapPost("/setroomdata", APISetRoomData);
+        DBAPI.MapPost("/tracelocation", APITraceLocation);
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {

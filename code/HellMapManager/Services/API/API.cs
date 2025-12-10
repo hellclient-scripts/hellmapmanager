@@ -504,5 +504,17 @@ public partial class APIServer
         Database.APISetRoomData(input.Room, input.Key, input.Value);
         await Success(ctx);
     }
+    public async Task APITraceLocation(HttpContext ctx)
+    {
+
+        var input = InputTraceLocation.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        Database.APITraceLocation(input.Key, input.Location);
+        await Success(ctx);
+    }
 
 }
