@@ -349,8 +349,12 @@ public class ValueConditionModel
 }
 public class RoomModel
 {
-    public static RoomModel From(Room room)
+    public static RoomModel? From(Room? room)
     {
+        if (room is null)
+        {
+            return null;
+        }
         var rm = new RoomModel()
         {
             Key = room.Key,
@@ -382,7 +386,7 @@ public class RoomModel
         var list = new List<RoomModel>();
         foreach (var room in rooms)
         {
-            list.Add(From(room));
+            list.Add(From(room)!);
         }
         return list;
     }
@@ -1677,7 +1681,7 @@ public class InputFilterRooms
         return null;
     }
     public RoomFilterModel Filter { get; set; } = new RoomFilterModel();
-    public List<string> Source = [];
+    public List<string> Source{get;set;} = [];
 }
 
 public class InputGroupRoom

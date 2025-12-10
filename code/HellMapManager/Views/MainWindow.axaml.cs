@@ -134,13 +134,13 @@ public partial class MainWindow : Window
     }
 
 
-    public void StartServer(object? sender, RoutedEventArgs args)
+    public async void StartServer(object? sender, RoutedEventArgs args)
     {
         APIServer.Instance.Start();
     }
-    public void StopServer(object? sender, RoutedEventArgs args)
+    public async void StopServer(object? sender, RoutedEventArgs args)
     {
-        APIServer.Instance.Stop();
+        await APIServer.Instance.Stop();
     }
     public async void ConfigServer(object? sender, RoutedEventArgs args)
     {

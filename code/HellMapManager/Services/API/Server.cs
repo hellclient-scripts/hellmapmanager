@@ -66,13 +66,13 @@ public partial class APIServer
         app.Urls.Add(Database.Settings.BuildURL());
         app.RunAsync();
     }
-    public void Stop()
+    public async Task Stop()
     {
         if (App is null)
         {
             return;
         }
-        App.StopAsync();
+        await App.StopAsync();
     }
 
     private void ConfigureRoutes(WebApplication app)
@@ -116,9 +116,11 @@ public partial class APIServer
         DBAPI.MapPost("/dilate", APIDilate);
         DBAPI.MapPost("/trackexit", APITrackExit);
 
-        DBAPI.MapPost("/apiqueryregionrooms", APIQueryRegionRooms);
+        DBAPI.MapPost("/queryregionrooms", APIQueryRegionRooms);
         DBAPI.MapPost("/getvariable", APIGetVariable);
         DBAPI.MapPost("/getroom", APIGetRoom);
+        DBAPI.MapPost("/filterrooms", APIFilterRooms);
+        DBAPI.MapPost("/searchrooms", APISearchRooms);
 
         DBAPI.MapPost("/clearsnapshot", APIClearSnapshot);
         DBAPI.MapPost("/takesnapshot", APITakeSnapshot);

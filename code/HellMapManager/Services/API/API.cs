@@ -409,7 +409,7 @@ public partial class APIServer
             return;
         }
         var room = Database.APIGetRoom(input.Key, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
-        await WriteJSON(ctx, room);
+        await WriteJSON(ctx, RoomModel.From(room));
     }
     public async Task APIClearSnapshot(HttpContext ctx)
     {

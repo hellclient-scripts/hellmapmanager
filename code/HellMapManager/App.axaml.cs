@@ -14,6 +14,7 @@ using HellMapManager.Services.API;
 using HellMapManager.Helpers;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 namespace HellMapManager;
 
 public partial class App : Application
@@ -23,7 +24,7 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         string process;
