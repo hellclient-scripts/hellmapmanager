@@ -516,5 +516,15 @@ public partial class APIServer
         Database.APITraceLocation(input.Key, input.Location);
         await Success(ctx);
     }
-
+    public async Task APIGetRoomExits(HttpContext ctx)
+    {
+        var input = InputGetRoom.FromJSON(await LoadBody(ctx));
+        if (input is null)
+        {
+            await InvalidJSONRequest(ctx);
+            return;
+        }
+        var exits = Database.APIGetRoomExits(input.Key, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        await WriteJSON(ctx, ExitModel.FromList(exits));
+    }
 }

@@ -3064,7 +3064,7 @@ public class APIServerTest
             Locations = ["1", "2"],
             Message = "message1",
         };
-                var server = new HellMapManager.Services.API.APIServer();
+        var server = new HellMapManager.Services.API.APIServer();
         server.BindMapDatabase(mapDatabase);
         server.Start();
         var resp = await Post($"http://localhost:{server.Port}" + "/api/db/tracelocation", new InputTraceLocation()
@@ -3074,7 +3074,7 @@ public class APIServerTest
         });
         Assert.False(updated);
         server.Stop();
-                mapDatabase.NewMap();
+        mapDatabase.NewMap();
         mapDatabase.APIInsertTraces([trace]);
         updated = false;
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/tracelocation", new InputTraceLocation()
@@ -3097,7 +3097,8 @@ public class APIServerTest
         Assert.True(updated);
         updated = false;
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/tracelocation", new InputTraceLocation()
-        {            Key = "traceNotfound",
+        {
+            Key = "traceNotfound",
             Location = "3",
         });
         traces = mapDatabase.APIListTraces(new APIListOption().WithKeys(["trace1", "traceNotfound"]));
@@ -3107,5 +3108,121 @@ public class APIServerTest
         server.Stop();
         return;
     }
-
+    [Fact]
+    public async Task TestAPIGetRoomExits()
+    {
+        var mapDatabase = new MapDatabase();
+        var ctx = new Context();
+        var opt = new MapperOptions();
+        var server = new HellMapManager.Services.API.APIServer();
+        server.BindMapDatabase(mapDatabase);
+        server.Start();
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroomexits", new InputGetRoom()
+        {
+            Key = "key",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        var result = JsonSerializer.Deserialize(resp, typeof(List<ExitModel>), APIJsonSerializerContext.Default) as List<ExitModel>;
+        Assert.Empty(result!);
+        mapDatabase.NewMap();
+        var exit1 = new Exit()
+        {
+            Command = "cmd1",
+            To = "key2",
+        };
+        var exit2 = new Exit()
+        {
+            Command = "cmd2",
+            To = "key2",
+        };
+        mapDatabase.APIInsertRooms([
+            new Room()
+            {
+                Key = "key1",
+                Exits = [exit1,exit2]
+            },
+            new Room()
+            {
+                Key = "key2",
+            },
+        ]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroomexits", new InputGetRoom()
+        {
+            Key = "notfound",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<ExitModel>), APIJsonSerializerContext.Default) as List<ExitModel>;
+        Assert.Empty(result!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroomexits", new InputGetRoom()
+        {
+            Key = "key1",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<ExitModel>), APIJsonSerializerContext.Default) as List<ExitModel>;
+        Assert.Equal(2, result!.Count);
+        Assert.True(exit1.Equal(result[0].ToExit()));
+        Assert.True(exit2.Equal(result[1].ToExit()));
+        var shortcut1 = new Shortcut()
+        {
+            Key = "shortcut1",
+            To = "key2",
+            Command = "sc1",
+        };
+        mapDatabase.APIInsertShortcuts([shortcut1]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroomexits", new InputGetRoom()
+        {
+            Key = "key1",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<ExitModel>), APIJsonSerializerContext.Default) as List<ExitModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(exit1.Equal(result[0].ToExit()));
+        Assert.True(exit2.Equal(result[1].ToExit()));
+        Assert.True(shortcut1.Equal(result[2].ToExit()));
+        var path1 = new HellMapManager.Models.Path()
+        {
+            From = "key1",
+            Command = "cmdp1",
+            To = "key2",
+        };
+        var shortcut2 = new Shortcut()
+        {
+            Key = "shortcut2",
+            To = "key2",
+            Command = "sc2",
+        };
+        ctx.WithPaths([path1]);
+        ctx.WithShortcuts([shortcut2]);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroomexits", new InputGetRoom()
+        {
+            Key = "key1",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<ExitModel>), APIJsonSerializerContext.Default) as List<ExitModel>;
+        Assert.Equal(5, result!.Count);
+        Assert.True(exit1.Equal(result[0].ToExit()));
+        Assert.True(exit2.Equal(result[1].ToExit()));
+        Assert.True(path1.Equal(result[2].ToExit()));
+        Assert.True(shortcut1.Equal(result[3].ToExit()));
+        Assert.True(shortcut2.Equal(result[4].ToExit()));
+        opt.WithDisableShortcuts(true);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/getroomexits", new InputGetRoom()
+        {
+            Key = "key1",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        result = JsonSerializer.Deserialize(resp, typeof(List<ExitModel>), APIJsonSerializerContext.Default) as List<ExitModel>;
+        Assert.Equal(3, result!.Count);
+        Assert.True(exit1.Equal(result[0].ToExit()));
+        Assert.True(exit2.Equal(result[1].ToExit()));
+        Assert.True(path1.Equal(result[2].ToExit()));
+        server.Stop();
+        return;
+    }
 }
