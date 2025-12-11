@@ -6,11 +6,29 @@ namespace TestProject;
 
 public class APITest
 {
-    [Fact] 
+    [Fact]
     public void TestVersion()
     {
         var mapDatabase = new MapDatabase();
-        Assert.Equal(MapDatabase.Version,mapDatabase.APIVersion());
+        Assert.Equal(MapDatabase.Version, mapDatabase.APIVersion());
+    }
+    [Fact]
+    public void TestAPIInfo()
+    {
+        var mapDatabase = new MapDatabase();
+        var info=mapDatabase.APIInfo();
+        Assert.Null(info);
+        mapDatabase.NewMap();
+        info=mapDatabase.APIInfo();
+        Assert.NotNull(info);
+        Assert.Equal("",info.Name);
+        Assert.Equal("",info.Desc);
+        mapDatabase.Current!.Map.Info.Name="testname";
+        mapDatabase.Current!.Map.Info.Desc="testdesc";
+        info=mapDatabase.APIInfo();
+        Assert.NotNull(info);
+        Assert.Equal("testname",info.Name);
+        Assert.Equal("testdesc",info.Desc);
     }
     [Fact]
     public void TestAPIListOption()
