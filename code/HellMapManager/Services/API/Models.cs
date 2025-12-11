@@ -1636,13 +1636,13 @@ public class RoomFilterModel
             ContainsAnyKey = [.. ContainsAnyKey ?? []],
         };
     }
-    public List<ValueConditionModel>? RoomConditions = [];
-    public List<string>? HasAnyExitTo = [];
-    public List<DataModel>? HasAnyData = [];
-    public List<string>? HasAnyName = [];
-    public List<DataModel>? ContainsAnyData = [];
-    public List<string>? ContainsAnyName = [];
-    public List<string>? ContainsAnyKey = [];
+    public List<ValueConditionModel>? RoomConditions {get;set;}= [];
+    public List<string>? HasAnyExitTo {get;set;}= [];
+    public List<DataModel>? HasAnyData {get;set;}= [];
+    public List<string>? HasAnyName {get;set;}= [];
+    public List<DataModel>? ContainsAnyData {get;set;}= [];
+    public List<string>? ContainsAnyName {get;set;}= [];
+    public List<string>? ContainsAnyKey {get;set;}= [];
 }
 
 public class InputSearchRooms
