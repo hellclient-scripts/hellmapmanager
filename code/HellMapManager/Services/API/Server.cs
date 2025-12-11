@@ -137,6 +137,7 @@ public partial class APIServer
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
     });
     private readonly Encoding gb18030Encoding = System.Text.Encoding.GetEncoding("GB18030");
+
     private async Task MiddlewareSetHeaderServer(HttpContext ctx, RequestDelegate next)
     {
         ctx.Response.Headers["Server"] = "HellMapManager";
@@ -172,9 +173,15 @@ public partial class APIServer
     private async Task<string> LoadBody(HttpContext ctx)
     {
         var enc = Encoding.UTF8;
-        if (ctx.Request.Headers.TryGetValue("charset", out var charset) && charset.ToString().ToLower() == "gb18030")
+        if (ctx.Request.Headers.TryGetValue("charset", out var charset))
         {
-            enc = gb18030Encoding;
+            switch (charset.ToString().ToLower())
+            {
+                case "gb18030":
+                    enc = gb18030Encoding;
+                    break;
+            }
+
         }
         using var reader = new StreamReader(ctx.Request.Body, enc);
         return await reader.ReadToEndAsync();
@@ -183,13 +190,20 @@ public partial class APIServer
     {
         ctx.Response.ContentType = "application/json";
         ctx.Response.StatusCode = statusCode;
+        var charsetlabel = "utf-8";
         var enc = Encoding.UTF8;
         var json = JsonSerializer.Serialize(obj, typeof(object), jsonctx);
-        if (ctx.Request.Headers.TryGetValue("charset", out var charset) && charset.ToString().ToLower() == "gb18030")
+        if (ctx.Request.Headers.TryGetValue("charset", out var charset))
         {
-            enc = gb18030Encoding;
+            switch (charset.ToString().ToLower())
+            {
+                case "gb18030":
+                    enc = gb18030Encoding;
+                    charsetlabel = "gb18030";
+                    break;
+            }
         }
-
+        ctx.Response.Headers["Content-Type"] = $"application/json; charset={charsetlabel}";
         await ctx.Response.WriteAsync(json, enc);
     }
     public async Task Success(HttpContext ctx)
