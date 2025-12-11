@@ -3,6 +3,7 @@ using HellMapManager.Cores;
 using System.Text.Json.Serialization;
 using HellMapManager.Models;
 using System;
+using System.Linq;
 
 namespace HellMapManager.Services.API;
 
@@ -24,7 +25,7 @@ public class KeyTypeValue()
     public static List<KeyTypeValue> FromSnapshotKeyList(List<SnapshotKey> keys)
     {
         var list = new List<KeyTypeValue>();
-        foreach (var key in keys)
+        foreach (var key in keys.Where(x=>x is not null))
         {
             list.Add(FromSnapshotKey(key));
         }
@@ -33,7 +34,7 @@ public class KeyTypeValue()
     public static List<SnapshotKey> ToSnapshotKeyList(List<KeyTypeValue> keyTypes)
     {
         var list = new List<SnapshotKey>();
-        foreach (var keyType in keyTypes)
+        foreach (var keyType in keyTypes.Where(x=>x is not null))
         {
             list.Add(keyType.ToSnapshotKey());
         }
@@ -81,7 +82,7 @@ public class KeyType
     public static List<KeyType> FromLandmarkKeyList(List<LandmarkKey> keys)
     {
         var list = new List<KeyType>();
-        foreach (var key in keys)
+        foreach (var key in keys.Where(x=>x is not null))
         {
             list.Add(FromLandmarkKey(key));
         }
@@ -90,7 +91,7 @@ public class KeyType
     public static List<LandmarkKey> ToLandmarkKeyList(List<KeyType> keyTypes)
     {
         var list = new List<LandmarkKey>();
-        foreach (var keyType in keyTypes)
+        foreach (var keyType in keyTypes.Where(x=>x is not null))
         {
             list.Add(keyType.ToLandmarkKey());
         }
@@ -204,7 +205,7 @@ public class ValueTagModel
     public static List<ValueTagModel> FromList(List<ValueTag> tags)
     {
         var list = new List<ValueTagModel>();
-        foreach (var tag in tags)
+        foreach (var tag in tags.Where(x=>x is not null))
         {
             list.Add(From(tag));
         }
@@ -217,7 +218,7 @@ public class ValueTagModel
     public static List<ValueTag> ToValueTagList(List<ValueTagModel> tagModels)
     {
         var list = new List<ValueTag>();
-        foreach (var tagModel in tagModels)
+        foreach (var tagModel in tagModels.Where(x=>x is not null))
         {
             list.Add(tagModel.ToValueTag());
         }
@@ -244,7 +245,7 @@ public class DataModel
     public static List<DataModel> FromList(List<Data> datas)
     {
         var list = new List<DataModel>();
-        foreach (var data in datas)
+        foreach (var data in datas.Where(x=>x is not null))
         {
             list.Add(From(data));
         }
@@ -253,7 +254,7 @@ public class DataModel
     public static List<Data> ToDataList(List<DataModel> dataModels)
     {
         var list = new List<Data>();
-        foreach (var dataModel in dataModels)
+        foreach (var dataModel in dataModels.Where(x=>x is not null))
         {
             list.Add(dataModel.ToData());
         }
@@ -289,7 +290,7 @@ public class ExitModel
     public static List<ExitModel> FromList(List<Exit> exits)
     {
         var list = new List<ExitModel>();
-        foreach (var exit in exits)
+        foreach (var exit in exits.Where(x=>x is not null))
         {
             list.Add(From(exit));
         }
@@ -298,7 +299,7 @@ public class ExitModel
     public static List<Exit> ToExitList(List<ExitModel> exitModels)
     {
         var list = new List<Exit>();
-        foreach (var exitModel in exitModels)
+        foreach (var exitModel in exitModels.Where(x=>x is not null))
         {
             list.Add(exitModel.ToExit());
         }
@@ -328,7 +329,7 @@ public class ValueConditionModel
     public static List<ValueConditionModel> FromList(List<ValueCondition> conditions)
     {
         var list = new List<ValueConditionModel>();
-        foreach (var condition in conditions)
+        foreach (var condition in conditions.Where(x=>x is not null))
         {
             list.Add(From(condition));
         }
@@ -337,7 +338,7 @@ public class ValueConditionModel
     public static List<ValueCondition> ToValueConditionList(List<ValueConditionModel> conditionModels)
     {
         var list = new List<ValueCondition>();
-        foreach (var conditionModel in conditionModels)
+        foreach (var conditionModel in conditionModels.Where(x=>x is not null))
         {
             list.Add(conditionModel.ToValueCondition());
         }
@@ -384,7 +385,7 @@ public class RoomModel
     public static List<RoomModel> FromList(List<Room> rooms)
     {
         var list = new List<RoomModel>();
-        foreach (var room in rooms)
+        foreach (var room in rooms.Where(x=>x is not null))
         {
             list.Add(From(room)!);
         }
@@ -393,7 +394,7 @@ public class RoomModel
     public static List<Room> ToRoomList(List<RoomModel> roomModels)
     {
         var list = new List<Room>();
-        foreach (var roomModel in roomModels)
+        foreach (var roomModel in roomModels.Where(x=>x is not null))
         {
             list.Add(roomModel.ToRoom());
         }
@@ -464,7 +465,7 @@ public class MarkerModel()
     public static List<Marker> ToMarkerList(List<MarkerModel> markerModels)
     {
         var list = new List<Marker>();
-        foreach (var markerModel in markerModels)
+        foreach (var markerModel in markerModels.Where(x=>x is not null))
         {
             list.Add(markerModel.ToMarker());
         }
@@ -522,7 +523,7 @@ public class RouteModel
     public static List<RouteModel> FromList(List<Route> routes)
     {
         var list = new List<RouteModel>();
-        foreach (var route in routes)
+        foreach (var route in routes.Where(x=>x is not null))
         {
             list.Add(From(route));
         }
@@ -531,7 +532,7 @@ public class RouteModel
     public static List<Route> ToRouteList(List<RouteModel> routeModels)
     {
         var list = new List<Route>();
-        foreach (var routeModel in routeModels)
+        foreach (var routeModel in routeModels.Where(x=>x is not null))
         {
             list.Add(routeModel.ToRoute());
         }
@@ -589,7 +590,7 @@ public class TraceModel()
     public static List<TraceModel> FromList(List<Trace> traces)
     {
         var list = new List<TraceModel>();
-        foreach (var trace in traces)
+        foreach (var trace in traces.Where(x=>x is not null))
         {
             list.Add(From(trace));
         }
@@ -598,7 +599,7 @@ public class TraceModel()
     public static List<Trace> ToTraceList(List<TraceModel> traceModels)
     {
         var list = new List<Trace>();
-        foreach (var traceModel in traceModels)
+        foreach (var traceModel in traceModels.Where(x=>x is not null))
         {
             list.Add(traceModel.ToTrace());
         }
@@ -648,7 +649,7 @@ public class RegionItemModel
     public static List<RegionItemModel> FromList(List<RegionItem> items)
     {
         var list = new List<RegionItemModel>();
-        foreach (var item in items)
+        foreach (var item in items.Where(x=>x is not null))
         {
             list.Add(From(item));
         }
@@ -657,7 +658,7 @@ public class RegionItemModel
     public static List<RegionItem> ToRegionItemList(List<RegionItemModel> itemModels)
     {
         var list = new List<RegionItem>();
-        foreach (var itemModel in itemModels)
+        foreach (var itemModel in itemModels.Where(x=>x is not null))
         {
             list.Add(itemModel.ToRegionItem());
         }
@@ -704,7 +705,7 @@ public class RegionModel()
     public static List<Region> ToRegionList(List<RegionModel> regionModels)
     {
         var list = new List<Region>();
-        foreach (var regionModel in regionModels)
+        foreach (var regionModel in regionModels.Where(x=>x is not null))
         {
             list.Add(regionModel.ToRegion());
         }
@@ -770,7 +771,7 @@ public class ShortcutModel()
     public static List<ShortcutModel> FromList(List<Shortcut> shortcuts)
     {
         var list = new List<ShortcutModel>();
-        foreach (var shortcut in shortcuts)
+        foreach (var shortcut in shortcuts.Where(x=>x is not null))
         {
             list.Add(From(shortcut));
         }
@@ -779,7 +780,7 @@ public class ShortcutModel()
     public static List<Shortcut> ToShortcutList(List<ShortcutModel> shortcutModels)
     {
         var list = new List<Shortcut>();
-        foreach (var shortcutModel in shortcutModels)
+        foreach (var shortcutModel in shortcutModels.Where(x=>x is not null))
         {
             list.Add(shortcutModel.ToShortcut());
         }
@@ -839,7 +840,7 @@ public class VariableModel()
     public static List<VariableModel> FromList(List<Variable> variables)
     {
         var list = new List<VariableModel>();
-        foreach (var variable in variables)
+        foreach (var variable in variables.Where(x=>x is not null))
         {
             list.Add(From(variable));
         }
@@ -848,7 +849,7 @@ public class VariableModel()
     public static List<Variable> ToVariableList(List<VariableModel> variableModels)
     {
         var list = new List<Variable>();
-        foreach (var variableModel in variableModels)
+        foreach (var variableModel in variableModels.Where(x=>x is not null))
         {
             list.Add(variableModel.ToVariable());
         }
@@ -907,7 +908,7 @@ public class LandmarkModel()
     public static List<LandmarkModel> FromList(List<Landmark> landmarks)
     {
         var list = new List<LandmarkModel>();
-        foreach (var landmark in landmarks)
+        foreach (var landmark in landmarks.Where(x=>x is not null))
         {
             list.Add(From(landmark));
         }
@@ -916,7 +917,7 @@ public class LandmarkModel()
     public static List<Landmark> ToLandmarkList(List<LandmarkModel> landmarkModels)
     {
         var list = new List<Landmark>();
-        foreach (var landmarkModel in landmarkModels)
+        foreach (var landmarkModel in landmarkModels.Where(x=>x is not null))
         {
             list.Add(landmarkModel.ToLandmark());
         }
@@ -977,7 +978,7 @@ public class SnapshotModel()
     public static List<SnapshotModel> FromList(List<Snapshot> snapshots)
     {
         var list = new List<SnapshotModel>();
-        foreach (var snapshot in snapshots)
+        foreach (var snapshot in snapshots.Where(x=>x is not null))
         {
             list.Add(From(snapshot));
         }
@@ -986,7 +987,7 @@ public class SnapshotModel()
     public static List<Snapshot> ToSnapshotList(List<SnapshotModel> snapshotModels)
     {
         var list = new List<Snapshot>();
-        foreach (var snapshotModel in snapshotModels)
+        foreach (var snapshotModel in snapshotModels.Where(x=>x is not null))
         {
             list.Add(snapshotModel.ToSnapshot());
         }
@@ -1041,7 +1042,7 @@ public class StepModel()
     public static List<StepModel> FromList(List<Step> steps)
     {
         var list = new List<StepModel>();
-        foreach (var step in steps)
+        foreach (var step in steps.Where(x=>x is not null))
         {
             list.Add(From(step));
         }
@@ -1050,7 +1051,7 @@ public class StepModel()
     public static List<Step> ToStepList(List<StepModel> stepModels)
     {
         var list = new List<Step>();
-        foreach (var stepModel in stepModels)
+        foreach (var stepModel in stepModels.Where(x=>x is not null))
         {
             list.Add(stepModel.ToStep());
         }
@@ -1121,7 +1122,7 @@ public class PathModel()
     public static List<PathModel> FromPathList(List<Path> paths)
     {
         var list = new List<PathModel>();
-        foreach (var path in paths)
+        foreach (var path in paths.Where(x=>x is not null))
         {
             list.Add(FromPath(path));
         }
@@ -1130,7 +1131,7 @@ public class PathModel()
     public static List<Path> ToPathList(List<PathModel> pathModels)
     {
         var list = new List<Path>();
-        foreach (var pathModel in pathModels)
+        foreach (var pathModel in pathModels.Where(x=>x is not null))
         {
             list.Add(pathModel.ToPath());
         }
@@ -1170,7 +1171,7 @@ public class RoomConditionExitModel()
     public static List<RoomConditionExitModel> FromRoomConditionExitList(List<RoomConditionExit> exits)
     {
         var list = new List<RoomConditionExitModel>();
-        foreach (var exit in exits)
+        foreach (var exit in exits.Where(x=>x is not null))
         {
             list.Add(From(exit));
         }
@@ -1179,7 +1180,7 @@ public class RoomConditionExitModel()
     public static List<RoomConditionExit> ToRoomConditionExitList(List<RoomConditionExitModel> exitModels)
     {
         var list = new List<RoomConditionExit>();
-        foreach (var exitModel in exitModels)
+        foreach (var exitModel in exitModels.Where(x=>x is not null))
         {
             list.Add(exitModel.ToRoomConditionExit());
         }
@@ -1209,7 +1210,7 @@ public class LinkModel()
     public static List<LinkModel> FromLinkList(List<Link> links)
     {
         var list = new List<LinkModel>();
-        foreach (var link in links)
+        foreach (var link in links.Where(x=>x is not null))
         {
             list.Add(FromLink(link));
         }
@@ -1218,7 +1219,7 @@ public class LinkModel()
     public static List<Link> ToLinkList(List<LinkModel> linkModels)
     {
         var list = new List<Link>();
-        foreach (var linkModel in linkModels)
+        foreach (var linkModel in linkModels.Where(x=>x is not null))
         {
             list.Add(linkModel.ToLink());
         }
@@ -1245,7 +1246,7 @@ public class CommandCostModel()
     public static List<CommandCostModel> FromCommandCostList(List<CommandCost> commandCosts)
     {
         var list = new List<CommandCostModel>();
-        foreach (var commandCost in commandCosts)
+        foreach (var commandCost in commandCosts.Where(x=>x is not null))
         {
             list.Add(From(commandCost));
         }
@@ -1254,7 +1255,7 @@ public class CommandCostModel()
     public static List<CommandCost> ToCommandCostList(List<CommandCostModel> commandCostModels)
     {
         var list = new List<CommandCost>();
-        foreach (var commandCostModel in commandCostModels)
+        foreach (var commandCostModel in commandCostModels.Where(x=>x is not null))
         {
             list.Add(commandCostModel.ToCommandCost());
         }
