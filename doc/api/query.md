@@ -70,6 +70,16 @@
 | --CommandCosts.To                            | string    | 指令目标         |
 | --CommandCosts.Cost                          | int       | 指令消耗         |
 
+* Tags 是当前环境的标签列表，用于匹配 出口/捷径 里的环境条件
+* RoomConditions 是环境的房间条件列表，用于过滤房间的Tags
+* Rooms是临时房间
+* Paths是临时出口列表，一般用于连接固定房间和临时房间
+* Shortcut是捷径列表列表，一般用于不同角色独属的接近
+* Whitelist是房间白名单，只有在白名单内的房间才能参与规划路径，较少用，留空不限制。
+* Blacklisk是房间黑名单，不进入黑名单中的房间
+* BlockedLinks是临时封锁的连接，一般用于被拦路的情况
+* CommandCosts是临时指令消耗，用于通过指定的指令到达制定房间的消耗。To为空在当前版本属于Undefined Behavior。
+
 ### 地图选项 MapperOptions
 
 地图选项指一次计算时的特殊设置
