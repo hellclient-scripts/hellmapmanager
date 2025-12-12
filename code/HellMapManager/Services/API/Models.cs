@@ -1396,7 +1396,7 @@ public class InputDilate()
         }
         return null;
     }
-    public List<string> Src { get; set; } = [];
+    public List<string> Source { get; set; } = [];
     public int Iterations { get; set; } = 1;
     public EnvironmentModel Environment { get; set; } = new();
     public MapperOptionsModel Options { get; set; } = new();

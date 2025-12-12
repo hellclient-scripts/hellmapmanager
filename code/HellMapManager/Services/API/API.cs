@@ -364,7 +364,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var output = Database.APIDilate(input.Src, input.Iterations, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        var output = Database.APIDilate(input.Source, input.Iterations, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
         await WriteJSON(ctx, output);
     }
     public async Task APITrackExit(HttpContext ctx)

@@ -1445,7 +1445,7 @@ public class APIServerTest
         Assert.Null(queryresult);
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key1", "key6"],
+            Source = ["key1", "key6"],
             Iterations = 2,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1495,7 +1495,7 @@ public class APIServerTest
         Assert.Equal("1>2", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key1", "key6"],
+            Source = ["key1", "key6"],
             Iterations = 2,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1581,7 +1581,7 @@ public class APIServerTest
         Assert.Equal("A>1;1>2", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1640,7 +1640,7 @@ public class APIServerTest
         Assert.Equal("6>3;3>1;1>2", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1693,7 +1693,7 @@ public class APIServerTest
         Assert.Equal("1>3;3>4;4>5;5>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key1"],
+            Source = ["key1"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1743,7 +1743,7 @@ public class APIServerTest
         Assert.Equal("1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key1"],
+            Source = ["key1"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1796,7 +1796,7 @@ public class APIServerTest
         Assert.Equal("1>3;3>4;4>5;5>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key1"],
+            Source = ["key1"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1846,7 +1846,7 @@ public class APIServerTest
         Assert.Equal("1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key1"],
+            Source = ["key1"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1899,7 +1899,7 @@ public class APIServerTest
         Assert.Equal("1>3;3>4;4>5;5>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key3"],
+            Source = ["key3"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -1949,7 +1949,7 @@ public class APIServerTest
         Assert.Equal("A>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key3"],
+            Source = ["key3"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2002,7 +2002,7 @@ public class APIServerTest
         Assert.Equal("1>3;3>4;4>5;5>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key4"],
+            Source = ["key4"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2052,7 +2052,7 @@ public class APIServerTest
         Assert.Equal("A>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key4"],
+            Source = ["key4"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2104,7 +2104,7 @@ public class APIServerTest
         Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2154,7 +2154,7 @@ public class APIServerTest
         Assert.Equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2207,7 +2207,7 @@ public class APIServerTest
         Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2257,7 +2257,7 @@ public class APIServerTest
         Assert.Equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2309,7 +2309,7 @@ public class APIServerTest
         Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2359,7 +2359,7 @@ public class APIServerTest
         Assert.Equal("6>3;3>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2412,7 +2412,7 @@ public class APIServerTest
         Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
@@ -2462,7 +2462,7 @@ public class APIServerTest
         Assert.Equal("A>1", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
         {
-            Src = ["key6"],
+            Source = ["key6"],
             Iterations = 1,
             Environment = EnvironmentModel.From(ctx.ToEnvironment()),
             Options = MapperOptionsModel.From(opt),
