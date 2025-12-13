@@ -2,7 +2,8 @@
 
 搜索房间接口是一系列专门用于根据一定的条件搜索符合条件的房间列表的接口。
 
-## 房间过滤器 RoomFilter
+## 数据结构
+### 房间过滤器 RoomFilter
 
 房间过滤器是一个根据实际场景需要对房间进行过滤的数据结构。基本数据结构如下
 
@@ -37,3 +38,181 @@
 * HasAnyData 匹配含有任何指定房间数据的房间。房间数据必须完整匹配。比如查找描述
 * ContainsAnyData 匹配含有任何指定房间数据的房间。房间数据部分匹配。
 * ContainsAnyKey 匹配房间key部分匹配的房间。一般较少用，除非key有特殊的规律
+
+## 搜索房间接口 SearchRooms
+
+根据给到的过滤器搜索符合条件的房间
+
+**请求地址:**
+
+/api/db/searchrooms
+
+**请求正文:**
+
+| 字段   | 类型       | 说明       |
+| ------ | ---------- | ---------- |
+| Filter | RoomFilter | 房间过滤器 |
+
+
+**返回结果：**
+| 字段                     | 类型      | 说明         |
+| ------------------------ | --------- | ------------ |
+|                          | []object? | 房间         |
+| Key                      | string    | 房间主键     |
+| Name                     | string    | 房间名       |
+| Desc                     | string    | 房间描述     |
+| Group                    | string    | 房间分组     |
+| Tags                     | []object  | 房间标签     |
+| --Key                    | string    | 标签主键     |
+| --Value                  | int       | 标签值       |
+| Exits                    | []object  | 房间出口列表 |
+| --Exits.Command          | string    | 出口指令     |
+| --Exits.To               | string    | 出口房间     |
+| --Exits.Cost             | int       | 出口消耗     |
+| --Exits.Conditions       | []object  | 出口条件列表 |
+| --Exits.Conditions.Key   | string    | 条件主键     |
+| --Exits.Conditions.Not   | bool      | 条件取否     |
+| --Exits.Conditions.Value | int       | 条件值       |
+| Data                     | []object? | 房间数据列表 |
+| --Data.Key               | string    | 数据主键     |
+| --Data.Value             | string    | 数据值       |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/searchrooms HTTP/1.1
+
+{
+    "Filter":{
+        "HasAnyName" :["钱庄"]
+    }
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Sat, 13 Dec 2025 12:56:30 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "23",
+    "Name": "钱庄",
+    "Desc": "",
+    "Group": "扬州",
+    "Tags": [],
+    "Exits": [
+      {
+        "Command": "e",
+        "To": "22",
+        "Conditions": [],
+        "Cost": 1
+      }
+    ],
+    "Data": []
+  },
+  {
+    "Key": "137",
+    "Name": "钱庄",
+    "Desc": "",
+    "Group": "长安",
+    "Tags": [],
+    "Exits": [
+      {
+        "Command": "e",
+        "To": "136",
+        "Conditions": [],
+        "Cost": 1
+      }
+    ],
+    "Data": []
+  }
+]
+```
+
+## 过滤房间接口 FilterRooms
+
+根据给到的过滤器搜索，过滤给到的的房间
+
+一般用来对搜索结果或者Trace/Region的房间进行再过滤
+
+**请求地址:**
+
+/api/db/filterrooms
+
+**请求正文:**
+
+| 字段   | 类型       | 说明       |
+| ------ | ---------- | ---------- |
+| Source | []string   | 原始房间   |
+| Filter | RoomFilter | 房间过滤器 |
+
+
+**返回结果：**
+| 字段                     | 类型      | 说明         |
+| ------------------------ | --------- | ------------ |
+|                          | []object? | 房间         |
+| Key                      | string    | 房间主键     |
+| Name                     | string    | 房间名       |
+| Desc                     | string    | 房间描述     |
+| Group                    | string    | 房间分组     |
+| Tags                     | []object  | 房间标签     |
+| --Key                    | string    | 标签主键     |
+| --Value                  | int       | 标签值       |
+| Exits                    | []object  | 房间出口列表 |
+| --Exits.Command          | string    | 出口指令     |
+| --Exits.To               | string    | 出口房间     |
+| --Exits.Cost             | int       | 出口消耗     |
+| --Exits.Conditions       | []object  | 出口条件列表 |
+| --Exits.Conditions.Key   | string    | 条件主键     |
+| --Exits.Conditions.Not   | bool      | 条件取否     |
+| --Exits.Conditions.Value | int       | 条件值       |
+| Data                     | []object? | 房间数据列表 |
+| --Data.Key               | string    | 数据主键     |
+| --Data.Value             | string    | 数据值       |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/filterrooms HTTP/1.1
+
+{
+    "Source":["23","137"],
+    "Filter":{
+        "HasAnyGroup" :["扬州"]
+    }
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Sat, 13 Dec 2025 13:05:10 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "23",
+    "Name": "钱庄",
+    "Desc": "",
+    "Group": "扬州",
+    "Tags": [],
+    "Exits": [
+      {
+        "Command": "e",
+        "To": "22",
+        "Conditions": [],
+        "Cost": 1
+      }
+    ],
+    "Data": []
+  }
+]
+```
