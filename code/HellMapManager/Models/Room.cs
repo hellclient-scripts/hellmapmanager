@@ -10,6 +10,8 @@ public class RoomFilter
     public List<string> HasAnyExitTo = [];
     public List<Data> HasAnyData = [];
     public List<string> HasAnyName = [];
+    public List<string> HasAnyGroup = [];
+
     public List<Data> ContainsAnyData = [];
     public List<string> ContainsAnyName = [];
     public List<string> ContainsAnyKey = [];
@@ -20,6 +22,21 @@ public class RoomFilter
             foreach (var data in HasAnyName)
             {
                 if (room.Name == data)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+    private bool ValidateHasAnyGroup(Room room)
+    {
+        if (HasAnyGroup.Count > 0)
+        {
+            foreach (var data in HasAnyGroup)
+            {
+                if (room.Group == data)
                 {
                     return true;
                 }
@@ -119,6 +136,10 @@ public class RoomFilter
             }
         }
         if (!ValidateHasAnyExitTo(room))
+        {
+            return false;
+        }
+        if (!ValidateHasAnyGroup(room))
         {
             return false;
         }
