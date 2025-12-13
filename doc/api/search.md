@@ -13,7 +13,7 @@
 | --RoomConditions.Not    | bool      | 条件取否                     |
 | --RoomConditions.Value  | int       | 条件值                       |
 | HasAnyExitTo            | []string? | 出口目标过滤，留空则不过滤   |
-| HasAnyGroup              | []string? | 房间分组过滤，留空则不过滤 |
+| HasAnyGroup             | []string? | 房间分组过滤，留空则不过滤   |
 | HasAnyName              | []string? | 完整房间名过滤，留空则不过滤 |
 | ContainsAnyName         | []string? | 部分房间名过滤，留空则不过滤 |
 | HasAnyData              | []obecjt? | 完整数据值过滤，留空则不过滤 |
@@ -31,7 +31,7 @@
 具体功能为
 * RoomConditions 与房间的Tag进行匹配，必须全部符合
 * HasAnyExitTo 必须具有到指定房间的出口
-* HasAnyGroup 必须具有指定分组过滤，一般用于限制城市
+* HasAnyGroup 必须具有指定分组过滤，一般用于限制城市.1001版后加入。
 * HasAnyName 根据完整房间名的筛选，可以用来查找是否是唯一的名称的房间
 * ContainsAnyName 查找房间名字，部分匹配即可
 * HasAnyData 匹配含有任何指定房间数据的房间。房间数据必须完整匹配。比如查找描述
