@@ -122,7 +122,7 @@ public partial class APIServer
         DBAPI.MapPost("/filterrooms", APIFilterRooms);
         DBAPI.MapPost("/searchrooms", APISearchRooms);
 
-        DBAPI.MapPost("/clearsnapshot", APIClearSnapshot);
+        DBAPI.MapPost("/clearsnapshots", APIClearSnapshots);
         DBAPI.MapPost("/takesnapshot", APITakeSnapshot);
         DBAPI.MapPost("/searchsnapshots", APISearchSnapshots);
 

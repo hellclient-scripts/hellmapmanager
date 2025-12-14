@@ -746,7 +746,7 @@ public partial class MapDatabase
         }
         return null;
     }
-    public void APIClearSnapshot(SnapshotFilter filter)
+    public void APIClearSnapshots(SnapshotFilter filter)
     {
         lock (_lock)
         {

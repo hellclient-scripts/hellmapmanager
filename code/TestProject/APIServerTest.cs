@@ -2572,7 +2572,7 @@ public class APIServerTest
         var server = new HellMapManager.Services.API.APIServer();
         server.BindMapDatabase(mapDatabase);
         server.Start();
-        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshot", typeof(InputSnapshotFilter), InputSnapshotFilter.From(new SnapshotFilter(null, null, null)));
+        var resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshots", typeof(InputSnapshotFilter), InputSnapshotFilter.From(new SnapshotFilter(null, null, null)));
         Assert.False(updated);
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/takesnapshot", typeof(InputTakeSnapshot), new InputTakeSnapshot()
         {
@@ -2613,7 +2613,7 @@ public class APIServerTest
         Assert.Single(snapshots!);
         Assert.Equal("key1", snapshots![0].Key);
         Assert.Equal(2, snapshots![0].Sum);
-        resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshot", typeof(InputSnapshotFilter), InputSnapshotFilter.From(new SnapshotFilter(null, null, null)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshots", typeof(InputSnapshotFilter), InputSnapshotFilter.From(new SnapshotFilter(null, null, null)));
         Assert.True(updated);
         updated = false;
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchsnapshots", typeof(SnapshotSearchModel), SnapshotSearchModel.From(new SnapshotSearch()));
