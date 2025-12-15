@@ -117,24 +117,6 @@ public class AppUI(MapDatabase mapDatabase)
         return "";
     }
 
-    public async Task<string> AskImportRoomsH()
-    {
-        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
-
-        // 启动异步操作以打开对话框。
-        var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-        {
-            Title = "导入UTF8格式的rooms.h文件",
-            AllowMultiple = false
-        });
-
-        if (files.Count >= 1)
-        {
-            return files[0].Path.LocalPath;
-        }
-        return "";
-    }
-
     public static FilePickerFileType HMMFileType
     {
         get => new("文本地图HMM文件")
@@ -174,17 +156,6 @@ public class AppUI(MapDatabase mapDatabase)
             Title = "保存地图文件",
             DefaultExtension = "hmm",
             FileTypeChoices = new[] { HMMFileType, HMZFileType },
-            ShowOverwritePrompt = true,
-        });
-        return file == null ? "" : file.Path.LocalPath;
-    }
-    public async Task<string> AskExportRoomsH()
-    {
-        var topLevel = TopLevel.GetTopLevel((Avalonia.Visual)Desktop.MainWindow!);
-
-        var file = await topLevel!.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title = "导出RoomsH文件",
             ShowOverwritePrompt = true,
         });
         return file == null ? "" : file.Path.LocalPath;
@@ -253,21 +224,6 @@ public class AppUI(MapDatabase mapDatabase)
         return ConfirmedExit;
     }
 
-    public async Task ImportRoomsH()
-    {
-        var file = await AskImportRoomsH();
-        if (file != "")
-        {
-            try
-            {
-                MapDatabase.ImportRoomsHFile(file);
-            }
-            catch (Exception ex)
-            {
-                Alert("导入失败", ex.Message);
-            }
-        }
-    }
     public async Task Open()
     {
         var file = await AskLoadFile();

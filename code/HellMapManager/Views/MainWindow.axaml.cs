@@ -5,7 +5,6 @@ using HellMapManager.Models;
 using HellMapManager.Misc;
 using HellMapManager.Windows.PatchWindow;
 using HellMapManager.Windows.AboutWindow;
-using HellMapManager.Windows.RoomsHExportWindow;
 using HellMapManager.Windows.APIConfigWindow;
 using Avalonia.Interactivity;
 using System;
@@ -27,31 +26,6 @@ public partial class MainWindow : Window
         if (sender is not null && sender is MenuItem mi && mi.DataContext is RecentFile rf)
         {
             await AppUI.Main.OnOpenRecent(rf.Path);
-        }
-    }
-    public async void OnExportRoomsH(object? sender, RoutedEventArgs args)
-    {
-        if (AppKernel.MapDatabase.Current == null)
-        {
-            return;
-        }
-        var window = new RoomsHExportWindow();
-        window.DataContext = new RoomsHExportOption();
-        var result = await window.ShowDialog<RoomsHExportOption>(this);
-        if (result != null && result is RoomsHExportOption option)
-        {
-            var path = await AppUI.Main.AskExportRoomsH();
-            if (path != null && path != "")
-            {
-                try
-                {
-                    AppKernel.MapDatabase.ExportRoomsH(path, option);
-                }
-                catch (Exception ex)
-                {
-                    AppUI.Alert("导出失败", ex.Message);
-                }
-            }
         }
     }
     public async void OnDiffMapFile(object? sender, RoutedEventArgs args)
@@ -128,6 +102,11 @@ public partial class MainWindow : Window
     {
         TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.ScriptInro));
     }
+    public void OpenURLBestPractices(object? sender, RoutedEventArgs args)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.BestPractices));
+    }
+
     public void OpenURLAPI(object? sender, RoutedEventArgs args)
     {
         TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.API));

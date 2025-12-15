@@ -137,22 +137,4 @@ public partial class MapDatabase()
             }
         }
     }
-    public void ImportRoomsHFile(string file)
-    {
-        if (Current != null)
-        {
-            var rooms = RoomsH.Open(file);
-            if (rooms != null)
-            {
-                APIInsertRooms(rooms);
-            }
-        }
-    }
-    public void ExportRoomsH(string path, RoomsHExportOption opt)
-    {
-        if (Current != null)
-        {
-            RoomsH.Save(path, Current.Map.Rooms, opt);
-        }
-    }
 }
