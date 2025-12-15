@@ -112,7 +112,7 @@ Transfer-Encoding: chunked
 
 ## 列出房间接口
 
-根据给到的ListOption,列出房间别表
+根据给到的ListOption,列出房间列表
 
 **请求地址:**
 
@@ -240,6 +240,159 @@ HTTP/1.1 200 OK
 Connection: close
 Content-Type: application/json; charset=utf-8
 Date: Mon, 15 Dec 2025 05:43:56 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 插入标记接口 InsertMarkers
+
+批量插入标记。如果房间已经存在，会进行替换。
+
+**请求地址:**
+
+/api/db/insertmarkers
+
+**请求正文:**
+
+| 字段              | 类型     | 说明                     |
+| ----------------- | -------- | ------------------------ |
+| Markers           | []object | 标记列表                 |
+| --Markers.Key     | string   | 标记主键                 |
+| --Markers.Value   | string   | 标记值，对应的房间Key    |
+| --Markers.Group   | string   | 标记分组                 |
+| --Markers.Desc    | string   | 标记描述                 |
+| --Markers.Message | string   | 标记消息，一般供脚本使用 |
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/insertmarkers HTTP/1.1
+
+{
+    "Markers":[
+        {
+            "Key":"扬州中心",
+            "Value":"0",
+            "Group":"CityCenter",
+            "Desc":"扬州地区中心",
+            "Message":"area|yz"
+        }
+    ]
+}
+
+```
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 05:57:09 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 列出标记接口
+
+根据给到的ListOption,列出标记列表
+
+**请求地址:**
+
+/api/db/listmarkers
+
+
+**请求正文:**
+
+| 字段 | 类型       | 说明     |
+| ---- | ---------- | -------- |
+|      | ListOption | 过滤选项 |
+
+**返回结果：**
+
+| 字段       | 类型     | 说明                     |
+| ---------- | -------- | ------------------------ |
+|            | []object | 标记列表                 |
+| --.Key     | string   | 标记主键                 |
+| --.Value   | string   | 标记值，对应的房间Key    |
+| --.Group   | string   | 标记分组                 |
+| --.Desc    | string   | 标记描述                 |
+| --.Message | string   | 标记消息，一般供脚本使用 |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/listmarkers HTTP/1.1
+
+{
+  "Groups":["CityCenter"]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:01:41 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "扬州中心",
+    "Value": "0",
+    "Group": "CityCenter",
+    "Desc": "扬州地区中心",
+    "Message": "area|yz"
+  }
+]
+```
+
+## 批量删除标记接口 RemoveMarkers
+
+通过给到的主键，批量删除标记。
+
+如果主键不存在，则跳过该标记主键继续删除。
+
+**请求地址:**
+
+/api/db/removemarkers
+
+**请求正文:**
+
+| 字段 | 类型     | 说明         |
+| ---- | -------- | ------------ |
+| Keys | []string | 标记主键列表 |
+
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/removeMarkers HTTP/1.1
+
+{
+    "Keys":["notexists","扬州中心"]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:03:25 GMT
 Server: HellMapManager
 Transfer-Encoding: chunked
 
