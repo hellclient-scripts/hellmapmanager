@@ -894,11 +894,7 @@ Transfer-Encoding: chunked
 []
 ```
 
-## 定位数据接口 Landmark
-
-定位(Landmark)用于描述地图中可供脚本或展示使用的定位信息，`Landmark` 的主键由 `Key` 与 `Type` 组合唯一确定。
-
-### 插入定位接口 InsertLandmarks
+## 插入定位接口 InsertLandmarks
 
 批量插入定位。如果定位已经存在，会进行替换。
 
@@ -951,7 +947,7 @@ Transfer-Encoding: chunked
 "success"
 ```
 
-### 列出定位接口 ListLandmarks
+## 列出定位接口 ListLandmarks
 
 根据给到的 `ListOption`，列出定位列表。
 
@@ -967,14 +963,14 @@ Transfer-Encoding: chunked
 
 **返回结果：**
 
-| 字段     | 类型     | 说明                     |
-| -------- | -------- | ------------------------ |
-|          | []object | 定位列表                 |
-| --.Key   | string   | 定位主键                 |
-| --.Type  | string   | 定位类型                 |
-| --.Value | string   | 定位值 |
-| --.Group | string   | 定位分组                 |
-| --.Desc  | string   | 定位描述                 |
+| 字段     | 类型     | 说明     |
+| -------- | -------- | -------- |
+|          | []object | 定位列表 |
+| --.Key   | string   | 定位主键 |
+| --.Type  | string   | 定位类型 |
+| --.Value | string   | 定位值   |
+| --.Group | string   | 定位分组 |
+| --.Desc  | string   | 定位描述 |
 
 **示例请求**
 
@@ -1006,7 +1002,7 @@ Transfer-Encoding: chunked
 ]
 ```
 
-### 批量删除定位接口 RemoveLandmarks
+## 批量删除定位接口 RemoveLandmarks
 
 通过给到的主键列表，批量删除定位。主键由 `Key` 与 `Type` 两部分组成。
 
@@ -1049,4 +1045,348 @@ Transfer-Encoding: chunked
 
 "success"
 ```
+
+
+## 插入快捷出口接口 InsertShortcuts
+
+批量插入快捷出口。如果已存在同主键的快捷出口，会进行替换。
+
+**请求地址:**
+
+/api/db/insertshortcuts
+
+**请求正文:**
+
+| 字段                               | 类型     | 说明         |
+| ---------------------------------- | -------- | ------------ |
+| Shortcuts                          | []object | 快捷出口列表 |
+| --Shortcuts.Key                    | string   | 快捷出口主键 |
+| --Shortcuts.Command                | string   | 出口命令     |
+| --Shortcuts.To                     | string   | 目标房间Key  |
+| --Shortcuts.RoomConditions         | []object | 房间条件列表 |
+| ----Shortcuts.RoomConditions.Key   | string   | 条件主键     |
+| ----Shortcuts.RoomConditions.Not   | bool     | 条件取否     |
+| ----Shortcuts.RoomConditions.Value | int      | 条件值       |
+| --Shortcuts.Conditions             | []object | 出口条件列表 |
+| ----Shortcuts.Conditions.Key       | string   | 条件主键     |
+| ----Shortcuts.Conditions.Not       | bool     | 条件取否     |
+| ----Shortcuts.Conditions.Value     | int      | 条件值       |
+| --Shortcuts.Cost                   | int      | 出口消耗     |
+| --Shortcuts.Group                  | string   | 分组         |
+| --Shortcuts.Desc                   | string   | 描述         |
+
+ValueCondition 结构：
+
+| 字段  | 类型   | 说明     |
+| ----- | ------ | -------- |
+| Key   | string | 条件主键 |
+| Not   | bool   | 是否取非 |
+| Value | int    | 条件值   |
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/insertshortcuts HTTP/1.1
+
+{
+  "Shortcuts": [
+    {
+      "Key": "FastPass",
+      "Command": "shortcut",
+      "To": "100",
+      "RoomConditions": [ { "Key": "is_safe", "Not": false, "Value": 1 } ],
+      "Conditions": [],
+      "Cost": 1,
+      "Group": "Default",
+      "Desc": "当房间安全时可用的快捷出口"
+    }
+  ]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:41:52 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 列出快捷出口接口 ListShortcuts
+
+根据给到的 `ListOption`，列出快捷出口列表。
+
+**请求地址:**
+
+/api/db/listshortcuts
+
+**请求正文:**
+
+| 字段 | 类型       | 说明     |
+| ---- | ---------- | -------- |
+|      | ListOption | 过滤选项 |
+
+**返回结果：**
+
+| 字段                      | 类型     | 说明         |
+| ------------------------- | -------- | ------------ |
+|                           | []object | 快捷出口列表 |
+| --.Key                    | string   | 快捷出口主键 |
+| --.Command                | string   | 出口命令     |
+| --.To                     | string   | 目标房间Key  |
+| --.RoomConditions         | []object | 房间条件列表 |
+| ----.RoomConditions.Key   | string   | 条件主键     |
+| ----.RoomConditions.Not   | bool     | 条件取否     |
+| ----.RoomConditions.Value | int      | 条件值       |
+| --.Conditions             | []object | 出口条件列表 |
+| ----.Conditions.Key       | string   | 条件主键     |
+| ----.Conditions.Not       | bool     | 条件取否     |
+| ----.Conditions.Value     | int      | 条件值       |
+| --.Cost                   | int      | 出口消耗     |
+| --.Group                  | string   | 分组         |
+| --.Desc                   | string   | 描述         |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/listshortcuts HTTP/1.1
+
+{
+  "Groups": ["Default"]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:42:00 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:42:19 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "FastPass",
+    "Command": "shortcut",
+    "To": "100",
+    "RoomConditions": [
+      {
+        "Key": "is_safe",
+        "Not": false,
+        "Value": 1
+      }
+    ],
+    "Conditions": [],
+    "Cost": 1,
+    "Group": "Default",
+    "Desc": "当房间安全时可用的快捷出口"
+  }
+]
+```
+
+## 批量删除快捷出口接口 RemoveShortcuts
+
+通过给到的主键列表，批量删除快捷出口。主键为 `Key`。
+
+**请求地址:**
+
+/api/db/removeshortcuts
+
+**请求正文:**
+
+| 字段 | 类型     | 说明             |
+| ---- | -------- | ---------------- |
+| Keys | []string | 快捷出口主键列表 |
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/removeshortcuts HTTP/1.1
+
+{
+  "Keys": ["FastPass"]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:45:00 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 插入变量接口 InsertVariables
+
+批量插入变量。如果变量已经存在，会进行替换。
+
+**请求地址:**
+
+/api/db/insertvariables
+
+
+**请求正文:**
+
+| 字段              | 类型     | 说明     |
+| ----------------- | -------- | -------- |
+| Variables         | []object | 变量列表 |
+| --Variables.Key   | string   | 变量主键 |
+| --Variables.Value | string   | 变量值   |
+| --Variables.Group | string   | 变量分组 |
+| --Variables.Desc  | string   | 变量描述 |
+
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/insertvariables HTTP/1.1
+
+{
+  "Variables":[
+    {
+      "Key":"greeting",
+      "Value":"hello",
+      "Group":"common",
+      "Desc":"问候语"
+    }
+  ]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:53:20 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 列出变量接口 ListVariables
+
+根据给到的 `ListOption`，列出变量列表。
+
+**请求地址:**
+
+/api/db/listvariables
+
+
+**请求正文:**
+
+| 字段 | 类型       | 说明     |
+| ---- | ---------- | -------- |
+|      | ListOption | 过滤选项 |
+
+**返回结果：**
+
+| 字段     | 类型     | 说明     |
+| -------- | -------- | -------- |
+|          | []object | 变量列表 |
+| --.Key   | string   | 变量主键 |
+| --.Value | string   | 变量值   |
+| --.Group | string   | 变量分组 |
+| --.Desc  | string   | 变量描述 |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/listvariables HTTP/1.1
+
+{
+  "Groups":["common"]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:52:55 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "greeting",
+    "Value": "hello",
+    "Group": "common",
+    "Desc": "问候语"
+  }
+]
+```
+
+## 批量删除变量接口 RemoveVariables
+
+通过给到的主键，批量删除变量。如果主键不存在，则跳过该主键继续删除。
+
+**请求地址:**
+
+/api/db/removevariables
+
+
+**请求正文:**
+
+| 字段 | 类型     | 说明         |
+| ---- | -------- | ------------ |
+| Keys | []string | 变量主键列表 |
+
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/removevariables HTTP/1.1
+
+{
+  "Keys": ["greeting"]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:53:32 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
 
