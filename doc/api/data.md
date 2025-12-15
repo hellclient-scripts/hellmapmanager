@@ -110,7 +110,7 @@ Transfer-Encoding: chunked
 "success"
 ```
 
-## 列出房间接口
+## 列出房间接口 ListRooms
 
 根据给到的ListOption,列出房间列表
 
@@ -299,7 +299,7 @@ Transfer-Encoding: chunked
 "success"
 ```
 
-## 列出标记接口
+## 列出标记接口 ListMarkers
 
 根据给到的ListOption,列出标记列表
 
@@ -397,4 +397,499 @@ Server: HellMapManager
 Transfer-Encoding: chunked
 
 "success"
+```
+
+## 插入路线接口 InsertRoutes
+
+批量插入路线。如果路线已经存在，会进行替换。
+
+**请求地址:**
+
+/api/db/insertroutes
+
+**请求正文:**
+
+| 字段       | 类型     | 说明                  |
+| ---------- | -------- | --------------------- |
+| Routes     | []object | 路线列表              |
+| --.Key     | string   | 路线主键              |
+| --.Desc    | string   | 路线描述              |
+| --.Group   | string   | 路线分组              |
+| --.Message | string   | 路线消息              |
+| --.Rooms   | []string | 路线包含的房间Key列表 |
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/insertroutes HTTP/1.1
+
+{
+  "Routes":[
+    {
+      "Key":"route1",
+      "Desc":"示例路线",
+      "Group":"默认",
+      "Message":"msg|example",
+      "Rooms":["0","1","2"]
+    }
+  ]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:14:41 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 列出路线接口 ListRoutes
+
+根据给到的 `ListOption`，列出路线列表。
+
+**请求地址:**
+
+/api/db/listroutes
+
+**请求正文:**
+
+| 字段 | 类型       | 说明     |
+| ---- | ---------- | -------- |
+|      | ListOption | 过滤选项 |
+
+**返回结果：**
+
+| 字段       | 类型     | 说明              |
+| ---------- | -------- | ----------------- |
+|            | []object | 路线列表          |
+| --.Key     | string   | 路线主键          |
+| --.Desc    | string   | 路线描述          |
+| --.Group   | string   | 路线分组          |
+| --.Message | string   | 路线消息          |
+| --.Rooms   | []string | 路线包含的房间Key |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/listroutes HTTP/1.1
+
+{
+  "Groups":["默认"]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:14:52 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "route1",
+    "Desc": "示例路线",
+    "Group": "默认",
+    "Message": "msg|example",
+    "Rooms": [
+      "0",
+      "1",
+      "2"
+    ]
+  }
+]
+```
+
+## 批量删除路线接口 RemoveRoutes
+
+通过给到的主键，批量删除路线。如果主键不存在，则跳过该路线主键继续删除。
+
+**请求地址:**
+
+/api/db/removeroutes
+
+**请求正文:**
+
+| 字段 | 类型     | 说明         |
+| ---- | -------- | ------------ |
+| Keys | []string | 路线主键列表 |
+
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/removeroutes HTTP/1.1
+
+{
+    "Keys":["notexists","route1"]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+
+## 插入足迹接口 InsertTraces
+
+批量插入足迹(Trace)。如果足迹已经存在，会进行替换。
+
+**请求地址:**
+
+/api/db/inserttraces
+
+
+**请求正文:**
+
+| 字段               | 类型     | 说明              |
+| ------------------ | -------- | ----------------- |
+| Traces             | []object | 足迹列表          |
+| --Traces.Key       | string   | 足迹主键          |
+| --Traces.Group     | string   | 足迹分组          |
+| --Traces.Desc      | string   | 足迹描述          |
+| --Traces.Message   | string   | 足迹消息          |
+| --Traces.Locations | []string | 足迹包含的房间Key |
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/inserttraces HTTP/1.1
+
+{
+  "Traces":[
+    {
+      "Key":"mytrace",
+      "Group":"默认",
+      "Desc":"示例足迹",
+      "Message":"tag|trace",
+      "Locations":["0","1","2"]
+    }
+  ]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:20:42 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 列出足迹接口 ListTraces
+
+根据给到的 `ListOption`，列出足迹列表。
+
+**请求地址:**
+
+/api/db/listtraces
+
+
+**请求正文:**
+
+| 字段 | 类型       | 说明     |
+| ---- | ---------- | -------- |
+|      | ListOption | 过滤选项 |
+
+**返回结果：**
+
+| 字段         | 类型     | 说明              |
+| ------------ | -------- | ----------------- |
+|              | []object | 足迹列表          |
+| --.Key       | string   | 足迹主键          |
+| --.Group     | string   | 足迹分组          |
+| --.Desc      | string   | 足迹描述          |
+| --.Message   | string   | 足迹消息          |
+| --.Locations | []string | 足迹包含的房间Key |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/listtraces HTTP/1.1
+
+{
+  "Groups":["默认"]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:20:59 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "mytrace",
+    "Group": "默认",
+    "Desc": "示例足迹",
+    "Message": "tag|trace",
+    "Locations": [
+      "0",
+      "1",
+      "2"
+    ]
+  }
+]
+```
+
+## 批量删除足迹接口 RemoveTraces
+
+通过给到的主键，批量删除足迹。如果主键不存在，则跳过该主键继续删除。
+
+**请求地址:**
+
+/api/db/removetraces
+
+
+**请求正文:**
+
+| 字段 | 类型     | 说明         |
+| ---- | -------- | ------------ |
+| Keys | []string | 足迹主键列表 |
+
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/removetraces HTTP/1.1
+
+{
+    "Keys":["notexists","mytrace"]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:21:12 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 插入地区接口 InsertRegions
+
+批量插入地区(Region)。如果地区已经存在，会进行替换。
+
+**请求地址:**
+
+/api/db/insertregions
+
+
+**请求正文:**
+
+| 字段               | 类型      | 说明                          |
+| ------------------ | --------- | ----------------------------- |
+| Regions            | []object  | 地区列表                      |
+| --Regions.Key      | string    | 地区主键                      |
+| --Regions.Group    | string    | 地区分组                      |
+| --Regions.Desc     | string    | 地区描述                      |
+| --Regions.Message  | string    | 地区消息（供脚本/标签使用）   |
+| --Regions.Items    | []object  | 地区元素列表                  |
+| ----Items.Not      | bool      | 是否为排除项（true 表示排除） |
+| ----Items.Type     | string    | 元素类型："Room" 或 "Zone" |
+| ----Items.Value    | string    | 元素值（房间 Key 或 区域标识）|
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/insertregions HTTP/1.1
+
+{
+  "Regions":[
+    {
+      "Key":"myregion",
+      "Group":"默认",
+      "Desc":"示例地区",
+      "Message":"tag|region",
+      "Items":[
+        { "Not":false, "Type":"Room", "Value":"0" },
+        { "Not":true,  "Type":"Room", "Value":"2220" },
+        { "Not":false, "Type":"Zone", "Value":"aaaa" }
+      ]
+    }
+  ]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:25:47 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 列出地区接口 ListRegions
+
+根据给到的 `ListOption`，列出地区列表。
+
+**请求地址:**
+
+/api/db/listregions
+
+
+**请求正文:**
+
+| 字段 | 类型       | 说明     |
+| ---- | ---------- | -------- |
+|      | ListOption | 过滤选项 |
+
+**返回结果：**
+
+| 字段                 | 类型      | 说明            |
+| -------------------- | --------- | --------------- |
+|                      | []object  | 地区列表        |
+| --.Key               | string    | 地区主键        |
+| --.Group             | string    | 地区分组        |
+| --.Desc              | string    | 地区描述        |
+| --.Message           | string    | 地区消息        |
+| --.Items             | []object  | 地区元素列表    |
+| ----.Items.Not       | bool      | 是否为排除项    |
+| ----.Items.Type      | string    | 元素类型(Room/Zone) |
+| ----.Items.Value     | string    | 元素值          |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/listregions HTTP/1.1
+
+{
+  "Groups":["默认"]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:30:12 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:26:14 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "myregion",
+    "Group": "默认",
+    "Desc": "示例地区",
+    "Message": "tag|region",
+    "Items": [
+      {
+        "Not": false,
+        "Type": "Room",
+        "Value": "0"
+      },
+      {
+        "Not": true,
+        "Type": "Room",
+        "Value": "2220"
+      },
+      {
+        "Not": false,
+        "Type": "Zone",
+        "Value": "aaaa"
+      }
+    ]
+  }
+]
+```
+
+## 批量删除地区接口 RemoveRegions
+
+通过给到的主键，批量删除地区。如果主键不存在，则跳过该主键继续删除。
+
+**请求地址:**
+
+/api/db/removeregions
+
+
+**请求正文:**
+
+| 字段 | 类型     | 说明         |
+| ---- | -------- | ------------ |
+| Keys | []string | 地区主键列表 |
+
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/removeregions HTTP/1.1
+
+{
+    "Keys":["notexists","myregion"]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:26:36 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[]
 ```
