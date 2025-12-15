@@ -73,7 +73,8 @@ public partial class App : Application
 
                     }
                 }
-            }
+            };
+            desktop.Exit+=OnAppExit;
         ;
         }
         APIServer.Instance.BindMapDatabase(AppKernel.MapDatabase);
@@ -82,6 +83,10 @@ public partial class App : Application
             APIServer.Instance.Start();
         }
         base.OnFrameworkInitializationCompleted();
+    }
+    private async void OnAppExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    {
+       await APIServer.Instance.Stop();
     }
 
     [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]

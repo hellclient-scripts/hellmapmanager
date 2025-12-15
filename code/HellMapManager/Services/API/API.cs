@@ -364,7 +364,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var output = Database.APIDilate(input.Src, input.Iterations, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        var output = Database.APIDilate(input.Source, input.Iterations, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
         await WriteJSON(ctx, output);
     }
     public async Task APITrackExit(HttpContext ctx)
@@ -411,7 +411,7 @@ public partial class APIServer
         var room = Database.APIGetRoom(input.Key, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
         await WriteJSON(ctx, RoomModel.From(room));
     }
-    public async Task APIClearSnapshot(HttpContext ctx)
+    public async Task APIClearSnapshots(HttpContext ctx)
     {
 
         var input = InputSnapshotFilter.FromJSON(await LoadBody(ctx));
@@ -420,7 +420,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        Database.APIClearSnapshot(input.ToSnapshotFilter());
+        Database.APIClearSnapshots(input.ToSnapshotFilter());
         await Success(ctx);
     }
     public async Task APITakeSnapshot(HttpContext ctx)

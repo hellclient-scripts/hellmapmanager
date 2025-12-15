@@ -310,7 +310,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
         }
         return room;
     }
-    //更具上下文，获取出口的移动消耗
+    //根据上下文，获取出口的移动消耗
     public int GetExitCost(Exit exit)
     {
         //判断上下文中是否有单独的出口消耗定义覆盖原始值

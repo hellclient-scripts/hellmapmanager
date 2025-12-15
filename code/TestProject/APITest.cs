@@ -1574,7 +1574,7 @@ public class APITest
         {
             updated = true;
         };
-        mapDatabase.APIClearSnapshot(new SnapshotFilter(null, null, null));
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null));
         Assert.False(updated);
         mapDatabase.APITakeSnapshot("key1", "value1", "type1", "group1");
         Assert.False(updated);
@@ -1593,7 +1593,7 @@ public class APITest
         Assert.Single(snapshots);
         Assert.Equal("key1", snapshots[0].Key);
         Assert.Equal(2, snapshots[0].Sum);
-        mapDatabase.APIClearSnapshot(new SnapshotFilter(null, null, null));
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null));
         Assert.True(updated);
         updated = false;
         snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
