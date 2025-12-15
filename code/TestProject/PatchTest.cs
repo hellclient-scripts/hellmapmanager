@@ -5,6 +5,8 @@ using System.Text;
 using HellMapManager.Helpers.HMPEncoder;
 namespace TestProject;
 
+[Collection("Core")]
+
 public class PatchTest
 {
     [Fact]
@@ -886,9 +888,9 @@ public class PatchTest
         DiffHelper.Apply(diffs2, mf2);
         Assert.Equal(HMMEncoder.Encode(mf2), mfdata);
 
-        var diffs3=HMPEncoder.Decode(HMPEncoder.Encode(diffs));
+        var diffs3 = HMPEncoder.Decode(HMPEncoder.Encode(diffs));
         Assert.Equal(diffs.Items.Count, diffs3!.Items.Count);
-        for(var i=0;i<diffs.Items.Count;i++)
+        for (var i = 0; i < diffs.Items.Count; i++)
         {
             Assert.Equal(diffs.Items[i].Type, diffs3.Items[i].Type);
             Assert.Equal(diffs.Items[i].DiffKey, diffs3.Items[i].DiffKey);
@@ -896,6 +898,6 @@ public class PatchTest
             Assert.Equal(diffs.Items[i].Encode(), diffs3.Items[i].Encode());
         }
         Assert.Null(HMPEncoder.Decode([]));
-        
+
     }
 }

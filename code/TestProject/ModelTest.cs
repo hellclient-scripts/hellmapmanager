@@ -515,6 +515,12 @@ public class ModelTest
         rf.RoomConditions = [new ValueCondition("tag1", 2, true), new ValueCondition("tag2", 1, false)];
         Assert.True(rf.Validate(room));
         rf.ContainsAnyData = [];
+
+        rf.HasAnyGroup=["group1","group2"];
+        Assert.False(rf.Validate(room));
+        rf.HasAnyGroup=["group","group2"];
+        Assert.True(rf.Validate(room));
+        rf.HasAnyGroup=[];
     }
     [Fact]
     public void TestMarker()
