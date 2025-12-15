@@ -61,13 +61,6 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
     }
-    public async void OnImportRoomsH()
-    {
-        if (await AppUI.Main.ConfirmImport())
-        {
-            await AppUI.Main.ImportRoomsH();
-        }
-    }
     public void OnExit()
     {
         AppKernel.MapDatabase.Exit();
