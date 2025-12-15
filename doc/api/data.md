@@ -1390,3 +1390,160 @@ Transfer-Encoding: chunked
 ```
 
 
+## 插入快照接口 InsertSnapshots
+
+批量插入快照。如果快照已经存在（Key+Type+Value），则会替换。
+
+**请求地址:**
+
+/api/db/insertsnapshots
+
+**请求正文:**
+
+| 字段         | 类型     | 说明        |
+| ------------ | -------- | ----------- |
+| Snapshots    | []object | 快照列表    |
+| --.Key       | string   | 快照主键    |
+| --.Timestamp | int      | Unix 时间戳 |
+| --.Group     | string   | 分组        |
+| --.Type      | string   | 类型        |
+| --.Count     | int      | 计数        |
+| --.Value     | string   | 值          |
+
+**返回结果：**
+
+"success"
+
+**示例请求:**
+
+```http
+POST http://127.0.0.1:8466/api/db/insertsnapshots HTTP/1.1
+
+{
+  "Snapshots":[
+    {
+      "Key":"health",
+      "Timestamp":1700000000,
+      "Group":"metrics",
+      "Type":"status",
+      "Count":1,
+      "Value":"ok"
+    }
+  ]
+}
+```
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:53:32 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+## 列出快照接口 ListSnapshots
+
+根据给到的 `ListOption` 过滤并列出快照。
+
+**请求地址:**
+
+/api/db/listsnapshots
+
+**请求正文:**
+
+| 字段 | 类型       | 说明     |
+| ---- | ---------- | -------- |
+|      | ListOption | 过滤选项 |
+
+**返回结果：**
+
+| 字段         | 类型     | 说明        |
+| ------------ | -------- | ----------- |
+|              | []object | 快照列表    |
+| --.Key       | string   | 快照主键    |
+| --.Timestamp | int      | Unix 时间戳 |
+| --.Group     | string   | 分组        |
+| --.Type      | string   | 类型        |
+| --.Count     | int      | 计数        |
+| --.Value     | string   | 值          |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/listsnapshots HTTP/1.1
+
+{
+  "Groups":["metrics"]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 07:12:25 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "health",
+    "Timestamp": 1700000000,
+    "Group": "metrics",
+    "Type": "status",
+    "Count": 1,
+    "Value": "ok"
+  }
+]
+```
+
+## 批量删除快照接口 RemoveSnapshots
+
+通过 `Key+Type+Value` 列表批量删除快照。不存在的键将被跳过。
+
+**请求地址:**
+
+/api/db/removesnapshots
+
+**请求正文:**
+
+| 字段     | 类型     | 说明                           |
+| -------- | -------- | ------------------------------ |
+| Keys     | []object | 快照主键列表（Key/Type/Value） |
+| --.Key   | string   | 快照主键                       |
+| --.Type  | string   | 类型                           |
+| --.Value | string   | 值                             |
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/removesnapshots HTTP/1.1
+
+{
+  "Keys":[
+    { "Key":"health", "Type":"status", "Value":"ok" }
+  ]
+}
+```
+
+**示例结果:**
+
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 07:13:04 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
