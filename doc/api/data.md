@@ -717,17 +717,17 @@ Transfer-Encoding: chunked
 
 **请求正文:**
 
-| 字段               | 类型      | 说明                          |
-| ------------------ | --------- | ----------------------------- |
-| Regions            | []object  | 地区列表                      |
-| --Regions.Key      | string    | 地区主键                      |
-| --Regions.Group    | string    | 地区分组                      |
-| --Regions.Desc     | string    | 地区描述                      |
-| --Regions.Message  | string    | 地区消息（供脚本/标签使用）   |
-| --Regions.Items    | []object  | 地区元素列表                  |
-| ----Items.Not      | bool      | 是否为排除项（true 表示排除） |
-| ----Items.Type     | string    | 元素类型："Room" 或 "Zone" |
-| ----Items.Value    | string    | 元素值（房间 Key 或 区域标识）|
+| 字段              | 类型     | 说明                           |
+| ----------------- | -------- | ------------------------------ |
+| Regions           | []object | 地区列表                       |
+| --Regions.Key     | string   | 地区主键                       |
+| --Regions.Group   | string   | 地区分组                       |
+| --Regions.Desc    | string   | 地区描述                       |
+| --Regions.Message | string   | 地区消息（供脚本/标签使用）    |
+| --Regions.Items   | []object | 地区元素列表                   |
+| ----Items.Not     | bool     | 是否为排除项（true 表示排除）  |
+| ----Items.Type    | string   | 元素类型："Room" 或 "Zone"     |
+| ----Items.Value   | string   | 元素值（房间 Key 或 区域标识） |
 
 **返回结果：**
 
@@ -785,17 +785,17 @@ Transfer-Encoding: chunked
 
 **返回结果：**
 
-| 字段                 | 类型      | 说明            |
-| -------------------- | --------- | --------------- |
-|                      | []object  | 地区列表        |
-| --.Key               | string    | 地区主键        |
-| --.Group             | string    | 地区分组        |
-| --.Desc              | string    | 地区描述        |
-| --.Message           | string    | 地区消息        |
-| --.Items             | []object  | 地区元素列表    |
-| ----.Items.Not       | bool      | 是否为排除项    |
-| ----.Items.Type      | string    | 元素类型(Room/Zone) |
-| ----.Items.Value     | string    | 元素值          |
+| 字段             | 类型     | 说明                |
+| ---------------- | -------- | ------------------- |
+|                  | []object | 地区列表            |
+| --.Key           | string   | 地区主键            |
+| --.Group         | string   | 地区分组            |
+| --.Desc          | string   | 地区描述            |
+| --.Message       | string   | 地区消息            |
+| --.Items         | []object | 地区元素列表        |
+| ----.Items.Not   | bool     | 是否为排除项        |
+| ----.Items.Type  | string   | 元素类型(Room/Zone) |
+| ----.Items.Value | string   | 元素值              |
 
 **示例请求**
 
@@ -893,3 +893,160 @@ Transfer-Encoding: chunked
 
 []
 ```
+
+## 定位数据接口 Landmark
+
+定位(Landmark)用于描述地图中可供脚本或展示使用的定位信息，`Landmark` 的主键由 `Key` 与 `Type` 组合唯一确定。
+
+### 插入定位接口 InsertLandmarks
+
+批量插入定位。如果定位已经存在，会进行替换。
+
+**请求地址:**
+
+/api/db/insertlandmarks
+
+**请求正文:**
+
+| 字段              | 类型     | 说明                         |
+| ----------------- | -------- | ---------------------------- |
+| Landmarks         | []object | 定位列表                     |
+| --Landmarks.Key   | string   | 定位主键，一般是房间主键     |
+| --Landmarks.Type  | string   | 定位类型（用于区分同名定位） |
+| --Landmarks.Value | string   | 定位值，用于定位的数据       |
+| --Landmarks.Group | string   | 定位分组                     |
+| --Landmarks.Desc  | string   | 定位描述                     |
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/insertlandmarks HTTP/1.1
+
+{
+  "Landmarks":[
+    {
+      "Key":"TreeTop",
+      "Type":"regexp",
+      "Value":"^象一蓬蓬巨伞般伸向天空",
+      "Group":"Scenery",
+      "Desc":"树冠的描述，供匹配与显示使用"
+    }
+  ]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:33:54 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
+### 列出定位接口 ListLandmarks
+
+根据给到的 `ListOption`，列出定位列表。
+
+**请求地址:**
+
+/api/db/listlandmarks
+
+**请求正文:**
+
+| 字段 | 类型       | 说明     |
+| ---- | ---------- | -------- |
+|      | ListOption | 过滤选项 |
+
+**返回结果：**
+
+| 字段     | 类型     | 说明                     |
+| -------- | -------- | ------------------------ |
+|          | []object | 定位列表                 |
+| --.Key   | string   | 定位主键                 |
+| --.Type  | string   | 定位类型                 |
+| --.Value | string   | 定位值 |
+| --.Group | string   | 定位分组                 |
+| --.Desc  | string   | 定位描述                 |
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/listlandmarks HTTP/1.1
+
+{
+  "Groups":["Scenery"]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:34:02 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+[
+  {
+    "Key": "TreeTop",
+    "Type": "regexp",
+    "Value": "^象一蓬蓬巨伞般伸向天空",
+    "Group": "Scenery",
+    "Desc": "树冠的描述，供匹配与显示使用"
+  }
+]
+```
+
+### 批量删除定位接口 RemoveLandmarks
+
+通过给到的主键列表，批量删除定位。主键由 `Key` 与 `Type` 两部分组成。
+
+**请求地址:**
+
+/api/db/removelandmarks
+
+**请求正文:**
+
+| 字段                | 类型     | 说明              |
+| ------------------- | -------- | ----------------- |
+| LandmarkKeys        | []object | 定位主键列表      |
+| --LandmarkKeys.Key  | string   | 定位主键的 `Key`  |
+| --LandmarkKeys.Type | string   | 定位主键的 `Type` |
+
+**返回结果：**
+
+"success"
+
+**示例请求**
+
+```http
+POST http://127.0.0.1:8466/api/db/removelandmarks HTTP/1.1
+
+{
+  "LandmarkKeys": [
+    { "Key": "TreeTop", "Type": "regexp" }
+  ]
+}
+```
+
+**示例结果:**
+```
+HTTP/1.1 200 OK
+Connection: close
+Content-Type: application/json; charset=utf-8
+Date: Mon, 15 Dec 2025 06:34:14 GMT
+Server: HellMapManager
+Transfer-Encoding: chunked
+
+"success"
+```
+
