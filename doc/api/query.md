@@ -651,8 +651,8 @@ Transfer-Encoding: chunked
 | Desc                     | string    | 房间描述     |
 | Group                    | string    | 房间分组     |
 | Tags                     | []object  | 房间标签     |
-| --Key                    | string    | 标签主键     |
-| --Value                  | int       | 标签值       |
+| --Tags.Key               | string    | 标签主键     |
+| --Tags.Value             | int       | 标签值       |
 | Exits                    | []object  | 房间出口列表 |
 | --Exits.Command          | string    | 出口指令     |
 | --Exits.To               | string    | 出口房间     |

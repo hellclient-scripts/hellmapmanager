@@ -161,7 +161,7 @@ Transfer-Encoding: chunked
 | 字段     | 类型   | 说明     |
 | -------- | ------ | -------- |
 | Key      | string | 足迹主键 |
-| Location | string | 房间主键   |
+| Location | string | 房间主键 |
 
 
 **返回结果：**
