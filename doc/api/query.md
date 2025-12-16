@@ -109,69 +109,6 @@
 | --Steps.Cost    | int      | 步骤消耗       |
 | Unvisited       | []string | 未经过房间列表 |
 
-## 点对点规划接口
-
-规划不定数量个起点到不定数量个终点之间的最近路线。
-
-一般常见的是一个起点到一个终点，或者一个起点到多个终点的规划
-
-**请求地址:**
-
-/api/db/querypathany
-
-**请求正文:**
-
-| 字段        | 类型          | 说明     |
-| ----------- | ------------- | -------- |
-| From        | []string      | 起点列表 |
-| Target      | []string      | 终点列表 |
-| Environment | Environment   | 环境信息 |
-| Options     | MapperOptions | 地图选项 |
-
-**返回结果：**
-
-成功返回 QueryResult
-
-失败返回 null
-
-**示例请求**
-
-```http
-POST http://127.0.0.1:8466/api/db/querypathany HTTP/1.1
-
-{
-    "From" :["0"],
-    "Target":["1"],
-    "Environment":{
-    },
-    "Options":{}
-}
-```
-
-**示例结果:**
-
-```
-HTTP/1.1 200 OK
-Connection: close
-Content-Type: application/json; charset=utf-8
-Date: Fri, 12 Dec 2025 14:32:25 GMT
-Server: HellMapManager
-Transfer-Encoding: chunked
-
-{
-  "From": "0",
-  "To": "1",
-  "Cost": 1,
-  "Steps": [
-    {
-      "Command": "w",
-      "Target": "1",
-      "Cost": 1
-    }
-  ],
-  "Unvisited": []
-}
-```
 
 ## 点对点规划接口
 
@@ -237,7 +174,7 @@ Transfer-Encoding: chunked
 }
 ```
 
-## 点对点规划接口
+## 点对点规划接口 QueryPathAny
 
 规划不定数量个起点到不定数量个终点之间的最近路线。
 
@@ -303,7 +240,7 @@ Transfer-Encoding: chunked
 }
 ```
 
-## 范围遍历规划接口
+## 范围遍历规划接口 QueryPathAll
 
 规划一个起点到最终经过所有目标的路线
 
@@ -396,7 +333,7 @@ Transfer-Encoding: chunked
 }
 ```
 
-## 顺序遍历规划接口
+## 顺序遍历规划接口 QueryPathOrdered
 
 规划一个起点，按顺序经过所有目标的路线
 
