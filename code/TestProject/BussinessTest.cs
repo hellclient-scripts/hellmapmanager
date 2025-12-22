@@ -172,7 +172,7 @@ public class BussinessTest
         Assert.Equal("1", trace2.Locations[0]);
         trace2 = new Trace();
         trace2.Locations = ["2", "3"];
-        trace2.AddLocations(["1", "3", "4"]);
+        trace2.AddLocations(["","1", "3", "4"]);
         Assert.Equal(4, trace2.Locations.Count);
         Assert.Equal("1", trace2.Locations[0]);
         Assert.Equal("2", trace2.Locations[1]);
