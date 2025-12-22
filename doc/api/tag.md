@@ -60,11 +60,11 @@ Transfer-Encoding: chunked
 
 **请求正文:**
 
-| 字段  | 类型   | 说明     |
-| ----- | ------ | -------- |
-| Room  | string | 房间主键 |
-| Tag   | string | 标签主键 |
-| Value | int    | 标签值   |
+| 字段  | 类型   | 说明                 |
+| ----- | ------ | -------------------- |
+| Room  | string | 房间主键             |
+| Tag   | string | 标签主键             |
+| Value | int    | 标签值,为0会删除标签 |
 
 
 **返回结果：**
@@ -110,11 +110,11 @@ Transfer-Encoding: chunked
 
 **请求正文:**
 
-| 字段  | 类型   | 说明     |
-| ----- | ------ | -------- |
-| Room  | string | 房间主键 |
-| Key   | string | 数据主键 |
-| Value | string | 数据值   |
+| 字段  | 类型   | 说明                  |
+| ----- | ------ | --------------------- |
+| Room  | string | 房间主键              |
+| Key   | string | 数据主键              |
+| Value | string | 数据值,为空会删除数据 |
 
 
 **返回结果：**
