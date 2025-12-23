@@ -6,7 +6,7 @@ namespace HellMapManager.Cores;
 public partial class MapDatabase()
 {
     private object _lock = new();
-    public const int Version = 1001;
+    public const int Version = 1002;
     public MapFile? Current;
     public Settings Settings = new();
 
