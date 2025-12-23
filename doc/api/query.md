@@ -78,7 +78,10 @@
 * Whitelist是房间白名单，只有在白名单内的房间才能参与规划路径，较少用，留空不限制。
 * Blacklisk是房间黑名单，不进入黑名单中的房间
 * BlockedLinks是临时封锁的连接，一般用于被拦路的情况
-* CommandCosts是临时指令消耗，用于通过指定的指令到达制定房间的消耗。To为空在当前版本属于Undefined Behavior。
+* CommandCosts是临时指令消耗，用于通过指定的指令到达制定房间的消耗。Command为空在当前版本属于Undefined Behavior。
+
+**版本更新**
+* 1002版本后，CommandCosts支持to为空字符串作为通配符，匹配所有出口。
 
 ### 地图选项 MapperOptions
 

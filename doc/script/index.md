@@ -10,7 +10,8 @@ HellMapManager(HMM) 准备了相同算法的Typescript项目 HellMapManager.ts�
 
 目前HMM也提供了HTTP接口。由于脚本是用TS转写了C#的对应代码，绝大部分功能与脚本是完全一致的。
 
-目前仅有两处不同
+目前仅有三处不同
 
 * 脚本有DecodeRoomHook,EncodeRoomHook,DecodeShortcutHook,EncodeShortcutHook4个钩子函数在解码/编码HMM文件时提供处理数据的机会。HMM的代码中有这个机制，但没有合适的引入机会。
 * 脚本使用的是上下文Context,客户端接口使用的是更容易做JSON编码的Environment。实际功能是等价的，仅为传输格式不同。
+* 脚本使用的APIListOption，客户使用的是更容易做JSON编码的ListOption。实际功能是等价的，仅为传输格式不同。

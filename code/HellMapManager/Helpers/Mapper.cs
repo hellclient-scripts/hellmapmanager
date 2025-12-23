@@ -142,7 +142,7 @@ public class Walking(Mapper mapper)
                 //如果目标已经到达，则放弃
                 if (!Walked.ContainsKey(step.To))
                 {
-                    
+
                     if (step.Remain <= 1)
                     {
                         //移动到达
@@ -320,6 +320,11 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             {
                 return cost;
             }
+            if (costs.TryGetValue("", out var cost2))
+            {
+                return cost2;
+            }
+
         }
         return exit.Cost;
     }
