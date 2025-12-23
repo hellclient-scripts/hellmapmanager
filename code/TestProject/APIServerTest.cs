@@ -36,7 +36,7 @@ public class APIServerTest
         Assert.Equal(MapDatabase.Version, mapDatabase.APIVersion());
         var resp = await Post($"http://localhost:{server.Port}" + "/api/version", typeof(string), "");
         var result = JsonSerializer.Deserialize(resp, typeof(int), APIJsonSerializerContext.Default) as int?;
-        Assert.Equal(1001, result);
+        Assert.Equal(1002, result);
         await server.Stop();
     }
     [Fact]
