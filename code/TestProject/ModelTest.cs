@@ -122,18 +122,18 @@ public class ModelTest
         Assert.False(ValueTag.HasTag(tags, "key2", 6));
         Assert.False(ValueTag.HasTag(tags, "key3", 1));
         Assert.True(ValueTag.HasTag(tags, "key3", 0));
-        Assert.True(ValueTag.ValidteConditions([], []));
-        Assert.False(ValueTag.ValidteConditions([], [new("key1", 1, false)]));
-        Assert.True(ValueTag.ValidteConditions(tags, []));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, true)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 0, false)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 10, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 10, false)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 4, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, true), new("key2", 1, false)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key3", 1, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key3", 1, false)]));
+        Assert.True(ValueTag.ValidateConditions([], []));
+        Assert.False(ValueTag.ValidateConditions([], [new("key1", 1, false)]));
+        Assert.True(ValueTag.ValidateConditions(tags, []));
+        Assert.True(ValueTag.ValidateConditions(tags, [new("key1", 1, false)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, true)]));
+        Assert.True(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key2", 0, false)]));
+        Assert.True(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key2", 10, true)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key2", 10, false)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key2", 4, true)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, true), new("key2", 1, false)]));
+        Assert.True(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key3", 1, true)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key3", 1, false)]));
     }
     [Fact]
     public void TestValueTag()
@@ -516,11 +516,11 @@ public class ModelTest
         Assert.True(rf.Validate(room));
         rf.ContainsAnyData = [];
 
-        rf.HasAnyGroup=["group1","group2"];
+        rf.HasAnyGroup = ["group1", "group2"];
         Assert.False(rf.Validate(room));
-        rf.HasAnyGroup=["group","group2"];
+        rf.HasAnyGroup = ["group", "group2"];
         Assert.True(rf.Validate(room));
-        rf.HasAnyGroup=[];
+        rf.HasAnyGroup = [];
     }
     [Fact]
     public void TestMarker()
@@ -1721,10 +1721,10 @@ public class ModelTest
         Assert.False(ctx.HasTag("tag2", 3));
         Assert.False(ctx.HasTag("tag3", 1));
         Assert.True(ctx.HasTag("tag3", 0));
-        Assert.True(ctx.ValidteConditions([new("tag1", 1, false), new("tag2", 2, false)]));
-        Assert.True(ctx.ValidteConditions([new("tag1", 1, false), new("tag3", 1, true)]));
-        Assert.False(ctx.ValidteConditions([new("tag1", 1, false), new("tag3", 1, false)]));
-        Assert.True(ctx.ValidteConditions([new("tag3", 0, false)]));
+        Assert.True(ctx.ValidateConditions([new("tag1", 1, false), new("tag2", 2, false)]));
+        Assert.True(ctx.ValidateConditions([new("tag1", 1, false), new("tag3", 1, true)]));
+        Assert.False(ctx.ValidateConditions([new("tag1", 1, false), new("tag3", 1, false)]));
+        Assert.True(ctx.ValidateConditions([new("tag3", 0, false)]));
     }
     [Fact]
     public void TestSnapshotFilter()
@@ -1735,6 +1735,7 @@ public class ModelTest
             Type = "type1",
             Value = "value1",
             Group = "group1",
+            Count = 10,
             Timestamp = 1234567890
         };
         var sf = new SnapshotFilter("key1", "type1", "group1");
@@ -1752,6 +1753,8 @@ public class ModelTest
         Assert.False(new SnapshotFilter(null, "typenotfound", null).Validate(snapshot));
         Assert.False(new SnapshotFilter(null, null, "groupnotfound").Validate(snapshot));
         Assert.False(new SnapshotFilter("keynotfound", "typenotfound", "groupnotfound").Validate(snapshot));
+        Assert.True(new SnapshotFilter("key1", "type1", "group1").WithMaxCount(10).Validate(snapshot));
+        Assert.False(new SnapshotFilter("key1", "type1", "group1").WithMaxCount(9).Validate(snapshot));
     }
     [Fact]
     public void TestSnapshotSearch()

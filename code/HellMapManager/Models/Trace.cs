@@ -76,8 +76,11 @@ public partial class Trace
     {
         foreach (var l in loctions)
         {
-            Locations.Remove(l);
-            Locations.Add(l);
+            if (l != "")
+            {
+                Locations.Remove(l);
+                Locations.Add(l);
+            }
         }
         Arrange();
     }

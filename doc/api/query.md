@@ -4,6 +4,7 @@
 
 
 ## 通用数据结构
+
 ### 环境 Environment
 
 环境指在计算和查询地图时传入的对地图的临时修正，参考术语中的上下文Context,是上下文信息以适合HTTP调用的方式的变形。
@@ -78,7 +79,11 @@
 * Whitelist是房间白名单，只有在白名单内的房间才能参与规划路径，较少用，留空不限制。
 * Blacklisk是房间黑名单，不进入黑名单中的房间
 * BlockedLinks是临时封锁的连接，一般用于被拦路的情况
-* CommandCosts是临时指令消耗，用于通过指定的指令到达制定房间的消耗。To为空在当前版本属于Undefined Behavior。
+* CommandCosts是临时指令消耗，用于通过指定的指令到达制定房间的消耗。Command为空在当前版本属于Undefined Behavior。
+
+**版本更新**
+
+* 1002版本后，CommandCosts支持To为空字符串作为通配符，匹配所有出口。
 
 ### 地图选项 MapperOptions
 
@@ -86,11 +91,12 @@
 
 **数据结构：**
 
-| 字段             | 类型  | 说明           |
-| ---------------- | ----- | -------------- |
-| MaxExitCost      | int?  | 最大单出口消耗 |
-| MaxTotalCost     | int?  | 最大总路线消耗 |
-| DisableShortcuts | bool? | 禁用捷径标志   |
+| 字段             | 类型      | 说明           |
+| ---------------- | --------- | -------------- |
+| MaxExitCost      | int?      | 最大单出口消耗 |
+| MaxTotalCost     | int?      | 最大总路线消耗 |
+| DisableShortcuts | bool?     | 禁用捷径标志   |
+| CommandWhitelist | []string? | 指令白名单     |
 
 ### 路线规划查询结果 QueryResult
 
@@ -109,69 +115,6 @@
 | --Steps.Cost    | int      | 步骤消耗       |
 | Unvisited       | []string | 未经过房间列表 |
 
-## 点对点规划接口
-
-规划不定数量个起点到不定数量个终点之间的最近路线。
-
-一般常见的是一个起点到一个终点，或者一个起点到多个终点的规划
-
-**请求地址:**
-
-/api/db/querypathany
-
-**请求正文:**
-
-| 字段        | 类型          | 说明     |
-| ----------- | ------------- | -------- |
-| From        | []string      | 起点列表 |
-| Target      | []string      | 终点列表 |
-| Environment | Environment   | 环境信息 |
-| Options     | MapperOptions | 地图选项 |
-
-**返回结果：**
-
-成功返回 QueryResult
-
-失败返回 null
-
-**示例请求**
-
-```http
-POST http://127.0.0.1:8466/api/db/querypathany HTTP/1.1
-
-{
-    "From" :["0"],
-    "Target":["1"],
-    "Environment":{
-    },
-    "Options":{}
-}
-```
-
-**示例结果:**
-
-```
-HTTP/1.1 200 OK
-Connection: close
-Content-Type: application/json; charset=utf-8
-Date: Fri, 12 Dec 2025 14:32:25 GMT
-Server: HellMapManager
-Transfer-Encoding: chunked
-
-{
-  "From": "0",
-  "To": "1",
-  "Cost": 1,
-  "Steps": [
-    {
-      "Command": "w",
-      "Target": "1",
-      "Cost": 1
-    }
-  ],
-  "Unvisited": []
-}
-```
 
 ## 点对点规划接口
 
@@ -237,7 +180,7 @@ Transfer-Encoding: chunked
 }
 ```
 
-## 点对点规划接口
+## 点对点规划接口 QueryPathAny
 
 规划不定数量个起点到不定数量个终点之间的最近路线。
 
@@ -303,7 +246,7 @@ Transfer-Encoding: chunked
 }
 ```
 
-## 范围遍历规划接口
+## 范围遍历规划接口 QueryPathAll
 
 规划一个起点到最终经过所有目标的路线
 
@@ -396,7 +339,7 @@ Transfer-Encoding: chunked
 }
 ```
 
-## 顺序遍历规划接口
+## 顺序遍历规划接口 QueryPathOrdered
 
 规划一个起点，按顺序经过所有目标的路线
 

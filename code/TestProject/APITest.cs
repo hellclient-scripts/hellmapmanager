@@ -16,19 +16,19 @@ public class APITest
     public void TestAPIInfo()
     {
         var mapDatabase = new MapDatabase();
-        var info=mapDatabase.APIInfo();
+        var info = mapDatabase.APIInfo();
         Assert.Null(info);
         mapDatabase.NewMap();
-        info=mapDatabase.APIInfo();
+        info = mapDatabase.APIInfo();
         Assert.NotNull(info);
-        Assert.Equal("",info.Name);
-        Assert.Equal("",info.Desc);
-        mapDatabase.Current!.Map.Info.Name="testname";
-        mapDatabase.Current!.Map.Info.Desc="testdesc";
-        info=mapDatabase.APIInfo();
+        Assert.Equal("", info.Name);
+        Assert.Equal("", info.Desc);
+        mapDatabase.Current!.Map.Info.Name = "testname";
+        mapDatabase.Current!.Map.Info.Desc = "testdesc";
+        info = mapDatabase.APIInfo();
         Assert.NotNull(info);
-        Assert.Equal("testname",info.Name);
-        Assert.Equal("testdesc",info.Desc);
+        Assert.Equal("testname", info.Name);
+        Assert.Equal("testdesc", info.Desc);
     }
     [Fact]
     public void TestAPIListOption()
@@ -1593,9 +1593,19 @@ public class APITest
         Assert.Single(snapshots);
         Assert.Equal("key1", snapshots[0].Key);
         Assert.Equal(2, snapshots[0].Sum);
-        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null));
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null).WithMaxCount(1));
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        Assert.Single(snapshots);
+        updated = false;
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null).WithMaxCount(2));
         Assert.True(updated);
         updated = false;
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        Assert.Empty(snapshots);
+        mapDatabase.APITakeSnapshot("key1", "value1", "type1", "group1");
+        snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
+        Assert.Single(snapshots);
+        mapDatabase.APIClearSnapshots(new SnapshotFilter(null, null, null));
         snapshots = mapDatabase.APISearchSnapshots(new SnapshotSearch());
         Assert.Empty(snapshots);
     }

@@ -46,7 +46,9 @@ public class MapperTest()
         var ctx = new Context();
         ctx.WithCommandCosts([
             new CommandCost("cmd2", "to1", 20),
-            new CommandCost("cmd2", "to2", 20)
+            new CommandCost("cmd2", "to2", 20),
+            new CommandCost("cmd3", "to4", 20),
+            new CommandCost("cmd3", "", 30)
         ]);
         var mapper = new Mapper(md.Current!, ctx, new MapperOptions());
         var exit = new Exit()
@@ -67,10 +69,24 @@ public class MapperTest()
             Command = "cmd2",
             Cost = 10,
         };
+        var exit4 = new Exit()
+        {
+            To = "to4",
+            Command = "cmd3",
+            Cost = 10,
+        };
+        var exit5 = new Exit()
+        {
+            To = "to5",
+            Command = "cmd3",
+            Cost = 10,
+        };
 
         Assert.Equal(10, mapper.GetExitCost(exit));
         Assert.Equal(20, mapper.GetExitCost(exit2));
         Assert.Equal(10, mapper.GetExitCost(exit3));
+        Assert.Equal(20, mapper.GetExitCost(exit4));
+        Assert.Equal(30, mapper.GetExitCost(exit5));
     }
     [Fact]
     public void TestValidateRoom()
@@ -167,6 +183,13 @@ public class MapperTest()
         Assert.True(mapper.ValidatePath("key1", exit));
         ctx.WithCommandCosts([new CommandCost("cmd1", "key2", 50)]);
         Assert.False(mapper.ValidatePath("key1", exit));
+        ctx.ClearCommandCosts();
+        opt.MaxExitCost = 0;
+        opt.WithCommandWhitelist(["cmd1"]);
+        Assert.True(mapper.ValidateExit("key1", exit, 10));
+        opt.ClearCommandWhitelist();
+        opt.WithCommandWhitelist(["cmd2"]);
+        Assert.False(mapper.ValidateExit("key1", exit, 10));
     }
     [Fact]
     public void TestWalkingStep()

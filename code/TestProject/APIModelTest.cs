@@ -1626,22 +1626,29 @@ public class APIModelTest
             MaxExitCost = 500,
             MaxTotalCost = 2000,
             DisableShortcuts = true,
+            CommandWhitelist=["cmd1","cmd2"]
         };
+        model.CommandWhitelist.Sort();
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.MapperOptionsModel);
         var deserialized = JsonSerializer.Deserialize(json, APIJsonSerializerContext.Default.MapperOptionsModel);
         Assert.Equal(model.MaxExitCost, deserialized?.MaxExitCost);
         Assert.Equal(model.MaxTotalCost, deserialized?.MaxTotalCost);
         Assert.Equal(model.DisableShortcuts, deserialized?.DisableShortcuts);
+        deserialized?.CommandWhitelist.Sort();
+        Assert.Equal(model.CommandWhitelist, deserialized?.CommandWhitelist);
         var raw = model.ToMapperOptions();
         var fromRaw = MapperOptionsModel.From(raw);
         Assert.Equal(model.MaxExitCost, fromRaw.MaxExitCost);
         Assert.Equal(model.MaxTotalCost, fromRaw.MaxTotalCost);
         Assert.Equal(model.DisableShortcuts, fromRaw.DisableShortcuts);
+        fromRaw.CommandWhitelist.Sort();
+        Assert.Equal(model.CommandWhitelist, fromRaw.CommandWhitelist);
         var emptyModel = new MapperOptionsModel();
         var fromEmpty = MapperOptionsModel.From(emptyModel.ToMapperOptions());
         Assert.Equal(0, fromEmpty.MaxExitCost);
         Assert.Equal(0, fromEmpty.MaxTotalCost);
         Assert.False(fromEmpty.DisableShortcuts);
+        Assert.Empty(fromEmpty.CommandWhitelist);
     }
     [Fact]
     public void InputQueryPathAnyTest()
@@ -1817,6 +1824,7 @@ public class APIModelTest
             Key = "filterKey",
             Type = "filterType",
             Group = "filterGroup",
+            MaxCount = 10,
         };
         Assert.Null(InputSnapshotFilter.FromJSON("wrong json"));
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.InputSnapshotFilter);
@@ -1824,11 +1832,13 @@ public class APIModelTest
         Assert.Equal(model.Key, deserialized?.Key);
         Assert.Equal(model.Type, deserialized?.Type);
         Assert.Equal(model.Group, deserialized?.Group);
+        Assert.Equal(model.MaxCount, deserialized?.MaxCount);
         var raw = model.ToSnapshotFilter();
         var fromRaw = InputSnapshotFilter.From(raw); ;
         Assert.Equal(model.Key, fromRaw.Key);
         Assert.Equal(model.Type, fromRaw.Type);
         Assert.Equal(model.Group, fromRaw.Group);
+        Assert.Equal(model.MaxCount, fromRaw.MaxCount);
     }
 
     [Fact]

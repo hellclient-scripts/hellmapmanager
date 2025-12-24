@@ -1,12 +1,14 @@
 using HellMapManager.Models;
 using HellMapManager.Helpers;
+using System.Threading;
+
 namespace HellMapManager.Cores;
 
 
 public partial class MapDatabase()
 {
-    private object _lock = new();
-    public const int Version = 1001;
+    private ReaderWriterLockSlim _lock = new();
+    public const int Version = 1002;
     public MapFile? Current;
     public Settings Settings = new();
 
@@ -51,7 +53,8 @@ public partial class MapDatabase()
         var mf = HMMFile.Open(file);
         if (mf != null)
         {
-            lock (_lock)
+            _lock.EnterWriteLock();
+            try
             {
                 Current = mf;
                 Current.Modified = false;
@@ -59,13 +62,18 @@ public partial class MapDatabase()
                 AddRecent(Current.ToRecentFile());
                 RaiseMapFileUpdatedEvent(this);
             }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
     }
     public void SaveFile(string file)
     {
         if (Current != null)
         {
-            lock (_lock)
+            _lock.EnterWriteLock();
+            try
             {
 
                 Current.Map.Arrange();
@@ -75,13 +83,18 @@ public partial class MapDatabase()
                 AddRecent(Current.ToRecentFile());
                 RaiseMapFileUpdatedEvent(this);
             }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
         }
     }
     public Diffs? DiffFile(string file)
     {
         if (Current != null)
         {
-            lock (_lock)
+            _lock.EnterReadLock();
+            try
             {
 
                 var mf = HMMFile.Open(file);
@@ -90,6 +103,10 @@ public partial class MapDatabase()
                     var diffs = DiffHelper.Diff(Current.Map, mf.Map);
                     return diffs;
                 }
+            }
+            finally
+            {
+                _lock.ExitReadLock();
             }
         }
         return null;
@@ -101,25 +118,42 @@ public partial class MapDatabase()
 
     public void NewMap()
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             var mapfile = MapFile.Create("", "");
-            SetCurrent(mapfile);
+            Current = mapfile;
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+        RaiseMapFileUpdatedEvent(this);
+
     }
     public void SetCurrent(MapFile mapfile)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             Current = mapfile;
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
         }
         RaiseMapFileUpdatedEvent(this);
     }
     public void CloseCurrent()
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             Current = null;
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
         }
         RaiseMapFileUpdatedEvent(this);
     }
@@ -127,13 +161,18 @@ public partial class MapDatabase()
     {
         if (Current != null)
         {
-            lock (_lock)
+            _lock.EnterWriteLock();
+            try
             {
                 Current.Map.Encoding = s.Encoding;
                 Current.Map.Info.Name = s.Name;
                 Current.Map.Info.Desc = s.Desc;
                 Current.MarkAsModified();
                 RaiseMapFileUpdatedEvent(this);
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
             }
         }
     }

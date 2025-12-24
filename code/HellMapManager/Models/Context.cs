@@ -238,7 +238,7 @@ public class Context
         }
         return value <= 0;
     }
-    public bool ValidteConditions(List<ValueCondition> conditions)
+    public bool ValidateConditions(List<ValueCondition> conditions)
     {
         foreach (var rcondition in conditions)
         {

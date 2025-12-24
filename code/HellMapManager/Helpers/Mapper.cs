@@ -142,7 +142,7 @@ public class Walking(Mapper mapper)
                 //如果目标已经到达，则放弃
                 if (!Walked.ContainsKey(step.To))
                 {
-                    
+
                     if (step.Remain <= 1)
                     {
                         //移动到达
@@ -320,6 +320,11 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             {
                 return cost;
             }
+            if (costs.TryGetValue("", out var cost2))
+            {
+                return cost2;
+            }
+
         }
         return exit.Cost;
     }
@@ -339,7 +344,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             MapFile.Map.Shortcuts.ForEach(e =>
             {
                 //符合条件则加入列表
-                if (ValueTag.ValidteConditions(room.Tags, e.RoomConditions))
+                if (ValueTag.ValidateConditions(room.Tags, e.RoomConditions))
                 {
                     result.Add(e);
                 }
@@ -348,7 +353,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             Context.Shortcuts.ForEach(e =>
             {
                 //符合条件则加入列表
-                if (ValueTag.ValidteConditions(room.Tags, e.RoomConditions))
+                if (ValueTag.ValidateConditions(room.Tags, e.RoomConditions))
                 {
                     result.Add(e);
                 }
@@ -389,7 +394,11 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             return false;
         }
         //判断出口的条件是否匹配当前上下文
-        if (!Context.ValidteConditions(exit.Conditions))
+        if (!Context.ValidateConditions(exit.Conditions))
+        {
+            return false;
+        }
+        if (!Options.ValidateCommand(exit.Command))
         {
             return false;
         }
@@ -409,7 +418,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             return false;
         }
         //验证房间的标签是否匹配上下文中的房间条件
-        if (!ValueTag.ValidteConditions(room.Tags, Context.RoomConditions))
+        if (!ValueTag.ValidateConditions(room.Tags, Context.RoomConditions))
         {
             return false;
         }

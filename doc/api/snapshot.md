@@ -73,7 +73,7 @@ Transfer-Encoding: chunked
 
 * Type 限制只搜索特定类型的快照
 * Group 限制只搜索特定分组的快照
-* Keywords, 关键字列表，具体效果和下面两个参数相关
+* Keywords, 关键字列表，具体效果和下面两个参数相关,为空返回与Any相反的结果。
 * PartialMatch 部分匹配，默认表现为只要关键字出现在快照内容内就匹配。为false则必须完整匹配
 * Any 任意满足一般用在完整匹配时，任何一个关键字匹配则快照匹配
 
@@ -144,11 +144,12 @@ Transfer-Encoding: chunked
 
 **请求正文:**
 
-| 字段  | 类型    | 说明     |
-| ----- | ------- | -------- |
-| Key   | string? | 房间主键 |
-| Type  | string? | 快照类型 |
-| Group | string? | 快照分组 |
+| 字段     | 类型    | 说明        |
+| -------- | ------- | ----------- |
+| Key      | string? | 房间主键    |
+| Type     | string? | 快照类型    |
+| Group    | string? | 快照分组    |
+| MaxCount | int  | 最大Count数 |
 
 
 **返回结果：**
