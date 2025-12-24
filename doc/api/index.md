@@ -33,3 +33,4 @@ HellMapManager(HMM)支持以HTTP形式提供API服务，供有JSON处理和HTTP�
 * [快照接口](./snapshot.md) 快照相关的操作接口。
 * [搜索房间接口](./search.md) 根据条件或者预设搜索房间信息的接口。
 * [其他接口](./etc.md) 其他接口文档。
+* [变更记录](./history.md) API变更记录。
