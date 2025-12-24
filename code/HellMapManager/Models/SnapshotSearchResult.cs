@@ -1,11 +1,19 @@
 using System.Collections.Generic;
 
 namespace HellMapManager.Models;
+
 public class SnapshotFilter(string? key, string? type, string? group)
 {
     public string? Key { get; } = key;
     public string? Type { get; } = type;
     public string? Group { get; } = group;
+
+    public int MaxCount { get; set; } = 0;
+    public SnapshotFilter WithMaxCount(int count)
+    {
+        MaxCount = count;
+        return this;
+    }
     public bool Validate(Snapshot model)
     {
         if (Key != null && model.Key != Key)
@@ -17,6 +25,10 @@ public class SnapshotFilter(string? key, string? type, string? group)
             return false;
         }
         if (Group != null && model.Group != Group)
+        {
+            return false;
+        }
+        if (MaxCount > 0 && model.Count > MaxCount)
         {
             return false;
         }

@@ -1486,15 +1486,18 @@ public class InputSnapshotFilter()
             Key = filter.Key,
             Type = filter.Type,
             Group = filter.Group,
+            MaxCount = filter.MaxCount,
         };
     }
     public SnapshotFilter ToSnapshotFilter()
     {
-        return new SnapshotFilter(Key, Type, Group);
+        return new SnapshotFilter(Key, Type, Group).WithMaxCount(MaxCount);
     }
     public string? Key { get; set; } = null;
     public string? Type { get; set; } = null;
     public string? Group { get; set; } = null;
+
+    public int MaxCount { get; set;} = 0;
 
 }
 public class InputTakeSnapshot()

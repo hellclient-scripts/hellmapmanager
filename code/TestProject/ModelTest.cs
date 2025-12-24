@@ -516,11 +516,11 @@ public class ModelTest
         Assert.True(rf.Validate(room));
         rf.ContainsAnyData = [];
 
-        rf.HasAnyGroup=["group1","group2"];
+        rf.HasAnyGroup = ["group1", "group2"];
         Assert.False(rf.Validate(room));
-        rf.HasAnyGroup=["group","group2"];
+        rf.HasAnyGroup = ["group", "group2"];
         Assert.True(rf.Validate(room));
-        rf.HasAnyGroup=[];
+        rf.HasAnyGroup = [];
     }
     [Fact]
     public void TestMarker()
@@ -1735,6 +1735,7 @@ public class ModelTest
             Type = "type1",
             Value = "value1",
             Group = "group1",
+            Count = 10,
             Timestamp = 1234567890
         };
         var sf = new SnapshotFilter("key1", "type1", "group1");
@@ -1752,6 +1753,8 @@ public class ModelTest
         Assert.False(new SnapshotFilter(null, "typenotfound", null).Validate(snapshot));
         Assert.False(new SnapshotFilter(null, null, "groupnotfound").Validate(snapshot));
         Assert.False(new SnapshotFilter("keynotfound", "typenotfound", "groupnotfound").Validate(snapshot));
+        Assert.True(new SnapshotFilter("key1", "type1", "group1").WithMaxCount(10).Validate(snapshot));
+        Assert.False(new SnapshotFilter("key1", "type1", "group1").WithMaxCount(9).Validate(snapshot));
     }
     [Fact]
     public void TestSnapshotSearch()

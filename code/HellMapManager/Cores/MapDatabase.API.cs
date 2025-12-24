@@ -74,7 +74,8 @@ public partial class MapDatabase
     }
     public MapInfo? APIInfo()
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -82,34 +83,44 @@ public partial class MapDatabase
                 return Current.Map.Info;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return null;
     }
     public List<Landmark> APIListLandmarks(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
+        {
             if (Current != null)
             {
+                if (option.IsEmpty())
                 {
-                    if (option.IsEmpty())
-                    {
-                        return Current.Map.Landmarks;
-                    }
-                    var list = new List<Landmark>() { };
-                    Current.Map.Landmarks.ForEach((model) =>
-                    {
-                        if (option.Validate(model.Key, model.Group))
-                        {
-                            list.Add(model);
-                        }
-                    });
-                    return list;
+                    return Current.Map.Landmarks;
                 }
+                var list = new List<Landmark>() { };
+                Current.Map.Landmarks.ForEach((model) =>
+                {
+                    if (option.Validate(model.Key, model.Group))
+                    {
+                        list.Add(model);
+                    }
+                });
+                return list;
             }
+        }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APIInsertLandmarks(List<Landmark> models)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && models.Count > 0)
             {
@@ -125,10 +136,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIRemoveLandmarks(List<LandmarkKey> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && keys.Count > 0)
             {
@@ -140,10 +156,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Marker> APIListMarkers(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -162,11 +183,16 @@ public partial class MapDatabase
                 return list;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APIInsertMarkers(List<Marker> models)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && models.Count > 0)
             {
@@ -182,10 +208,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIRemoveMarkers(List<string> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && keys.Count > 0)
             {
@@ -197,10 +228,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Region> APIListRegions(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -219,11 +255,16 @@ public partial class MapDatabase
                 return list;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APIInsertRegions(List<Region> models)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && models.Count > 0)
             {
@@ -239,10 +280,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIRemoveRegions(List<string> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && keys.Count > 0)
             {
@@ -254,10 +300,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Room> APIListRooms(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -276,11 +327,16 @@ public partial class MapDatabase
                 return list;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APIInsertRooms(List<Room> models)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && models.Count > 0)
             {
@@ -296,10 +352,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIRemoveRooms(List<string> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && keys.Count > 0)
             {
@@ -311,29 +372,16 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
-    }
-    public void APIInsertRoutes(List<Route> models)
-    {
-        lock (_lock)
+        finally
         {
-            if (Current != null && models.Count > 0)
-            {
-                foreach (var model in models)
-                {
-                    if (model.Validated())
-                    {
-                        Current.InsertRoute(model);
-                    }
-                }
-                Route.Sort(Current.Map.Routes);
-                Current.MarkAsModified();
-                RaiseMapFileUpdatedEvent(this);
-            }
+            _lock.ExitWriteLock();
         }
     }
+
     public List<Route> APIListRoutes(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -352,11 +400,40 @@ public partial class MapDatabase
                 return list;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
+    }
+    public void APIInsertRoutes(List<Route> models)
+    {
+        _lock.EnterWriteLock();
+        try
+        {
+            if (Current != null && models.Count > 0)
+            {
+                foreach (var model in models)
+                {
+                    if (model.Validated())
+                    {
+                        Current.InsertRoute(model);
+                    }
+                }
+                Route.Sort(Current.Map.Routes);
+                Current.MarkAsModified();
+                RaiseMapFileUpdatedEvent(this);
+            }
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIRemoveRoutes(List<string> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && keys.Count > 0)
             {
@@ -368,10 +445,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIInsertShortcuts(List<Shortcut> models)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && models.Count > 0)
             {
@@ -387,10 +469,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Shortcut> APIListShortcuts(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -409,11 +496,16 @@ public partial class MapDatabase
                 return list;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APIRemoveShortcuts(List<string> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
 
             if (Current != null && keys.Count > 0)
@@ -426,10 +518,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIInsertSnapshots(List<Snapshot> models)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && models.Count > 0)
             {
@@ -445,10 +542,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Snapshot> APIListSnapshots(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -467,11 +569,16 @@ public partial class MapDatabase
                 return list;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APIRemoveSnapshots(List<SnapshotKey> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && keys.Count > 0)
             {
@@ -484,10 +591,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIInsertTraces(List<Trace> models)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && models.Count > 0)
             {
@@ -503,11 +615,16 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
 
     public void APIRemoveTraces(List<string> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && keys.Count > 0)
             {
@@ -519,10 +636,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Trace> APIListTraces(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -541,11 +663,16 @@ public partial class MapDatabase
                 return list;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APIInsertVariables(List<Variable> models)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && models.Count > 0)
             {
@@ -561,10 +688,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Variable> APIListVariables(APIListOption option)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -583,11 +715,16 @@ public partial class MapDatabase
                 return list;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APIRemoveVariables(List<string> keys)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null && keys.Count > 0)
             {
@@ -599,45 +736,65 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public QueryResult? APIQueryPathAny(List<string> from, List<string> target, Context context, MapperOptions options)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
                 return new Walking(new Mapper(Current, context, options)).QueryPathAny(from, target, 0).SuccessOrNull();
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return null;
     }
 
     public QueryResult? APIQueryPathAll(string start, List<string> target, Context context, MapperOptions options)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
                 return new Walking(new Mapper(Current, context, options)).QueryPathAll(start, target).SuccessOrNull();
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return null;
     }
     public QueryResult? APIQueryPathOrdered(string start, List<string> target, Context context, MapperOptions options)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
                 return new Walking(new Mapper(Current, context, options)).QueryPathOrdered(start, target).SuccessOrNull();
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return null;
     }
     //不考虑context
     public List<string> APIQueryRegionRooms(string key)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -684,23 +841,33 @@ public partial class MapDatabase
                 }
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
 
     public List<string> APIDilate(List<string> src, int iterations, Context context, MapperOptions options)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
                 return new Walking(new Mapper(Current, context, options)).Dilate(src, iterations);
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public string APITrackExit(string start, string command, Context context, MapperOptions options)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -719,11 +886,16 @@ public partial class MapDatabase
                 }
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return "";
     }
     public string APIGetVariable(string key)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -733,22 +905,32 @@ public partial class MapDatabase
                 }
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return "";
     }
     public Room? APIGetRoom(string key, Context context, MapperOptions options)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
                 return new Mapper(Current, context, options).GetRoom(key);
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return null;
     }
     public void APIClearSnapshots(SnapshotFilter filter)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null)
             {
@@ -758,10 +940,15 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Room> APISearchRooms(RoomFilter filter)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -776,12 +963,17 @@ public partial class MapDatabase
                 return result;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
 
     public List<Room> APIFilterRooms(List<string> src, RoomFilter filter)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -800,11 +992,16 @@ public partial class MapDatabase
                 return result;
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APITakeSnapshot(string key, string type, string value, string group)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
 
             if (Current != null)
@@ -814,21 +1011,31 @@ public partial class MapDatabase
                 RaiseMapFileUpdatedEvent(this);
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<SnapshotSearchResult> APISearchSnapshots(SnapshotSearch search)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
                 return SnapshotHelper.Search(search, Current.Map.Snapshots);
             }
         }
+        finally
+        {
+            _lock.ExitReadLock();
+        }
         return [];
     }
     public void APITraceLocation(string key, string location)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null)
             {
@@ -850,10 +1057,15 @@ public partial class MapDatabase
                 }
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APITagRoom(string key, string tag, int value)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null)
             {
@@ -878,10 +1090,15 @@ public partial class MapDatabase
                 }
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APISetRoomData(string roomkey, string datakey, string datavalue)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null)
             {
@@ -900,10 +1117,15 @@ public partial class MapDatabase
                 }
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public void APIGroupRoom(string key, string group)
     {
-        lock (_lock)
+        _lock.EnterWriteLock();
+        try
         {
             if (Current != null)
             {
@@ -920,10 +1142,15 @@ public partial class MapDatabase
                 }
             }
         }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
     }
     public List<Exit> APIGetRoomExits(string key, Context context, MapperOptions options)
     {
-        lock (_lock)
+        _lock.EnterReadLock();
+        try
         {
             if (Current != null)
             {
@@ -934,6 +1161,10 @@ public partial class MapDatabase
                     return mapper.GetRoomExits(room);
                 }
             }
+        }
+        finally
+        {
+            _lock.ExitReadLock();
         }
         return [];
     }

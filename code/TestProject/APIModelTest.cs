@@ -1817,6 +1817,7 @@ public class APIModelTest
             Key = "filterKey",
             Type = "filterType",
             Group = "filterGroup",
+            MaxCount = 10,
         };
         Assert.Null(InputSnapshotFilter.FromJSON("wrong json"));
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.InputSnapshotFilter);
@@ -1824,11 +1825,13 @@ public class APIModelTest
         Assert.Equal(model.Key, deserialized?.Key);
         Assert.Equal(model.Type, deserialized?.Type);
         Assert.Equal(model.Group, deserialized?.Group);
+        Assert.Equal(model.MaxCount, deserialized?.MaxCount);
         var raw = model.ToSnapshotFilter();
         var fromRaw = InputSnapshotFilter.From(raw); ;
         Assert.Equal(model.Key, fromRaw.Key);
         Assert.Equal(model.Type, fromRaw.Type);
         Assert.Equal(model.Group, fromRaw.Group);
+        Assert.Equal(model.MaxCount, fromRaw.MaxCount);
     }
 
     [Fact]

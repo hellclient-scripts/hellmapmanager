@@ -2613,6 +2613,25 @@ public class APIServerTest
         Assert.Single(snapshots!);
         Assert.Equal("key1", snapshots![0].Key);
         Assert.Equal(2, snapshots![0].Sum);
+
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshots", typeof(InputSnapshotFilter), InputSnapshotFilter.From(new SnapshotFilter(null, null, null).WithMaxCount(1)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchsnapshots", typeof(SnapshotSearchModel), SnapshotSearchModel.From(new SnapshotSearch()));
+        snapshots = JsonSerializer.Deserialize(resp, typeof(List<SnapshotSearchResultModel>), APIJsonSerializerContext.Default) as List<SnapshotSearchResultModel>;
+        Assert.Single(snapshots!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshots", typeof(InputSnapshotFilter), InputSnapshotFilter.From(new SnapshotFilter(null, null, null).WithMaxCount(2)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchsnapshots", typeof(SnapshotSearchModel), SnapshotSearchModel.From(new SnapshotSearch()));
+        snapshots = JsonSerializer.Deserialize(resp, typeof(List<SnapshotSearchResultModel>), APIJsonSerializerContext.Default) as List<SnapshotSearchResultModel>;
+        Assert.Empty(snapshots!);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/takesnapshot", typeof(InputTakeSnapshot), new InputTakeSnapshot()
+        {
+            Key = "key1",
+            Value = "value1",
+            Type = "type1",
+            Group = "group1",
+        });
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/searchsnapshots", typeof(SnapshotSearchModel), SnapshotSearchModel.From(new SnapshotSearch()));
+        snapshots = JsonSerializer.Deserialize(resp, typeof(List<SnapshotSearchResultModel>), APIJsonSerializerContext.Default) as List<SnapshotSearchResultModel>;
+        Assert.Single(snapshots!);
         resp = await Post($"http://localhost:{server.Port}" + "/api/db/clearsnapshots", typeof(InputSnapshotFilter), InputSnapshotFilter.From(new SnapshotFilter(null, null, null)));
         Assert.True(updated);
         updated = false;
