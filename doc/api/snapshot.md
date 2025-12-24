@@ -149,7 +149,7 @@ Transfer-Encoding: chunked
 | Key      | string? | 房间主键    |
 | Type     | string? | 快照类型    |
 | Group    | string? | 快照分组    |
-| MaxCount | number  | 最大Count数 |
+| MaxCount | int  | 最大Count数 |
 
 
 **返回结果：**
