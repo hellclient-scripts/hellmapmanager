@@ -15,7 +15,7 @@ HellMapManager(HMM)是一款专注于MUD游戏地图数据维护和管理的跨�
 
 得益于C# dotnet平台和Avalonia UI优秀跨平台性能，HMM支持以下平台
 
-* Linux平台:支持当前和上一个版本的Debian发行版及对应内核/Glibc的其他发行版
+* Linux平台:支持当前和上一个版本的Debian发行版及对应内核/Glibc的发行版
 * Windows 平台: Windows 10/Windows 11
 * Mac OS X:最新2个大版本的实验性支持
 
