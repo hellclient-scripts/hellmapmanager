@@ -183,6 +183,13 @@ public class MapperTest()
         Assert.True(mapper.ValidatePath("key1", exit));
         ctx.WithCommandCosts([new CommandCost("cmd1", "key2", 50)]);
         Assert.False(mapper.ValidatePath("key1", exit));
+        ctx.ClearCommandCosts();
+        opt.MaxExitCost = 0;
+        opt.WithCommandWhitelist(["cmd1"]);
+        Assert.True(mapper.ValidateExit("key1", exit, 10));
+        opt.ClearCommandWhitelist();
+        opt.WithCommandWhitelist(["cmd2"]);
+        Assert.False(mapper.ValidateExit("key1", exit, 10));
     }
     [Fact]
     public void TestWalkingStep()

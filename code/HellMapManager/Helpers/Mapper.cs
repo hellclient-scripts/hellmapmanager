@@ -398,6 +398,10 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
         {
             return false;
         }
+        if (!Options.ValidateCommand(exit.Command))
+        {
+            return false;
+        }
         return true;
     }
     //验证房间

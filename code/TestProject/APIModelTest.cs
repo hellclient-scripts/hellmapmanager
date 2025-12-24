@@ -1626,22 +1626,29 @@ public class APIModelTest
             MaxExitCost = 500,
             MaxTotalCost = 2000,
             DisableShortcuts = true,
+            CommandWhitelist=["cmd1","cmd2"]
         };
+        model.CommandWhitelist.Sort();
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.MapperOptionsModel);
         var deserialized = JsonSerializer.Deserialize(json, APIJsonSerializerContext.Default.MapperOptionsModel);
         Assert.Equal(model.MaxExitCost, deserialized?.MaxExitCost);
         Assert.Equal(model.MaxTotalCost, deserialized?.MaxTotalCost);
         Assert.Equal(model.DisableShortcuts, deserialized?.DisableShortcuts);
+        deserialized?.CommandWhitelist.Sort();
+        Assert.Equal(model.CommandWhitelist, deserialized?.CommandWhitelist);
         var raw = model.ToMapperOptions();
         var fromRaw = MapperOptionsModel.From(raw);
         Assert.Equal(model.MaxExitCost, fromRaw.MaxExitCost);
         Assert.Equal(model.MaxTotalCost, fromRaw.MaxTotalCost);
         Assert.Equal(model.DisableShortcuts, fromRaw.DisableShortcuts);
+        fromRaw.CommandWhitelist.Sort();
+        Assert.Equal(model.CommandWhitelist, fromRaw.CommandWhitelist);
         var emptyModel = new MapperOptionsModel();
         var fromEmpty = MapperOptionsModel.From(emptyModel.ToMapperOptions());
         Assert.Equal(0, fromEmpty.MaxExitCost);
         Assert.Equal(0, fromEmpty.MaxTotalCost);
         Assert.False(fromEmpty.DisableShortcuts);
+        Assert.Empty(fromEmpty.CommandWhitelist);
     }
     [Fact]
     public void InputQueryPathAnyTest()
