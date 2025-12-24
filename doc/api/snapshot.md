@@ -144,11 +144,12 @@ Transfer-Encoding: chunked
 
 **请求正文:**
 
-| 字段  | 类型    | 说明     |
-| ----- | ------- | -------- |
-| Key   | string? | 房间主键 |
-| Type  | string? | 快照类型 |
-| Group | string? | 快照分组 |
+| 字段     | 类型    | 说明        |
+| -------- | ------- | ----------- |
+| Key      | string? | 房间主键    |
+| Type     | string? | 快照类型    |
+| Group    | string? | 快照分组    |
+| MaxCount | number  | 最大Count数 |
 
 
 **返回结果：**
