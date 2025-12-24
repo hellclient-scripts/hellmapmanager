@@ -91,12 +91,12 @@
 
 **数据结构：**
 
-| 字段             | 类型                     | 说明           |
-| ---------------- | ------------------------ | -------------- |
-| MaxExitCost      | int?                     | 最大单出口消耗 |
-| MaxTotalCost     | int?                     | 最大总路线消耗 |
-| DisableShortcuts | bool?                    | 禁用捷径标志   |
-| CommandWhitelist | Dictionary<string, bool> | 指令白名单     |
+| 字段             | 类型      | 说明           |
+| ---------------- | --------- | -------------- |
+| MaxExitCost      | int?      | 最大单出口消耗 |
+| MaxTotalCost     | int?      | 最大总路线消耗 |
+| DisableShortcuts | bool?     | 禁用捷径标志   |
+| CommandWhitelist | []string? | 指令白名单     |
 
 ### 路线规划查询结果 QueryResult
 
