@@ -4,6 +4,7 @@
 
 
 ## 通用数据结构
+
 ### 环境 Environment
 
 环境指在计算和查询地图时传入的对地图的临时修正，参考术语中的上下文Context,是上下文信息以适合HTTP调用的方式的变形。
@@ -81,7 +82,8 @@
 * CommandCosts是临时指令消耗，用于通过指定的指令到达制定房间的消耗。Command为空在当前版本属于Undefined Behavior。
 
 **版本更新**
-* 1002版本后，CommandCosts支持to为空字符串作为通配符，匹配所有出口。
+
+* 1002版本后，CommandCosts支持To为空字符串作为通配符，匹配所有出口。
 
 ### 地图选项 MapperOptions
 

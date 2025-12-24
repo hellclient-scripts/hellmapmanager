@@ -122,18 +122,18 @@ public class ModelTest
         Assert.False(ValueTag.HasTag(tags, "key2", 6));
         Assert.False(ValueTag.HasTag(tags, "key3", 1));
         Assert.True(ValueTag.HasTag(tags, "key3", 0));
-        Assert.True(ValueTag.ValidteConditions([], []));
-        Assert.False(ValueTag.ValidteConditions([], [new("key1", 1, false)]));
-        Assert.True(ValueTag.ValidteConditions(tags, []));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, true)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 0, false)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 10, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 10, false)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key2", 4, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, true), new("key2", 1, false)]));
-        Assert.True(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key3", 1, true)]));
-        Assert.False(ValueTag.ValidteConditions(tags, [new("key1", 1, false), new("key3", 1, false)]));
+        Assert.True(ValueTag.ValidateConditions([], []));
+        Assert.False(ValueTag.ValidateConditions([], [new("key1", 1, false)]));
+        Assert.True(ValueTag.ValidateConditions(tags, []));
+        Assert.True(ValueTag.ValidateConditions(tags, [new("key1", 1, false)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, true)]));
+        Assert.True(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key2", 0, false)]));
+        Assert.True(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key2", 10, true)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key2", 10, false)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key2", 4, true)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, true), new("key2", 1, false)]));
+        Assert.True(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key3", 1, true)]));
+        Assert.False(ValueTag.ValidateConditions(tags, [new("key1", 1, false), new("key3", 1, false)]));
     }
     [Fact]
     public void TestValueTag()
@@ -1721,10 +1721,10 @@ public class ModelTest
         Assert.False(ctx.HasTag("tag2", 3));
         Assert.False(ctx.HasTag("tag3", 1));
         Assert.True(ctx.HasTag("tag3", 0));
-        Assert.True(ctx.ValidteConditions([new("tag1", 1, false), new("tag2", 2, false)]));
-        Assert.True(ctx.ValidteConditions([new("tag1", 1, false), new("tag3", 1, true)]));
-        Assert.False(ctx.ValidteConditions([new("tag1", 1, false), new("tag3", 1, false)]));
-        Assert.True(ctx.ValidteConditions([new("tag3", 0, false)]));
+        Assert.True(ctx.ValidateConditions([new("tag1", 1, false), new("tag2", 2, false)]));
+        Assert.True(ctx.ValidateConditions([new("tag1", 1, false), new("tag3", 1, true)]));
+        Assert.False(ctx.ValidateConditions([new("tag1", 1, false), new("tag3", 1, false)]));
+        Assert.True(ctx.ValidateConditions([new("tag3", 0, false)]));
     }
     [Fact]
     public void TestSnapshotFilter()

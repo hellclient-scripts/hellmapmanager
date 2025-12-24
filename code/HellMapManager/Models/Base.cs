@@ -55,7 +55,7 @@ public class ValueTag(string key, int value)
         }
         return value < 1;
     }
-    public static bool ValidteConditions(List<ValueTag> tags, List<ValueCondition> conditions)
+    public static bool ValidateConditions(List<ValueTag> tags, List<ValueCondition> conditions)
     {
         foreach (var rcondition in conditions)
         {

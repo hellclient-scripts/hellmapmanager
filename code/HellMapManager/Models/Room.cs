@@ -130,7 +130,7 @@ public class RoomFilter
     {
         if (RoomConditions.Count > 0)
         {
-            if (!ValueTag.ValidteConditions(room.Tags, RoomConditions))
+            if (!ValueTag.ValidateConditions(room.Tags, RoomConditions))
             {
                 return false;
             }
