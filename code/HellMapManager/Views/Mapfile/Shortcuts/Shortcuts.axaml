@@ -31,8 +31,8 @@
             </StackPanel.Styles>
             <TextBlock Classes="Title">捷径列表</TextBlock>
             <TextBlock Classes="Desc">
-               捷径是可以从任意房间，或者符合房间条件的所有房间直达某个目的地的路径。<LineBreak />
-               一般体现为飞行。</TextBlock>
+               捷径是可以从任意符合条件的所有房间直达某个目的地的路径。<LineBreak />
+               例如飞行是一种常见的捷径。</TextBlock>
          </StackPanel>
       </ScrollViewer>
       <DockPanel>

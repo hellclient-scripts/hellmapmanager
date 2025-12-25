@@ -31,9 +31,9 @@
             </StackPanel.Styles>
             <TextBlock Classes="Title">足迹列表</TextBlock>
             <TextBlock Classes="Desc">
-               足迹是记录某个NPC,动物或者道具可能初夏年的房间。<LineBreak />
+               足迹是记录某个NPC,动物或者道具可能出现的房间。<LineBreak />
                内容为没有顺序，不重复的房间列表。<LineBreak />
-               机器中只需要遇到NPC直接调用添加记录的指令，足迹会自动去重。</TextBlock>
+               机器中只需要遇到NPC时直接调用添加记录的指令，足迹会自动去重。</TextBlock>
          </StackPanel>
       </ScrollViewer>
       <DockPanel>

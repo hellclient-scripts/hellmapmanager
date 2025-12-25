@@ -31,9 +31,9 @@
             </StackPanel.Styles>
             <TextBlock Classes="Title">路线列表</TextBlock>
             <TextBlock Classes="Desc">
-               路线是有顺序的房间ID的列表。<LineBreak />
+               路线是有顺序的房间Key的列表。<LineBreak />
                一般用于固定路径的遍历。<LineBreak />
-               应该在机器中处理好部分房间不能进入后的跳过遍历。</TextBlock>
+               建议在机器中处理房间进入失败后的继续遍历。</TextBlock>
          </StackPanel>
       </ScrollViewer>
       <DockPanel>
