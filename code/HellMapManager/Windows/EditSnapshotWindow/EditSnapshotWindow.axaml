@@ -88,8 +88,8 @@
               <SelectableTextBlock Text="{Binding Item.Type}" />
             </Panel>
             <TextBlock Classes="Label" Text="值:" />
-            <Panel Classes="Content TextArea">
-              <SelectableTextBlock Text="{Binding Item.Value}" />
+            <Panel Classes="Content">
+              <SelectableTextBlock Classes="TextArea" Text="{Binding Item.Value}" />
             </Panel>
             <TextBlock Classes="Label" Text="分组:" />
             <Panel Classes="Content">

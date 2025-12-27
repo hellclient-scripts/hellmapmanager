@@ -274,6 +274,22 @@ public class AppUI(MapDatabase mapDatabase)
         }
         return null;
     }
+    public async Task<Diffs?> DiffOriginal()
+    {
+        if (MapDatabase.Current!=null && MapDatabase.Current.Path!="")
+        {
+            try
+            {
+                return MapDatabase.DiffFile(MapDatabase.Current.Path);
+            }
+            catch (Exception ex)
+            {
+                Alert("打开失败", ex.Message);
+            }
+
+        }
+        return null;
+    }
     public async void SavePatch(Diffs diffs)
     {
         var file = await AskSavePatch();

@@ -46,6 +46,26 @@ public partial class MainWindow : Window
             }
         }
     }
+    public async void OnDiffOriginal(object? sender, RoutedEventArgs args)
+    {
+        if (AppKernel.MapDatabase.Current == null)
+        {
+            return;
+        }
+        var diffs = await AppUI.Main.DiffOriginal();
+        if (diffs != null)
+        {
+            var result = await ShowDiffWindow(AppKernel.MapDatabase.Current, diffs);
+            if (result != null && result.Items.Count > 0)
+            {
+                DiffHelper.Apply(result, AppKernel.MapDatabase.Current);
+                AppKernel.MapDatabase.Current.MarkAsModified();
+                AppKernel.MapDatabase.RaiseMapFileUpdatedEvent(this);
+            }
+        }
+    }
+
+
     public async Task<Diffs?> ShowDiffWindow(MapFile mf, Diffs diffs)
     {
         var window = new PatchWindow();

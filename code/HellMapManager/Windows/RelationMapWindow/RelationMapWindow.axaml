@@ -63,7 +63,7 @@
               Classes="RoomTags Content"
               Classes.Empty="{Binding Current.IsTagsEmpty}"
               Text="{Binding Current.TagsInfo}" />
-            <TextBlock Classes="RoomDesc Label" Text="房间备注" />
+            <TextBlock Classes="RoomDesc Label" Text="房间描述" />
             <TextBlock
               Classes="RoomDesc Content"
               Classes.Empty="{Binding Current.IsDescEmpty}"

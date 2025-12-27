@@ -19,6 +19,7 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(TitleInfo));
             OnPropertyChanged(nameof(CanShowWelcome));
             OnPropertyChanged(nameof(IsFileOpend));
+            OnPropertyChanged(nameof(CanDiffOriginal));
         };
         InitOverview();
         InitRooms();
@@ -100,6 +101,10 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool CanShowWelcome
     {
         get => AppKernel.MapDatabase.Current == null;
+    }
+    public bool CanDiffOriginal
+    {
+        get => AppKernel.MapDatabase.Current != null && AppKernel.MapDatabase.Current.Path != "" && AppKernel.MapDatabase.Current.Modified;
     }
     public bool IsFileOpend
     {

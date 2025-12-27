@@ -16,7 +16,7 @@ public class SnapSearchHelperTest
             new Snapshot(){Key = "test1", Type = "type2", Group = "group1", Value = "value1",Count=4},
             new Snapshot(){Key = "test2", Type = "type1", Group = "group2", Value = "value3",Count=5},
         };
-        var ss = new SnapshotSearch(){};
+        var ss = new SnapshotSearch() { };
         var sr = SnapshotHelper.Search(ss, snapshots);
         Assert.Equal(2, sr.Count);
         Assert.Equal("test1", sr[0].Key);
@@ -66,5 +66,25 @@ public class SnapSearchHelperTest
         };
         sr = SnapshotHelper.Search(ss, snapshots);
         Assert.Empty(sr);
+        ss = new SnapshotSearch()
+        {
+            Type = "type2",
+            Keywords = new List<string> { "value3", "value4", "ue1" },
+            PartialMatch = true,
+            Any = false,
+        };
+        sr = SnapshotHelper.Search(ss, snapshots);
+        Assert.Empty(sr);
+        ss = new SnapshotSearch()
+        {
+            Type = "type2",
+            Keywords = new List<string> { "value3", "value4", "ue1" },
+            PartialMatch = true,
+            Any = false,
+            MaxNoise = 2,
+        };
+        sr = SnapshotHelper.Search(ss, snapshots);
+        Assert.Equal(2, sr.Count);
+
     }
 }

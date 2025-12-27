@@ -1550,6 +1550,7 @@ public class SnapshotSearchModel()
             Keywords = [.. search.Keywords],
             PartialMatch = search.PartialMatch,
             Any = search.Any,
+            MaxNoise = search.MaxNoise,
         };
     }
     public SnapshotSearch ToSnapshotSearch()
@@ -1561,6 +1562,7 @@ public class SnapshotSearchModel()
             Keywords = Keywords ?? [],
             PartialMatch = PartialMatch ?? true,
             Any = Any ?? false,
+            MaxNoise = MaxNoise
         };
     }
     public string? Type { get; set; }
@@ -1568,6 +1570,7 @@ public class SnapshotSearchModel()
     public List<string>? Keywords { get; set; } = [];
     public bool? PartialMatch { get; set; } = true;
     public bool? Any { get; set; } = false;
+    public int MaxNoise { get; set; } = 0;
 }
 
 public class SnapshotSearchResultModel
