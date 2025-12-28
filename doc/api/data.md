@@ -2,6 +2,8 @@
 
 数据维护接口是对HellMapManager(hmm)中的9种基本数据结构 Room,Marker,Route,Trace,Region,Landmark,Shortcut,Variable,Snaphshot的List/Insert/Remove操作。
 
+注意，不建议同时在应用界面(房间列表/房间关系地图)和接口同时对数据进行操作。
+
 ## 通用结构
 
 ### 列出数据选项 ListOption

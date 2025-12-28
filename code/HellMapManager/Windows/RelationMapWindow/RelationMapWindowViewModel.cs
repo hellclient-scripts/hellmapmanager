@@ -8,6 +8,7 @@ using HellMapManager.Cores;
 using System.Collections.ObjectModel;
 using System.Linq;
 namespace HellMapManager.Windows.RelationMapWindow;
+
 public class ViewItem
 {
     public ViewItem(RelationMapItem item)
@@ -155,6 +156,10 @@ public class RelationMapWindowViewModel : ObservableObject
     {
         get => Histories.Count > 0;
     }
+    public bool CanRemove
+    {
+        get => Histories.Count > 0 && Histories.Last() != Item.Room.Key;
+    }
     private void AddHistory(string key)
     {
         Histories.Add(key);
@@ -169,7 +174,7 @@ public class RelationMapWindowViewModel : ObservableObject
         {
             var last = Histories.Last();
             Histories = Histories.Slice(0, Histories.Count - 1);
-            DoEnterRoomKey(last, false);
+            DoEnterRoomKey(last, false, false);
         }
     }
     public void EnterViewItem(object obj)
@@ -182,33 +187,51 @@ public class RelationMapWindowViewModel : ObservableObject
     }
     public void EnterRoomKey(string key)
     {
-        DoEnterRoomKey(key, true);
+        DoEnterRoomKey(key, true, false);
     }
-    private void DoEnterRoomKey(string key, bool modfiyHistory)
+    public void EnterUpdatedRoom(string key)
     {
-        if (key != "" && key != Item.Room.Key && AppKernel.MapDatabase.Current is not null)
+        DoEnterRoomKey(key, false, true);
+    }
+    private void DoEnterRoomKey(string key, bool modfiyHistory, bool force)
+    {
+        AppKernel.MapDatabase._lock.EnterReadLock();
+        try
         {
-            var item = RelationMapper.RelationMap(AppKernel.MapDatabase.Current, key, AppPreset.RelationMaxDepth);
-            if (item is not null)
+            if (key != "" && (key != Item.Room.Key || force) && AppKernel.MapDatabase.Current is not null)
             {
-                if (modfiyHistory)
+                var item = RelationMapper.RelationMap(AppKernel.MapDatabase.Current, key, AppPreset.RelationMaxDepth);
+                if (item is not null)
                 {
-                    AddHistory(Item.Room.Key);
-                }
-                Item = item;
-                OnPropertyChanged(nameof(MyGraph));
-                OnPropertyChanged(nameof(Title));
-                OnPropertyChanged(nameof(Current));
-                OnPropertyChanged(nameof(HasHistory));
-                RefreshEvent?.Invoke(this, EventArgs.Empty);
-            }
+                    if (modfiyHistory)
+                    {
+                        AddHistory(Item.Room.Key);
+                    }
+                    Item = item;
+                    OnPropertyChanged(nameof(MyGraph));
+                    OnPropertyChanged(nameof(Title));
+                    OnPropertyChanged(nameof(Current));
+                    OnPropertyChanged(nameof(HasHistory));
+                    OnPropertyChanged(nameof(CanRemove));
 
+                }
+            }
         }
+        finally
+        {
+            AppKernel.MapDatabase._lock.ExitReadLock();
+        }
+        RefreshEvent?.Invoke(this, EventArgs.Empty);
     }
     public void OnHistoryBack()
     {
         HistoryBack();
     }
+    public void Refresh()
+    {
+        DoEnterRoomKey(Item.Room.Key, false, false);
+    }
+
     public event EventHandler? RefreshEvent;
 }
 
