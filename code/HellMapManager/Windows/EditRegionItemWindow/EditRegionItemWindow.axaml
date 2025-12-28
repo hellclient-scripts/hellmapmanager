@@ -5,8 +5,8 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:vm="using:HellMapManager.Windows.EditRegionItemWindow"
   xmlns:roompicker="using:HellMapManager.Views.Components.RoomPicker"
+  xmlns:vm="using:HellMapManager.Windows.EditRegionItemWindow"
   Title="{Binding Title}"
   Width="700"
   d:DesignHeight="450"
@@ -29,6 +29,7 @@
       <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style Selector="TextBlock.Label">
+      <Setter Property="FontWeight" Value="Bold" />
       <Setter Property="Margin" Value="0 5 0 5" />
     </Style>
     <Style Selector="Panel.Content">
@@ -69,8 +70,14 @@
             </ComboBox.ItemTemplate>
           </ComboBox>
           <TextBlock Classes="Label" Text="值:" />
-          <TextBox IsVisible="{Binding !Item.IsRoom}" Text="{Binding Item.Value}" Watermark="值" />
-          <roompicker:RoomPicker IsVisible="{Binding Item.IsRoom}" Room="{Binding Item.Value}" Watermark="值" />
+          <TextBox
+            IsVisible="{Binding !Item.IsRoom}"
+            Text="{Binding Item.Value}"
+            Watermark="值" />
+          <roompicker:RoomPicker
+            IsVisible="{Binding Item.IsRoom}"
+            Room="{Binding Item.Value}"
+            Watermark="值" />
           <CheckBox IsChecked="{Binding Item.Not}" IsThreeState="False">排除该元素</CheckBox>
         </StackPanel>
       </ScrollViewer>

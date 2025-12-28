@@ -25,7 +25,7 @@
         HorizontalAlignment="Right"
         Text="{Binding RoomsFilter}"
         TextChanged="OnFilter"
-        Watermark="过滤,英文逗号分隔多个关键字" />
+        Watermark="过滤,逗号分隔关键字" />
     </Panel>
     <Panel DockPanel.Dock="Bottom">
       <WrapPanel HorizontalAlignment="Right">

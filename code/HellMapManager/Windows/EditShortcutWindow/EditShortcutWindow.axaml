@@ -30,6 +30,7 @@
     </Style>
     <Style Selector="TextBlock.Label">
       <Setter Property="Margin" Value="0 5 0 5" />
+      <Setter Property="FontWeight" Value="Bold" />
     </Style>
     <Style Selector="Panel.Content">
       <Setter Property="Margin" Value="5 0 5 0" />

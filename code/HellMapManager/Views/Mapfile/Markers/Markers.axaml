@@ -56,7 +56,7 @@
                DockPanel.Dock="Right"
                Text="{Binding MarkersFilter}"
                TextChanged="OnFilter"
-               Watermark="过滤,英文逗号分隔多个关键字" />
+               Watermark="过滤,逗号分隔关键字" />
             <WrapPanel
                Margin="0,0,10,0"
                HorizontalAlignment="Right"
