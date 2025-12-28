@@ -24,15 +24,15 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if (AppKernel.MapDatabase.Current != null)
             {
-                var traces = AppKernel.MapDatabase.Current.Map.Snapshots;
-                if (string.IsNullOrEmpty(SnapshotsFilter))
+                var models = AppKernel.MapDatabase.Current.Map.Snapshots;
+                if (!string.IsNullOrEmpty(SnapshotsFilter))
                 {
-                    return new ObservableCollection<Snapshot>(traces);
+                    HellMapManager.Utils.FilterUtil.SplitFilter(SnapshotsFilter).ForEach(filter =>
+                    {
+                        models = models.FindAll(r => r.Filter(filter));
+                    });
                 }
-                else
-                {
-                    return new ObservableCollection<Snapshot>(traces.FindAll(r => r.Filter(SnapshotsFilter)));
-                }
+                return new ObservableCollection<Snapshot>(models);
             }
             return [];
         }

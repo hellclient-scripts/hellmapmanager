@@ -25,14 +25,14 @@ public partial class MainWindowViewModel : ViewModelBase
             if (AppKernel.MapDatabase.Current != null)
             {
                 var models = AppKernel.MapDatabase.Current.Map.Landmarks;
-                if (string.IsNullOrEmpty(LandmarksFilter))
+                if (!string.IsNullOrEmpty(LandmarksFilter))
                 {
-                    return new ObservableCollection<Landmark>(models);
+                    HellMapManager.Utils.FilterUtil.SplitFilter(LandmarksFilter).ForEach(filter =>
+                    {
+                        models = models.FindAll(r => r.Filter(filter));
+                    });
                 }
-                else
-                {
-                    return new ObservableCollection<Landmark>(models.FindAll(r => r.Filter(LandmarksFilter)));
-                }
+                return new ObservableCollection<Landmark>(models);
             }
             return [];
         }

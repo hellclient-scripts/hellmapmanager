@@ -5,6 +5,7 @@ using HellMapManager.Models;
 using HellMapManager.Services;
 using HellMapManager.Misc;
 using HellMapManager.Services.API;
+using System.Collections.Generic;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -33,7 +34,6 @@ public partial class MainWindowViewModel : ViewModelBase
         InitSnapshots();
         InitServer();
     }
-
     public partial void InitOverview();
     public partial void InitRooms();
     public partial void InitMarkers();
