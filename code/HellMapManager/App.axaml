@@ -1,22 +1,31 @@
-<Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="HellMapManager.App"
-             Name="HellMapManager"
-             xmlns:local="using:HellMapManager"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+<Application
+    x:Class="HellMapManager.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HellMapManager"
+    Name="HellMapManager"
+    RequestedThemeVariant="Default">
+    <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
 
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
     <NativeMenu.Menu>
-     <NativeMenu>
-         <NativeMenuItem Header="关于HellMapManager" Click="ShowAbout"/>
-     </NativeMenu>
- </NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Click="ShowAbout" Header="关于HellMapManager" />
+        </NativeMenu>
+    </NativeMenu.Menu>
 
     <Application.Styles>
         <FluentTheme />
-            <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
     </Application.Styles>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="/Assets/translate.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
 </Application>
