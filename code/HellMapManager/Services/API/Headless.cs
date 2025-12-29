@@ -11,7 +11,7 @@ public partial class APIServer
     {
         await Success(ctx);
         Console.WriteLine("Quiting.");
-        await Stop();
+        Stop();
     }
     public async Task HeadlessSave(HttpContext ctx)
     {
