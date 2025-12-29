@@ -22,23 +22,27 @@ public partial class PatchWindowViewModel : ViewModelBase
     {
         get
         {
-            var rooms = Patch.Variables.Items;
-            if (string.IsNullOrEmpty(VariablesFilter))
+            var models = Patch.Variables.Items;
+            if (!string.IsNullOrEmpty(VariablesFilter))
             {
-                return new ObservableCollection<PatchItem>(rooms);
-            }
-            return new ObservableCollection<PatchItem>(rooms.FindAll(r =>
-            {
-                if (r.Display is VariableDiff rd)
+                HellMapManager.Utils.FilterUtil.SplitFilter(VariablesFilter).ForEach(filter =>
                 {
-                    var model = rd.Model;
-                    if (model != null)
+                    models = models.FindAll(r =>
                     {
-                        return model.Filter(VariablesFilter);
-                    }
-                }
-                return false;
-            }));
+                        if (r.Display is VariableDiff rd)
+                        {
+                            var model = rd.Model;
+                            if (model != null)
+                            {
+                                return model.Filter(filter);
+                            }
+                        }
+                        return false;
+
+                    });
+                });
+            }
+            return new ObservableCollection<PatchItem>(models);
         }
     }
     
