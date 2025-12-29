@@ -62,7 +62,13 @@ public partial class App : Application
                 }
             };
             desktop.Exit += OnAppExit;
-            ;
+            mw.Opened += (s, e) =>
+            {
+                if (CommandLineHelper.Current.OpenFile is not null)
+                {
+                    var _ = AppUI.Main.OnOpenRecent(CommandLineHelper.Current.OpenFile);
+                }
+            };
         }
         APIServer.Instance.BindMapDatabase(AppKernel.MapDatabase);
         if (AppKernel.MapDatabase.Settings.APIEnabled)
