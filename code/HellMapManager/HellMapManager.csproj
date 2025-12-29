@@ -11,7 +11,7 @@
     <TrimMode>full</TrimMode>
 		<PublishTrimmed>true</PublishTrimmed>
 		<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
-    <UseAppHost>true</UseAppHost>
+    <UseAppHost>false</UseAppHost>
     <ApplicationIcon>Assets/app.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -37,5 +37,6 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="MessageBox.Avalonia" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.3.0" />
+    <PackageReference Include="System.CommandLine" Version="2.0.1" />
   </ItemGroup>
 </Project>

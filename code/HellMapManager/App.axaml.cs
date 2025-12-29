@@ -26,20 +26,7 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        string process;
-        string path;
-        if (Environment.GetEnvironmentVariable(AppPreset.ProcessPathEnvName) is string envPath && !string.IsNullOrEmpty(envPath))
-        {
-            process = envPath;
-        }
-        else
-        {
-            process = Environment.ProcessPath ?? "";
-        }
-        path = Path.GetDirectoryName(process ?? "") ?? "";
-
-        var settingspath = System.IO.Path.Join([path, AppPreset.SettingsFileName]);
+        var settingspath = CommandLineHelper.Current.GetSettingsPath();
         var settingsHelper = new SettingsHelper(settingspath);
         var settings = settingsHelper.Load();
 
