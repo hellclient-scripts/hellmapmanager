@@ -22,23 +22,27 @@ public partial class PatchWindowViewModel : ViewModelBase
     {
         get
         {
-            var trace = Patch.Shortcuts.Items;
-            if (string.IsNullOrEmpty(ShortcutsFilter))
+            var models = Patch.Shortcuts.Items;
+            if (!string.IsNullOrEmpty(ShortcutsFilter))
             {
-                return new ObservableCollection<PatchItem>(trace);
-            }
-            return new ObservableCollection<PatchItem>(trace.FindAll(r =>
-            {
-                if (r.Display is ShortcutDiff rd)
+                HellMapManager.Utils.FilterUtil.SplitFilter(ShortcutsFilter).ForEach(filter =>
                 {
-                    var model = rd.Model;
-                    if (model != null)
+                    models = models.FindAll(r =>
                     {
-                        return model.Filter(ShortcutsFilter);
-                    }
-                }
-                return false;
-            }));
+                        if (r.Display is ShortcutDiff rd)
+                        {
+                            var model = rd.Model;
+                            if (model != null)
+                            {
+                                return model.Filter(filter);
+                            }
+                        }
+                        return false;
+
+                    });
+                });
+            }
+            return new ObservableCollection<PatchItem>(models);
         }
     }
     

@@ -68,14 +68,16 @@ Transfer-Encoding: chunked
 | Type         | string?   | 限制快照类型，留空不限制 |
 | Group        | string?   | 限制快照分组，留空不限制 |
 | Keywords     | []string? | 搜索关键字，留空不限制   |
-| PartialMatch | bool      | 部分匹配，默认为true     |
+| PartialMatch | bool?     | 部分匹配，默认为true     |
 | Any          | bool      | 任意满足，默认为false    |
+| MaxNoise     | int       | 最大噪声，默认为0        |
 
 * Type 限制只搜索特定类型的快照
 * Group 限制只搜索特定分组的快照
 * Keywords, 关键字列表，具体效果和下面两个参数相关,为空返回与Any相反的结果。
 * PartialMatch 部分匹配，默认表现为只要关键字出现在快照内容内就匹配。为false则必须完整匹配
 * Any 任意满足一般用在完整匹配时，任何一个关键字匹配则快照匹配
+* MaxNoise 非任意满足时，允许最多多少个关键字不匹配(噪声数据)
 
 **返回结果：**
 
@@ -102,7 +104,8 @@ POST http://127.0.0.1:8466/api/db/searchsnapshots HTTP/1.1
     "Type":"desc",
     "Keywords":["ce","er"],
     "PartialMatch":true,
-    "Any":false
+    "Any":false,
+    "MaxNoise":0
 }
 ```
 
@@ -149,7 +152,7 @@ Transfer-Encoding: chunked
 | Key      | string? | 房间主键    |
 | Type     | string? | 快照类型    |
 | Group    | string? | 快照分组    |
-| MaxCount | int  | 最大Count数 |
+| MaxCount | int     | 最大Count数 |
 
 
 **返回结果：**

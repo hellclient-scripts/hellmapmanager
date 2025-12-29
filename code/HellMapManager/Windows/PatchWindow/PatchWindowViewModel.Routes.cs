@@ -22,23 +22,27 @@ public partial class PatchWindowViewModel : ViewModelBase
     {
         get
         {
-            var router = Patch.Routes.Items;
-            if (string.IsNullOrEmpty(RoutesFilter))
+            var models = Patch.Routes.Items;
+            if (!string.IsNullOrEmpty(RoutesFilter))
             {
-                return new ObservableCollection<PatchItem>(router);
-            }
-            return new ObservableCollection<PatchItem>(router.FindAll(r =>
-            {
-                if (r.Display is RouteDiff rd)
+                HellMapManager.Utils.FilterUtil.SplitFilter(RoutesFilter).ForEach(filter =>
                 {
-                    var model = rd.Model;
-                    if (model != null)
+                    models = models.FindAll(r =>
                     {
-                        return model.Filter(RoutesFilter);
-                    }
-                }
-                return false;
-            }));
+                        if (r.Display is RouteDiff rd)
+                        {
+                            var model = rd.Model;
+                            if (model != null)
+                            {
+                                return model.Filter(filter);
+                            }
+                        }
+                        return false;
+
+                    });
+                });
+            }
+            return new ObservableCollection<PatchItem>(models);
         }
     }
     

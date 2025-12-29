@@ -22,23 +22,27 @@ public partial class PatchWindowViewModel : ViewModelBase
     {
         get
         {
-            var trace = Patch.Traces.Items;
-            if (string.IsNullOrEmpty(TracesFilter))
+            var models = Patch.Traces.Items;
+            if (!string.IsNullOrEmpty(TracesFilter))
             {
-                return new ObservableCollection<PatchItem>(trace);
-            }
-            return new ObservableCollection<PatchItem>(trace.FindAll(r =>
-            {
-                if (r.Display is TraceDiff rd)
+                HellMapManager.Utils.FilterUtil.SplitFilter(TracesFilter).ForEach(filter =>
                 {
-                    var model = rd.Model;
-                    if (model != null)
+                    models = models.FindAll(r =>
                     {
-                        return model.Filter(TracesFilter);
-                    }
-                }
-                return false;
-            }));
+                        if (r.Display is TraceDiff rd)
+                        {
+                            var model = rd.Model;
+                            if (model != null)
+                            {
+                                return model.Filter(filter);
+                            }
+                        }
+                        return false;
+
+                    });
+                });
+            }
+            return new ObservableCollection<PatchItem>(models);
         }
     }
     

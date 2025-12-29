@@ -43,7 +43,9 @@ public class SnapshotSearch
     public List<string> Keywords { get; set; } = [];
     public bool PartialMatch = true;
     public bool Any = false;
-    private bool match(string keyword, Snapshot model)
+
+    public int MaxNoise = 0;
+    private bool Match(string keyword, Snapshot model)
     {
 
         if (PartialMatch)
@@ -69,15 +71,28 @@ public class SnapshotSearch
         {
             return true;
         }
-
+        int noise = 0;
         foreach (var keyword in Keywords)
         {
             if (keyword != "")
             {
-                if (match(keyword, model) == Any)
+                if (Match(keyword, model) == Any)
                 {
-                    return Any;
+                    if (!Any)
+                    {
+                        //在完全匹配时，只有噪音超过允许的最大值才验证失败。
+                        noise++;
+                        if (noise > MaxNoise)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 }
+
             }
         }
         return !Any;

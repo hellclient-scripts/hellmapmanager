@@ -122,7 +122,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">房间</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计&#160;<Run Text="{Binding GetMapRoomsCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">地图的基本数据，用主键标识的房间互相之间的出口关系。</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">地图的基本数据，用主键标识的房间及互相之间的出口关系。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>
@@ -154,7 +154,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">路线</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计&#160;<Run Text="{Binding GetMapRoutesCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">有顺序的房间ID列表，代表一条固定路线。</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">有顺序的房间Key列表，代表一条固定路线。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>
@@ -186,7 +186,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">地区</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计&#160;<Run Text="{Binding GetMapRegionsCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">将一系列的房间分组或者房间定义为一个区域</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">将一系列的房间分组或者房间定义为一个区域。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>
@@ -202,7 +202,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">定位</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计&#160;<Run Text="{Binding GetMapLandmarksCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">用于定位当前房间位置的信息</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">用于定位当前房间位置的信息。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>
@@ -234,7 +234,7 @@
                 <TextBlock Classes="Label" DockPanel.Dock="Top">变量</TextBlock>
                 <TextBlock Classes="Count" DockPanel.Dock="Bottom">
                   共计&#160;<Run Text="{Binding GetMapVariablesCount}" /></TextBlock>
-                <TextBlock Classes="Desc" TextWrapping="Wrap">储存脚本中可能需要用到的和地图信息有关的字符串。</TextBlock>
+                <TextBlock Classes="Desc" TextWrapping="Wrap">储存脚本中可能需要用到的和地图信息有关的字符串变量。</TextBlock>
               </DockPanel>
             </DockPanel>
           </Border>

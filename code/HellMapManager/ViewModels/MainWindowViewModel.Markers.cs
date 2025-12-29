@@ -24,15 +24,16 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             if (AppKernel.MapDatabase.Current != null)
             {
-                var markers = AppKernel.MapDatabase.Current.Map.Markers;
-                if (string.IsNullOrEmpty(MarkersFilter))
+                var models = AppKernel.MapDatabase.Current.Map.Markers;
+                if (!string.IsNullOrEmpty(MarkersFilter))
                 {
-                    return new ObservableCollection<Marker>(markers);
+                    HellMapManager.Utils.FilterUtil.SplitFilter(MarkersFilter).ForEach(filter =>
+                    {
+                        models = models.FindAll(r => r.Filter(filter));
+                    });
                 }
-                else
-                {
-                    return new ObservableCollection<Marker>(markers.FindAll(r => r.Filter(MarkersFilter)));
-                }
+                return new ObservableCollection<Marker>(models);
+
             }
             return [];
         }

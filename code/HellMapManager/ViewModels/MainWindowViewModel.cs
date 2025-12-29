@@ -5,6 +5,7 @@ using HellMapManager.Models;
 using HellMapManager.Services;
 using HellMapManager.Misc;
 using HellMapManager.Services.API;
+using System.Collections.Generic;
 namespace HellMapManager.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
@@ -19,6 +20,7 @@ public partial class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(TitleInfo));
             OnPropertyChanged(nameof(CanShowWelcome));
             OnPropertyChanged(nameof(IsFileOpend));
+            OnPropertyChanged(nameof(CanDiffOriginal));
         };
         InitOverview();
         InitRooms();
@@ -32,7 +34,6 @@ public partial class MainWindowViewModel : ViewModelBase
         InitSnapshots();
         InitServer();
     }
-
     public partial void InitOverview();
     public partial void InitRooms();
     public partial void InitMarkers();
@@ -100,6 +101,10 @@ public partial class MainWindowViewModel : ViewModelBase
     public bool CanShowWelcome
     {
         get => AppKernel.MapDatabase.Current == null;
+    }
+    public bool CanDiffOriginal
+    {
+        get => AppKernel.MapDatabase.Current != null && AppKernel.MapDatabase.Current.Path != "" && AppKernel.MapDatabase.Current.Modified;
     }
     public bool IsFileOpend
     {

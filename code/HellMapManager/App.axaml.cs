@@ -26,20 +26,7 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        string process;
-        string path;
-        if (Environment.GetEnvironmentVariable(AppPreset.ProcessPathEnvName) is string envPath && !string.IsNullOrEmpty(envPath))
-        {
-            process = envPath;
-        }
-        else
-        {
-            process = Environment.ProcessPath ?? "";
-        }
-        path = Path.GetDirectoryName(process ?? "") ?? "";
-
-        var settingspath = System.IO.Path.Join([path, AppPreset.SettingsFileName]);
+        var settingspath = CommandLineHelper.Current.GetSettingsPath();
         var settingsHelper = new SettingsHelper(settingspath);
         var settings = settingsHelper.Load();
 
@@ -74,8 +61,8 @@ public partial class App : Application
                     }
                 }
             };
-            desktop.Exit+=OnAppExit;
-        ;
+            desktop.Exit += OnAppExit;
+            ;
         }
         APIServer.Instance.BindMapDatabase(AppKernel.MapDatabase);
         if (AppKernel.MapDatabase.Settings.APIEnabled)
@@ -86,7 +73,7 @@ public partial class App : Application
     }
     private async void OnAppExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-       await APIServer.Instance.Stop();
+        await APIServer.Instance.Stop();
     }
 
     [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]

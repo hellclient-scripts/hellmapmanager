@@ -59,6 +59,9 @@ nunit-*.xml
 *.settings.json
 
 .DS_STORE
-
+global.json
+.vscode/*
+launchSettings.json
+launch.json
 deploy/HellMapManager.app/Contents/MacOS/*
 macsign.sh

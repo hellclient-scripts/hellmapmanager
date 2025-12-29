@@ -5,9 +5,8 @@
   xmlns:condition="using:HellMapManager.Views.Components.Condition"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:itemlist="using:HellMapManager.Views.Components.UpDownList"
-  xmlns:roompicker="using:HellMapManager.Views.Components.RoomPicker"
-  
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:roompicker="using:HellMapManager.Views.Components.RoomPicker"
   xmlns:vm="using:HellMapManager.Windows.EditExitWindow"
   Title="{Binding Title}"
   Width="700"
@@ -31,6 +30,7 @@
       <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style Selector="TextBlock.Label">
+      <Setter Property="FontWeight" Value="Bold" />
       <Setter Property="Margin" Value="0 5 0 5" />
     </Style>
     <Style Selector="Panel.Content">

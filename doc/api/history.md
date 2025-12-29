@@ -1,5 +1,9 @@
 # API变更记录
 
+## Version 1003
+
+* SearchSnapshots 接口加入MaxNoise
+
 ## Version 1002
 
 * MapperOptions加入 CommandWhitelist属性

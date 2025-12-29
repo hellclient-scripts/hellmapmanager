@@ -22,23 +22,27 @@ public partial class PatchWindowViewModel : ViewModelBase
     {
         get
         {
-            var trace = Patch.Landmarks.Items;
-            if (string.IsNullOrEmpty(LandmarksFilter))
+            var models = Patch.Landmarks.Items;
+            if (!string.IsNullOrEmpty(LandmarksFilter))
             {
-                return new ObservableCollection<PatchItem>(trace);
-            }
-            return new ObservableCollection<PatchItem>(trace.FindAll(r =>
-            {
-                if (r.Display is LandmarkDiff rd)
+                HellMapManager.Utils.FilterUtil.SplitFilter(LandmarksFilter).ForEach(filter =>
                 {
-                    var model = rd.Model;
-                    if (model != null)
+                    models = models.FindAll(r =>
                     {
-                        return model.Filter(LandmarksFilter);
-                    }
-                }
-                return false;
-            }));
+                        if (r.Display is LandmarkDiff rd)
+                        {
+                            var model = rd.Model;
+                            if (model != null)
+                            {
+                                return model.Filter(filter);
+                            }
+                        }
+                        return false;
+
+                    });
+                });
+            }
+            return new ObservableCollection<PatchItem>(models);
         }
     }
     

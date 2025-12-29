@@ -1773,6 +1773,7 @@ public class ModelTest
         Assert.Empty(ss.Keywords);
         Assert.True(ss.PartialMatch);
         Assert.False(ss.Any);
+        Assert.Equal(0, ss.MaxNoise);
         Assert.True(ss.Validate(snapshot));
         ss.Type = "type2";
         Assert.False(ss.Validate(snapshot));
@@ -1794,6 +1795,12 @@ public class ModelTest
         ss.Keywords = ["value1"];
         Assert.False(ss.Validate(snapshot));
         ss.Keywords = ["value1\nvalue2"];
+        Assert.True(ss.Validate(snapshot));
+        ss.PartialMatch = true;
+        ss.Keywords = ["value3", "value4", "value"];
+        ss.Any = false;
+        Assert.False(ss.Validate(snapshot));
+        ss.MaxNoise=2;
         Assert.True(ss.Validate(snapshot));
     }
     [Fact]

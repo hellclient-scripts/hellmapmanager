@@ -17,25 +17,63 @@
   Icon="/Assets/app.ico"
   mc:Ignorable="d">
   <DockPanel>
-    <Panel
+    <DockPanel
       Name="RoomDetail"
       Width="300"
       Background="#FFEEEEEE"
-      DockPanel.Dock="Left">
+      DockPanel.Dock="Left"
+      LastChildFill="True">
+      <Border Padding="10,0,10,0" DockPanel.Dock="Bottom">
+        <WrapPanel Height="40" HorizontalAlignment="Right">
+          <Button Margin="2,2,2,2" Click="OnNew">
+            <ToolTip.Tip>
+              <TextBlock>新建房间</TextBlock>
+            </ToolTip.Tip>
+            <Image
+              Width="16"
+              Height="16"
+              Source="avares://HellMapManager/Assets/add.png" />
+          </Button>
+
+          <Button Margin="2" Click="OnEdit">
+            <ToolTip.Tip>
+              <TextBlock>编辑房间</TextBlock>
+            </ToolTip.Tip>
+            <Image
+              Width="16"
+              Height="16"
+              Source="avares://HellMapManager/Assets/edit.png" />
+          </Button>
+          <Button
+            Margin="2,2,2,2"
+            Click="OnRemove"
+            IsEnabled="{Binding CanRemove}">
+            <ToolTip.Tip>
+              <TextBlock>删除房间</TextBlock>
+            </ToolTip.Tip>
+            <Image
+              Width="16"
+              Height="16"
+              Source="avares://HellMapManager/Assets/delete.png" />
+          </Button>
+
+        </WrapPanel>
+      </Border>
       <ScrollViewer>
+
         <Border Padding="10">
           <StackPanel>
             <StackPanel.Styles>
               <Style Selector="TextBlock">
                 <Setter Property="TextWrapping" Value="Wrap" />
               </Style>
-              <Style Selector="TextBlock.Content">
+              <Style Selector="SelectableTextBlock.Content">
                 <Setter Property="Padding" Value="10 5 10 5" />
               </Style>
               <Style Selector="ItemsControl.Content">
                 <Setter Property="Padding" Value="10 5 10 5" />
               </Style>
-              <Style Selector="TextBlock.Content.Empty">
+              <Style Selector="SelectableTextBlock.Content.Empty">
                 <Setter Property="Foreground" Value="#FF888888" />
               </Style>
               <Style Selector="TextBlock.Label">
@@ -47,29 +85,29 @@
               </Style>
             </StackPanel.Styles>
             <TextBlock Classes="RoomKey Label" Text="房间主键" />
-            <TextBlock Classes="RoomKey Content" Text="{Binding Current.Item.Room.Key}" />
+            <SelectableTextBlock Classes="RoomKey Content" Text="{Binding Current.Item.Room.Key}" />
             <TextBlock Classes="RoomName Label" Text="房间名" />
-            <TextBlock
+            <SelectableTextBlock
               Classes="RoomName Content"
               Classes.Empty="{Binding Current.IsNameEmpty}"
               Text="{Binding Current.NameInfo}" />
             <TextBlock Classes="RoomGroup Label" Text="分组" />
-            <TextBlock
+            <SelectableTextBlock
               Classes="RoomGroup Content"
               Classes.Empty="{Binding Current.IsGroupEmpty}"
               Text="{Binding Current.GroupInfo}" />
             <TextBlock Classes="RoomTags Label" Text="标签" />
-            <TextBlock
+            <SelectableTextBlock
               Classes="RoomTags Content"
               Classes.Empty="{Binding Current.IsTagsEmpty}"
               Text="{Binding Current.TagsInfo}" />
-            <TextBlock Classes="RoomDesc Label" Text="房间备注" />
-            <TextBlock
+            <TextBlock Classes="RoomDesc Label" Text="房间描述" />
+            <SelectableTextBlock
               Classes="RoomDesc Content"
               Classes.Empty="{Binding Current.IsDescEmpty}"
               Text="{Binding Current.DescInfo}" />
             <TextBlock Classes="RoomData Label" Text="数据清单" />
-            <TextBlock
+            <SelectableTextBlock
               Classes="RoomData Content Empty"
               IsVisible="{Binding Current.IsDataEmpty}"
               Text="&lt;无数据&gt;" />
@@ -100,7 +138,7 @@
           </StackPanel>
         </Border>
       </ScrollViewer>
-    </Panel>
+    </DockPanel>
     <Panel Height="22" DockPanel.Dock="Bottom">
       <Border HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock

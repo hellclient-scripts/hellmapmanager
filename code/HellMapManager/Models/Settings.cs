@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace HellMapManager.Models;
 
@@ -16,7 +17,9 @@ public class Settings
     public string APIUserName { get; set; } = "";
     public string APIPassWord { get; set; } = "";
     public bool APIEnabled { get; set; } = false;
-    public string BuildURL() => $"http://localhost:{GetPort()}/";
+    [JsonIgnore]
+    public string Host = "localhost";
+    public string BuildURL() => $"http://{Host}:{GetPort()}/";
 }
 
 public class APIConfig

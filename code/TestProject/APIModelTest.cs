@@ -1626,7 +1626,7 @@ public class APIModelTest
             MaxExitCost = 500,
             MaxTotalCost = 2000,
             DisableShortcuts = true,
-            CommandWhitelist=["cmd1","cmd2"]
+            CommandWhitelist = ["cmd1", "cmd2"]
         };
         model.CommandWhitelist.Sort();
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.MapperOptionsModel);
@@ -1869,6 +1869,7 @@ public class APIModelTest
             Keywords = ["key1", "key2", "key3"],
             PartialMatch = true,
             Any = true,
+            MaxNoise = 10,
         };
         Assert.Null(SnapshotSearchModel.FromJSON("wrong json"));
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.SnapshotSearchModel);
@@ -1882,6 +1883,7 @@ public class APIModelTest
         }
         Assert.Equal(model.PartialMatch, deserialized?.PartialMatch);
         Assert.Equal(model.Any, deserialized?.Any);
+        Assert.Equal(model.MaxNoise, deserialized?.MaxNoise);
         var raw = model.ToSnapshotSearch();
         var fromRaw = SnapshotSearchModel.From(raw);
         Assert.Equal(model.Group, fromRaw.Group);
@@ -1891,6 +1893,7 @@ public class APIModelTest
         {
             Assert.Equal(model.Keywords[i], fromRaw.Keywords[i]);
         }
+        Assert.Equal(model.MaxNoise, deserialized?.MaxNoise);
     }
     [Fact]
     public void SnapshotSearchResultModelTest()

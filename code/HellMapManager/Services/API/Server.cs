@@ -20,6 +20,7 @@ public partial class APIServer
     public static APIServer Instance { get; } = new APIServer();
     private MapDatabase Database = new();
     private WebApplication? App;
+    public bool Headless = false;
     public bool Running { get => App is not null; }
     public void BindMapDatabase(MapDatabase db)
     {
@@ -52,6 +53,28 @@ public partial class APIServer
     public int Port { get; set; } = Settings.DefaultAPIPort;
     public string UserName { get; set; } = "";
     public string PassWord { get; set; } = "";
+    public void LaunchHeadless(string? datafilepath)
+    {
+        if (string.IsNullOrEmpty(datafilepath))
+        {
+            Console.WriteLine("Please provide hmm database path.");
+            return;
+        }
+        try
+        {
+            AppKernel.MapDatabase.LoadFile(datafilepath);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return;
+        }
+        Headless = true;
+        Console.WriteLine("Run in headless mode.");
+        Console.WriteLine($"Listening {Database.Settings.BuildURL()}.");
+        BindMapDatabase(AppKernel.MapDatabase);
+        Start();
+    }
     public void Start()
     {
         if (App is not null)
@@ -64,6 +87,11 @@ public partial class APIServer
         UserName = Database.Settings.APIUserName;
         PassWord = Database.Settings.APIPassWord;
         app.Urls.Add(Database.Settings.BuildURL());
+        if (Headless)
+        {
+            app.Run();
+            return;
+        }
         app.RunAsync();
     }
     public async Task Stop()
@@ -131,6 +159,11 @@ public partial class APIServer
         DBAPI.MapPost("/setroomdata", APISetRoomData);
         DBAPI.MapPost("/tracelocation", APITraceLocation);
         DBAPI.MapPost("/getroomexits", APIGetRoomExits);
+
+        var HeadlessAPI = app.MapGroup("/api/headless");
+        HeadlessAPI.Map("quit", HeadlessQuit);
+        HeadlessAPI.Map("save", HeadlessSave);
+        HeadlessAPI.Map("load", HeadlessLoad);
     }
     private readonly APIJsonSerializerContext jsonctx = new(new JsonSerializerOptions()
     {
