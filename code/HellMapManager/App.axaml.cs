@@ -64,9 +64,9 @@ public partial class App : Application
             desktop.Exit += OnAppExit;
             mw.Opened += (s, e) =>
             {
-                if (CommandLineHelper.Current.OpenFile is not null)
+                if (!string.IsNullOrEmpty(CommandLineHelper.Current.OpenFile))
                 {
-                    var _ = AppUI.Main.OnOpenRecent(CommandLineHelper.Current.OpenFile);
+                    var _ = AppUI.Main.OnOpenRecent(CommandLineHelper.Current.OpenFile!);
                 }
             };
         }
