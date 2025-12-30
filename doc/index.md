@@ -22,10 +22,16 @@ HMM提供了http协议接口提供服务，让任何支持http协议和json格�
 
 HMM文件格式的详细格式，您可以按这个格式在自己的代码里解析或生成HMM文件。
 
-* [查看详情](format/hmm.md)
+[查看详情](format/hmm.md)
 
 ## 最佳实践
 
 一系列建议的HMM使用方式。
 
-* [查看详情](bestpractices/index.md)
+[查看详情](bestpractices/index.md)
+
+## 启动参数
+
+程序可选的启动参数
+
+[查看详情](args/args.md)
