@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using HellMapManager.Cores;
+using HellMapManager.Misc;
 using HellMapManager.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -55,6 +56,7 @@ public partial class APIServer
     public string PassWord { get; set; } = "";
     public void LaunchHeadless(string? datafilepath)
     {
+        Console.WriteLine($"HellMapManager version {AppVersion.Current.ToString()} (API {MapDatabase.Version})");
         if (string.IsNullOrEmpty(datafilepath))
         {
             Console.WriteLine("Please provide hmm database path.");
