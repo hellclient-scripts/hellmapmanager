@@ -2,10 +2,9 @@
   <PropertyGroup>
     <OutputType Condition="'$(Configuration)' != 'Exe'">WinExe</OutputType>
     <OutputType Condition="'$(Configuration)' == 'Exe'">Exe</OutputType>
-    <DebugType Condition="'$(Configuration)' != 'Debug'">none</DebugType>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <PublishAot>true</PublishAot> 
@@ -13,7 +12,7 @@
     <TrimMode>full</TrimMode>
 		<PublishTrimmed>true</PublishTrimmed>
 		<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
-    <UseAppHost>false</UseAppHost>
+    <UseAppHost>true</UseAppHost>
     <ApplicationIcon>Assets/app.ico</ApplicationIcon>
   </PropertyGroup>
 

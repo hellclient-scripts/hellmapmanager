@@ -29,7 +29,6 @@ public partial class App : Application
         var settingspath = CommandLineHelper.Current.GetSettingsPath();
         var settingsHelper = new SettingsHelper(settingspath);
         var settings = settingsHelper.Load();
-
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
@@ -43,6 +42,7 @@ public partial class App : Application
             {
                 AppKernel.MapDatabase.Settings = settings;
             }
+            CommandLineHelper.Current.ApplyTo(AppKernel.MapDatabase.Settings);
             var mw = new MainWindow()
             {
                 DataContext = new MainWindowViewModel()
