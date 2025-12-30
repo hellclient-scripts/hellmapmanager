@@ -17,10 +17,40 @@ public class MiscModelTest
         Assert.Equal("1.0", Settings.CurrentVersion);
         var settings = new Settings();
         Assert.False(settings.APIEnabled);
-        Assert.Equal(8466, settings.APIPort);
+        Assert.Equal(Settings.DefaultAPIPort, settings.APIPort);
         Assert.Equal("", settings.APIUserName);
         Assert.Equal("", settings.APIPassWord);
         Assert.Empty(settings.Recents);
+        Assert.Equal($"http://localhost:{Settings.DefaultAPIPort}/", settings.BuildURL());
+        settings.APIPort = 1234;
+        Assert.Equal(1234, settings.GetPort());
+        settings.Host = "0.0.0.0";
+        Assert.Equal($"http://0.0.0.0:1234/", settings.BuildURL());
+        settings.APIPort = -1;
+        Assert.Equal(Settings.DefaultAPIPort, settings.GetPort());
+
+    }
+    [Fact]
+    public void TestAPIConfig()
+    {
+        var settings = new Settings()
+        {
+            APIPort = 1234,
+            APIUserName = "user",
+            APIPassWord = "pass",
+            APIEnabled = true,
+        };
+        var apiConfig = APIConfig.From(settings);
+        Assert.Equal(1234, apiConfig.APIPort);
+        Assert.Equal("user", apiConfig.APIUserName);
+        Assert.Equal("pass", apiConfig.APIPassWord);
+        Assert.True(apiConfig.APIEnabled);
+        var newSettings = new Settings();
+        apiConfig.Apply(newSettings);
+        Assert.Equal(1234, newSettings.APIPort);
+        Assert.Equal("user", newSettings.APIUserName);
+        Assert.Equal("pass", newSettings.APIPassWord);
+        Assert.True(newSettings.APIEnabled);
     }
     [Fact]
     public void TestExternalLink()

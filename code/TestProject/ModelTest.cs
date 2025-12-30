@@ -372,6 +372,7 @@ public class ModelTest
         Assert.True(room.Filter("dval2"));
         Assert.True(room.Filter("command1"));
         Assert.True(room.Filter("to2"));
+        Assert.True(room.Filter("on1"));
 
         Assert.Equal(2, room.ExitsCount);
         Assert.Equal("tag1,tag2", room.AllTags);
@@ -580,6 +581,8 @@ public class ModelTest
             Group = "group1",
             Message = "message1",
         };
+
+        Assert.Equal("rid1a\nrid1b", route.RoomsList);
         Assert.True(route.Filter("key"));
         Assert.True(route.Filter("rid1"));
         Assert.True(route.Filter("desc"));
@@ -628,6 +631,7 @@ public class ModelTest
             Desc = "desc1",
             Message = "message1",
         };
+        Assert.Equal("rid1\nrid2", trace.LocationList);
         Assert.True(trace.Filter("key"));
         Assert.True(trace.Filter("rid"));
         Assert.True(trace.Filter("desc"));
@@ -823,7 +827,8 @@ public class ModelTest
         Assert.True(sc.Filter("to"));
         Assert.True(sc.Filter("group"));
         Assert.True(sc.Filter("desc"));
-        Assert.False(sc.Filter("con"));
+        Assert.True(sc.Filter("on1"));
+        Assert.True(sc.Filter("on3"));
         Assert.False(sc.Filter("NotFound"));
         Shortcut sc2;
         sc2 = sc.Clone();

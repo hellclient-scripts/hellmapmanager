@@ -351,6 +351,13 @@ public partial class Room
             {
                 return true;
             }
+            foreach(var cond in exit.Conditions)
+            {
+                if (cond.Key.Contains(val))
+                {
+                    return true;
+                }
+            }
         }
         return false;
     }

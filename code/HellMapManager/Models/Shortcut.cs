@@ -69,6 +69,21 @@ public partial class Shortcut : RoomConditionExit
         {
             return true;
         }
+        foreach (var cond in Conditions)
+        {
+            if (cond.Key.Contains(val))
+            {
+                return true;
+            }
+        }
+        foreach (var cond in RoomConditions)
+        {
+            if (cond.Key.Contains(val))
+            {
+                return true;
+            }
+        }
+
         return false;
     }
     public bool Equal(Shortcut model)

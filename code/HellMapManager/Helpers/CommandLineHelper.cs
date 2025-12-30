@@ -32,7 +32,7 @@ public class CommandLineHelper
         var passwordOption = new Option<string?>("-w", "--password") { Description = "Password for authentication" };
         var autoStartOption = new Option<bool?>("-a", "--autostart") { Description = "Auto start the server" };
         var headlessOption = new Option<bool?>("-c", "--cli") { Description = "Run in CLI(headless) mode" };
-        var hostOption = new Option<string?>("-h", "--host"){ Description = "Host address for the server" };
+        var hostOption = new Option<string?>("-o", "--host"){ Description = "Host address for the server" };
         rootCommand.Options.Add(settingsOption);
         rootCommand.Options.Add(portOption);
         rootCommand.Options.Add(usernameOption);
