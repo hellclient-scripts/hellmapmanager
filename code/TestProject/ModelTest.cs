@@ -581,6 +581,8 @@ public class ModelTest
             Group = "group1",
             Message = "message1",
         };
+
+        Assert.Equal("rid1a\nrid1b", route.RoomsList);
         Assert.True(route.Filter("key"));
         Assert.True(route.Filter("rid1"));
         Assert.True(route.Filter("desc"));
@@ -629,6 +631,7 @@ public class ModelTest
             Desc = "desc1",
             Message = "message1",
         };
+        Assert.Equal("rid1\nrid2", trace.LocationList);
         Assert.True(trace.Filter("key"));
         Assert.True(trace.Filter("rid"));
         Assert.True(trace.Filter("desc"));

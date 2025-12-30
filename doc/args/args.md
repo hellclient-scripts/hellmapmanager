@@ -16,5 +16,5 @@ HellMapManager [自动打开的hmm/hmz文件位置] -选项
 | -u     | --username  | 字符串 | API的验证用户名，同设置窗口的设置。                                                      |
 | -w     | --password  | 字符串 | API的验证用户密码，同设置窗口的设置。                                                    |
 | -a     | --autostart | 布尔   | 是否自动启动API服务，同设置窗口的设置。无头模式强制自动开始。                            |
-| -h     | --host      | 字符串 | 监听的host地址。程序默认指监听localhost,只有通过这个选项设置才能监听其他地址             |
+| -o     | --host      | 字符串 | 监听的host地址。程序默认指监听localhost,只有通过这个选项设置才能监听其他地址             |
 | -c     | --cli       | 布尔   | 不显示图形界面，以cli形式执行。必须指定hmm/hmz文件，Windows系统下请使用带Console的版本。 |

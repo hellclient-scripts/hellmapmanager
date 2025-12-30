@@ -6,7 +6,7 @@ namespace HellMapManager.Models;
 
 public class Settings
 {
-    public static string CurrentVersion { get; set; } = "1.0";
+    public const string CurrentVersion  = "1.0";
     public List<RecentFile> Recents { get; set; } = [];
     public const int DefaultAPIPort = 8466;
     public int GetPort()
