@@ -372,6 +372,7 @@ public class ModelTest
         Assert.True(room.Filter("dval2"));
         Assert.True(room.Filter("command1"));
         Assert.True(room.Filter("to2"));
+        Assert.True(room.Filter("on1"));
 
         Assert.Equal(2, room.ExitsCount);
         Assert.Equal("tag1,tag2", room.AllTags);
@@ -823,7 +824,8 @@ public class ModelTest
         Assert.True(sc.Filter("to"));
         Assert.True(sc.Filter("group"));
         Assert.True(sc.Filter("desc"));
-        Assert.False(sc.Filter("con"));
+        Assert.True(sc.Filter("on1"));
+        Assert.True(sc.Filter("on3"));
         Assert.False(sc.Filter("NotFound"));
         Shortcut sc2;
         sc2 = sc.Clone();
