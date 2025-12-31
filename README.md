@@ -75,9 +75,11 @@ HMM使用基于CSV变种的HMM格式文件，便于阅读，以行为单位，�
 
 在执行程序时，设置 -c 标志 ，并制定要打开的hmm/hmz文件，就能以不显示界面的方式提供http服务。
 
+![无头模式](doc/images/headless.png)
+
 可以没有图形界面的系统或者需要低CPU/内存消耗的场景下使用。
 
-[控制接口介绍](doc/api/headless.md)
+[无头模式控制接口介绍](doc/api/headless.md)
 
 ## 完善文档
 

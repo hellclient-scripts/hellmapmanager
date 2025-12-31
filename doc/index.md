@@ -1,5 +1,12 @@
 # 文档
 
+## 教程
+
+使用HellMapManager进行地图维护的教程
+
+* [教程：使用HellMapManager手动绘制地图](tutorials/manual.md)
+* [教程：利用HellMapManager建立定位系统](tutorials/locate.md)
+
 ## 基本概念和数据结构
 
 HMM的基本数据分为房间(Room),标记(Marker),路线(Route),足迹(Trace),地区(Region),定位(Landmark),捷径(Shortcut),变量(Variable),快照(Snapshot)等9中基本数据机构和一些子结构
