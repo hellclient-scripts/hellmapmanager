@@ -57,8 +57,8 @@
         <Separator />
         <MenuItem
           Command="{Binding OnRevert}"
-          Header="还原(_R)"
-          IsEnabled="{Binding IsFileOpend}" />
+          Header="还原文件(_R)"
+          IsEnabled="{Binding CanRevert}" />
         <Separator />
         <MenuItem Command="{Binding OnExit}" Header="退出(_E)" />
       </MenuItem>
