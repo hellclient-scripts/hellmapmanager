@@ -1,5 +1,10 @@
 # API变更记录
 
+
+## Version 1004
+
+与hellmapmanager.ts的代码同步，对接口无影响。
+
 ## Version 1003
 
 * SearchSnapshots 接口加入MaxNoise

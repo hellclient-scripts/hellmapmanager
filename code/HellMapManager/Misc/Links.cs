@@ -8,5 +8,5 @@ public class Links
     public const string ScriptInro = "https://github.com/hellclient-scripts/hellmapmanager/blob/main/doc/script/index.md";
     public const string API = "https://github.com/hellclient-scripts/hellmapmanager/blob/main/doc/api/index.md";
     public const string BestPractices = "https://github.com/hellclient-scripts/hellmapmanager/blob/main/doc/bestpractices/index.md";
-
+    public const string Forum = "https://forum.hellclient.com/";
 }

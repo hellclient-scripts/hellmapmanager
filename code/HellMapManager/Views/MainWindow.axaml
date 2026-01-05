@@ -64,7 +64,10 @@
       </MenuItem>
       <MenuItem Header="对比(_D)" IsEnabled="{Binding IsFileOpend}">
         <MenuItem Click="OnDiffMapFile" Header="对比地图文件" />
-        <MenuItem IsEnabled="{Binding CanDiffOriginal}" Click="OnDiffOriginal" Header="对比原始文件" />
+        <MenuItem
+          Click="OnDiffOriginal"
+          Header="对比原始文件"
+          IsEnabled="{Binding CanDiffOriginal}" />
         <MenuItem Click="OnOpenPatch" Header="加载补丁文件" />
       </MenuItem>
       <MenuItem Header="接口(_A)">
@@ -81,6 +84,8 @@
       </MenuItem>
       <MenuItem Header="帮助(_H)">
         <MenuItem Click="OpenURLHomepage" Header="项目首页" />
+        <MenuItem Click="OpenURLForum" Header="社区" />
+        <Separator />
         <MenuItem Click="OpenURLTerm" Header="基本概念" />
         <MenuItem Click="OpenURLScriptIntro" Header="脚本支持" />
         <MenuItem Click="OpenURLAPI" Header="接口文档" />

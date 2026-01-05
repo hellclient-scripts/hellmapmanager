@@ -14,4 +14,11 @@ public partial class MainWindowViewModel : ViewModelBase
             new ExternalLink("最佳实践", Misc.Links.API,"了解使用HMM的最佳实践。"),
         ];
     }
+    public static ObservableCollection<ExternalLink> CommunityLinks
+    {
+        get => [
+            new ExternalLink("Github", Misc.Links.Homepage,"访问HMM的GitHub主页，获取最新版本和发布信息。"),
+            new ExternalLink("社区", Misc.Links.Forum,"加入HellClient社区，参与讨论并获取帮助。"),
+        ];
+    }
 }

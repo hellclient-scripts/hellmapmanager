@@ -95,6 +95,21 @@
         </StackPanel>
         <StackPanel />
         <StackPanel>
+          <TextBlock Classes="CommandLabel">沟通</TextBlock>
+          <ItemsControl ItemsSource="{Binding CommunityLinks}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Panel ToolTip.Tip="{Binding Intro}">
+                  <Border Classes="Command" Tapped="OnOpenLink">
+                    <WrapPanel>
+                      <Image Source="avares://HellMapManager/Assets/info.png" />
+                      <TextBlock Text="{Binding Name}" />
+                    </WrapPanel>
+                  </Border>
+                </Panel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
           <TextBlock Classes="CommandLabel">入门</TextBlock>
           <ItemsControl ItemsSource="{Binding HelpLinks}">
             <ItemsControl.ItemTemplate>
