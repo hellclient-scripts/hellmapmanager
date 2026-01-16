@@ -63,22 +63,26 @@ public partial class Shortcut : RoomConditionExit
         result.Cost = HMMFormatter.UnescapeIntAt(list, 7, 0);
         return result;
     }
-    public bool Filter(string val)
+    public bool Filter(FilterKeyword keyword)
     {
-        if (Key.Contains(val) || Command.Contains(val) || To.Contains(val) || Group.Contains(val) || Desc.Contains(val))
+        if (keyword.Match(Key, FilterKeywordType.Key) ||
+            keyword.Match(Command, FilterKeywordType.Command) ||
+            keyword.Match(To, FilterKeywordType.To) ||
+            keyword.Match(Group, FilterKeywordType.Group) ||
+            keyword.Match(Desc, FilterKeywordType.Desc))
         {
             return true;
         }
         foreach (var cond in Conditions)
         {
-            if (cond.Key.Contains(val))
+            if (keyword.Match(cond.Key, FilterKeywordType.Tag))
             {
                 return true;
             }
         }
         foreach (var cond in RoomConditions)
         {
-            if (cond.Key.Contains(val))
+            if (keyword.Match(cond.Key, FilterKeywordType.Tag))
             {
                 return true;
             }

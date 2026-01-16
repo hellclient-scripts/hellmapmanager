@@ -322,38 +322,38 @@ public partial class Room
         Tags.Sort((x, y) => x.Key.CompareTo(y.Key));
         Exits.ForEach(e => e.Arrange());
     }
-    public bool Filter(string val)
+    public bool Filter(FilterKeyword keyword)
     {
-        if (Key.Contains(val) ||
-            Name.Contains(val) ||
-            Desc.Contains(val) ||
-            Group.Contains(val))
+        if (keyword.Match(Key, FilterKeywordType.Key) ||
+            keyword.Match(Name, FilterKeywordType.Name) ||
+            keyword.Match(Desc, FilterKeywordType.Desc) ||
+            keyword.Match(Group, FilterKeywordType.Group))
         {
             return true;
         }
         foreach (var tag in Tags)
         {
-            if (tag.Key.Contains(val))
+            if (keyword.Match(tag.Key, FilterKeywordType.Tag))
             {
                 return true;
             }
         }
         foreach (var data in Data)
         {
-            if (data.Key.Contains(val) || data.Value.Contains(val))
+            if (keyword.Match(data.Key, FilterKeywordType.Misc) || keyword.Match(data.Value, FilterKeywordType.Misc))
             {
                 return true;
             }
         }
         foreach (var exit in Exits)
         {
-            if (exit.Command.Contains(val) || exit.To.Contains(val))
+            if (keyword.Match(exit.Command, FilterKeywordType.Command) || keyword.Match(exit.To, FilterKeywordType.To))
             {
                 return true;
             }
             foreach(var cond in exit.Conditions)
             {
-                if (cond.Key.Contains(val))
+                if (keyword.Match(cond.Key, FilterKeywordType.Tag))
                 {
                     return true;
                 }

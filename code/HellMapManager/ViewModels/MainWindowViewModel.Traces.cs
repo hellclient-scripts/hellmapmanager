@@ -27,7 +27,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 var models = AppKernel.MapDatabase.Current.Map.Traces;
                 if (!string.IsNullOrEmpty(TracesFilter))
                 {
-                    HellMapManager.Utils.FilterUtil.SplitFilter(TracesFilter).ForEach(filter =>
+                    HellMapManager.Helpers.FilterHelper.ParseKeywords(TracesFilter).ForEach(filter =>
                     {
                         models = models.FindAll(r => r.Filter(filter));
                     });

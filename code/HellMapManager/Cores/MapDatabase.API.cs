@@ -741,13 +741,15 @@ public partial class MapDatabase
             _lock.ExitWriteLock();
         }
     }
-    public QueryResult? APIQueryPathAny(List<string> from, List<string> target, Context context, MapperOptions options)
+    public QueryResult? APIQueryPathAny(List<string> from, List<string> target, Context? context, MapperOptions? options)
     {
         _lock.EnterReadLock();
         try
         {
             if (Current != null)
             {
+                context ??= new Context();
+                options ??= new MapperOptions();
                 return new Walking(new Mapper(Current, context, options)).QueryPathAny(from, target, 0).SuccessOrNull();
             }
         }
@@ -758,13 +760,15 @@ public partial class MapDatabase
         return null;
     }
 
-    public QueryResult? APIQueryPathAll(string start, List<string> target, Context context, MapperOptions options)
+    public QueryResult? APIQueryPathAll(string start, List<string> target, Context? context, MapperOptions? options)
     {
         _lock.EnterReadLock();
         try
         {
             if (Current != null)
             {
+                context ??= new Context();
+                options ??= new MapperOptions();
                 return new Walking(new Mapper(Current, context, options)).QueryPathAll(start, target).SuccessOrNull();
             }
         }
@@ -774,13 +778,15 @@ public partial class MapDatabase
         }
         return null;
     }
-    public QueryResult? APIQueryPathOrdered(string start, List<string> target, Context context, MapperOptions options)
+    public QueryResult? APIQueryPathOrdered(string start, List<string> target, Context? context, MapperOptions? options)
     {
         _lock.EnterReadLock();
         try
         {
             if (Current != null)
             {
+                context ??= new Context();
+                options ??= new MapperOptions();
                 return new Walking(new Mapper(Current, context, options)).QueryPathOrdered(start, target).SuccessOrNull();
             }
         }
@@ -848,13 +854,15 @@ public partial class MapDatabase
         return [];
     }
 
-    public List<string> APIDilate(List<string> src, int iterations, Context context, MapperOptions options)
+    public List<string> APIDilate(List<string> src, int iterations, Context? context, MapperOptions? options)
     {
         _lock.EnterReadLock();
         try
         {
             if (Current != null)
             {
+                context ??= new Context();
+                options ??= new MapperOptions();
                 return new Walking(new Mapper(Current, context, options)).Dilate(src, iterations);
             }
         }
@@ -864,13 +872,15 @@ public partial class MapDatabase
         }
         return [];
     }
-    public string APITrackExit(string start, string command, Context context, MapperOptions options)
+    public string APITrackExit(string start, string command, Context? context, MapperOptions? options)
     {
         _lock.EnterReadLock();
         try
         {
             if (Current != null)
             {
+                context ??= new Context();
+                options ??= new MapperOptions();
                 var mapper = new Mapper(Current, context, options);
                 var room = mapper.GetRoom(start);
                 if (room is not null)
@@ -911,13 +921,15 @@ public partial class MapDatabase
         }
         return "";
     }
-    public Room? APIGetRoom(string key, Context context, MapperOptions options)
+    public Room? APIGetRoom(string key, Context? context, MapperOptions? options)
     {
         _lock.EnterReadLock();
         try
         {
             if (Current != null)
             {
+                context ??= new Context();
+                options ??= new MapperOptions();
                 return new Mapper(Current, context, options).GetRoom(key);
             }
         }
@@ -1147,13 +1159,15 @@ public partial class MapDatabase
             _lock.ExitWriteLock();
         }
     }
-    public List<Exit> APIGetRoomExits(string key, Context context, MapperOptions options)
+    public List<Exit> APIGetRoomExits(string key, Context? context, MapperOptions? options)
     {
         _lock.EnterReadLock();
         try
         {
             if (Current != null)
             {
+                context ??= new Context();
+                options ??= new MapperOptions();
                 var mapper = new Mapper(Current, context, options);
                 var room = mapper.GetRoom(key);
                 if (room is not null)

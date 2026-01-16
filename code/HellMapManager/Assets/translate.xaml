@@ -25,4 +25,10 @@
     <x:String x:Key="StringManagedFileChooserOverwritePromptFileAlreadyExistsText">{0}个文件已经存在，您是否想替换它？</x:String>
     <x:String x:Key="StringManagedFileChooserOverwritePromptConfirmText">是</x:String>
     <x:String x:Key="StringManagedFileChooserOverwritePromptCancelText">否</x:String>
+    <x:String x:Key="ModelFilterTooltip">使用英文逗号分隔多个关键字。
+可以使用 类型=来进行精确匹配，例如 name=入口 表示只匹配名称完全等于“入口”的项目。
+类型为空可以进行全类型精确匹配。
+前置英文感叹号表示排除。
+支持的类型为：key|name|desc|tag|group|to|command|message|misc。
+支持用\进行转义。</x:String>
 </ResourceDictionary>

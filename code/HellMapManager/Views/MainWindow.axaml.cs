@@ -114,6 +114,11 @@ public partial class MainWindow : Window
     {
         TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.Homepage));
     }
+    public void OpenURLForum(object? sender, RoutedEventArgs args)
+    {
+        TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.Forum));
+    }
+
     public void OpenURLTerm(object? sender, RoutedEventArgs args)
     {
         TopLevel.GetTopLevel(this)!.Launcher.LaunchUriAsync(new Uri(Links.Term));

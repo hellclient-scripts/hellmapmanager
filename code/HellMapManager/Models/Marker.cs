@@ -62,13 +62,13 @@ public partial class Marker
 }
 public partial class Marker
 {
-    public bool Filter(string val)
+    public bool Filter(FilterKeyword keyword)
     {
-        if (Key.Contains(val) ||
-            Value.Contains(val) ||
-            Desc.Contains(val) ||
-            Group.Contains(val) ||
-            Message.Contains(val)
+        if (keyword.Match(Key, FilterKeywordType.Key) ||
+            keyword.Match(Value, FilterKeywordType.Value) ||
+            keyword.Match(Desc, FilterKeywordType.Desc) ||
+            keyword.Match(Group, FilterKeywordType.Group) ||
+            keyword.Match(Message, FilterKeywordType.Message)
             )
         {
             return true;

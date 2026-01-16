@@ -25,7 +25,7 @@ public partial class PatchWindowViewModel : ViewModelBase
             var models = Patch.Landmarks.Items;
             if (!string.IsNullOrEmpty(LandmarksFilter))
             {
-                HellMapManager.Utils.FilterUtil.SplitFilter(LandmarksFilter).ForEach(filter =>
+                HellMapManager.Helpers.FilterHelper.ParseKeywords(LandmarksFilter).ForEach(filter =>
                 {
                     models = models.FindAll(r =>
                     {

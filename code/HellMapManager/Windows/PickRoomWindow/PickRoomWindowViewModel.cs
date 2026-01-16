@@ -25,7 +25,7 @@ public class PickRoomWindowViewModel : ObservableObject
                 var models = AppKernel.MapDatabase.Current.Map.Rooms;
                 if (!string.IsNullOrEmpty(RoomsFilter))
                 {
-                    HellMapManager.Utils.FilterUtil.SplitFilter(RoomsFilter).ForEach(filter =>
+                    HellMapManager.Helpers.FilterHelper.ParseKeywords(RoomsFilter).ForEach(filter =>
                     {
                         models = models.FindAll(r => r.Filter(filter));
                     });

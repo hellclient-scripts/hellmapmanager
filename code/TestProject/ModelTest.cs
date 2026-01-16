@@ -1,3 +1,4 @@
+using HellMapManager.Helpers;
 using HellMapManager.Models;
 
 namespace TestProject;
@@ -363,16 +364,34 @@ public class ModelTest
         Assert.Equal("", room.GetData("notfound"));
 
         Room room2;
-        Assert.False(room.Filter("unknow"));
-        Assert.True(room.Filter("key"));
-        Assert.True(room.Filter("name"));
-        Assert.True(room.Filter("group"));
-        Assert.True(room.Filter("tag1"));
-        Assert.True(room.Filter("dkey1"));
-        Assert.True(room.Filter("dval2"));
-        Assert.True(room.Filter("command1"));
-        Assert.True(room.Filter("to2"));
-        Assert.True(room.Filter("on1"));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("unknow")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("key=ke")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("name")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("name=nam")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("name=name")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("group=gro")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("tag1")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("tag=tag")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("tag=tag1")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("dkey1")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("misc=dkey")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("misc=dkey1")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("dval2")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("misc=dval")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("misc=dval2")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("command1")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("command=command")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("command=command1")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("to2")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("to=to")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("to=to2")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("on1")));
+        Assert.False(room.Filter(FilterHelper.ParseKeyword("tag=con")));
+        Assert.True(room.Filter(FilterHelper.ParseKeyword("tag=con1")));
 
         Assert.Equal(2, room.ExitsCount);
         Assert.Equal("tag1,tag2", room.AllTags);
@@ -536,12 +555,22 @@ public class ModelTest
 
         };
 
-        Assert.True(marker.Filter("key"));
-        Assert.True(marker.Filter("value"));
-        Assert.True(marker.Filter("group"));
-        Assert.True(marker.Filter("desc"));
-        Assert.True(marker.Filter("message"));
-        Assert.False(marker.Filter("notfound"));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.False(marker.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("key=key1")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("value")));
+        Assert.False(marker.Filter(FilterHelper.ParseKeyword("value=value")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("value=value1")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.False(marker.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("group=group1")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("desc")));
+        Assert.False(marker.Filter(FilterHelper.ParseKeyword("desc=desc")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("desc=desc1")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("message")));
+        Assert.False(marker.Filter(FilterHelper.ParseKeyword("message=message")));
+        Assert.True(marker.Filter(FilterHelper.ParseKeyword("message=message1")));
+        Assert.False(marker.Filter(FilterHelper.ParseKeyword("notfound")));
         Marker marker2;
         marker2 = marker.Clone();
         Assert.True(marker2.Validated());
@@ -583,12 +612,22 @@ public class ModelTest
         };
 
         Assert.Equal("rid1a\nrid1b", route.RoomsList);
-        Assert.True(route.Filter("key"));
-        Assert.True(route.Filter("rid1"));
-        Assert.True(route.Filter("desc"));
-        Assert.True(route.Filter("group"));
-        Assert.True(route.Filter("message"));
-        Assert.False(route.Filter("NotFound"));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.False(route.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("key=key1")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("rid1")));
+        Assert.False(route.Filter(FilterHelper.ParseKeyword("to=rid")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("to=rid1a")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("desc")));
+        Assert.False(route.Filter(FilterHelper.ParseKeyword("desc=desc")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("desc=desc1")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.False(route.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("group=group1")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("message")));
+        Assert.False(route.Filter(FilterHelper.ParseKeyword("message=message")));
+        Assert.True(route.Filter(FilterHelper.ParseKeyword("message=message1")));
+        Assert.False(route.Filter(FilterHelper.ParseKeyword("NotFound")));
 
         Assert.Equal("rid1a;rid1b", route.AllRooms);
         Assert.Equal(2, route.RoomsCount);
@@ -632,12 +671,22 @@ public class ModelTest
             Message = "message1",
         };
         Assert.Equal("rid1\nrid2", trace.LocationList);
-        Assert.True(trace.Filter("key"));
-        Assert.True(trace.Filter("rid"));
-        Assert.True(trace.Filter("desc"));
-        Assert.True(trace.Filter("group"));
-        Assert.True(trace.Filter("message"));
-        Assert.False(trace.Filter("NotFound"));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.False(trace.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("key=key1")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("rid")));
+        Assert.False(trace.Filter(FilterHelper.ParseKeyword("to=rid")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("to=rid1")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("desc")));
+        Assert.False(trace.Filter(FilterHelper.ParseKeyword("desc=desc")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("desc=desc1")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.False(trace.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("group=group1")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("message")));
+        Assert.False(trace.Filter(FilterHelper.ParseKeyword("message=message")));
+        Assert.True(trace.Filter(FilterHelper.ParseKeyword("message=message1")));
+        Assert.False(trace.Filter(FilterHelper.ParseKeyword("NotFound")));
 
         Assert.Equal(2, trace.LocationsCount);
 
@@ -686,13 +735,25 @@ public class ModelTest
             Message = "message1",
             Items = [new RegionItem(RegionItemType.Room, "room1", false), new RegionItem(RegionItemType.Zone, "zone1", true)]
         };
-        Assert.True(region.Filter("key"));
-        Assert.True(region.Filter("room"));
-        Assert.True(region.Filter("zone"));
-        Assert.True(region.Filter("desc"));
-        Assert.True(region.Filter("group"));
-        Assert.True(region.Filter("message"));
-        Assert.False(region.Filter("NotFound"));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.False(region.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("key=key1")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("room")));
+        Assert.False(region.Filter(FilterHelper.ParseKeyword("to=room")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("to=room1")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("zone")));
+        Assert.False(region.Filter(FilterHelper.ParseKeyword("to=zone")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("to=zone1")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("desc")));
+        Assert.False(region.Filter(FilterHelper.ParseKeyword("desc=desc")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("desc=desc1")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.False(region.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("group=group1")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("message")));
+        Assert.False(region.Filter(FilterHelper.ParseKeyword("message=message")));
+        Assert.True(region.Filter(FilterHelper.ParseKeyword("message=message1")));
+        Assert.False(region.Filter(FilterHelper.ParseKeyword("NotFound")));
 
         Assert.Equal(2, region.ItemsCount);
         Region region2;
@@ -771,12 +832,22 @@ public class ModelTest
             Group = "group1",
             Desc = "desc1"
         };
-        Assert.True(lm.Filter("key"));
-        Assert.True(lm.Filter("type"));
-        Assert.True(lm.Filter("value"));
-        Assert.True(lm.Filter("group"));
-        Assert.True(lm.Filter("desc"));
-        Assert.False(lm.Filter("NotFound"));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("key=key1")));
+        Assert.False(lm.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("type")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("type=type1")));
+        Assert.False(lm.Filter(FilterHelper.ParseKeyword("type=type")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("value")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("value=value1")));
+        Assert.False(lm.Filter(FilterHelper.ParseKeyword("value=value")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("group=group1")));
+        Assert.False(lm.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("desc")));
+        Assert.True(lm.Filter(FilterHelper.ParseKeyword("desc=desc1")));
+        Assert.False(lm.Filter(FilterHelper.ParseKeyword("desc=desc")));
+        Assert.False(lm.Filter(FilterHelper.ParseKeyword("NotFound")));
 
         Landmark lm2;
         lm2 = lm.Clone();
@@ -822,14 +893,28 @@ public class ModelTest
             RoomConditions = [new ValueCondition("con1", 1, false), new ValueCondition("con2", 1, true)],
             Conditions = [new ValueCondition("con3", 1, false), new ValueCondition("con4", 1, true)]
         };
-        Assert.True(sc.Filter("key"));
-        Assert.True(sc.Filter("command"));
-        Assert.True(sc.Filter("to"));
-        Assert.True(sc.Filter("group"));
-        Assert.True(sc.Filter("desc"));
-        Assert.True(sc.Filter("on1"));
-        Assert.True(sc.Filter("on3"));
-        Assert.False(sc.Filter("NotFound"));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("key=key1")));
+        Assert.False(sc.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("command")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("command=command1")));
+        Assert.False(sc.Filter(FilterHelper.ParseKeyword("command=command")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("to")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("to=to1")));
+        Assert.False(sc.Filter(FilterHelper.ParseKeyword("to=to")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("group=group1")));
+        Assert.False(sc.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("desc")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("desc=desc1")));
+        Assert.False(sc.Filter(FilterHelper.ParseKeyword("desc=desc")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("on1")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("tag=con1")));
+        Assert.False(sc.Filter(FilterHelper.ParseKeyword("tag=con")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("on3")));
+        Assert.True(sc.Filter(FilterHelper.ParseKeyword("tag=con3")));
+        Assert.False(sc.Filter(FilterHelper.ParseKeyword("tag=con")));
+        Assert.False(sc.Filter(FilterHelper.ParseKeyword("NotFound")));
         Shortcut sc2;
         sc2 = sc.Clone();
         Assert.True(sc.Equal(sc2));
@@ -885,11 +970,19 @@ public class ModelTest
             Group = "group1",
             Desc = "desc1"
         };
-        Assert.True(var1.Filter("key"));
-        Assert.True(var1.Filter("value"));
-        Assert.True(var1.Filter("group"));
-        Assert.True(var1.Filter("desc"));
-        Assert.False(var1.Filter("NotFound"));
+        Assert.True(var1.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.True(var1.Filter(FilterHelper.ParseKeyword("key=key1")));
+        Assert.False(var1.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(var1.Filter(FilterHelper.ParseKeyword("value")));
+        Assert.True(var1.Filter(FilterHelper.ParseKeyword("value=value1")));
+        Assert.False(var1.Filter(FilterHelper.ParseKeyword("value=value")));
+        Assert.True(var1.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.True(var1.Filter(FilterHelper.ParseKeyword("group=group1")));
+        Assert.False(var1.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.True(var1.Filter(FilterHelper.ParseKeyword("desc")));
+        Assert.True(var1.Filter(FilterHelper.ParseKeyword("desc=desc1")));
+        Assert.False(var1.Filter(FilterHelper.ParseKeyword("desc=desc")));
+        Assert.False(var1.Filter(FilterHelper.ParseKeyword("NotFound")));
 
         Variable var2;
         var2 = var1.Clone();
@@ -922,11 +1015,19 @@ public class ModelTest
             Group = "group1",
             Timestamp = 1234567890
         };
-        Assert.True(snapshot.Filter("key"));
-        Assert.True(snapshot.Filter("type"));
-        Assert.True(snapshot.Filter("value"));
-        Assert.True(snapshot.Filter("group"));
-        Assert.False(snapshot.Filter("NotFound"));
+        Assert.True(snapshot.Filter(FilterHelper.ParseKeyword("key")));
+        Assert.True(snapshot.Filter(FilterHelper.ParseKeyword("key=key1")));
+        Assert.False(snapshot.Filter(FilterHelper.ParseKeyword("key=key")));
+        Assert.True(snapshot.Filter(FilterHelper.ParseKeyword("type")));
+        Assert.True(snapshot.Filter(FilterHelper.ParseKeyword("type=type1")));
+        Assert.False(snapshot.Filter(FilterHelper.ParseKeyword("type=type")));
+        Assert.True(snapshot.Filter(FilterHelper.ParseKeyword("value")));
+        Assert.True(snapshot.Filter(FilterHelper.ParseKeyword("value=value1")));
+        Assert.False(snapshot.Filter(FilterHelper.ParseKeyword("value=value")));
+        Assert.True(snapshot.Filter(FilterHelper.ParseKeyword("group")));
+        Assert.True(snapshot.Filter(FilterHelper.ParseKeyword("group=group1")));
+        Assert.False(snapshot.Filter(FilterHelper.ParseKeyword("group=group")));
+        Assert.False(snapshot.Filter(FilterHelper.ParseKeyword("NotFound")));
         Assert.True(snapshot.Validated());
 
         Snapshot snapshot2;
@@ -1805,7 +1906,7 @@ public class ModelTest
         ss.Keywords = ["value3", "value4", "value"];
         ss.Any = false;
         Assert.False(ss.Validate(snapshot));
-        ss.MaxNoise=2;
+        ss.MaxNoise = 2;
         Assert.True(ss.Validate(snapshot));
     }
     [Fact]

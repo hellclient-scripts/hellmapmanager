@@ -82,18 +82,18 @@ public partial class Route
             return string.Join("\n", Rooms);
         }
     }
-    public bool Filter(string val)
+    public bool Filter(FilterKeyword keyword)
     {
-        if (Key.Contains(val) ||
-            Desc.Contains(val) ||
-            Group.Contains(val) ||
-            Message.Contains(val))
+        if (keyword.Match(Key, FilterKeywordType.Key) ||
+            keyword.Match(Desc, FilterKeywordType.Desc) ||
+            keyword.Match(Group, FilterKeywordType.Group) ||
+            keyword.Match(Message, FilterKeywordType.Message))
         {
             return true;
         }
         foreach (var room in Rooms)
         {
-            if (room.Contains(val))
+            if (keyword.Match(room, FilterKeywordType.To))
             {
                 return true;
             }

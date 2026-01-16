@@ -26,7 +26,7 @@
         DockPanel.Dock="Right"
         Text="{Binding SnapshotsFilter}"
         TextChanged="OnFilter"
-        Watermark="过滤,逗号分隔关键字" />
+        Watermark="过滤"><ToolTip.Tip><TextBlock Text="{DynamicResource ModelFilterTooltip}" /></ToolTip.Tip></TextBox>
       <WrapPanel
         Margin="0,0,10,0"
         HorizontalAlignment="Right"

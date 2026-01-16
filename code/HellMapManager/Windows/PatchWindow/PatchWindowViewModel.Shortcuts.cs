@@ -25,7 +25,7 @@ public partial class PatchWindowViewModel : ViewModelBase
             var models = Patch.Shortcuts.Items;
             if (!string.IsNullOrEmpty(ShortcutsFilter))
             {
-                HellMapManager.Utils.FilterUtil.SplitFilter(ShortcutsFilter).ForEach(filter =>
+                HellMapManager.Helpers.FilterHelper.ParseKeywords(ShortcutsFilter).ForEach(filter =>
                 {
                     models = models.FindAll(r =>
                     {

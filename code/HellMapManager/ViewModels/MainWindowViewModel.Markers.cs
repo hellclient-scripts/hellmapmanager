@@ -27,7 +27,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 var models = AppKernel.MapDatabase.Current.Map.Markers;
                 if (!string.IsNullOrEmpty(MarkersFilter))
                 {
-                    HellMapManager.Utils.FilterUtil.SplitFilter(MarkersFilter).ForEach(filter =>
+                    HellMapManager.Helpers.FilterHelper.ParseKeywords(MarkersFilter).ForEach(filter =>
                     {
                         models = models.FindAll(r => r.Filter(filter));
                     });

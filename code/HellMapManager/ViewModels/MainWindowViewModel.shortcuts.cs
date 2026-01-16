@@ -27,7 +27,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 var models = AppKernel.MapDatabase.Current.Map.Shortcuts;
                 if (!string.IsNullOrEmpty(ShortcutsFilter))
                 {
-                    HellMapManager.Utils.FilterUtil.SplitFilter(ShortcutsFilter).ForEach(filter =>
+                    HellMapManager.Helpers.FilterHelper.ParseKeywords(ShortcutsFilter).ForEach(filter =>
                     {
                         models = models.FindAll(r => r.Filter(filter));
                     });
