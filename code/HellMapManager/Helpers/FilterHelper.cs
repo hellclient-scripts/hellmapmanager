@@ -29,19 +29,18 @@ public class FilterHelper
         WithCommand(new Command(" ", "4", "\\ ")).
         WithCommand(new Command("!", "5", "\\!"));
 
-    public static FilterKeyword ParseKeyword(string raw)
+    public static FilterKeyword ParseKeyword(string unpacked)
     {
-        var encoded = escaper.Decode(raw);
         var keyword = new FilterKeyword();
-        if (encoded.StartsWith("!"))
+        if (unpacked.StartsWith("!"))
         {
             keyword.Not = true;
-            encoded = encoded[1..];
+            unpacked = unpacked[1..];
         }
-        var data = encoded.Split(['='], 2);
+        var data = unpacked.Split(['='], 2);
         if (data.Length > 1)
         {
-            keyword.Type = escaper.Encode(data[0].Trim()) switch
+            keyword.Type = escaper.Decode(data[0].Trim()) switch
             {
                 "" => FilterKeywordType.Any,
                 TypeKey => FilterKeywordType.Key,
@@ -57,19 +56,19 @@ public class FilterHelper
                 TypeMessage => FilterKeywordType.Message,
                 _ => FilterKeywordType.Wrong,
             };
-            keyword.Value = escaper.Encode(data[1]);
+            keyword.Value = escaper.Decode(data[1]);
             keyword.PartialMatch = false;
         }
         else
         {
-            keyword.Value = escaper.Encode(data[0]);
+            keyword.Value = escaper.Decode(data[0]);
             keyword.PartialMatch = true;
         }
         return keyword;
     }
     public static List<FilterKeyword> ParseKeywords(string filter)
     {
-        return filter.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().ConvertAll(r => ParseKeyword(r));
+        return escaper.Unpack(filter).Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().ConvertAll(r => ParseKeyword(r));
     }
 
 }
