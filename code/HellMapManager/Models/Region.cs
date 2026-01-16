@@ -107,18 +107,19 @@ public partial class Region
 
 public partial class Region
 {
-    public bool Filter(string val)
+    public bool Filter(FilterKeyword keyword)
     {
-        if (Key.Contains(val) ||
-            Desc.Contains(val) ||
-            Group.Contains(val) ||
-            Message.Contains(val))
+
+        if (keyword.Match(Key, FilterKeywordType.Key) ||
+            keyword.Match(Desc, FilterKeywordType.Desc) ||
+            keyword.Match(Group, FilterKeywordType.Group) ||
+            keyword.Match(Message, FilterKeywordType.Message))
         {
             return true;
         }
         foreach (var item in Items)
         {
-            if (item.Value.Contains(val))
+            if (keyword.Match(item.Value, FilterKeywordType.To))
             {
                 return true;
             }

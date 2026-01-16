@@ -1,4 +1,5 @@
 namespace HellMapManager.Models;
+
 using System.Collections.Generic;
 
 
@@ -47,21 +48,12 @@ public class Variable
             Desc = Desc,
         };
     }
-    public bool Filter(string filter)
+    public bool Filter(FilterKeyword keyword)
     {
-        if (Key.Contains(filter))
-        {
-            return true;
-        }
-        if (Value.Contains(filter))
-        {
-            return true;
-        }
-        if (Group.Contains(filter))
-        {
-            return true;
-        }
-        if (Desc.Contains(filter))
+        if (keyword.Match(Key, FilterKeywordType.Key) ||
+            keyword.Match(Value, FilterKeywordType.Value) ||
+            keyword.Match(Group, FilterKeywordType.Group) ||
+            keyword.Match(Desc, FilterKeywordType.Desc))
         {
             return true;
         }

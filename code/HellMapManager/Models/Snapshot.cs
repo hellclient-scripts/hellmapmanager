@@ -87,9 +87,12 @@ public partial class Snapshot
             Count = Count,
         };
     }
-    public bool Filter(string filter)
+    public bool Filter(FilterKeyword keyword)
     {
-        if (Key.Contains(filter) || Type.Contains(filter) || Value.Contains(filter) || Group.Contains(filter))
+        if (keyword.Match(Key, FilterKeywordType.Key) ||
+            keyword.Match(Type, FilterKeywordType.Type) ||
+            keyword.Match(Value, FilterKeywordType.Value) ||
+            keyword.Match(Group, FilterKeywordType.Group))
         {
             return true;
         }

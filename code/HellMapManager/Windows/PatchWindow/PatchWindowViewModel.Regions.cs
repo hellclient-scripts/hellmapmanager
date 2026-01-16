@@ -25,7 +25,7 @@ public partial class PatchWindowViewModel : ViewModelBase
             var models = Patch.Regions.Items;
             if (!string.IsNullOrEmpty(RegionsFilter))
             {
-                HellMapManager.Utils.FilterUtil.SplitFilter(RegionsFilter).ForEach(filter =>
+                HellMapManager.Helpers.FilterHelper.ParseKeywords(RegionsFilter).ForEach(filter =>
                 {
                     models = models.FindAll(r =>
                     {

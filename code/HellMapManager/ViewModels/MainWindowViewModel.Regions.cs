@@ -27,7 +27,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 var models = AppKernel.MapDatabase.Current.Map.Regions;
                 if (!string.IsNullOrEmpty(RegionsFilter))
                 {
-                    HellMapManager.Utils.FilterUtil.SplitFilter(RegionsFilter).ForEach(filter =>
+                    HellMapManager.Helpers.FilterHelper.ParseKeywords(RegionsFilter).ForEach(filter =>
                     {
                         models = models.FindAll(r => r.Filter(filter));
                     });

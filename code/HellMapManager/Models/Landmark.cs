@@ -80,9 +80,9 @@ public partial class Landmark
 
 public partial class Landmark
 {
-    public bool Filter(string filter)
+    public bool Filter(FilterKeyword keyword)
     {
-        if (Key.Contains(filter) || Type.Contains(filter) || Value.Contains(filter) || Group.Contains(filter) || Desc.Contains(filter))
+        if (keyword.Match(Key, FilterKeywordType.Key) || keyword.Match(Type, FilterKeywordType.Type) || keyword.Match(Value, FilterKeywordType.Value) || keyword.Match(Group, FilterKeywordType.Group) || keyword.Match(Desc, FilterKeywordType.Desc))
         {
             return true;
         }

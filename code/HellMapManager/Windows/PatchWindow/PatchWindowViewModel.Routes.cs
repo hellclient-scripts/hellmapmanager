@@ -25,7 +25,7 @@ public partial class PatchWindowViewModel : ViewModelBase
             var models = Patch.Routes.Items;
             if (!string.IsNullOrEmpty(RoutesFilter))
             {
-                HellMapManager.Utils.FilterUtil.SplitFilter(RoutesFilter).ForEach(filter =>
+                HellMapManager.Helpers.FilterHelper.ParseKeywords(RoutesFilter).ForEach(filter =>
                 {
                     models = models.FindAll(r =>
                     {
