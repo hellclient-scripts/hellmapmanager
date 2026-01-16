@@ -331,7 +331,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var result = Database.APIQueryPathAny(query.From, query.Target, Context.FromEnvironment(query.Environment.ToEnvironment()), query.Options.ToMapperOptions());
+        var result = Database.APIQueryPathAny(query.From, query.Target, Context.FromEnvironment(query?.Environment?.ToEnvironment()), query?.Options?.ToMapperOptions());
         await WriteJSON(ctx, QueryResultModel.FromQueryResult(result));
     }
     public async Task APIQueryPathAll(HttpContext ctx)
@@ -342,7 +342,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var result = Database.APIQueryPathAll(query.Start, query.Target, Context.FromEnvironment(query.Environment.ToEnvironment()), query.Options.ToMapperOptions());
+        var result = Database.APIQueryPathAll(query.Start, query.Target, Context.FromEnvironment(query?.Environment?.ToEnvironment()), query?.Options?.ToMapperOptions());
         await WriteJSON(ctx, QueryResultModel.FromQueryResult(result));
     }
     public async Task APIQueryPathOrdered(HttpContext ctx)
@@ -353,7 +353,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var result = Database.APIQueryPathOrdered(query.Start, query.Target, Context.FromEnvironment(query.Environment.ToEnvironment()), query.Options.ToMapperOptions());
+        var result = Database.APIQueryPathOrdered(query.Start, query.Target, Context.FromEnvironment(query?.Environment?.ToEnvironment()), query?.Options?.ToMapperOptions());
         await WriteJSON(ctx, QueryResultModel.FromQueryResult(result));
     }
     public async Task APIDilate(HttpContext ctx)
@@ -364,7 +364,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var output = Database.APIDilate(input.Source, input.Iterations, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        var output = Database.APIDilate(input.Source, input.Iterations, Context.FromEnvironment(input?.Environment?.ToEnvironment()), input?.Options?.ToMapperOptions());
         await WriteJSON(ctx, output);
     }
     public async Task APITrackExit(HttpContext ctx)
@@ -375,7 +375,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var output = Database.APITrackExit(input.Start, input.Command, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        var output = Database.APITrackExit(input.Start, input.Command, Context.FromEnvironment(input?.Environment?.ToEnvironment()), input?.Options?.ToMapperOptions());
         await WriteJSON(ctx, output);
     }
     public async Task APIGetVariable(HttpContext ctx)
@@ -408,7 +408,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var room = Database.APIGetRoom(input.Key, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        var room = Database.APIGetRoom(input.Key, Context.FromEnvironment(input?.Environment?.ToEnvironment()), input?.Options?.ToMapperOptions());
         await WriteJSON(ctx, RoomModel.From(room));
     }
     public async Task APIClearSnapshots(HttpContext ctx)
@@ -524,7 +524,7 @@ public partial class APIServer
             await InvalidJSONRequest(ctx);
             return;
         }
-        var exits = Database.APIGetRoomExits(input.Key, Context.FromEnvironment(input.Environment.ToEnvironment()), input.Options.ToMapperOptions());
+        var exits = Database.APIGetRoomExits(input.Key, Context.FromEnvironment(input?.Environment?.ToEnvironment()), input?.Options?.ToMapperOptions());
         await WriteJSON(ctx, ExitModel.FromList(exits));
     }
 }

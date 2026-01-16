@@ -187,18 +187,21 @@ public class Context
     {
         return BlockedLinks.ContainsKey(from) && BlockedLinks[from].ContainsKey(to);
     }
-    public static Context FromEnvironment(Environment env)
+    public static Context FromEnvironment(Environment? env)
     {
         var context = new Context();
-        context.WithTags(env.Tags);
-        context.WithRoomConditions(env.RoomConditions);
-        context.WithRooms(env.Rooms);
-        context.WithWhitelist(env.Whitelist);
-        context.WithBlacklist(env.Blacklist);
-        context.WithShortcuts(env.Shortcuts);
-        context.WithPaths(env.Paths);
-        context.WithBlockedLinks(env.BlockedLinks);
-        context.WithCommandCosts(env.CommandCosts);
+        if (env != null)
+        {
+            context.WithTags(env.Tags);
+            context.WithRoomConditions(env.RoomConditions);
+            context.WithRooms(env.Rooms);
+            context.WithWhitelist(env.Whitelist);
+            context.WithBlacklist(env.Blacklist);
+            context.WithShortcuts(env.Shortcuts);
+            context.WithPaths(env.Paths);
+            context.WithBlockedLinks(env.BlockedLinks);
+            context.WithCommandCosts(env.CommandCosts);
+        }
         return context;
     }
     public Environment ToEnvironment()

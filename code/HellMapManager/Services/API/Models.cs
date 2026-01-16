@@ -1356,8 +1356,8 @@ public class InputQueryPathAny()
     }
     public List<string> From { get; set; } = [];
     public List<string> Target { get; set; } = [];
-    public EnvironmentModel Environment { get; set; } = new();
-    public MapperOptionsModel Options { get; set; } = new();
+    public EnvironmentModel? Environment { get; set; } = new();
+    public MapperOptionsModel? Options { get; set; } = new();
 }
 
 public class InputQueryPath()
@@ -1379,8 +1379,8 @@ public class InputQueryPath()
     }
     public string Start { get; set; } = "";
     public List<string> Target { get; set; } = [];
-    public EnvironmentModel Environment { get; set; } = new();
-    public MapperOptionsModel Options { get; set; } = new();
+    public EnvironmentModel? Environment { get; set; } = new();
+    public MapperOptionsModel? Options { get; set; } = new();
 }
 
 public class InputDilate()
@@ -1401,8 +1401,8 @@ public class InputDilate()
     }
     public List<string> Source { get; set; } = [];
     public int Iterations { get; set; } = 1;
-    public EnvironmentModel Environment { get; set; } = new();
-    public MapperOptionsModel Options { get; set; } = new();
+    public EnvironmentModel? Environment { get; set; } = new();
+    public MapperOptionsModel? Options { get; set; } = new();
 }
 public class InputTrackExit()
 {
@@ -1422,8 +1422,8 @@ public class InputTrackExit()
     }
     public string Start { get; set; } = "";
     public string Command { get; set; } = "";
-    public EnvironmentModel Environment { get; set; } = new();
-    public MapperOptionsModel Options { get; set; } = new();
+    public EnvironmentModel? Environment { get; set; } = new();
+    public MapperOptionsModel? Options { get; set; } = new();
 }
 public class InputKey()
 {
@@ -1461,8 +1461,8 @@ public class InputGetRoom()
         return null;
     }
     public string Key { get; set; } = "";
-    public EnvironmentModel Environment { get; set; } = new();
-    public MapperOptionsModel Options { get; set; } = new();
+    public EnvironmentModel? Environment { get; set; } = new();
+    public MapperOptionsModel? Options { get; set; } = new();
 
 }
 
