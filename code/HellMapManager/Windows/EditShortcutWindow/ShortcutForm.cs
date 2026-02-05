@@ -34,7 +34,7 @@ public partial class ShortcutForm : ObservableObject
             To = To,
             RoomConditions = [.. RoomConditions],
             Conditions = [.. Conditions],
-            Cost = Cost,
+            Cost = Cost??1,
             Group = Group,
             Desc = Desc,
         };
@@ -78,7 +78,7 @@ public partial class ShortcutForm : ObservableObject
 
     public ObservableCollection<ValueCondition> Conditions { get; set; } = [];
 
-    public int Cost { get; set; } = 1;
+    public int? Cost { get; set; } = 1;
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
     public string Validate()

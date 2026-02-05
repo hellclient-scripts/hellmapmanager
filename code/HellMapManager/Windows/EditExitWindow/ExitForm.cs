@@ -29,7 +29,7 @@ public partial class ExitForm : ObservableObject
             Command = Command,
             To = To,
             Conditions = [.. Conditions],
-            Cost = Cost
+            Cost = Cost??1,
         };
     }
     public Exit? Raw;
@@ -37,7 +37,7 @@ public partial class ExitForm : ObservableObject
     public string Command { get; set; } = "";
     public string To { get; set; } = "";
     public ObservableCollection<ValueCondition> Conditions { get; set; } = [];
-    public int Cost { get; set; } = 1;
+    public int? Cost { get; set; } = 1;
 
     public void Arrange()
     {

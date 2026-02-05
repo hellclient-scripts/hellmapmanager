@@ -18,12 +18,12 @@ public partial class TagForm : ObservableObject
     }
     public ValueTag ToTag()
     {
-        return new ValueTag(Key, Value);
+        return new ValueTag(Key, Value??1);
     }
     public ValueTag? Raw;
     public ExternalValidator ExternalValidator;
     public string Key { get; set; } = "";
-    public int Value { get; set; } = 1;
+    public int? Value { get; set; } = 1;
     public string Validate()
     {
         var err = ExternalValidator(this);

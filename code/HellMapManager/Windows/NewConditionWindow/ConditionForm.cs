@@ -19,12 +19,12 @@ public partial class ConditionForm : ObservableObject
     }
     public ValueCondition ToCondition()
     {
-        return new ValueCondition(Key, Value, Not);
+        return new ValueCondition(Key, Value??1, Not);
     }
     public ValueCondition? Raw;
     public ExternalValidator ExternalValidator;
     public bool Not { get; set; } = false;
-    public int Value { get; set; } = 1;
+    public int? Value { get; set; } = 1;
     public string Key { get; set; } = "";
     public string Validate()
     {

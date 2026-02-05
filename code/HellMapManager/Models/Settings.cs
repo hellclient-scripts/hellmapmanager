@@ -36,12 +36,12 @@ public class APIConfig
     }
     public void Apply(Settings settings)
     {
-        settings.APIPort = APIPort;
+        settings.APIPort = APIPort??Settings.DefaultAPIPort;
         settings.APIUserName = APIUserName;
         settings.APIPassWord = APIPassWord;
         settings.APIEnabled = APIEnabled;
     }
-    public int APIPort { get; set; } = 0;
+    public int? APIPort { get; set; } = 0;
     public string APIUserName { get; set; } = "";
     public string APIPassWord { get; set; } = "";
     public bool APIEnabled { get; set; } = false;
