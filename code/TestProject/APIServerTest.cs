@@ -37,7 +37,7 @@ public class APIServerTest
         Assert.Equal(MapDatabase.Version, mapDatabase.APIVersion());
         var resp = await Post($"http://localhost:{server.Port}" + "/api/version", typeof(string), "");
         var result = JsonSerializer.Deserialize(resp, typeof(int), APIJsonSerializerContext.Default) as int?;
-        Assert.Equal(1004, result);
+        Assert.Equal(1005, result);
         await server.Stop();
     }
     [Fact]
@@ -2574,6 +2574,111 @@ public class APIServerTest
         rooms = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
         rooms.Sort();
         Assert.Equal("key3;key6", string.Join(";", rooms));
+
+
+        //CommandNotContains
+        opt = new MapperOptions();
+        InitContext(ctx);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/trackexit", typeof(InputTrackExit), new InputTrackExit()
+        {
+            Start = "key6",
+            Command = "A>1",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        exit = JsonSerializer.Deserialize(resp, typeof(string), APIJsonSerializerContext.Default) as string ?? "";
+        Assert.Equal("key1", exit);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/querypathall", typeof(InputQueryPath), new InputQueryPath()
+        {
+            Start = "key6",
+            Target = ["key1", "key5"],
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
+        Assert.NotNull(queryresult);
+        Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/querypathany", typeof(InputQueryPathAny), new InputQueryPathAny()
+        {
+            From = ["key6"],
+            Target = ["key1", "key5"],
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
+        Assert.NotNull(queryresult);
+        Assert.Equal("A>1", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/querypathordered", typeof(InputQueryPath), new InputQueryPath()
+        {
+            Start = "key6",
+            Target = ["key1", "key5"],
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
+        Assert.NotNull(queryresult);
+        Assert.Equal("A>1;1>3;3>4;4>5", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
+        {
+            Source = ["key6"],
+            Iterations = 1,
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        rooms = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
+        rooms.Sort();
+        Assert.Equal("key1;key3;key6", string.Join(";", rooms));
+        opt.WithCommandNotContains([">3"]);
+               resp = await Post($"http://localhost:{server.Port}" + "/api/db/trackexit", typeof(InputTrackExit), new InputTrackExit()
+        {
+            Start = "key1",
+            Command = "1>3",
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        exit = JsonSerializer.Deserialize(resp, typeof(string), APIJsonSerializerContext.Default) as string ?? "";
+        Assert.Equal("", exit);
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/querypathall", typeof(InputQueryPath), new InputQueryPath()
+        {
+            Start = "key1",
+            Target = ["key4", "key6"],
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
+        Assert.NotNull(queryresult);
+        Assert.Equal("A>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/querypathany", typeof(InputQueryPathAny), new InputQueryPathAny()
+        {
+            From = ["key4"],
+            Target = ["key6", "key3"],
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
+        Assert.NotNull(queryresult);
+        Assert.Equal("A>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/querypathordered", typeof(InputQueryPath), new InputQueryPath()
+        {
+            Start = "key1",
+            Target = ["key5", "key6"],
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        queryresult = JsonSerializer.Deserialize(resp, typeof(QueryResultModel), APIJsonSerializerContext.Default) as QueryResultModel;
+        Assert.NotNull(queryresult);
+        Assert.Equal("A>6C", Step.JoinCommands(";", StepModel.ToStepList(queryresult!.Steps)));
+        resp = await Post($"http://localhost:{server.Port}" + "/api/db/dilate", typeof(InputDilate), new InputDilate()
+        {
+            Source = ["key4"],
+            Iterations = 1,
+            Environment = EnvironmentModel.From(ctx.ToEnvironment()),
+            Options = MapperOptionsModel.From(opt),
+        });
+        rooms = JsonSerializer.Deserialize(resp, typeof(List<string>), APIJsonSerializerContext.Default) as List<string> ?? [];
+        rooms.Sort();
+        Assert.Equal("key1;key4;key5;key6", string.Join(";", rooms));
+
 
         await server.Stop();
         return;

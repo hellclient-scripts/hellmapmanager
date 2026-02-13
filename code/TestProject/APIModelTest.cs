@@ -1626,7 +1626,8 @@ public class APIModelTest
             MaxExitCost = 500,
             MaxTotalCost = 2000,
             DisableShortcuts = true,
-            CommandWhitelist = ["cmd1", "cmd2"]
+            CommandWhitelist = ["cmd1", "cmd2"],
+            CommandNotContains = ["cmd3", "cmd4"]
         };
         model.CommandWhitelist.Sort();
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.MapperOptionsModel);
@@ -1636,6 +1637,8 @@ public class APIModelTest
         Assert.Equal(model.DisableShortcuts, deserialized?.DisableShortcuts);
         deserialized?.CommandWhitelist.Sort();
         Assert.Equal(model.CommandWhitelist, deserialized?.CommandWhitelist);
+        deserialized?.CommandNotContains.Sort();
+        Assert.Equal(model.CommandNotContains, deserialized?.CommandNotContains);
         var raw = model.ToMapperOptions();
         var fromRaw = MapperOptionsModel.From(raw);
         Assert.Equal(model.MaxExitCost, fromRaw.MaxExitCost);
@@ -1643,12 +1646,15 @@ public class APIModelTest
         Assert.Equal(model.DisableShortcuts, fromRaw.DisableShortcuts);
         fromRaw.CommandWhitelist.Sort();
         Assert.Equal(model.CommandWhitelist, fromRaw.CommandWhitelist);
+        fromRaw.CommandNotContains.Sort();
+        Assert.Equal(model.CommandNotContains, fromRaw.CommandNotContains);
         var emptyModel = new MapperOptionsModel();
         var fromEmpty = MapperOptionsModel.From(emptyModel.ToMapperOptions());
         Assert.Equal(0, fromEmpty.MaxExitCost);
         Assert.Equal(0, fromEmpty.MaxTotalCost);
         Assert.False(fromEmpty.DisableShortcuts);
         Assert.Empty(fromEmpty.CommandWhitelist);
+        Assert.Empty(fromEmpty.CommandNotContains);
     }
     [Fact]
     public void InputQueryPathAnyTest()

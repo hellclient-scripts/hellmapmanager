@@ -1,5 +1,8 @@
 # API变更记录
 
+## Version 1005
+
+* MapperOptions加入 CommandNotContains属性
 
 ## Version 1004
 

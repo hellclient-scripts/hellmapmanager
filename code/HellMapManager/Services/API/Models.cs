@@ -1319,6 +1319,7 @@ public class MapperOptionsModel
             MaxTotalCost = options.MaxTotalCost,
             DisableShortcuts = options.DisableShortcuts,
             CommandWhitelist = [.. options.CommandWhitelist.Keys],
+            CommandNotContains = [.. options.CommandNotContains],
         };
     }
     public MapperOptions ToMapperOptions()
@@ -1328,13 +1329,14 @@ public class MapperOptionsModel
             MaxExitCost = MaxExitCost ?? 0,
             MaxTotalCost = MaxTotalCost ?? 0,
             DisableShortcuts = DisableShortcuts ?? false,
-        }.WithCommandWhitelist(CommandWhitelist);
+        }.WithCommandWhitelist(CommandWhitelist).WithCommandNotContains(CommandNotContains);
     }
     public int? MaxExitCost { get; set; } = 0;
     public int? MaxTotalCost { get; set; } = 0;
     public bool? DisableShortcuts { get; set; } = false;
 
     public List<string> CommandWhitelist { get; set; } = [];
+    public List<string> CommandNotContains { get; set; } = [];
 }
 
 public class InputQueryPathAny()

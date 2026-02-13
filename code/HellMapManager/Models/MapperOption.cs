@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace HellMapManager.Models;
 
@@ -13,6 +14,8 @@ public class MapperOptions
     public bool DisableShortcuts = false;
 
     public Dictionary<string, bool> CommandWhitelist = new();
+
+    public List<string> CommandNotContains = new();
     public MapperOptions WithMaxExitCost(int cost)
     {
         MaxExitCost = cost;
@@ -41,9 +44,32 @@ public class MapperOptions
         CommandWhitelist.Clear();
         return this;
     }
+    public MapperOptions WithCommandNotContains(List<string> list)
+    {
+        CommandNotContains = list;
+        return this;
+    }
+    public MapperOptions ClearCommandNotContains()
+    {
+        CommandNotContains.Clear();
+        return this;
+    }
     public bool ValidateCommand(string command)
     {
-        if (CommandWhitelist.Count == 0) return true;
-        return CommandWhitelist.ContainsKey(command);
+        if (CommandWhitelist.Count != 0 && !CommandWhitelist.ContainsKey(command))
+        {
+            return false;
+        }
+        if (CommandNotContains.Count != 0)
+        {
+            foreach (var item in CommandNotContains)
+            {
+                if (command.Contains(item))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

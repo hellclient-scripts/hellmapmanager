@@ -532,6 +532,26 @@ public class MapTest()
         rooms = mapDatabase.APIDilate(["key6"], 1, ctx, opt);
         rooms.Sort();
         Assert.Equal("key3;key6", string.Join(";", rooms));
+        
+        //CommandNotContains
+        opt = new MapperOptions();
+        InitContext(ctx);
+        opt.WithCommandNotContains([">3"]);
+        exit = mapDatabase.APITrackExit("key1", "1>3", ctx, opt);
+        Assert.Equal("", exit);
+        qr = mapDatabase.APIQueryPathAll("key1", ["key4", "key6"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>6C", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathAny(["key4"], ["key6", "key3"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>6C", Step.JoinCommands(";", qr.Steps));
+        qr = mapDatabase.APIQueryPathOrdered("key1", ["key5", "key6"], ctx, opt);
+        Assert.NotNull(qr);
+        Assert.Equal("A>6C", Step.JoinCommands(";", qr.Steps));
+        rooms = mapDatabase.APIDilate(["key4"], 1, ctx, opt);
+        rooms.Sort();
+        Assert.Equal("key1;key4;key5;key6", string.Join(";", rooms));
+
 
     }
     [Fact]

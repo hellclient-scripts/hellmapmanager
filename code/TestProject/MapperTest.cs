@@ -190,6 +190,12 @@ public class MapperTest()
         opt.ClearCommandWhitelist();
         opt.WithCommandWhitelist(["cmd2"]);
         Assert.False(mapper.ValidateExit("key1", exit, 10));
+        opt.ClearCommandWhitelist();
+        opt.WithCommandNotContains(["md1"]);
+        Assert.False(mapper.ValidateExit("key1", exit, 10));
+        opt.ClearCommandNotContains();
+        Assert.True(mapper.ValidateExit("key1", exit, 10));
+
     }
     [Fact]
     public void TestWalkingStep()
