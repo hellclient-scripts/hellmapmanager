@@ -1266,6 +1266,43 @@ public class CommandCostModel()
     public int Cost { get; set; } = 0;
 
 }
+public class RoomTagModel()
+{
+    public static RoomTagModel From(RoomTag tag)
+    {
+        return new RoomTagModel()
+        {
+            Room = tag.Room,
+            Key = tag.Key,
+            Value = tag.Value,
+        };
+    }
+    public RoomTag ToRoomTag()
+    {
+        return new RoomTag(Room, Key, Value);
+    }
+    public static List<RoomTagModel> FromRoomTagList(List<RoomTag> tags)
+    {
+        var list = new List<RoomTagModel>();
+        foreach (var tag in tags.Where(x => x is not null))
+        {
+            list.Add(From(tag));
+        }
+        return list;
+    }
+    public static List<RoomTag> ToRoomTagList(List<RoomTagModel> tagModels)
+    {
+        var list = new List<RoomTag>();
+        foreach (var tagModel in tagModels.Where(x => x is not null))
+        {
+            list.Add(tagModel.ToRoomTag());
+        }
+        return list;
+    }
+    public string Room { get; set; } = "";
+    public string Key { get; set; } = "";
+    public int Value { get; set; } = 1;
+}
 public class EnvironmentModel()
 {
     public static EnvironmentModel From(Models.Environment data)
@@ -1281,6 +1318,7 @@ public class EnvironmentModel()
             Blacklist = [.. data.Blacklist],
             BlockedLinks = LinkModel.FromLinkList(data.BlockedLinks),
             CommandCosts = CommandCostModel.FromCommandCostList(data.CommandCosts),
+            RoomTags = RoomTagModel.FromRoomTagList(data.RoomTags),
         };
     }
     public Models.Environment ToEnvironment()
@@ -1296,6 +1334,7 @@ public class EnvironmentModel()
             Blacklist = [.. Blacklist ?? []],
             BlockedLinks = LinkModel.ToLinkList(BlockedLinks ?? []),
             CommandCosts = CommandCostModel.ToCommandCostList(CommandCosts ?? []),
+            RoomTags = RoomTagModel.ToRoomTagList(RoomTags ?? []),
         };
     }
     public List<ValueTagModel>? Tags { get; set; } = [];
@@ -1307,7 +1346,7 @@ public class EnvironmentModel()
     public List<string>? Blacklist { get; set; } = [];
     public List<LinkModel>? BlockedLinks { get; set; } = [];
     public List<CommandCostModel>? CommandCosts { get; set; } = [];
-
+    public List<RoomTagModel>? RoomTags { get; set; } = [];
 }
 public class MapperOptionsModel
 {

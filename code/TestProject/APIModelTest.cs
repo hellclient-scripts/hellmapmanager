@@ -1538,6 +1538,14 @@ public class APIModelTest
                     Cost = 20,
                 }
             ]),
+            RoomTags = new([
+                new RoomTagModel()
+                {
+                    Room="RoomTagRoom",
+                    Key = "roomTagKey",
+                    Value = 2,
+                }
+            ]),
         };
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.EnvironmentModel);
         var deserialized = JsonSerializer.Deserialize(json, APIJsonSerializerContext.Default.EnvironmentModel);
@@ -1606,6 +1614,14 @@ public class APIModelTest
             Assert.Equal(model.CommandCosts[i].To, deserialized?.CommandCosts[i].To);
             Assert.Equal(model.CommandCosts[i].Cost, deserialized?.CommandCosts[i].Cost);
         }
+        Assert.Equal(model.RoomTags.Count, deserialized?.RoomTags.Count);
+        for (int i = 0; i < model.RoomTags.Count; i++)
+        {
+            Assert.Equal(model.RoomTags[i].Room, deserialized?.RoomTags[i].Room);
+            Assert.Equal(model.RoomTags[i].Key, deserialized?.RoomTags[i].Key);
+            Assert.Equal(model.RoomTags[i].Value, deserialized?.RoomTags[i].Value);
+        }
+        
         var emptyModel = new EnvironmentModel();
         var fromEmpty = EnvironmentModel.From(emptyModel.ToEnvironment());
         Assert.Empty(fromEmpty.Tags);
@@ -1617,6 +1633,8 @@ public class APIModelTest
         Assert.Empty(fromEmpty.Blacklist);
         Assert.Empty(fromEmpty.BlockedLinks);
         Assert.Empty(fromEmpty.CommandCosts);
+        Assert.Empty(fromEmpty.RoomTags);
+
     }
     [Fact]
     public void MapperOptionsModelTest()

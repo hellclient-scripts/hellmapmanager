@@ -328,6 +328,20 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
         }
         return exit.Cost;
     }
+    //根据上下文获取房间标签
+    public List<ValueTag> GetRoomTags(Room room)
+    {
+        List<ValueTag> result = [.. room.Tags];
+        if (Context.RoomTags.TryGetValue(room.Key, out var list))
+        {
+            result.AddRange(list);
+        }
+        if (Context.RoomTags.TryGetValue("", out var publiclist))
+        {
+            result.AddRange(publiclist);
+        }
+        return result;
+    }
     //获取房间出口信息
     public List<Exit> GetRoomExits(Room room)
     {
@@ -344,7 +358,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             MapFile.Map.Shortcuts.ForEach(e =>
             {
                 //符合条件则加入列表
-                if (ValueTag.ValidateConditions(room.Tags, e.RoomConditions))
+                if (ValueTag.ValidateConditions(GetRoomTags(room), e.RoomConditions))
                 {
                     result.Add(e);
                 }
@@ -353,7 +367,7 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             Context.Shortcuts.ForEach(e =>
             {
                 //符合条件则加入列表
-                if (ValueTag.ValidateConditions(room.Tags, e.RoomConditions))
+                if (ValueTag.ValidateConditions(GetRoomTags(room), e.RoomConditions))
                 {
                     result.Add(e);
                 }
