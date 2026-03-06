@@ -10,6 +10,12 @@ public class Variable
     public string Value { get; set; } = "";
     public string Group { get; set; } = "";
     public string Desc { get; set; } = "";
+    public string ValueInOneline{
+        get
+        {
+            return Value.Replace("\n", "\\n");
+        }
+    }
     public bool Validated()
     {
         return ItemKey.Validate(Key);
