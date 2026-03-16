@@ -2,7 +2,7 @@ namespace HellMapManager.Misc;
 
 public class AppVersion(int major, int minor, int patch)
 {
-    public static AppVersion Current { get; } = new(0, 20260221, 0);
+    public static AppVersion Current { get; } = new(0, 20260316, 0);
     public int Major { get; } = major;
     public int Minor { get; } = minor;
     public int Patch { get; } = patch;
