@@ -70,6 +70,10 @@
 | --CommandCosts.Command                       | string    | 指令             |
 | --CommandCosts.To                            | string    | 指令目标         |
 | --CommandCosts.Cost                          | int       | 指令消耗         |
+| RoomTags                                     | []object? | 临时的房间标签   |
+| --RoomTags.Room                              | string    | 房间名           |
+| --RoomTags.Key                               | string    | 标签主键         |
+| --RoomTags.Value                             | int       | 标签值           |
 
 * Tags 是当前环境的标签列表，用于匹配 出口/捷径 里的环境条件
 * RoomConditions 是环境的房间条件列表，用于过滤房间的Tags
@@ -80,9 +84,11 @@
 * Blacklisk是房间黑名单，不进入黑名单中的房间
 * BlockedLinks是临时封锁的连接，一般用于被拦路的情况
 * CommandCosts是临时指令消耗，用于通过指定的指令到达指定房间的消耗。Command为空在当前版本属于Undefined Behavior。
+* RoomTags为制定房间加上制定的房间标签。如果Room为空字符串，则为所有房间加上对应的房间标签
 
 **版本更新**
 
+* 1006版本后，加入RoomTags
 * 1002版本后，CommandCosts支持To为空字符串作为通配符，匹配所有出口。
 
 ### 地图选项 MapperOptions

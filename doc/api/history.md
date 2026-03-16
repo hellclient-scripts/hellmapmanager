@@ -1,5 +1,13 @@
 # API变更记录
 
+## Version 1006
+
+* Environment 加入RoomTags属性
+* Context 加入RoomsTags属性，WithRoomsTags方法和RoomsTags方法
+
+## Version 1005
+
+* MapperOptions加入 CommandNotContains属性
 
 ## Version 1004
 

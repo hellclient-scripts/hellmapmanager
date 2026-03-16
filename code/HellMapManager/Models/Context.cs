@@ -4,6 +4,14 @@ using System.Linq;
 
 namespace HellMapManager.Models;
 
+public class RoomTag(string room, string key, int value)
+{
+    public string Room { get; set; } = room;
+    public string Key { get; set; } = key;
+    public int Value { get; set; } = value;
+}
+
+
 public class Path : Exit
 {
     public string From { get; set; } = "";
@@ -31,7 +39,7 @@ public class Environment
     public List<string> Blacklist = [];
     public List<Link> BlockedLinks = [];
     public List<CommandCost> CommandCosts = [];
-
+    public List<RoomTag> RoomTags = [];
 }
 
 //移动规划的上下文
@@ -55,6 +63,7 @@ public class Context
     public Dictionary<string, Dictionary<string, bool>> BlockedLinks = [];
     //临时指令消耗列表
     public Dictionary<string, Dictionary<string, int>> CommandCosts = [];
+    public Dictionary<string, List<ValueTag>> RoomTags = [];
     public Context ClearTags()
     {
         Tags.Clear();
@@ -65,6 +74,26 @@ public class Context
         foreach (var tag in tags)
         {
             Tags[tag.Key] = tag.Value;
+        }
+        return this;
+    }
+    public Context ClearRoomTags()
+    {
+        RoomTags.Clear();
+        return this;
+    }
+    public Context WithRoomTags(List<RoomTag> tags)
+    {
+        foreach (var tag in tags)
+        {
+            if (RoomTags.TryGetValue(tag.Room, out var roomTags))
+            {
+                RoomTags[tag.Room].Add(new ValueTag(tag.Key, tag.Value));
+            }
+            else
+            {
+                RoomTags[tag.Room] = [new ValueTag(tag.Key, tag.Value)];
+            }
         }
         return this;
     }
@@ -201,6 +230,7 @@ public class Context
             context.WithPaths(env.Paths);
             context.WithBlockedLinks(env.BlockedLinks);
             context.WithCommandCosts(env.CommandCosts);
+            context.WithRoomTags(env.RoomTags);
         }
         return context;
     }
@@ -229,6 +259,13 @@ public class Context
             foreach (var t in c.Value)
             {
                 env.CommandCosts.Add(new CommandCost(c.Key, t.Key, t.Value));
+            }
+        }
+        foreach (var r in RoomTags)
+        {
+            foreach (var t in r.Value)
+            {
+                env.RoomTags.Add(new RoomTag(r.Key, t.Key, t.Value));
             }
         }
         return env;

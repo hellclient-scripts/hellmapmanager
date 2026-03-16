@@ -1538,6 +1538,14 @@ public class APIModelTest
                     Cost = 20,
                 }
             ]),
+            RoomTags = new([
+                new RoomTagModel()
+                {
+                    Room="RoomTagRoom",
+                    Key = "roomTagKey",
+                    Value = 2,
+                }
+            ]),
         };
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.EnvironmentModel);
         var deserialized = JsonSerializer.Deserialize(json, APIJsonSerializerContext.Default.EnvironmentModel);
@@ -1606,6 +1614,14 @@ public class APIModelTest
             Assert.Equal(model.CommandCosts[i].To, deserialized?.CommandCosts[i].To);
             Assert.Equal(model.CommandCosts[i].Cost, deserialized?.CommandCosts[i].Cost);
         }
+        Assert.Equal(model.RoomTags.Count, deserialized?.RoomTags.Count);
+        for (int i = 0; i < model.RoomTags.Count; i++)
+        {
+            Assert.Equal(model.RoomTags[i].Room, deserialized?.RoomTags[i].Room);
+            Assert.Equal(model.RoomTags[i].Key, deserialized?.RoomTags[i].Key);
+            Assert.Equal(model.RoomTags[i].Value, deserialized?.RoomTags[i].Value);
+        }
+        
         var emptyModel = new EnvironmentModel();
         var fromEmpty = EnvironmentModel.From(emptyModel.ToEnvironment());
         Assert.Empty(fromEmpty.Tags);
@@ -1617,6 +1633,8 @@ public class APIModelTest
         Assert.Empty(fromEmpty.Blacklist);
         Assert.Empty(fromEmpty.BlockedLinks);
         Assert.Empty(fromEmpty.CommandCosts);
+        Assert.Empty(fromEmpty.RoomTags);
+
     }
     [Fact]
     public void MapperOptionsModelTest()
@@ -1626,7 +1644,8 @@ public class APIModelTest
             MaxExitCost = 500,
             MaxTotalCost = 2000,
             DisableShortcuts = true,
-            CommandWhitelist = ["cmd1", "cmd2"]
+            CommandWhitelist = ["cmd1", "cmd2"],
+            CommandNotContains = ["cmd3", "cmd4"]
         };
         model.CommandWhitelist.Sort();
         var json = JsonSerializer.Serialize(model, APIJsonSerializerContext.Default.MapperOptionsModel);
@@ -1636,6 +1655,8 @@ public class APIModelTest
         Assert.Equal(model.DisableShortcuts, deserialized?.DisableShortcuts);
         deserialized?.CommandWhitelist.Sort();
         Assert.Equal(model.CommandWhitelist, deserialized?.CommandWhitelist);
+        deserialized?.CommandNotContains.Sort();
+        Assert.Equal(model.CommandNotContains, deserialized?.CommandNotContains);
         var raw = model.ToMapperOptions();
         var fromRaw = MapperOptionsModel.From(raw);
         Assert.Equal(model.MaxExitCost, fromRaw.MaxExitCost);
@@ -1643,12 +1664,15 @@ public class APIModelTest
         Assert.Equal(model.DisableShortcuts, fromRaw.DisableShortcuts);
         fromRaw.CommandWhitelist.Sort();
         Assert.Equal(model.CommandWhitelist, fromRaw.CommandWhitelist);
+        fromRaw.CommandNotContains.Sort();
+        Assert.Equal(model.CommandNotContains, fromRaw.CommandNotContains);
         var emptyModel = new MapperOptionsModel();
         var fromEmpty = MapperOptionsModel.From(emptyModel.ToMapperOptions());
         Assert.Equal(0, fromEmpty.MaxExitCost);
         Assert.Equal(0, fromEmpty.MaxTotalCost);
         Assert.False(fromEmpty.DisableShortcuts);
         Assert.Empty(fromEmpty.CommandWhitelist);
+        Assert.Empty(fromEmpty.CommandNotContains);
     }
     [Fact]
     public void InputQueryPathAnyTest()

@@ -8,7 +8,7 @@ namespace HellMapManager.Cores;
 public partial class MapDatabase()
 {
     public ReaderWriterLockSlim _lock = new();
-    public const int Version = 1004;
+    public const int Version = 1006;
     public MapFile? Current;
     public Settings Settings = new();
 

@@ -190,6 +190,12 @@ public class MapperTest()
         opt.ClearCommandWhitelist();
         opt.WithCommandWhitelist(["cmd2"]);
         Assert.False(mapper.ValidateExit("key1", exit, 10));
+        opt.ClearCommandWhitelist();
+        opt.WithCommandNotContains(["md1"]);
+        Assert.False(mapper.ValidateExit("key1", exit, 10));
+        opt.ClearCommandNotContains();
+        Assert.True(mapper.ValidateExit("key1", exit, 10));
+
     }
     [Fact]
     public void TestWalkingStep()
@@ -293,11 +299,23 @@ public class MapperTest()
             Command="cmd2",
             To="key4",
             RoomConditions=[
-                new ValueCondition("tag1", 1, true)
+                new ValueCondition("tag1", 1, true),
             ],
             Cost=1,
         },
         ]);
+        md.APIInsertShortcuts([new Shortcut()
+        {
+            Key="eshortcut2",
+            Command="ecmd2",
+            To="key4",
+            RoomConditions=[
+                new ValueCondition("etag1", 1, false),
+            ],
+            Cost=1,
+        },
+        ]);
+
         exits = mapper.GetRoomExits(room);
         Assert.Equal(3, exits.Count);
         ctx.WithShortcuts([
@@ -327,6 +345,7 @@ public class MapperTest()
         opt.WithDisableShortcuts(true);
         exits = mapper.GetRoomExits(room);
         Assert.Equal(2, exits.Count);
+        opt.WithDisableShortcuts(false);
         ctx.WithPaths([new HellMapManager.Models.Path(){
             From="key1",
             To="key6",
@@ -334,7 +353,22 @@ public class MapperTest()
             Cost=10,
         }]);
         exits = mapper.GetRoomExits(room);
-        Assert.Equal(3, exits.Count);
+        Assert.Equal(5, exits.Count);
+        ctx.WithRoomTags([new RoomTag("key1", "etag1", 5)]);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(6, exits.Count);
+        ctx.ClearRoomTags();
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(5, exits.Count);
+        ctx.WithRoomTags([new RoomTag("key2", "etag1", 5)]);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(5, exits.Count);
+        ctx.ClearRoomTags();
+        ctx.WithRoomTags([new RoomTag("", "etag1", 5)]);
+        exits = mapper.GetRoomExits(room);
+        Assert.Equal(6, exits.Count);
+        ctx.ClearRoomTags();
+
     }
     [Fact]
     public void TestValidateToWalkingStep()

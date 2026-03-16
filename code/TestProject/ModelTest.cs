@@ -1620,6 +1620,20 @@ public class ModelTest
         Assert.Equal(1, ctx.CommandCosts["cmd1"]["to1"]);
         Assert.Equal(2, ctx.CommandCosts["cmd2"]["to1"]);
         Assert.Equal(3, ctx.CommandCosts["cmd1"]["to3"]);
+
+        Assert.Empty(ctx.RoomTags);
+        Assert.Equal(ctx, ctx.WithRoomTags([
+            new RoomTag("room1","tag1",1),
+            new RoomTag("room2","tag2",2),
+            new RoomTag("room2","tag3",2),
+        ]));
+        Assert.Equal(2, ctx.RoomTags.Count);
+        Assert.Equal("tag1", ctx.RoomTags["room1"][0].Key);
+        Assert.Equal(1, ctx.RoomTags["room1"][0].Value);
+        Assert.Equal("tag2", ctx.RoomTags["room2"][0].Key);
+        Assert.Equal(2, ctx.RoomTags["room2"][0].Value);
+        Assert.Equal("tag3", ctx.RoomTags["room2"][1].Key);
+        Assert.Equal(2, ctx.RoomTags["room2"][1].Value);
         Assert.Equal(ctx, ctx.ClearTags());
         Assert.Empty(ctx.Tags);
         Assert.Equal(ctx, ctx.ClearRoomConditions());
@@ -1638,6 +1652,8 @@ public class ModelTest
         Assert.Empty(ctx.BlockedLinks);
         Assert.Equal(ctx, ctx.ClearCommandCosts());
         Assert.Empty(ctx.CommandCosts);
+        Assert.Equal(ctx, ctx.ClearRoomTags());
+        Assert.Empty(ctx.RoomTags);
     }
     [Fact]
     public void TestEnvironment()
@@ -1653,6 +1669,7 @@ public class ModelTest
             Paths = [new HellMapManager.Models.Path() { To = "to1", From = "from1", Command = "cmd1" }, new HellMapManager.Models.Path() { To = "to2", From = "from2", Command = "cmd2" }, new HellMapManager.Models.Path() { To = "to3", From = "from1", Command = "cmd3" }],
             BlockedLinks = [new Link("from1", "to1"), new Link("from2", "to2"), new Link("from1", "to3")],
             CommandCosts = [new CommandCost("cmd1", "to1", 1), new CommandCost("cmd2", "to1", 2), new CommandCost("cmd1", "to3", 3)],
+            RoomTags = [new RoomTag("room1", "tag1", 1), new RoomTag("room2", "tag2", 2)],
         };
         var ctx = Context.FromEnvironment(env);
         Assert.Equal(2, ctx.Tags.Count);
@@ -1764,6 +1781,14 @@ public class ModelTest
             Assert.Equal(env.CommandCosts[i].Command, env2.CommandCosts[i].Command);
             Assert.Equal(env.CommandCosts[i].To, env2.CommandCosts[i].To);
             Assert.Equal(env.CommandCosts[i].Cost, env2.CommandCosts[i].Cost);
+        }
+        env.RoomTags.Sort((a, b) => a.Room.CompareTo(b.Room));
+        env2.RoomTags.Sort((a, b) => a.Room.CompareTo(b.Room));
+        for (var i = 0; i < env.RoomTags.Count; i++)
+        {
+            Assert.Equal(env.RoomTags[i].Room, env2.RoomTags[i].Room);
+            Assert.Equal(env.RoomTags[i].Key, env2.RoomTags[i].Key);
+            Assert.Equal(env.RoomTags[i].Value, env2.RoomTags[i].Value);
         }
     }
     [Fact]
