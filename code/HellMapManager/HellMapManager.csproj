@@ -1,7 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType Condition="'$(Configuration)' != 'Exe'">WinExe</OutputType>
+    <OutputType Condition="'$(Configuration)' != 'Exe' and '$(Configuration)' != 'Dll' and '$(Configuration)' != 'Static'">WinExe</OutputType>
     <OutputType Condition="'$(Configuration)' == 'Exe'">Exe</OutputType>
+    <OutputType Condition="'$(Configuration)' == 'Dll'">Library</OutputType>
+    <NativeLib Condition="'$(Configuration)' == 'Dll' or '$(Configuration)' == 'Static'">Shared</NativeLib>
+    <NativeLib Condition="'$(Configuration)' == 'Static'">Static</NativeLib>
     <OptimizationPreference Condition="'$(Configuration)' != 'Debug'">Size</OptimizationPreference>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -15,6 +18,7 @@
 		<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
     <UseAppHost>true</UseAppHost>
     <ApplicationIcon>Assets/app.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

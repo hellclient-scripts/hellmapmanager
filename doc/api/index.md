@@ -34,3 +34,4 @@ HellMapManager(HMM)支持以HTTP形式提供API服务，供有JSON处理和HTTP�
 * [搜索房间接口](./search.md) 根据条件或者预设搜索房间信息的接口。
 * [其他接口](./etc.md) 其他接口文档。
 * [变更记录](./history.md) API变更记录。
+* [动态链接](./dll.md) 通过动态链接的方式调用API
