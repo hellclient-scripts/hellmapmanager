@@ -164,7 +164,13 @@ public static class Dll
         var result = AppKernel.MapDatabase.CloseCurrent();
         return Output(result, encoding);
     }
-
+    [UnmanagedCallersOnly(EntryPoint = "create")]
+    public static IntPtr DllCreate(IntPtr input, int encoding)
+    {
+        Raw(input, encoding);
+        var result = AppKernel.MapDatabase.Create();
+        return Output(result, encoding);
+    }
     [UnmanagedCallersOnly(EntryPoint = "info")]
     public static IntPtr DllInfo(IntPtr input, int encoding)
     {

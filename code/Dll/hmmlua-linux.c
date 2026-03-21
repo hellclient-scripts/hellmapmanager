@@ -1,12 +1,25 @@
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
-#include <dlfcn.h>
+
+#ifdef _WIN32
+#include "windows.h"
+#define symLoad GetProcAddress
+#else
+#include "dlfcn.h"
+#define symLoad dlsym
+#endif
+
+#ifdef _WIN32
+HINSTANCE handle;
+#else
 void *handle;
+#endif
 
 char *(*c_version)(char *input, int encoding);
 char *(*c_import)(char *input, int encoding);
 char *(*c_export)(char *input, int encoding);
+char *(*c_create)(char *input, int encoding);
 char *(*c_close)(char *input, int encoding);
 char *(*c_info)(char *input, int encoding);
 char *(*c_listrooms)(char *input, int encoding);
@@ -55,7 +68,6 @@ char *(*c_setroomdata)(char *input, int encoding);
 char *(*c_tracelocation)(char *input, int encoding);
 char *(*c_getroomexits)(char *input, int encoding);
 
-
 static int
 l_version(lua_State *L)
 {
@@ -82,6 +94,16 @@ l_export(lua_State *L)
     const char *input = luaL_checkstring(L, 1);
     int encoding = luaL_checkinteger(L, 2);
     char *result = c_export((char *)input, encoding);
+    lua_pushstring(L, result);
+    return 1;
+}
+
+static int
+l_create(lua_State *L)
+{
+    const char *input = luaL_checkstring(L, 1);
+    int encoding = luaL_checkinteger(L, 2);
+    char *result = c_create((char *)input, encoding);
     lua_pushstring(L, result);
     return 1;
 }
@@ -558,15 +580,20 @@ l_getroomexits(lua_State *L)
 
 int luaopen_hmmlua(lua_State *L)
 {
-    handle = dlopen("./HellMapManager.so", RTLD_LAZY);
+#ifdef _WIN32
+    HINSTANCE handle = LoadLibrary("./HellMapManager.dll");
+#else
+    void *handle = dlopen("./HellMapManager.so", RTLD_LAZY);
+#endif
     if (!handle)
     {
-        luaL_error(L, "Failed to load HellMapManager.so: %s", dlerror());
+        luaL_error(L, "Failed to load HellMapManager: %s", dlerror());
         return 0;
     }
-        c_version = dlsym(handle, "version");
+    c_version = dlsym(handle, "version");
     c_import = dlsym(handle, "import");
     c_export = dlsym(handle, "export");
+    c_create = dlsym(handle, "create");
     c_close = dlsym(handle, "close");
     c_info = dlsym(handle, "info");
     c_listrooms = dlsym(handle, "listrooms");
@@ -618,6 +645,7 @@ int luaopen_hmmlua(lua_State *L)
         {"version", l_version},
         {"import", l_import},
         {"export", l_export},
+        {"create", l_create},
         {"close", l_close},
         {"info", l_info},
         {"listrooms", l_listrooms},

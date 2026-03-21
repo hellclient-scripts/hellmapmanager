@@ -34,6 +34,14 @@
 * 参数2为编码
 * 返回值为 json bool值是否成功(没有import地图为false)
 
+### create 创建地图
+
+创建地图
+
+* 参数1 随意
+* 参数2为编码
+* 返回值为 json bool值是否成功(已经打开地图为false)
+
 ### export 到处当前地图
 
 导出地图，可以用来import
@@ -46,3 +54,50 @@
 
 参考api中的对应接口，参数1为请求正文，参数2为 编码，返回值为接口响应
 
+* version
+* info
+* listrooms
+* removerooms
+* insertrooms
+* listmarkers
+* insertmarkers
+* removemarkers
+* listroutes
+* removeroutes
+* insertroutes
+* listtraces
+* removetraces
+* inserttraces
+* listregions
+* removeregions
+* insertregions
+* listshortcuts
+* removeshortcuts
+* insertshortcuts
+* listvariables
+* removevariables
+* insertvariables
+* listlandmarks
+* removelandmarks
+* insertlandmarks
+* listsnapshots
+* removesnapshots
+* insertsnapshots
+* querypathany
+* querypathall
+* querypathordered
+* dilate
+* trackexit
+* getvariable
+* queryregionrooms
+* getroom
+* clearsnapshots
+* takesnapshot
+* searchsnapshots
+* searchrooms
+* filterrooms
+* grouproom
+* tagroom
+* setroomdata
+* tracelocation
+* getroomexits

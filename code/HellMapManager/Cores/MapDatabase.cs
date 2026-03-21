@@ -115,8 +115,30 @@ public partial class MapDatabase()
         {
             _lock.ExitWriteLock();
         }
-
     }
+    public bool Create()
+    {
+        _lock.EnterWriteLock();
+        try
+        {
+            if (Current != null)
+            {
+                return false;
+            }
+            var mapfile = MapFile.Create("", "");
+            Current = mapfile;
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+    }
+
     public void SaveFile(string file)
     {
         if (Current != null)
