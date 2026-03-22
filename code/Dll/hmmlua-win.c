@@ -1,7 +1,3 @@
-#include ".\include\lua51\lua.h"
-#include ".\include\lua51\lauxlib.h"
-#include ".\include\lua51\lualib.h"
-
 #ifdef _WIN32
 #include "windows.h"
 #define symLoad GetProcAddress
@@ -15,6 +11,11 @@ HINSTANCE handle;
 #else
 void *handle;
 #endif
+
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
 
 char *(*c_version)(char *input, int encoding);
 char *(*c_import)(char *input, int encoding);
@@ -577,8 +578,11 @@ l_getroomexits(lua_State *L)
     lua_pushstring(L, result);
     return 1;
 }
-
+#ifdef _WIN32
+__declspec(dllexport) int luaopen_hmmlua(lua_State *L)
+#else
 int luaopen_hmmlua(lua_State *L)
+#endif
 {
 #ifdef _WIN32
     HINSTANCE handle = LoadLibrary("./HellMapManager.dll");
@@ -587,60 +591,59 @@ int luaopen_hmmlua(lua_State *L)
 #endif
     if (!handle)
     {
-        luaL_error(L, "Failed to load HellMapManager: %s", dlerror());
         return 0;
     }
-    c_version = dlsym(handle, "version");
-    c_import = dlsym(handle, "import");
-    c_export = dlsym(handle, "export");
-    c_create = dlsym(handle, "create");
-    c_close = dlsym(handle, "close");
-    c_info = dlsym(handle, "info");
-    c_listrooms = dlsym(handle, "listrooms");
-    c_removerooms = dlsym(handle, "removerooms");
-    c_insertrooms = dlsym(handle, "insertrooms");
-    c_listmarkers = dlsym(handle, "listmarkers");
-    c_insertmarkers = dlsym(handle, "insertmarkers");
-    c_removemarkers = dlsym(handle, "removemarkers");
-    c_listroutes = dlsym(handle, "listroutes");
-    c_removeroutes = dlsym(handle, "removeroutes");
-    c_insertroutes = dlsym(handle, "insertroutes");
-    c_listtraces = dlsym(handle, "listtraces");
-    c_removetraces = dlsym(handle, "removetraces");
-    c_inserttraces = dlsym(handle, "inserttraces");
-    c_listregions = dlsym(handle, "listregions");
-    c_removeregions = dlsym(handle, "removeregions");
-    c_insertregions = dlsym(handle, "insertregions");
-    c_listshortcuts = dlsym(handle, "listshortcuts");
-    c_removeshortcuts = dlsym(handle, "removeshortcuts");
-    c_insertshortcuts = dlsym(handle, "insertshortcuts");
-    c_listvariables = dlsym(handle, "listvariables");
-    c_removevariables = dlsym(handle, "removevariables");
-    c_insertvariables = dlsym(handle, "insertvariables");
-    c_listlandmarks = dlsym(handle, "listlandmarks");
-    c_removelandmarks = dlsym(handle, "removelandmarks");
-    c_insertlandmarks = dlsym(handle, "insertlandmarks");
-    c_listsnapshots = dlsym(handle, "listsnapshots");
-    c_removesnapshots = dlsym(handle, "removesnapshots");
-    c_insertsnapshots = dlsym(handle, "insertsnapshots");
-    c_querypathany = dlsym(handle, "querypathany");
-    c_querypathall = dlsym(handle, "querypathall");
-    c_querypathordered = dlsym(handle, "querypathordered");
-    c_dilate = dlsym(handle, "dilate");
-    c_trackexit = dlsym(handle, "trackexit");
-    c_getvariable = dlsym(handle, "getvariable");
-    c_queryregionrooms = dlsym(handle, "queryregionrooms");
-    c_getroom = dlsym(handle, "getroom");
-    c_clearsnapshots = dlsym(handle, "clearsnapshots");
-    c_takesnapshot = dlsym(handle, "takesnapshot");
-    c_searchsnapshots = dlsym(handle, "searchsnapshots");
-    c_searchrooms = dlsym(handle, "searchrooms");
-    c_filterrooms = dlsym(handle, "filterrooms");
-    c_grouproom = dlsym(handle, "grouproom");
-    c_tagroom = dlsym(handle, "tagroom");
-    c_setroomdata = dlsym(handle, "setroomdata");
-    c_tracelocation = dlsym(handle, "tracelocation");
-    c_getroomexits = dlsym(handle, "getroomexits");
+    c_version = symLoad(handle, "version");
+    c_import = symLoad(handle, "import");
+    c_export = symLoad(handle, "export");
+    c_create = symLoad(handle, "create");
+    c_close = symLoad(handle, "close");
+    c_info = symLoad(handle, "info");
+    c_listrooms = symLoad(handle, "listrooms");
+    c_removerooms = symLoad(handle, "removerooms");
+    c_insertrooms = symLoad(handle, "insertrooms");
+    c_listmarkers = symLoad(handle, "listmarkers");
+    c_insertmarkers = symLoad(handle, "insertmarkers");
+    c_removemarkers = symLoad(handle, "removemarkers");
+    c_listroutes = symLoad(handle, "listroutes");
+    c_removeroutes = symLoad(handle, "removeroutes");
+    c_insertroutes = symLoad(handle, "insertroutes");
+    c_listtraces = symLoad(handle, "listtraces");
+    c_removetraces = symLoad(handle, "removetraces");
+    c_inserttraces = symLoad(handle, "inserttraces");
+    c_listregions = symLoad(handle, "listregions");
+    c_removeregions = symLoad(handle, "removeregions");
+    c_insertregions = symLoad(handle, "insertregions");
+    c_listshortcuts = symLoad(handle, "listshortcuts");
+    c_removeshortcuts = symLoad(handle, "removeshortcuts");
+    c_insertshortcuts = symLoad(handle, "insertshortcuts");
+    c_listvariables = symLoad(handle, "listvariables");
+    c_removevariables = symLoad(handle, "removevariables");
+    c_insertvariables = symLoad(handle, "insertvariables");
+    c_listlandmarks = symLoad(handle, "listlandmarks");
+    c_removelandmarks = symLoad(handle, "removelandmarks");
+    c_insertlandmarks = symLoad(handle, "insertlandmarks");
+    c_listsnapshots = symLoad(handle, "listsnapshots");
+    c_removesnapshots = symLoad(handle, "removesnapshots");
+    c_insertsnapshots = symLoad(handle, "insertsnapshots");
+    c_querypathany = symLoad(handle, "querypathany");
+    c_querypathall = symLoad(handle, "querypathall");
+    c_querypathordered = symLoad(handle, "querypathordered");
+    c_dilate = symLoad(handle, "dilate");
+    c_trackexit = symLoad(handle, "trackexit");
+    c_getvariable = symLoad(handle, "getvariable");
+    c_queryregionrooms = symLoad(handle, "queryregionrooms");
+    c_getroom = symLoad(handle, "getroom");
+    c_clearsnapshots = symLoad(handle, "clearsnapshots");
+    c_takesnapshot = symLoad(handle, "takesnapshot");
+    c_searchsnapshots = symLoad(handle, "searchsnapshots");
+    c_searchrooms = symLoad(handle, "searchrooms");
+    c_filterrooms = symLoad(handle, "filterrooms");
+    c_grouproom = symLoad(handle, "grouproom");
+    c_tagroom = symLoad(handle, "tagroom");
+    c_setroomdata = symLoad(handle, "setroomdata");
+    c_tracelocation = symLoad(handle, "tracelocation");
+    c_getroomexits = symLoad(handle, "getroomexits");
     luaL_Reg functions[] = {
         {"version", l_version},
         {"import", l_import},
