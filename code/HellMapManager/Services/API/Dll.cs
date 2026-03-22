@@ -79,16 +79,18 @@ public static class Dll
     }
     public static byte[] Raw(IntPtr ptr, int encoding)
     {
-        if (ptr == IntPtr.Zero) return Array.Empty<byte>();
+        if (ptr == IntPtr.Zero) return [];
         try
         {
-            var str = Marshal.PtrToStringAnsi(ptr) ?? "";
-            var data = encoding switch
+            int length = 0;
+            while (Marshal.ReadByte(ptr, length) != 0)
             {
-                1 => gb18030Encoding.GetBytes(str),
-                _ => Encoding.UTF8.GetBytes(str),
-            };
-            return data;
+                length++;
+            }
+
+            byte[] destination = new byte[length];
+            Marshal.Copy(ptr, destination, 0, length);
+            return destination;
         }
         catch (Exception)
         {
