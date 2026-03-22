@@ -1,6 +1,8 @@
 using HellMapManager.Models;
 using HellMapManager.Helpers;
 using System.Threading;
+using HellMapManager.Helpers.HMMEncoder;
+using System;
 
 namespace HellMapManager.Cores;
 
@@ -68,6 +70,75 @@ public partial class MapDatabase()
             }
         }
     }
+    public bool Import(byte[] data)
+    {
+        var mf = HMMEncoder.Decode(data);
+        if (mf != null)
+        {
+            _lock.EnterWriteLock();
+            try
+            {
+                if (Current != null)
+                {
+                    return false;
+                }
+                Current = mf;
+                Current.Modified = true;
+                Current.Path = "";
+                RaiseMapFileUpdatedEvent(this);
+                return true;
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
+        }
+        return false;
+    }
+    public string Export()
+    {
+        _lock.EnterWriteLock();
+        try
+        {
+            if (Current == null)
+            {
+                return "";
+            }
+            var data = HMMEncoder.GetEncoding(Current.Map.Encoding).GetString(HMMEncoder.Encode(Current));
+            return data;
+        }
+        catch (Exception)
+        {
+            return "";
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+    }
+    public bool Create()
+    {
+        _lock.EnterWriteLock();
+        try
+        {
+            if (Current != null)
+            {
+                return false;
+            }
+            var mapfile = MapFile.Create("", "");
+            Current = mapfile;
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+    }
+
     public void SaveFile(string file)
     {
         if (Current != null)
@@ -144,18 +215,23 @@ public partial class MapDatabase()
         }
         RaiseMapFileUpdatedEvent(this);
     }
-    public void CloseCurrent()
+    public bool CloseCurrent()
     {
         _lock.EnterWriteLock();
         try
         {
+            if (Current == null)
+            {
+                return false;
+            }
             Current = null;
+            return true;
         }
         finally
         {
             _lock.ExitWriteLock();
+            RaiseMapFileUpdatedEvent(this);
         }
-        RaiseMapFileUpdatedEvent(this);
     }
     public void UpdateMapSettings(MapSettings s)
     {

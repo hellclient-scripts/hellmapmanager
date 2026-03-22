@@ -65,3 +65,7 @@ launchSettings.json
 launch.json
 deploy/HellMapManager.app/Contents/MacOS/*
 macsign.sh
+
+code/Dll/*.so
+code/Dll/*.o
+code/Dll/*.dll
