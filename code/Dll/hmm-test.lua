@@ -1,27 +1,37 @@
 local lu = require('luaunit')
 local hmm = require('hmmlua')
-local json=require('json')
+local json = require('json')
 
 function TestDLL()
-    local closed=json.decode(hmm.close("",0))
-    lu.assertEquals(closed,false)
-    local created=json.decode(hmm.create("",0))
-    lu.assertEquals(created,true)
+    local closed = json.decode(hmm.close("", 0))
+    lu.assertEquals(closed, false)
+    local created = json.decode(hmm.create("", 0))
+    lu.assertEquals(created, true)
 end
+
+function TestImport()
+    local closed = json.decode(hmm.close("", 0))
+    lu.assertEquals(closed, true)
+    local data = [[HMM1.0>UTF8
+Info>Test地图|1773938371|]]
+    local imported = json.decode(hmm.import(data, 0))
+    lu.assertEquals(imported, true)
+end
+
 function TestVersion()
-    hmm.close("",0)
-    hmm.create("",0)
-    local result=json.decode(hmm.version("",0))
-    lu.assertEquals(result,1006)
+    hmm.close("", 0)
+    hmm.create("", 0)
+    local result = json.decode(hmm.version("", 0))
+    lu.assertEquals(result, 1006)
 end
 
 function TestInfo()
-    hmm.close("",0)
-    local created=json.decode(hmm.create("",0))
-    lu.assertEquals(created,true)
-    local result=json.decode(hmm.info("",0))
-    lu.assertEquals(result.Name,"")
-    lu.assertEquals(result.Desc,"")
+    hmm.close("", 0)
+    local created = json.decode(hmm.create("", 0))
+    lu.assertEquals(created, true)
+    local result = json.decode(hmm.info("", 0))
+    lu.assertEquals(result.Name, "")
+    lu.assertEquals(result.Desc, "")
 end
 
 -- function TestEscape()
