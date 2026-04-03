@@ -1,28 +1,28 @@
 <Window
-  x:Class="HellMapManager.Windows.RelationMapWindow.RelationMapWindow"
-  xmlns="https://github.com/avaloniaui"
-  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:agc="clr-namespace:AvaloniaGraphControl;assembly=AvaloniaGraphControl"
-  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:exit="using:HellMapManager.Views.Components.Exit"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:models="using:HellMapManager.Models"
-  xmlns:paz="using:Avalonia.Controls.PanAndZoom"
-  xmlns:services="using:HellMapManager.Services"
-  xmlns:vm="using:HellMapManager.Windows.RelationMapWindow"
-  Title="{Binding Title}"
-  d:DesignHeight="450"
-  d:DesignWidth="800"
-  x:DataType="vm:RelationMapWindowViewModel"
-  Icon="/Assets/app.ico"
-  mc:Ignorable="d">
+x:Class="HellMapManager.Windows.RelationMapWindow.RelationMapWindow"
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:agc="clr-namespace:AvaloniaGraphControl;assembly=AvaloniaGraphControl"
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+xmlns:exit="using:HellMapManager.Views.Components.Exit"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+xmlns:models="using:HellMapManager.Models"
+xmlns:paz="using:Avalonia.Controls.PanAndZoom"
+xmlns:services="using:HellMapManager.Services"
+xmlns:vm="using:HellMapManager.Windows.RelationMapWindow"
+Title="{Binding Title}"
+d:DesignHeight="450"
+d:DesignWidth="800"
+x:DataType="vm:RelationMapWindowViewModel"
+Icon="/Assets/app.ico"
+mc:Ignorable="d">
   <DockPanel>
     <DockPanel
-      Name="RoomDetail"
-      Width="300"
-      Background="#FFEEEEEE"
-      DockPanel.Dock="Left"
-      LastChildFill="True">
+    Name="RoomDetail"
+    Width="300"
+    Background="#FFEEEEEE"
+    DockPanel.Dock="Left"
+    LastChildFill="True">
       <Border Padding="10,0,10,0" DockPanel.Dock="Bottom">
         <WrapPanel Height="40" HorizontalAlignment="Right">
           <Button Margin="2,2,2,2" Click="OnNew">
@@ -30,9 +30,9 @@
               <TextBlock>新建房间</TextBlock>
             </ToolTip.Tip>
             <Image
-              Width="16"
-              Height="16"
-              Source="avares://HellMapManager/Assets/add.png" />
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/add.png" />
           </Button>
 
           <Button Margin="2" Click="OnEdit">
@@ -40,21 +40,21 @@
               <TextBlock>编辑房间</TextBlock>
             </ToolTip.Tip>
             <Image
-              Width="16"
-              Height="16"
-              Source="avares://HellMapManager/Assets/edit.png" />
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/edit.png" />
           </Button>
           <Button
-            Margin="2,2,2,2"
-            Click="OnRemove"
-            IsEnabled="{Binding CanRemove}">
+          Margin="2,2,2,2"
+          Click="OnRemove"
+          IsEnabled="{Binding CanRemove}">
             <ToolTip.Tip>
               <TextBlock>删除房间</TextBlock>
             </ToolTip.Tip>
             <Image
-              Width="16"
-              Height="16"
-              Source="avares://HellMapManager/Assets/delete.png" />
+            Width="16"
+            Height="16"
+            Source="avares://HellMapManager/Assets/delete.png" />
           </Button>
 
         </WrapPanel>
@@ -88,33 +88,33 @@
             <SelectableTextBlock Classes="RoomKey Content" Text="{Binding Current.Item.Room.Key}" />
             <TextBlock Classes="RoomName Label" Text="房间名" />
             <SelectableTextBlock
-              Classes="RoomName Content"
-              Classes.Empty="{Binding Current.IsNameEmpty}"
-              Text="{Binding Current.NameInfo}" />
+            Classes="RoomName Content"
+            Classes.Empty="{Binding Current.IsNameEmpty}"
+            Text="{Binding Current.NameInfo}" />
             <TextBlock Classes="RoomGroup Label" Text="分组" />
             <SelectableTextBlock
-              Classes="RoomGroup Content"
-              Classes.Empty="{Binding Current.IsGroupEmpty}"
-              Text="{Binding Current.GroupInfo}" />
+            Classes="RoomGroup Content"
+            Classes.Empty="{Binding Current.IsGroupEmpty}"
+            Text="{Binding Current.GroupInfo}" />
             <TextBlock Classes="RoomTags Label" Text="标签" />
             <SelectableTextBlock
-              Classes="RoomTags Content"
-              Classes.Empty="{Binding Current.IsTagsEmpty}"
-              Text="{Binding Current.TagsInfo}" />
+            Classes="RoomTags Content"
+            Classes.Empty="{Binding Current.IsTagsEmpty}"
+            Text="{Binding Current.TagsInfo}" />
             <TextBlock Classes="RoomDesc Label" Text="房间描述" />
             <SelectableTextBlock
-              Classes="RoomDesc Content"
-              Classes.Empty="{Binding Current.IsDescEmpty}"
-              Text="{Binding Current.DescInfo}" />
+            Classes="RoomDesc Content"
+            Classes.Empty="{Binding Current.IsDescEmpty}"
+            Text="{Binding Current.DescInfo}" />
             <TextBlock Classes="RoomData Label" Text="数据清单" />
             <SelectableTextBlock
-              Classes="RoomData Content Empty"
-              IsVisible="{Binding Current.IsDataEmpty}"
-              Text="&lt;无数据&gt;" />
+            Classes="RoomData Content Empty"
+            IsVisible="{Binding Current.IsDataEmpty}"
+            Text="&lt;无数据&gt;" />
             <ItemsControl
-              Classes="RoomDatas Content"
-              IsVisible="{Binding Current.HasData}"
-              ItemsSource="{Binding Current.Item.Room.Data}">
+            Classes="RoomDatas Content"
+            IsVisible="{Binding Current.HasData}"
+            ItemsSource="{Binding Current.Item.Room.Data}">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
                   <StackPanel>
@@ -129,9 +129,9 @@
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
                   <exit:Exit
-                    Padding="0,5"
-                    DataContext="{Binding .}"
-                    DoubleTapped="OnExitDoubleTapped" />
+                  Padding="0,5"
+                  DataContext="{Binding .}"
+                  DoubleTapped="OnExitDoubleTapped" />
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -142,9 +142,9 @@
     <Panel Height="22" DockPanel.Dock="Bottom">
       <Border HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock
-          FontSize="14"
-          Foreground="#FF666666"
-          Text="鼠标拖动移动地图，滚轮缩放，右键房间显示菜单，双击房间进入" />
+        FontSize="14"
+        Foreground="#FF666666"
+        Text="鼠标拖动移动地图，滚轮缩放，右键房间显示菜单，双击房间进入" />
       </Border>
     </Panel>
     <Panel>
@@ -182,47 +182,58 @@
         <Style Selector="Border.LevelOther SelectableTextBlock">
           <Setter Property="FontSize" Value="16" />
         </Style>
-        <Style Selector="TextBlock.tags">
+        <Style Selector="SelectableTextBlock.tags">
           <Setter Property="FontSize" Value="14" />
         </Style>
+        <Style Selector="SelectableTextBlock.marker">
+          <Setter Property="FontSize" Value="12" />
+        </Style>
+
       </Panel.Styles>
       <Canvas x:Name="BGCanvas">
         <paz:ZoomBorder
-          Name="ZoomBorder"
-          Canvas.Left="0"
-          Canvas.Top="0"
-          Width="{Binding ElementName=BGCanvas, Path=Bounds.Width}"
-          Height="{Binding ElementName=BGCanvas, Path=Bounds.Height}"
-          HorizontalAlignment="Center"
-          VerticalAlignment="Center"
-          ClipToBounds="True"
-          EnableConstrains="True"
-          EnableGestureTranslation="True"
-          EnableGestureZoom="True"
-          EnablePan="True"
-          PanButton="Left"
-          Stretch="None"
-          ZoomSpeed="1.2">
+        Name="ZoomBorder"
+        Canvas.Left="0"
+        Canvas.Top="0"
+        Width="{Binding ElementName=BGCanvas, Path=Bounds.Width}"
+        Height="{Binding ElementName=BGCanvas, Path=Bounds.Height}"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        ClipToBounds="True"
+        EnableConstrains="True"
+        EnableGestureTranslation="True"
+        EnableGestureZoom="True"
+        EnablePan="True"
+        PanButton="Left"
+        Stretch="None"
+        ZoomSpeed="1.2">
           <agc:GraphPanel
-            Name="GraphPanel"
-            Width="999999"
-            Height="999999"
-            Graph="{Binding MyGraph}"
-            LayoutMethod="MDS">
+          Name="GraphPanel"
+          Width="999999"
+          Height="999999"
+          Graph="{Binding MyGraph}"
+          LayoutMethod="MDS">
             <agc:GraphPanel.DataTemplates>
               <DataTemplate DataType="{x:Type vm:LonelyEdge}">
                 <agc:Connection Brush="#00000000" />
               </DataTemplate>
               <DataTemplate DataType="{x:Type vm:ViewItem}">
                 <Border
-                  Classes.Level0="{Binding IsLevel0}"
-                  Classes.Level1="{Binding IsLevel1}"
-                  Classes.Level2="{Binding IsLevel2}"
-                  Classes.LevelOther="{Binding IsLevelOther}"
-                  DoubleTapped="OnDoubleTapped">
+                Classes.Level0="{Binding IsLevel0}"
+                Classes.Level1="{Binding IsLevel1}"
+                Classes.Level2="{Binding IsLevel2}"
+                Classes.LevelOther="{Binding IsLevelOther}"
+                DoubleTapped="OnDoubleTapped">
                   <StackPanel>
                     <SelectableTextBlock Text="{Binding LabelWithKey}" />
                     <TextBlock Classes="tags" Text="{Binding Tags}" />
+                    <ItemsControl ItemsSource="{Binding Item.Markers}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <SelectableTextBlock Classes="marker" Text="{Binding .}" />
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                   </StackPanel>
                 </Border>
               </DataTemplate>
@@ -230,39 +241,39 @@
           </agc:GraphPanel>
         </paz:ZoomBorder>
         <Button
-          Canvas.Top="10"
-          Canvas.Right="30"
-          Width="42"
-          Height="42"
-          Tapped="OnRefreshButtonDoubleTapped">
+        Canvas.Top="10"
+        Canvas.Right="30"
+        Width="42"
+        Height="42"
+        Tapped="OnRefreshButtonDoubleTapped">
           <ToolTip.Tip>
             <TextBlock>刷新</TextBlock>
           </ToolTip.Tip>
           <Image
-            Width="20"
-            Height="20"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Source="avares://HellMapManager/Assets/refresh.png"
-            ZIndex="1" />
+          Width="20"
+          Height="20"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Source="avares://HellMapManager/Assets/refresh.png"
+          ZIndex="1" />
         </Button>
         <Button
-          Canvas.Top="10"
-          Canvas.Right="82"
-          Width="42"
-          Height="42"
-          Command="{Binding OnHistoryBack}"
-          IsVisible="{Binding HasHistory}">
+        Canvas.Top="10"
+        Canvas.Right="82"
+        Width="42"
+        Height="42"
+        Command="{Binding OnHistoryBack}"
+        IsVisible="{Binding HasHistory}">
           <ToolTip.Tip>
             <TextBlock>返回</TextBlock>
           </ToolTip.Tip>
           <Image
-            Width="20"
-            Height="20"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Source="avares://HellMapManager/Assets/arrow_back.png"
-            ZIndex="1" />
+          Width="20"
+          Height="20"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Source="avares://HellMapManager/Assets/arrow_back.png"
+          ZIndex="1" />
         </Button>
       </Canvas>
     </Panel>

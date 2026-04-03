@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using HellMapManager.Models;
 
@@ -19,6 +20,7 @@ public class RelationMapItem(Room room, int depth)
     public int Depth = depth;
     public Room Room { get; } = room;
     public List<Relation> Relations = [];
+    public List<string> Markers { get; set; } = [];
     public bool HasRelation(string target)
     {
         foreach (Relation r in Relations)
@@ -66,6 +68,13 @@ public partial class RelationMapper
                 }
                 var target = new RelationMapItem(targetRoom, item.Depth + 1);
                 Walked[exit.To] = target;
+                mf.Map.Markers.ForEach(m =>
+                {
+                    if (m.Value == exit.To)
+                    {
+                        target.Markers.Add($">{m.Key}");
+                    }
+                });
                 if (targetRoom.HasExitTo(item.Room.Key))
                 {
                     mode = RelationType.TwoSide;
@@ -81,6 +90,13 @@ public partial class RelationMapper
             }
             var targetRoom = MapFile.Cache.Rooms[Start];
             var root = new RelationMapItem(targetRoom, 0);
+            MapFile.Map.Markers.ForEach(m =>
+            {
+                if (m.Value == root.Room.Key)
+                {
+                    root.Markers.Add($">{m.Key}");
+                }
+            });
             Walked[Start] = root;
             BuildRelations(root);
             var currentDepth = 1;
