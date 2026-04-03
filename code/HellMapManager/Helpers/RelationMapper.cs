@@ -72,7 +72,7 @@ public partial class RelationMapper
                 {
                     if (m.Value == exit.To)
                     {
-                        target.Markers.Add($">{m.Key}");
+                        target.Markers.Add($"> {m.Key}");
                     }
                 });
                 if (targetRoom.HasExitTo(item.Room.Key))
@@ -94,7 +94,7 @@ public partial class RelationMapper
             {
                 if (m.Value == root.Room.Key)
                 {
-                    root.Markers.Add($">{m.Key}");
+                    root.Markers.Add($"> {m.Key}");
                 }
             });
             Walked[Start] = root;

@@ -186,7 +186,7 @@ mc:Ignorable="d">
           <Setter Property="FontSize" Value="14" />
         </Style>
         <Style Selector="SelectableTextBlock.marker">
-          <Setter Property="FontSize" Value="12" />
+          <Setter Property="FontSize" Value="14" />
         </Style>
 
       </Panel.Styles>
