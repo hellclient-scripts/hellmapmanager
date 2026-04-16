@@ -11,7 +11,6 @@ using System;
 using HellMapManager.Cores;
 using System.Threading.Tasks;
 using HellMapManager.Services.API;
-using Microsoft.AspNetCore.Authentication;
 
 namespace HellMapManager.Views;
 
