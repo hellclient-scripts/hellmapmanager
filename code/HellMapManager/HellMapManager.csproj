@@ -4,6 +4,7 @@
     <OutputType Condition="'$(Configuration)' == 'Exe'">Exe</OutputType>
     <OutputType Condition="'$(Configuration)' == 'Dll'">Library</OutputType>
     <NativeLib Condition="'$(Configuration)' == 'Dll'">Shared</NativeLib>
+    <DefineConstants Condition="'$(Configuration)' == 'Dll'">$(DefineConstants);DLL</DefineConstants>
     <OptimizationPreference Condition="'$(Configuration)' != 'Debug'">Size</OptimizationPreference>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
