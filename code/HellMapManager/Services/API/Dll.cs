@@ -10,7 +10,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using HellMapManager.Models;
-
+#if DLL
 public static class Dll
 {
     static Dll()
@@ -1031,3 +1031,5 @@ public static class Dll
         }
     }
 }
+
+#endif
