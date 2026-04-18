@@ -23,6 +23,7 @@ public class WalkingStep
             Cost = cost,
             TotalCost = TotalCost + cost,
             Remain = cost - 1,
+            Exit = exit,
         };
     }
     public Step ToStep()
@@ -42,15 +43,38 @@ public class WalkingStep
     public int TotalCost { get; set; } = 0;
     //剩余步数，每个计算回合-1,为0说明这一步移动完成。
     public int Remain { get; set; } = 0;
+    public Exit? Exit { get; set; } = null;
 }
 
 //规划类
-public class Walking(Mapper mapper)
+public class Walking
 {
+    public Walking(Mapper mapper)
+    {
+        this.Mapper = mapper;
+    }
+    public void InitShortcuts()
+    {
+        Mapper.MapFile.Map.Shortcuts.ForEach(e =>
+        {
+            if (this.Mapper.ValidateExitStatic(e))
+            {
+                Shortcuts.Add(e);
+            }
+        });
+        Mapper.Context.Shortcuts.ForEach(e =>
+        {
+            if (this.Mapper.ValidateExitStatic(e))
+            {
+                Shortcuts.Add(e);
+            }
+        });
+    }
+    private List<RoomConditionExit> Shortcuts = [];
     //已经移动过的房间信息
     private Dictionary<string, WalkingStep> Walked = new();
     //对应的mapper
-    public Mapper Mapper { get; } = mapper;
+    public Mapper Mapper { get; }
     //根据最后成功的最后一步移动(last),生成移动结果。targets为目标列表，会在去除移动目标并在结果里记录剩余目标
     private static QueryResult BuildResult(WalkingStep last, List<string> targets)
     {
@@ -87,6 +111,7 @@ public class Walking(Mapper mapper)
     //initTotalCost 初始移动总消耗，用于缺点多步逼近规划里限制总消耗
     public QueryResult QueryPathAny(List<string> from, List<string> target, int initTotalCost)
     {
+        InitShortcuts();
         from.RemoveAll(x => x == "");
         target.RemoveAll(x => x == "");
         if (from.Count == 0 || target.Count == 0)
@@ -128,7 +153,7 @@ public class Walking(Mapper mapper)
                 Command = "",
             };
             //加入移动中列表
-            Mapper.AddRoomWalkingSteps(null, pending, f, initTotalCost);
+            AddRoomWalkingSteps(null, pending, f, initTotalCost);
         }
         //移动一轮
         while (pending.Count > 0)
@@ -152,8 +177,13 @@ public class Walking(Mapper mapper)
                             return BuildResult(step, target);
                         }
                         Walked[step.To] = step;
+                        var sc = step.Exit as RoomConditionExit;
+                        if (sc != null)
+                        {
+                            Shortcuts.Remove(sc);
+                        }
                         //还没走完，延迟到下一轮判断
-                        Mapper.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
+                        AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
                     }
                     else
                     {
@@ -171,6 +201,7 @@ public class Walking(Mapper mapper)
     //一般用于npc会多步随机移动时，遍历目标和目标周边房间
     public List<string> Dilate(List<string> src, int iterations)
     {
+        InitShortcuts();
         Walked = new();
         List<WalkingStep> current;
         List<WalkingStep> pending = [];
@@ -185,7 +216,7 @@ public class Walking(Mapper mapper)
                     From = "",
                     Command = "",
                 };
-                Mapper.AddRoomWalkingSteps(null, pending, f, 0);
+                AddRoomWalkingSteps(null, pending, f, 0);
             }
         }
         var i = 0;
@@ -199,7 +230,7 @@ public class Walking(Mapper mapper)
                 if (!Walked.ContainsKey(step.To))
                 {
                     Walked[step.To] = step;
-                    Mapper.AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
+                    AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
                 }
             }
             i++;
@@ -255,6 +286,7 @@ public class Walking(Mapper mapper)
     //用于在有某些限制条件的情况下，是指最新的上下文，然后尽可能多的遍历原路径中的房间
     public QueryResult QueryPathOrdered(string start, List<string> target)
     {
+        InitShortcuts();
         target.RemoveAll(x => x == "");
         if (target.Count == 0 || start == "")
         {
@@ -287,8 +319,91 @@ public class Walking(Mapper mapper)
         }
         return result;
     }
-}
+    private List<Exit> GetRoomExitsWithoutShortcuts(Room room)
+    {
+        List<Exit> result = [.. room.Exits];
+        //加入上下文中的临时出口
+        if (Mapper.Context.Paths.TryGetValue(room.Key, out var list))
+        {
+            result.AddRange(list);
+        }
+        return result;
+    }
+    //验证并转换路径
+    //如果路径无效，返回空
+    public WalkingStep? ValidateToWalkingStep(WalkingStep? prev, string from, Exit exit, int TotalCost)
+    {
+        if (exit.To == "" || exit.To == from)
+        {
+            return null;
+        }
+        var cost = Mapper.GetExitCost(exit);
+        //验证出口
+        if (!Mapper.ValidateExit(from, exit, cost))
+        {
+            return null;
+        }
+        //判断最大消耗
+        if (Mapper.Options.MaxTotalCost > 0 && Mapper.Options.MaxTotalCost < (cost + TotalCost))
+        {
+            return null;
+        }
+        //转换
+        return WalkingStep.FromExit(prev, from, exit, cost, TotalCost);
+    }
+    public WalkingStep? ValidateShortcutToWalkingStep(WalkingStep? prev, string from, RoomConditionExit shortcut, int TotalCost)
+    {
+        if (shortcut.To == "" || shortcut.To == from)
+        {
+            return null;
+        }
+        var cost = Mapper.GetExitCost(shortcut);
+        //验证出口
+        if (!Mapper.ValidateExitDynamic(from, shortcut, cost))
+        {
+            return null;
+        }
+        //判断最大消耗
+        if (Mapper.Options.MaxTotalCost > 0 && Mapper.Options.MaxTotalCost < (cost + TotalCost))
+        {
+            return null;
+        }
+        //转换
+        return WalkingStep.FromExit(prev, from, shortcut, cost, TotalCost);
+    }
 
+
+    private void AddRoomWalkingSteps(WalkingStep? prev, List<WalkingStep> list, string from, int TotalCost)
+    {
+        var room = this.Mapper.GetRoom(from);
+        if (room is not null)
+        {
+            foreach (var exit in GetRoomExitsWithoutShortcuts(room))
+            {
+                var step = ValidateToWalkingStep(prev, from, exit, TotalCost);
+                if (step is not null)
+                {
+                    list.Add(step);
+                }
+            }
+            //判断是否禁用捷径(飞行)出口
+            if (!this.Mapper.Options.DisableShortcuts)
+            {
+                foreach (var shortcut in Shortcuts)
+                {
+                    if (ValueTag.ValidateConditions(Mapper.GetRoomTags(room), shortcut.RoomConditions))
+                    {
+                        var step = ValidateShortcutToWalkingStep(prev, from, shortcut, TotalCost);
+                        if (step is not null)
+                        {
+                            list.Add(step);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 //地图计算器
 //mapfile为地图信息
 //context为移动上下文,多个移动可能使用相同的上下文
@@ -381,7 +496,18 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
     //cost为移动消耗
     public bool ValidateExit(string start, Exit exit, int cost)
     {
-        //判断房间有效
+        if (!ValidateExitStatic(exit))
+        {
+            return false;
+        }
+        if (!ValidateExitDynamic(start, exit, cost))
+        {
+            return false;
+        }
+        return true;
+    }
+    public bool ValidateExitStatic(Exit exit)
+    {
         var room = GetRoom(exit.To);
         if (room == null)
         {
@@ -392,6 +518,19 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
         {
             return false;
         }
+        //判断出口的条件是否匹配当前上下文
+        if (!Context.ValidateConditions(exit.Conditions))
+        {
+            return false;
+        }
+        if (!Options.ValidateCommand(exit.Command))
+        {
+            return false;
+        }
+        return true;
+    }
+    public bool ValidateExitDynamic(string start, Exit exit, int cost)
+    {
         //判断房间不在上下文中的拦截名单里
         if (Context.IsBlocked(start, exit.To))
         {
@@ -404,15 +543,6 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
         }
         //判断出口不超过整个移动的最大消耗
         if (Options.MaxTotalCost > 0 && cost > Options.MaxTotalCost)
-        {
-            return false;
-        }
-        //判断出口的条件是否匹配当前上下文
-        if (!Context.ValidateConditions(exit.Conditions))
-        {
-            return false;
-        }
-        if (!Options.ValidateCommand(exit.Command))
         {
             return false;
         }
@@ -447,42 +577,5 @@ public class Mapper(MapFile mapFile, Context context, MapperOptions options)
             return false;
         }
         return ValidateExit(start, exit, GetExitCost(exit));
-    }
-    //验证并转换路径
-    //如果路径无效，返回空
-    public WalkingStep? ValidateToWalkingStep(WalkingStep? prev, string from, Exit exit, int TotalCost)
-    {
-        if (exit.To == "" || exit.To == from)
-        {
-            return null;
-        }
-        var cost = GetExitCost(exit);
-        //验证出口
-        if (!ValidateExit(from, exit, cost))
-        {
-            return null;
-        }
-        //判断最大消耗
-        if (Options.MaxTotalCost > 0 && Options.MaxTotalCost < (cost + TotalCost))
-        {
-            return null;
-        }
-        //转换
-        return WalkingStep.FromExit(prev, from, exit, cost, TotalCost);
-    }
-    public void AddRoomWalkingSteps(WalkingStep? prev, List<WalkingStep> list, string from, int TotalCost)
-    {
-        var room = GetRoom(from);
-        if (room is not null)
-        {
-            foreach (var exit in GetRoomExits(room))
-            {
-                var step = ValidateToWalkingStep(prev, from, exit, TotalCost);
-                if (step is not null)
-                {
-                    list.Add(step);
-                }
-            }
-        }
     }
 }
