@@ -230,6 +230,11 @@ public class Walking
                 if (!Walked.ContainsKey(step.To))
                 {
                     Walked[step.To] = step;
+                    var sc = step.Exit as RoomConditionExit;
+                    if (sc != null)
+                    {
+                        Shortcuts.Remove(sc);
+                    }
                     AddRoomWalkingSteps(step, pending, step.To, step.TotalCost);
                 }
             }
@@ -286,7 +291,6 @@ public class Walking
     //用于在有某些限制条件的情况下，是指最新的上下文，然后尽可能多的遍历原路径中的房间
     public QueryResult QueryPathOrdered(string start, List<string> target)
     {
-        InitShortcuts();
         target.RemoveAll(x => x == "");
         if (target.Count == 0 || start == "")
         {
@@ -331,7 +335,7 @@ public class Walking
     }
     //验证并转换路径
     //如果路径无效，返回空
-    public WalkingStep? ValidateToWalkingStep(WalkingStep? prev, string from, Exit exit, int TotalCost)
+    private WalkingStep? ValidateToWalkingStep(WalkingStep? prev, string from, Exit exit, int TotalCost)
     {
         if (exit.To == "" || exit.To == from)
         {
@@ -351,7 +355,7 @@ public class Walking
         //转换
         return WalkingStep.FromExit(prev, from, exit, cost, TotalCost);
     }
-    public WalkingStep? ValidateShortcutToWalkingStep(WalkingStep? prev, string from, RoomConditionExit shortcut, int TotalCost)
+    private WalkingStep? ValidateShortcutToWalkingStep(WalkingStep? prev, string from, RoomConditionExit shortcut, int TotalCost)
     {
         if (shortcut.To == "" || shortcut.To == from)
         {
