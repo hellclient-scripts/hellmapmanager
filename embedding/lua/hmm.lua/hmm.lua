@@ -502,7 +502,16 @@ function SnapshotFilter.new()
     return self
 end
 m.SnapshotFilter = SnapshotFilter
-
+TakeSnapshot={}
+TakeSnapshot.__index = TakeSnapshot
+function TakeSnapshot.new()
+        local self = setmetatable({}, TakeSnapshot)
+        self.Key = ""
+        self.Type = ""
+        self.Group = ""
+        self.Value = ""
+end
+m.TakeSnapshot = TakeSnapshot
 SnapshotSearch = {}
 SnapshotSearch.__index = SnapshotSearch
 function SnapshotSearch.new()

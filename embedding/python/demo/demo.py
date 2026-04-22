@@ -17,7 +17,7 @@ query.Target=["3431"]
 start = datetime.now()
 result=None
 for i in range (1000):
-    querydata=json.dumps(query.__dict__)
+    querydata=hmm.encode(query)
     #查询
     result=json.loads(hmm.call("querypathany", querydata))
 end=datetime.now()
