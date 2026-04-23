@@ -1,15 +1,21 @@
 from ctypes import *
+import platform
 import json
-
+    
 class HMMDll():
     Encoding = 'utf-8'
     DllEncoding = 0
     def __init__(self, dllpath):
-        self.dll=CDLL(dllpath)
+        if platform.system()=="Windows":
+            self.dll=WinDLL(dllpath)
+        else:
+            self.dll=CDLL(dllpath)
     def call(self, funcname, arg=""):
         func = getattr(self.dll, funcname)
         func.restype = c_char_p 
         return func(arg.encode(self.Encoding), self.DllEncoding).decode(self.Encoding)
+    def encode(self, obj):
+        return json.dumps(obj,default = lambda x: x.__dict__)
 class Environment:
     def __init__(self):
         self.Tags=[] #ValueTag
@@ -263,6 +269,12 @@ class SnapshotFilter:
         self.Type = None
         self.Group = None
         self.MaxCount = 0
+class TakeSnapshot:
+    def __init__(self):
+        self.Key = ""
+        self.Type = ""
+        self.Group = ""
+        self.Value = ""
 class SnapshotSearch:
     def __init__(self):
         self.Type = None
