@@ -81,6 +81,12 @@ HMM使用基于CSV变种的HMM格式文件，便于阅读，以行为单位，�
 
 [无头模式控制接口介绍](doc/api/headless.md)
 
+## DLL支持
+
+HellMapManager支持编译为dll文件，通过标准的dll接口供 lua/python等脚本语言进行调用
+
+[DLL接口说明](./doc/api/dll.md)
+
 ## 完善的文档
 
 HMM提供完善的文档支持，[进入文档](doc/index.md)。
