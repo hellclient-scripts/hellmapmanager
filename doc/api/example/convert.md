@@ -21,6 +21,7 @@
 ```lua
 local hmmlib=require('hmm')
 local hmm=hmmlib.new()
+hmm:all("create")
 hmm.DllEncoding=0 --0 for utf-8, 1 for gbk
 local json=require('json')
 local roomsdata=readroomsdata()
@@ -60,12 +61,12 @@ for key,value in ipairs(roomlinks)
     exit.Cost=1
     table.insert(rooms[from_room].Exits,exit)
 end
-inputrooms=hmmpy.Rooms.new()
+inputrooms=hmmlib.Rooms.new()
 for key,value in rooms()
-    table.insert(inputrooms.Rooms,room)
+    table.insert(inputrooms.Rooms,value)
 end
-hmm.call("insertrooms", json.encode(inputrooms))
-output=hmm.call("export")
+hmm:call("insertrooms", json.encode(inputrooms))
+output=hmm:call("export")
 print(output)
 local file = assert(io.open("my.hmm", "w"))
 file:write(output)

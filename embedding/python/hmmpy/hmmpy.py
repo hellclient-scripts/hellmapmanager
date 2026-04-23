@@ -94,7 +94,7 @@ class Exit:
     def __init__(self):
         self.Command=""
         self.To=""
-        self.Cost=0
+        self.Cost=1
         self.Conditions=[] #ValueCondition
 
 class Room:
@@ -169,7 +169,7 @@ class Shortcut:
         self.To=""
         self.RoomConditions=[] #ValueCondition
         self.Conditions=[] #ValueCondition
-        self.Cost=0
+        self.Cost=1
         self.Group=""
         self.Desc=""
 
@@ -236,7 +236,7 @@ class CommandCost:
     def __init__(self):
         self.Command=""
         self.To=""
-        self.Cost=0
+        self.Cost=1
 class RoomTag:
     def __init__(self):
         self.Room=""

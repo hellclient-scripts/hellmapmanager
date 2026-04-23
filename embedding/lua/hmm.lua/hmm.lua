@@ -168,7 +168,7 @@ function Exit.new()
     local self = setmetatable({}, Exit)
     self.Command = ""
     self.To = ""
-    self.Cost = 0
+    self.Cost = 1
     self.Conditions = {} -- ValueCondition
     return self
 end
@@ -306,7 +306,7 @@ function Shortcut.new()
     self.To = ""
     self.RoomConditions = {} -- ValueCondition
     self.Conditions = {} -- ValueCondition
-    self.Cost = 0
+    self.Cost = 1
     self.Group = ""
     self.Desc=""
     return self
@@ -431,7 +431,7 @@ function CommandCost.new()
     local self = setmetatable({}, CommandCost)
     self.Command = ""
     self.To = ""
-    self.Cost = 0
+    self.Cost = 1
     return self
 end
 m.CommandCost = CommandCost
