@@ -42,7 +42,7 @@
 * 参数2为编码
 * 返回值为 json bool值是否成功(已经打开地图为false)
 
-### export 到处当前地图
+### export 导出当前地图
 
 导出地图，可以用来import
 
@@ -101,3 +101,7 @@
 * setroomdata
 * tracelocation
 * getroomexits
+
+## 范例代码
+
+参考[范例代码](./example/index.md)

@@ -35,3 +35,5 @@ HellMapManager(HMM)支持以HTTP形式提供API服务，供有JSON处理和HTTP�
 * [其他接口](./etc.md) 其他接口文档。
 * [变更记录](./history.md) API变更记录。
 * [动态链接](./dll.md) 通过动态链接的方式调用API
+
+lua和python用户使用嵌入dll的方式使用时，可以参考[范例代码](./example/index.md)
