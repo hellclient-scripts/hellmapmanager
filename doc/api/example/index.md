@@ -5,3 +5,5 @@
 * [动态规划路线](./dynamic.md)
 * [临时拦截](./blocked.md)
 * [直达捷径](./shortcut.md)
+* [临时房间](./extroom.md)
+* [快照](./snapshot.md)

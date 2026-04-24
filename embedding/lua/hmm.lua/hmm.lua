@@ -40,7 +40,7 @@ function MapperOptions.new()
     local self = setmetatable({}, MapperOptions)
         self.MaxExitCost = 0
         self.MaxTotalCost = 0
-        self.DisableShortcuts = False
+        self.DisableShortcuts = false
         self.CommandWhitelist = {} --string
         self.CommandNotContains = {} --string
     return self
@@ -510,6 +510,7 @@ function TakeSnapshot.new()
         self.Type = ""
         self.Group = ""
         self.Value = ""
+        return self
 end
 m.TakeSnapshot = TakeSnapshot
 SnapshotSearch = {}

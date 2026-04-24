@@ -150,7 +150,12 @@ public static class Dll
         try
         {
             Raw(input, encoding);
-            var result = AppKernel.MapDatabase.Export();
+            var mapencoding = encoding switch
+            {
+                1 => MapEncoding.GB18030,
+                _ => MapEncoding.Default,
+            };
+            var result = AppKernel.MapDatabase.Export(mapencoding);
             return RawOut(result, encoding);
         }
         catch (Exception)

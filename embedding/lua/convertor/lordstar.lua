@@ -1,4 +1,3 @@
---转换loardstar的rooms.lua
 local hmmlib = require('hmm')
 local hmm = hmmlib.new()
 hmm.DllEncoding = 1 --0 for utf-8, 1 for gbk
@@ -20,43 +19,37 @@ for _, roomdata in pairs(rooms) do
     room.Group = roomdata.area
     if (roomdata.relation ~= "") then
         local data = hmmlib.Data.new()
-        data.Type = "relation"
+        data.Key = "relation"
         data.Value = roomdata.relation
         table.insert(room.Data, data)
     end
     if (roomdata.links ~= "") then
         local data = hmmlib.Data.new()
-        data.Type = "links"
+        data.Key = "links"
         data.Value = roomdata.links
         table.insert(room.Data, data)
     end
     if (roomdata.desc ~= "") then
         local data = hmmlib.Data.new()
-        data.Type = "desc"
+        data.Key = "desc"
         data.Value = roomdata.desc
         table.insert(room.Data, data)
     end
     if (roomdata.info ~= "") then
         local data = hmmlib.Data.new()
-        data.Type = "info"
-        data.Value = roomdata.info
-        table.insert(room.Data, data)
-    end
-    if (roomdata.info ~= "") then
-        local data = hmmlib.Data.new()
-        data.Type = "info"
+        data.Key = "info"
         data.Value = roomdata.info
         table.insert(room.Data, data)
     end
     if (roomdata.mark ~= "") then
         local data = hmmlib.Data.new()
-        data.Type = "mark"
+        data.Key = "mark"
         data.Value = roomdata.mark
         table.insert(room.Data, data)
     end
     if (roomdata.enter ~= "") then
         local data = hmmlib.Data.new()
-        data.Type = "enter"
+        data.Key = "enter"
         data.Value = roomdata.enter
         table.insert(room.Data, data)
     end
