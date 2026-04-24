@@ -95,7 +95,7 @@ public partial class MapDatabase()
         }
         return false;
     }
-    public string Export()
+    public string Export(MapEncoding encoding)
     {
         _lock.EnterWriteLock();
         try
@@ -104,7 +104,10 @@ public partial class MapDatabase()
             {
                 return "";
             }
+            var rawencoding = Current.Map.Encoding;
+            Current.Map.Encoding = encoding;
             var data = HMMEncoder.GetEncoding(Current.Map.Encoding).GetString(HMMEncoder.Encode(Current));
+            Current.Map.Encoding = rawencoding;
             return data;
         }
         catch (Exception)

@@ -40,7 +40,7 @@ function MapperOptions.new()
     local self = setmetatable({}, MapperOptions)
         self.MaxExitCost = 0
         self.MaxTotalCost = 0
-        self.DisableShortcuts = False
+        self.DisableShortcuts = false
         self.CommandWhitelist = {} --string
         self.CommandNotContains = {} --string
     return self
@@ -54,7 +54,7 @@ function QueryPathAny.new()
         self.From={} --string
         self.Target={} --string
         self.Environment=nil
-        self.MapperOptions=nil
+        self.Options=nil
     return self
 end
 m.QueryPathAny=QueryPathAny
@@ -66,7 +66,7 @@ function QueryPath.new()
         self.Start=""
         self.Target={} --string
         self.Environment=nil
-        self.MapperOptions=nil
+        self.Options=nil
     return self
 end
 m.QueryPath=QueryPath
@@ -168,7 +168,7 @@ function Exit.new()
     local self = setmetatable({}, Exit)
     self.Command = ""
     self.To = ""
-    self.Cost = 0
+    self.Cost = 1
     self.Conditions = {} -- ValueCondition
     return self
 end
@@ -306,7 +306,7 @@ function Shortcut.new()
     self.To = ""
     self.RoomConditions = {} -- ValueCondition
     self.Conditions = {} -- ValueCondition
-    self.Cost = 0
+    self.Cost = 1
     self.Group = ""
     self.Desc=""
     return self
@@ -431,7 +431,7 @@ function CommandCost.new()
     local self = setmetatable({}, CommandCost)
     self.Command = ""
     self.To = ""
-    self.Cost = 0
+    self.Cost = 1
     return self
 end
 m.CommandCost = CommandCost
@@ -510,6 +510,7 @@ function TakeSnapshot.new()
         self.Type = ""
         self.Group = ""
         self.Value = ""
+        return self
 end
 m.TakeSnapshot = TakeSnapshot
 SnapshotSearch = {}

@@ -54,10 +54,10 @@ end
 local blocker=Blocker:new()
 
 local query=hmmlib.QueryPathAny.new()
-query.From={"2522"}
-query.Target={"3431"}
+query.Start="2522"
+query.Target={"2440","2544","2494"}
 
-local result=json.decode(hmm:call("querypathany", json.encode(query)))
+local result=json.decode(hmm:call("querypathordered", json.encode(query)))
 if (result==nil) then
     print("No path found")
 else
@@ -66,12 +66,9 @@ else
 end
 
 blocker:block(blockedroom, blockedStep)
-query=hmmlib.QueryPathAny.new()
-query.From={"2522"}
-query.Target={"3431"}
 query.Environment=hmmlib.Environment.new()
 query.Environment.BlockedLinks=blocker:list()
-result=json.decode(hmm:call("querypathany", json.encode(query)))
+result=json.decode(hmm:call("querypathordered", json.encode(query)))
 if (result==nil) then
     print("No blocked path found")
 else
@@ -115,11 +112,11 @@ hmm = hmmpy.HMMDll("./HellMapManager.so")
 with open('hongchen.hmm', 'r', encoding='utf-8') as f:
     hmm.call("import",f.read())
 
-query=hmmpy.QueryPathAny()
-query.From=["2522"]
-query.Target=["3431"]
+query=hmmpy.QueryPath()
+query.Start="2522"
+query.Target=["2440","2544","2494"]
 
-result=json.loads(hmm.call("querypathany", hmm.encode(query)))
+result=json.loads(hmm.call("querypathordered", hmm.encode(query)))
 if (result==None):
     print("No path found")
 else:
@@ -127,12 +124,9 @@ else:
     print(result)
 
 blocker.block(blockedroom, blockedStep)
-query=hmmpy.QueryPathAny()
-query.From=["2522"]
-query.Target=["3431"]
 query.Environment=hmmpy.Environment()
 query.Environment.BlockedLinks=blocker.list()
-result=json.loads(hmm.call("querypathany", hmm.encode(query)))
+result=json.loads(hmm.call("querypathordered", hmm.encode(query)))
 if (result==None):
     print("No blocked path found")
 else:
@@ -143,7 +137,7 @@ else:
 ## 输出
 ```
 Path found:
-{'From': '2522', 'To': '3431', 'Cost': 29, 'Steps': [{'Command': 'e', 'Target': '2440', 'Cost': 1}, {'Command': 'e', 'Target': '2544', 'Cost': 1}, {'Command': 'e', 'Target': '2494', 'Cost': 1}, {'Command': 'goto beijing', 'Target': '3432', 'Cost': 20}, {'Command': 'e', 'Target': '3436', 'Cost': 1}, {'Command': 'e', 'Target': '3500', 'Cost': 1}, {'Command': 'e', 'Target': '3501', 'Cost': 1}, {'Command': 'e', 'Target': '3404', 'Cost': 1}, {'Command': 'e', 'Target': '3430', 'Cost': 1}, {'Command': 'n', 'Target': '3431', 'Cost': 1}], 'Unvisited': []}
+{'From': '2522', 'To': '2494', 'Cost': 3, 'Steps': [{'Command': 'e', 'Target': '2440', 'Cost': 1}, {'Command': 'e', 'Target': '2544', 'Cost': 1}, {'Command': 'e', 'Target': '2494', 'Cost': 1}], 'Unvisited': []}
 Blocked path found:
-{'From': '2522', 'To': '3431', 'Cost': 51, 'Steps': [{'Command': 'e', 'Target': '2440', 'Cost': 1}, {'Command': 's', 'Target': '2439', 'Cost': 1}, {'Command': 's', 'Target': '2460', 'Cost': 1}, {'Command': 's', 'Target': '2504', 'Cost': 1}, {'Command': 's', 'Target': '2505', 'Cost': 1}, {'Command': 's', 'Target': '2506', 'Cost': 1}, {'Command': 's', 'Target': '1600', 'Cost': 1}, {'Command': 's', 'Target': '1602', 'Cost': 1}, {'Command': 's', 'Target': '1603', 'Cost': 1}, {'Command': 's', 'Target': '1604', 'Cost': 1}, {'Command': 'w', 'Target': '1605', 'Cost': 1}, {'Command': 'n', 'Target': '2560', 'Cost': 1}, {'Command': 'n', 'Target': '2616', 'Cost': 1}, {'Command': 'n', 'Target': '2615', 'Cost': 1}, {'Command': 'n', 'Target': '2619', 'Cost': 1}, {'Command': 'n', 'Target': '2618', 'Cost': 1}, {'Command': 'n', 'Target': '2617', 'Cost': 1}, {'Command': 'n', 'Target': '2575', 'Cost': 1}, {'Command': 'e', 'Target': '2568', 'Cost': 1}, {'Command': 'e', 'Target': '2569', 'Cost': 1}, {'Command': 'n', 'Target': '2571', 'Cost': 1}, {'Command': 'n', 'Target': '2572', 'Cost': 1}, {'Command': 'n', 'Target': '2590', 'Cost': 1}, {'Command': 'w', 'Target': '2610', 'Cost': 1}, {'Command': 'n', 'Target': '2601', 'Cost': 1}, {'Command': 'goto beijing', 'Target': '3432', 'Cost': 20}, {'Command': 'e', 'Target': '3436', 'Cost': 1}, {'Command': 'e', 'Target': '3500', 'Cost': 1}, {'Command': 'e', 'Target': '3501', 'Cost': 1}, {'Command': 'e', 'Target': '3404', 'Cost': 1}, {'Command': 'e', 'Target': '3430', 'Cost': 1}, {'Command': 'n', 'Target': '3431', 'Cost': 1}], 'Unvisited': []}
+{'From': '2522', 'To': '2494', 'Cost': 35, 'Steps': [{'Command': 'e', 'Target': '2440', 'Cost': 1}, {'Command': 's', 'Target': '2439', 'Cost': 1}, {'Command': 's', 'Target': '2460', 'Cost': 1}, {'Command': 'e', 'Target': '2448', 'Cost': 1}, {'Command': 'e', 'Target': '2449', 'Cost': 1}, {'Command': 'e', 'Target': '2450', 'Cost': 1}, {'Command': 'e', 'Target': '4033', 'Cost': 1}, {'Command': 'e', 'Target': '4034', 'Cost': 1}, {'Command': 'se', 'Target': '4151', 'Cost': 1}, {'Command': 's', 'Target': '4152', 'Cost': 1}, {'Command': 'e', 'Target': '4137', 'Cost': 1}, {'Command': 's', 'Target': '4140', 'Cost': 1}, {'Command': 'sw', 'Target': '4142', 'Cost': 1}, {'Command': 'goto yangzhou', 'Target': '2494', 'Cost': 20}, {'Command': 'w', 'Target': '2544', 'Cost': 1}, {'Command': 'e', 'Target': '2494', 'Cost': 1}], 'Unvisited': []}
 ```
