@@ -41,7 +41,7 @@ class QueryPathAny:
         self.From=[] #string
         self.Target=[] #string
         self.Environment=None
-        self.MapperOptions=None
+        self.Options=None
 
 class QueryPath:
 
@@ -49,7 +49,7 @@ class QueryPath:
         self.Start=""
         self.Target=[] #string
         self.Environment=None
-        self.MapperOptions=None
+        self.Options=None
 
 class KeyTypeValue:
     def __init__(self):

@@ -54,7 +54,7 @@ function QueryPathAny.new()
         self.From={} --string
         self.Target={} --string
         self.Environment=nil
-        self.MapperOptions=nil
+        self.Options=nil
     return self
 end
 m.QueryPathAny=QueryPathAny
@@ -66,7 +66,7 @@ function QueryPath.new()
         self.Start=""
         self.Target={} --string
         self.Environment=nil
-        self.MapperOptions=nil
+        self.Options=nil
     return self
 end
 m.QueryPath=QueryPath
