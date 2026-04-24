@@ -19,10 +19,8 @@ local file=assert(io.open("hongchen.hmm","r"))
 local data=file:read("*a")
 file:close();
 hmm:call("import",data)
--- npc不会使用的出口
-local blacklist={"ask ","yell ","cross","jump ","enter "}
 
--- 当前位置
+local blacklist={"ask ","yell ","cross","jump ","enter "}
 local current="3431"
 
 local search=hmmlib.SearchRooms.new()
@@ -37,8 +35,8 @@ local dilate=hmmlib.Dilate.new()
 dilate.Source=yzrooms
 -- 膨胀3步
 dilate.Iterations=3
-dilate.MapperOptions=hmmlib.MapperOptions.new()
-dilate.MapperOptions.CommandNotContains=blacklist
+dilate.Options=hmmlib.MapperOptions.new()
+dilate.Options.CommandNotContains=blacklist
 local rooms=json.decode(hmm:call("dilate",json.encode(dilate)))
 print(json.encode(rooms))
 local query=hmmlib.QueryPathAny.new()
@@ -54,6 +52,7 @@ allquery.Target=rooms
 local allresult=json.decode(hmm:call("querypathall",json.encode(allquery)))
 print(json.encode(allresult))
 
+
 ```
 
 ## python 代码
@@ -61,9 +60,8 @@ print(json.encode(allresult))
 ```python
 import json
 import hmmpy
-## npc不会使用的出口
+
 blacklist=["ask ","yell ","cross","jump ","enter "]
-## 当前位置
 current="3431"
 hmm = hmmpy.HMMDll("./HellMapManager.so")
 with open('hongchen.hmm', 'r', encoding='utf-8') as f:
@@ -78,8 +76,8 @@ dilate=hmmpy.Dilate()
 dilate.Source=yzrooms
 ## 膨胀3步
 dilate.Iterations=3
-dilate.MapperOptions=hmmpy.MapperOptions()
-dilate.MapperOptions.CommandNotContains=blacklist
+dilate.Options=hmmpy.MapperOptions()
+dilate.Options.CommandNotContains=blacklist
 rooms=json.loads(hmm.call("dilate",hmm.encode(dilate)))
 print(rooms)
 query=hmmpy.QueryPathAny()
