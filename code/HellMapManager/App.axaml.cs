@@ -33,7 +33,7 @@ public partial class App : Application
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-            DisableAvaloniaDataAnnotationValidation();
+            // DisableAvaloniaDataAnnotationValidation();
             AppUI.Main.MapDatabase = AppKernel.MapDatabase;
             AppUI.Main.Desktop = desktop;
             AppKernel.MapDatabase.SettingsUpdatedEvent += (sender, args) => { settingsHelper.Save(AppKernel.MapDatabase.Settings); };
@@ -82,19 +82,19 @@ public partial class App : Application
         await APIServer.Instance.Stop();
     }
 
-    [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        var dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+    // [UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
+    // private void DisableAvaloniaDataAnnotationValidation()
+    // {
+    //     // Get an array of plugins to remove
+    //     var dataValidationPluginsToRemove =
+    //         BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
 
-        // remove each entry found
-        foreach (var plugin in dataValidationPluginsToRemove)
-        {
-            BindingPlugins.DataValidators.Remove(plugin);
-        }
-    }
+    //     // remove each entry found
+    //     foreach (var plugin in dataValidationPluginsToRemove)
+    //     {
+    //         BindingPlugins.DataValidators.Remove(plugin);
+    //     }
+    // }
     public void ShowAbout(object? sender, EventArgs args)
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
