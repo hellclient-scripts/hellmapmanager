@@ -68,7 +68,7 @@ public partial class RelationMapper
                 }
                 var target = new RelationMapItem(targetRoom, item.Depth + 1);
                 Walked[exit.To] = target;
-                mf.Map.Markers.ForEach(m =>
+                MapFile.Map.Markers.ForEach(m =>
                 {
                     if (m.Value == exit.To)
                     {
@@ -119,6 +119,7 @@ public partial class RelationMapper
             return root;
         }
         Dictionary<string, RelationMapItem> Walked = new Dictionary<string, RelationMapItem>();
+
         readonly MapFile MapFile = mf;
         readonly string Start = start;
         readonly int MaxDepth = maxDepth;

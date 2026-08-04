@@ -73,23 +73,23 @@
         <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
-            <TextBox Text="{Binding Item.Key}" Watermark="标记主键" />
+            <TextBox Text="{Binding Item.Key}" PlaceholderText="标记主键" />
             <TextBlock Classes="Label" Text="值:" />
-            <roompicker:RoomPicker Room="{Binding Item.Value}" Watermark="标记值" />
+            <roompicker:RoomPicker Room="{Binding Item.Value}" PlaceholderText="标记值" />
             <TextBlock Classes="Label" Text="分组:" />
-            <TextBox Text="{Binding Item.Group}" Watermark="分组" />
+            <TextBox Text="{Binding Item.Group}" PlaceholderText="分组" />
             <TextBlock Classes="Label" Text="描述:" />
             <TextBox
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Desc}"
-              Watermark="标记描述" />
+              PlaceholderText="标记描述" />
             <TextBlock Classes="Label" Text="消息:" />
             <TextBox
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Message}"
-              Watermark="传递给脚本的消息" />
+              PlaceholderText="传递给脚本的消息" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />

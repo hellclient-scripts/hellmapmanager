@@ -60,9 +60,9 @@
           <TextBlock Classes="Label" Text="服务端口:" />
           <NumericUpDown Increment="1" Value="{Binding Config.APIPort}" />
           <TextBlock Classes="Label" Text="用户名:" />
-          <TextBox Text="{Binding Config.APIUserName}" Watermark="接口用户名,留空则无检验" />
+          <TextBox Text="{Binding Config.APIUserName}" PlaceholderText="接口用户名,留空则无检验" />
           <TextBlock Classes="Label" Text="用户密码:" />
-          <TextBox Text="{Binding Config.APIPassWord}" Watermark="接口密码,留空则无检验" />
+          <TextBox Text="{Binding Config.APIPassWord}" PlaceholderText="接口密码,留空则无检验" />
           <CheckBox IsChecked="{Binding Config.APIEnabled}" IsThreeState="False">打开程序时自动启动服务</CheckBox>
         </StackPanel>
       </Border>

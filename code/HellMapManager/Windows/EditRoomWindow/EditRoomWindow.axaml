@@ -75,11 +75,11 @@
         <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
-            <TextBox Text="{Binding Item.Key}" Watermark="房间主键" />
+            <TextBox Text="{Binding Item.Key}" PlaceholderText="房间主键" />
             <TextBlock Classes="Label" Text="名称:" />
-            <TextBox Text="{Binding Item.Name}" Watermark="房间名" />
+            <TextBox Text="{Binding Item.Name}" PlaceholderText="房间名" />
             <TextBlock Classes="Label" Text="分组:" />
-            <TextBox Text="{Binding Item.Group}" Watermark="分组" />
+            <TextBox Text="{Binding Item.Group}" PlaceholderText="分组" />
             <TextBlock Classes="Label" Text="标签:" />
             <StackPanel Classes="Content">
               <WrapPanel Margin="12,2">
@@ -216,7 +216,7 @@
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Desc}"
-              Watermark="房间描述" />
+              PlaceholderText="房间描述" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />

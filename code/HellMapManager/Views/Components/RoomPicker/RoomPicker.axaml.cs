@@ -19,12 +19,12 @@ public partial class RoomPicker : UserControl
     {
         InitializeComponent();
     }
-    public static readonly StyledProperty<string> WatermarkProperty
-    = AvaloniaProperty.Register<RoomPicker, string>(nameof(WatermarkProperty));
-    public string Watermark
+    public static readonly StyledProperty<string> PlaceholderTextProperty
+    = AvaloniaProperty.Register<RoomPicker, string>(nameof(PlaceholderTextProperty));
+    public string PlaceholderText
     {
-        get => GetValue(WatermarkProperty);
-        set => SetValue(WatermarkProperty, value);
+        get => GetValue(PlaceholderTextProperty);
+        set => SetValue(PlaceholderTextProperty, value);
     }
 
     public async void OnPick(object? sender, RoutedEventArgs args)

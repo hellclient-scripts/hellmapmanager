@@ -73,11 +73,11 @@
           <TextBox
             IsVisible="{Binding !Item.IsRoom}"
             Text="{Binding Item.Value}"
-            Watermark="值" />
+            PlaceholderText="值" />
           <roompicker:RoomPicker
             IsVisible="{Binding Item.IsRoom}"
             Room="{Binding Item.Value}"
-            Watermark="值" />
+            PlaceholderText="值" />
           <CheckBox IsChecked="{Binding Item.Not}" IsThreeState="False">排除该元素</CheckBox>
         </StackPanel>
       </ScrollViewer>
