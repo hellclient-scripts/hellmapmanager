@@ -74,7 +74,7 @@
         <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
-            <TextBox Text="{Binding Item.Key}" Watermark="主键" />
+            <TextBox Text="{Binding Item.Key}" PlaceholderText="主键" />
             <TextBlock Classes="Label" Text="房间条件:" />
             <StackPanel Classes="Content">
               <WrapPanel Margin="12,2">
@@ -113,9 +113,9 @@
               </ListBox>
             </StackPanel>
             <TextBlock Classes="Label" Text="指令:" />
-            <TextBox Text="{Binding Item.Command}" Watermark="指令" />
+            <TextBox Text="{Binding Item.Command}" PlaceholderText="指令" />
             <TextBlock Classes="Label" Text="目标:" />
-            <roompicker:RoomPicker Room="{Binding Item.To}" Watermark="目标" />
+            <roompicker:RoomPicker Room="{Binding Item.To}" PlaceholderText="目标" />
             <TextBlock Classes="Label" Text="环境条件:" />
             <StackPanel Classes="Content">
               <WrapPanel Margin="12,2">
@@ -156,13 +156,13 @@
             <TextBlock Classes="Label" Text="耗时:" />
             <NumericUpDown Increment="1" Value="{Binding Item.Cost}" />
             <TextBlock Classes="Label" Text="分组:" />
-            <TextBox Text="{Binding Item.Group}" Watermark="分组" />
+            <TextBox Text="{Binding Item.Group}" PlaceholderText="分组" />
             <TextBlock Classes="Label" Text="描述:" />
             <TextBox
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Desc}"
-              Watermark="指令描述" />
+              PlaceholderText="指令描述" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />

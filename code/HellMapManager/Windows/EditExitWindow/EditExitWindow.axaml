@@ -59,9 +59,9 @@
       <ScrollViewer>
         <StackPanel Margin="20">
           <TextBlock Classes="Label" Text="目标:" />
-          <roompicker:RoomPicker Room="{Binding Item.To}" Watermark="目标" />
+          <roompicker:RoomPicker Room="{Binding Item.To}" PlaceholderText="目标" />
           <TextBlock Classes="Label" Text="指令:" />
-          <TextBox Text="{Binding Item.Command}" Watermark="指令" />
+          <TextBox Text="{Binding Item.Command}" PlaceholderText="指令" />
           <TextBlock Classes="Label" Text="条件:" />
           <StackPanel Classes="Content">
             <WrapPanel Margin="12,2">

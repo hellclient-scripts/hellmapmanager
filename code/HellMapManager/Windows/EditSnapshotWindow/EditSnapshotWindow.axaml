@@ -67,17 +67,17 @@
         <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
-            <TextBox Text="{Binding Item.Key}" Watermark="快照主键" />
+            <TextBox Text="{Binding Item.Key}" PlaceholderText="快照主键" />
             <TextBlock Classes="Label" Text="类型:" />
-            <TextBox Text="{Binding Item.Type}" Watermark="快照类型" />
+            <TextBox Text="{Binding Item.Type}" PlaceholderText="快照类型" />
             <TextBlock Classes="Label" Text="值:" />
             <TextBox
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Value}"
-              Watermark="快照值" />
+              PlaceholderText="快照值" />
             <TextBlock Classes="Label" Text="分组:" />
-            <TextBox Text="{Binding Item.Group}" Watermark="分组" />
+            <TextBox Text="{Binding Item.Group}" PlaceholderText="分组" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />

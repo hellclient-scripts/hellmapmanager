@@ -57,13 +57,13 @@
       <ScrollViewer>
         <StackPanel Margin="20">
           <TextBlock Classes="Label" Text="主键:" />
-          <TextBox Text="{Binding Item.Key}" Watermark="主键" />
+          <TextBox Text="{Binding Item.Key}" PlaceholderText="主键" />
           <TextBlock Classes="Label" Text="值:" />
           <TextBox
             AcceptsReturn="True"
             Classes="TextArea"
             Text="{Binding Item.Value}"
-            Watermark="值" />
+            PlaceholderText="值" />
         </StackPanel>
       </ScrollViewer>
     </DockPanel>

@@ -40,7 +40,7 @@
       <ScrollViewer>
         <StackPanel Margin="20">
           <TextBlock Classes="Label" Text="名称:" />
-          <TextBox Text="{Binding Settings.Name}" Watermark="地图名称" />
+          <TextBox Text="{Binding Settings.Name}" PlaceholderText="地图名称" />
           <TextBlock Classes="Label" Text="编码:" />
           <ComboBox
             ItemsSource="{Binding Items}"
@@ -57,7 +57,7 @@
             AcceptsReturn="True"
             Classes="TextArea"
             Text="{Binding Settings.Desc}"
-            Watermark="地图名称" />
+            PlaceholderText="地图名称" />
         </StackPanel>
       </ScrollViewer>
     </DockPanel>

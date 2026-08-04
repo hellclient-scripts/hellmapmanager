@@ -72,27 +72,27 @@
         <StackPanel Margin="20">
           <StackPanel IsVisible="{Binding !ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
-            <TextBox Text="{Binding Item.Key}" Watermark="路线主键" />
+            <TextBox Text="{Binding Item.Key}" PlaceholderText="路线主键" />
             <TextBlock Classes="Label" Text="分组:" />
-            <TextBox Text="{Binding Item.Group}" Watermark="分组" />
+            <TextBox Text="{Binding Item.Group}" PlaceholderText="分组" />
             <TextBlock Classes="Label" Text="房间列表,一行一个房间" />
             <TextBox
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Rooms}"
-              Watermark="房间列表" />
+              PlaceholderText="房间列表" />
             <TextBlock Classes="Label" Text="描述:" />
             <TextBox
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Desc}"
-              Watermark="路线描述" />
+              PlaceholderText="路线描述" />
             <TextBlock Classes="Label" Text="消息:" />
             <TextBox
               AcceptsReturn="True"
               Classes="TextArea"
               Text="{Binding Item.Message}"
-              Watermark="传递给脚本的消息" />
+              PlaceholderText="传递给脚本的消息" />
           </StackPanel>
           <StackPanel IsVisible="{Binding ViewMode}">
             <TextBlock Classes="Label" Text="主键:" />
